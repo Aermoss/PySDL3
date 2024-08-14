@@ -1,0 +1,2 @@
+include sdl2/*
+include sdl2/bin/*
