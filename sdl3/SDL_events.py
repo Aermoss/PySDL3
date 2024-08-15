@@ -13,7 +13,7 @@ from .SDL_camera import SDL_CameraID
 from .SDL_pen import SDL_PenID, SDL_PenInputFlags, SDL_PenAxis
 from .SDL_touch import SDL_TouchID, SDL_FingerID
 
-SDL_EventType = ctypes.c_uint32
+SDL_EventType = ctypes.c_int
 
 SDL_EVENT_FIRST = 0x0
 SDL_EVENT_QUIT = 0x100
