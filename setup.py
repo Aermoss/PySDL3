@@ -6,7 +6,7 @@ with open("README.md", "r", encoding = "utf-8") as file:
 setup(
     name = "PySDL3",
     packages = ["sdl3"],
-    version = "0.2.1a1",
+    version = "0.2.2a0",
     description = "A pure Python wrapper for SDL3.",
     long_description = description,
     long_description_content_type = "text/markdown",
