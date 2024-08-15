@@ -1,13 +1,13 @@
 from setuptools import setup
 
-with open("README.md", "r", encoding = "UTF-8") as file:
+with open("README.md", "r", encoding = "utf-8") as file:
     description = file.read()
 
 setup(
     name = "PySDL3",
     packages = ["sdl3"],
     version = "0.2.1a1",
-    description = description.split("\n")[1],
+    description = "A pure Python wrapper for SDL3.",
     long_description = description,
     long_description_content_type = "text/markdown",
     url = "https://github.com/Aermoss/PySDL3",
