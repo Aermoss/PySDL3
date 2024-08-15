@@ -1,2 +1,2 @@
-include sdl2/*
-include sdl2/bin/*
+include sdl3/*
+include sdl3/bin/*
