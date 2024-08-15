@@ -1,4 +1,4 @@
-import sys, os, ctypes
+import sys, os, ctypes, _ctypes
 
 if "PYSDL3_DISABLE_DOCS" not in os.environ:
     os.environ["PYSDL3_DISABLE_DOCS"] = "0"
@@ -30,20 +30,29 @@ if not __initialized__ and not __disable_docs__:
     with open(__docs_file__, "w") as file:
         result = "from .SDL import *\n\n"
         result += "from .__init__ import ctypes, dll\n\n"
+        definitions, types = "", set()
 
         for index, name in enumerate(functions.keys()):
             retType, args = functions[name].restype, functions[name].argtypes
-            getType = lambda i: "None" if i is None else ("ctypes." if "SDL_" not in i.__name__ else "") \
-                + i.__name__.replace("CFunctionType", "_CFuncPtr").replace("LP_", "")
 
-            result += f"def {name}({", ".join([f"_{index}: {getType(i)}" for index, i in enumerate(args)])}) -> {getType(retType)}:\n"
-            result += f"    \"\"\"This function is auto-generated.\"\"\"\n"
-            result += f"    return dll.{name}({", ".join([f"_{index}" for index, i in enumerate(args)])})"
+            def getName(i):
+                if i is None: return "None"
+                name = i.__name__.replace("CFunctionType", "_CFuncPtr")
+                if "SDL_" in name or "LP_" in name: types.add(name); return name
+                else: return f"ctypes.{name}"
+
+            definitions += f"def {name}({", ".join([f"_{index}: {getName(i)}" for index, i in enumerate(args)])}) -> {getName(retType)}:\n"
+            definitions += f"    \"\"\"This function is auto-generated.\"\"\"\n"
+            definitions += f"    return dll.{name}({", ".join([f"_{index}" for index, i in enumerate(args)])})"
 
             if index != len(functions.keys()) - 1:
-                result += "\n\n"
-            
-        file.write(result)
+                definitions += "\n\n"
+
+        for i in types:
+            result += f"class {i}(ctypes._Pointer):\n"
+            result += "    \"\"\"This class is auto-generated.\"\"\"\n\n"
+
+        file.write(result + definitions)
 
     from .__docs__ import *
 
