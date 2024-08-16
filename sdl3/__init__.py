@@ -1,4 +1,4 @@
-import sys, os, ctypes, _ctypes
+import sys, os, ctypes
 
 if "PYSDL3_DISABLE_DOCS" not in os.environ:
     os.environ["PYSDL3_DISABLE_DOCS"] = "0"
