@@ -4,6 +4,7 @@ from .SDL_properties import SDL_PropertiesID
 from .SDL_surface import SDL_Surface
 from .SDL_pixels import SDL_PixelFormat
 from .SDL_rect import SDL_Point, SDL_Rect
+from .SDL_stdinc import SDL_FunctionPointer
 
 SDL_DisplayID = ctypes.c_uint32
 SDL_WindowID = ctypes.c_uint32
@@ -87,6 +88,71 @@ SDL_FLASH_CANCEL = 0
 SDL_FLASH_BRIEFLY = 1
 SDL_FLASH_UNTIL_FOCUSED = 2
 
+SDL_GLContext = ctypes.c_void_p
+
+SDL_EGLDisplay = ctypes.c_void_p
+SDL_EGLConfig = ctypes.c_void_p
+SDL_EGLSurface = ctypes.c_void_p
+SDL_EGLAttrib = ctypes.c_longlong
+SDL_EGLint = ctypes.c_int
+
+SDL_EGLAttribArrayCallback = ctypes.CFUNCTYPE(ctypes.POINTER(SDL_EGLAttrib))
+SDL_EGLIntArrayCallback = ctypes.CFUNCTYPE(ctypes.POINTER(SDL_EGLint))
+
+SDL_GLattr = ctypes.c_int
+
+SDL_GL_RED_SIZE = 0
+SDL_GL_GREEN_SIZE = 1
+SDL_GL_BLUE_SIZE = 2
+SDL_GL_ALPHA_SIZE = 3
+SDL_GL_BUFFER_SIZE = 4
+SDL_GL_DOUBLEBUFFER = 5
+SDL_GL_DEPTH_SIZE = 6
+SDL_GL_STENCIL_SIZE = 7
+SDL_GL_ACCUM_RED_SIZE = 8
+SDL_GL_ACCUM_GREEN_SIZE = 9
+SDL_GL_ACCUM_BLUE_SIZE = 10
+SDL_GL_ACCUM_ALPHA_SIZE = 11
+SDL_GL_STEREO = 12
+SDL_GL_MULTISAMPLEBUFFERS = 13
+SDL_GL_MULTISAMPLESAMPLES = 14
+SDL_GL_ACCELERATED_VISUAL = 15
+SDL_GL_RETAINED_BACKING = 16
+SDL_GL_CONTEXT_MAJOR_VERSION = 17
+SDL_GL_CONTEXT_MINOR_VERSION = 18
+SDL_GL_CONTEXT_FLAGS = 19
+SDL_GL_CONTEXT_PROFILE_MASK = 20
+SDL_GL_SHARE_WITH_CURRENT_CONTEXT = 21
+SDL_GL_FRAMEBUFFER_SRGB_CAPABLE = 22
+SDL_GL_CONTEXT_RELEASE_BEHAVIOR = 23
+SDL_GL_CONTEXT_RESET_NOTIFICATION = 24
+SDL_GL_CONTEXT_NO_ERROR = 25
+SDL_GL_FLOATBUFFERS = 26
+SDL_GL_EGL_PLATFORM = 27
+
+SDL_GLprofile = ctypes.c_int
+
+SDL_GL_CONTEXT_PROFILE_CORE = 0x0001
+SDL_GL_CONTEXT_PROFILE_COMPATIBILITY = 0x0002
+SDL_GL_CONTEXT_PROFILE_ES = 0x0004
+
+SDL_GLcontextFlag = ctypes.c_int
+
+SDL_GL_CONTEXT_DEBUG_FLAG = 0x0001
+SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG = 0x0002
+SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG = 0x0004
+SDL_GL_CONTEXT_RESET_ISOLATION_FLAG = 0x0008
+
+SDL_GLcontextReleaseFlag = ctypes.c_int
+
+SDL_GL_CONTEXT_RELEASE_BEHAVIOR_NONE = 0x0000
+SDL_GL_CONTEXT_RELEASE_BEHAVIOR_FLUSH = 0x0001
+
+SDL_GLContextResetNotification = ctypes.c_int
+
+SDL_GL_CONTEXT_RESET_NO_NOTIFICATION = 0x0000
+SDL_GL_CONTEXT_RESET_LOSE_CONTEXT = 0x0001
+
 SDL_FUNC("SDL_GetNumVideoDrivers", ctypes.c_int)
 SDL_FUNC("SDL_GetVideoDriver", ctypes.c_char_p, ctypes.c_int)
 SDL_FUNC("SDL_GetCurrentVideoDriver", ctypes.c_char_p)
@@ -132,39 +198,40 @@ SDL_FUNC("SDL_CreateWindow", ctypes.POINTER(SDL_Window), ctypes.c_char_p, ctypes
 SDL_FUNC("SDL_CreatePopupWindow", ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, SDL_WindowFlags)
 SDL_FUNC("SDL_CreateWindowWithProperties", ctypes.POINTER(SDL_Window), SDL_PropertiesID)
 
-SDL_PROP_WINDOW_CREATE_ALWAYS_ON_TOP_BOOLEAN = "always_on_top"
-SDL_PROP_WINDOW_CREATE_BORDERLESS_BOOLEAN = "borderless"
-SDL_PROP_WINDOW_CREATE_FOCUSABLE_BOOLEAN = "focusable"
-SDL_PROP_WINDOW_CREATE_EXTERNAL_GRAPHICS_CONTEXT_BOOLEAN = "external_graphics_context"
-SDL_PROP_WINDOW_CREATE_FULLSCREEN_BOOLEAN = "fullscreen"
-SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER = "height"
-SDL_PROP_WINDOW_CREATE_HIDDEN_BOOLEAN = "hidden"
-SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN = "high_pixel_density"
-SDL_PROP_WINDOW_CREATE_MAXIMIZED_BOOLEAN = "maximized"
-SDL_PROP_WINDOW_CREATE_MENU_BOOLEAN = "menu"
-SDL_PROP_WINDOW_CREATE_METAL_BOOLEAN = "metal"
-SDL_PROP_WINDOW_CREATE_MINIMIZED_BOOLEAN = "minimized"
-SDL_PROP_WINDOW_CREATE_MODAL_BOOLEAN = "modal"
-SDL_PROP_WINDOW_CREATE_MOUSE_GRABBED_BOOLEAN = "mouse_grabbed"
-SDL_PROP_WINDOW_CREATE_OPENGL_BOOLEAN = "opengl"
-SDL_PROP_WINDOW_CREATE_PARENT_POINTER = "parent"
-SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN = "resizable"
-SDL_PROP_WINDOW_CREATE_TITLE_STRING = "title"
-SDL_PROP_WINDOW_CREATE_TRANSPARENT_BOOLEAN = "transparent"
-SDL_PROP_WINDOW_CREATE_TOOLTIP_BOOLEAN = "tooltip"
-SDL_PROP_WINDOW_CREATE_UTILITY_BOOLEAN = "utility"
-SDL_PROP_WINDOW_CREATE_VULKAN_BOOLEAN = "vulkan"
-SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER = "width"
-SDL_PROP_WINDOW_CREATE_X_NUMBER = "x"
-SDL_PROP_WINDOW_CREATE_Y_NUMBER = "y"
-SDL_PROP_WINDOW_CREATE_COCOA_WINDOW_POINTER = "cocoa.window"
-SDL_PROP_WINDOW_CREATE_COCOA_VIEW_POINTER = "cocoa.view"
-SDL_PROP_WINDOW_CREATE_WAYLAND_SURFACE_ROLE_CUSTOM_BOOLEAN = "wayland.surface_role_custom"
-SDL_PROP_WINDOW_CREATE_WAYLAND_CREATE_EGL_WINDOW_BOOLEAN = "wayland.create_egl_window"
-SDL_PROP_WINDOW_CREATE_WAYLAND_WL_SURFACE_POINTER = "wayland.wl_surface"
-SDL_PROP_WINDOW_CREATE_WIN32_HWND_POINTER = "win32.hwnd"
-SDL_PROP_WINDOW_CREATE_WIN32_PIXEL_FORMAT_HWND_POINTER = "win32.pixel_format_hwnd"
-SDL_PROP_WINDOW_CREATE_X11_WINDOW_NUMBER = "x11.window"
+SDL_PROP_WINDOW_CREATE_ALWAYS_ON_TOP_BOOLEAN = "SDL.window.create.always_on_top"
+SDL_PROP_WINDOW_CREATE_BORDERLESS_BOOLEAN = "SDL.window.create.borderless"
+SDL_PROP_WINDOW_CREATE_FOCUSABLE_BOOLEAN = "SDL.window.create.focusable"
+SDL_PROP_WINDOW_CREATE_EXTERNAL_GRAPHICS_CONTEXT_BOOLEAN = "SDL.window.create.external_graphics_context"
+SDL_PROP_WINDOW_CREATE_FLAGS_NUMBER = "SDL.window.create.flags"
+SDL_PROP_WINDOW_CREATE_FULLSCREEN_BOOLEAN = "SDL.window.create.fullscreen"
+SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER = "SDL.window.create.height"
+SDL_PROP_WINDOW_CREATE_HIDDEN_BOOLEAN = "SDL.window.create.hidden"
+SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN = "SDL.window.create.high_pixel_density"
+SDL_PROP_WINDOW_CREATE_MAXIMIZED_BOOLEAN = "SDL.window.create.maximized"
+SDL_PROP_WINDOW_CREATE_MENU_BOOLEAN = "SDL.window.create.menu"
+SDL_PROP_WINDOW_CREATE_METAL_BOOLEAN = "SDL.window.create.metal"
+SDL_PROP_WINDOW_CREATE_MINIMIZED_BOOLEAN = "SDL.window.create.minimized"
+SDL_PROP_WINDOW_CREATE_MODAL_BOOLEAN = "SDL.window.create.modal"
+SDL_PROP_WINDOW_CREATE_MOUSE_GRABBED_BOOLEAN = "SDL.window.create.mouse_grabbed"
+SDL_PROP_WINDOW_CREATE_OPENGL_BOOLEAN = "SDL.window.create.opengl"
+SDL_PROP_WINDOW_CREATE_PARENT_POINTER = "SDL.window.create.parent"
+SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN = "SDL.window.create.resizable"
+SDL_PROP_WINDOW_CREATE_TITLE_STRING = "SDL.window.create.title"
+SDL_PROP_WINDOW_CREATE_TRANSPARENT_BOOLEAN = "SDL.window.create.transparent"
+SDL_PROP_WINDOW_CREATE_TOOLTIP_BOOLEAN = "SDL.window.create.tooltip"
+SDL_PROP_WINDOW_CREATE_UTILITY_BOOLEAN = "SDL.window.create.utility"
+SDL_PROP_WINDOW_CREATE_VULKAN_BOOLEAN = "SDL.window.create.vulkan"
+SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER = "SDL.window.create.width"
+SDL_PROP_WINDOW_CREATE_X_NUMBER = "SDL.window.create.x"
+SDL_PROP_WINDOW_CREATE_Y_NUMBER = "SDL.window.create.y"
+SDL_PROP_WINDOW_CREATE_COCOA_WINDOW_POINTER = "SDL.window.create.cocoa.window"
+SDL_PROP_WINDOW_CREATE_COCOA_VIEW_POINTER = "SDL.window.create.cocoa.view"
+SDL_PROP_WINDOW_CREATE_WAYLAND_SURFACE_ROLE_CUSTOM_BOOLEAN = "SDL.window.create.wayland.surface_role_custom"
+SDL_PROP_WINDOW_CREATE_WAYLAND_CREATE_EGL_WINDOW_BOOLEAN = "SDL.window.create.wayland.create_egl_window"
+SDL_PROP_WINDOW_CREATE_WAYLAND_WL_SURFACE_POINTER = "SDL.window.create.wayland.wl_surface"
+SDL_PROP_WINDOW_CREATE_WIN32_HWND_POINTER = "SDL.window.create.win32.hwnd"
+SDL_PROP_WINDOW_CREATE_WIN32_PIXEL_FORMAT_HWND_POINTER = "SDL.window.create.win32.pixel_format_hwnd"
+SDL_PROP_WINDOW_CREATE_X11_WINDOW_NUMBER = "SDL.window.create.x11.window"
 
 SDL_FUNC("SDL_GetWindowID", SDL_WindowID, ctypes.POINTER(SDL_Window))
 SDL_FUNC("SDL_GetWindowFromID", ctypes.POINTER(SDL_Window), SDL_WindowID)
@@ -304,3 +371,32 @@ SDL_FUNC("SDL_DestroyWindow", None, ctypes.POINTER(SDL_Window))
 SDL_FUNC("SDL_ScreenSaverEnabled", ctypes.c_bool)
 SDL_FUNC("SDL_EnableScreenSaver", ctypes.c_int)
 SDL_FUNC("SDL_DisableScreenSaver", ctypes.c_int)
+
+SDL_FUNC("SDL_GL_LoadLibrary", ctypes.c_int, ctypes.c_char_p)
+SDL_FUNC("SDL_GL_GetProcAddress", SDL_FunctionPointer, ctypes.c_char_p)
+SDL_FUNC("SDL_EGL_GetProcAddress", SDL_FunctionPointer, ctypes.c_char_p)
+SDL_FUNC("SDL_GL_UnloadLibrary", None)
+
+SDL_FUNC("SDL_GL_ExtensionSupported", ctypes.c_bool, ctypes.c_char_p)
+
+SDL_FUNC("SDL_GL_ResetAttributes", None)
+SDL_FUNC("SDL_GL_SetAttribute", ctypes.c_int, SDL_GLattr, ctypes.c_int)
+SDL_FUNC("SDL_GL_GetAttribute", ctypes.c_int, SDL_GLattr, ctypes.POINTER(ctypes.c_int))
+
+SDL_FUNC("SDL_GL_CreateContext", SDL_GLContext, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_GL_MakeCurrent", ctypes.c_int, ctypes.POINTER(SDL_Window), SDL_GLContext)
+
+SDL_FUNC("SDL_GL_GetCurrentWindow", ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_GL_GetCurrentContext", SDL_GLContext)
+
+SDL_FUNC("SDL_EGL_GetCurrentDisplay", SDL_EGLDisplay)
+SDL_FUNC("SDL_EGL_GetCurrentConfig", SDL_EGLConfig)
+SDL_FUNC("SDL_EGL_GetWindowSurface", SDL_EGLSurface, ctypes.POINTER(SDL_Window))
+
+SDL_FUNC("SDL_EGL_SetAttributeCallbacks", None, SDL_EGLAttribArrayCallback, SDL_EGLIntArrayCallback, SDL_EGLIntArrayCallback)
+
+SDL_FUNC("SDL_GL_SetSwapInterval", ctypes.c_int, ctypes.c_int)
+SDL_FUNC("SDL_GL_GetSwapInterval", ctypes.c_int, ctypes.POINTER(ctypes.c_int))
+
+SDL_FUNC("SDL_GL_SwapWindow", ctypes.c_int, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_GL_DestroyContext", ctypes.c_int, SDL_GLContext)
