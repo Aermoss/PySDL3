@@ -1,3 +1,12 @@
 from .__init__ import ctypes, SDL_FUNC
 
-SDL_PowerState = ctypes.c_uint32
+SDL_PowerState = ctypes.c_int
+
+SDL_POWERSTATE_ERROR = -1
+SDL_POWERSTATE_UNKNOWN = 0
+SDL_POWERSTATE_ON_BATTERY = 1
+SDL_POWERSTATE_NO_BATTERY = 2
+SDL_POWERSTATE_CHARGING = 3
+SDL_POWERSTATE_CHARGED = 4
+
+SDL_FUNC("SDL_GetPowerInfo", SDL_PowerState, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
