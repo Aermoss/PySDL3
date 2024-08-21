@@ -1,4 +1,4 @@
-from .__init__ import sys, ctypes, wintypes, \
+from .__init__ import sys, ctypes, \
     SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
 SDL_SET_CURRENT_DLL(SDL_DLL)
@@ -6,6 +6,8 @@ SDL_SET_CURRENT_DLL(SDL_DLL)
 from .SDL_video import SDL_DisplayID
 
 if "win32" in sys.platform:
+    import ctypes.wintypes as wintypes
+
     MSG = wintypes.tagMSG
     SDL_WindowsMessageHook = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.POINTER(MSG))
     SDL_FUNC("SDL_SetWindowsMessageHook", None, SDL_WindowsMessageHook, ctypes.c_void_p)
