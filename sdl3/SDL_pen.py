@@ -1,4 +1,7 @@
-from .__init__ import ctypes, SDL_FUNC
+from .__init__ import ctypes, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_PenID = ctypes.c_uint32
 SDL_PenInputFlags = ctypes.c_uint32

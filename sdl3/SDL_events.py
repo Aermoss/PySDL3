@@ -1,4 +1,5 @@
-from .__init__ import ctypes, SDL_FUNC
+from .__init__ import ctypes, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
 from .SDL_video import SDL_WindowID, SDL_DisplayID
 from .SDL_sensor import SDL_SensorID
@@ -12,6 +13,8 @@ from .SDL_audio import SDL_AudioDeviceID
 from .SDL_camera import SDL_CameraID
 from .SDL_pen import SDL_PenID, SDL_PenInputFlags, SDL_PenAxis
 from .SDL_touch import SDL_TouchID, SDL_FingerID
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_EventType = ctypes.c_int
 

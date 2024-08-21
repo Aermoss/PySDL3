@@ -1,4 +1,9 @@
-from .__init__ import ctypes, SDL_FUNC
+from .__init__ import ctypes, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+
+from .SDL_events import SDL_Event
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_InitFlags = ctypes.c_uint32
 
@@ -11,6 +16,17 @@ SDL_INIT_GAMEPAD = 0x00002000
 SDL_INIT_EVENTS = 0x00004000
 SDL_INIT_SENSOR = 0x00008000
 SDL_INIT_CAMERA = 0x00010000
+
+SDL_AppResult = ctypes.c_int
+
+SDL_APP_CONTINUE = 0
+SDL_APP_SUCCESS = 1
+SDL_APP_FAILURE = 2
+
+SDL_AppInit_func = ctypes.CFUNCTYPE(SDL_AppResult, ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.POINTER(ctypes.c_char_p))
+SDL_AppIterate_func = ctypes.CFUNCTYPE(SDL_AppResult, ctypes.c_void_p)
+SDL_AppEvent_func = ctypes.CFUNCTYPE(SDL_AppResult, ctypes.c_void_p, ctypes.POINTER(SDL_Event))
+SDL_AppQuit_func = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
 
 SDL_FUNC("SDL_Init", ctypes.c_int, SDL_InitFlags)
 SDL_FUNC("SDL_InitSubSystem", ctypes.c_int, SDL_InitFlags)

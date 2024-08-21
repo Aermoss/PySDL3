@@ -1,10 +1,13 @@
-from .__init__ import ctypes, SDL_FUNC
+from .__init__ import ctypes, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
 from .SDL_properties import SDL_PropertiesID
 from .SDL_keycode import SDL_Keycode, SDL_Keymod
 from .SDL_scancode import SDL_Scancode
 from .SDL_video import SDL_Window
 from .SDL_rect import SDL_Rect
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_KeyboardID = ctypes.c_uint32
 

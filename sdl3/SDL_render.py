@@ -1,4 +1,7 @@
-from .__init__ import ctypes, SDL_FUNC
+from .__init__ import ctypes, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 from .SDL_events import SDL_Event
 from .SDL_rect import SDL_Point, SDL_FPoint, SDL_Rect, SDL_FRect

@@ -1,4 +1,7 @@
-from .__init__ import ctypes, SDL_FUNC
+from .__init__ import ctypes, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 from .SDL_pixels import SDL_PixelFormat, SDL_Colorspace, SDL_Palette
 from .SDL_properties import SDL_PropertiesID

@@ -1,4 +1,7 @@
-from .__init__ import ctypes, SDL_FUNC
+from .__init__ import ctypes, dll, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_SpinLock = ctypes.c_int
 
@@ -23,10 +26,10 @@ class LP_SDL_AtomicInt(ctypes._Pointer):
     ...
 
 def SDL_AtomicIncRef(a: LP_SDL_AtomicInt) -> ctypes.c_int:
-    return SDL_AtomicAdd(a, 1)
+    return dll.SDL_AtomicAdd(a, 1)
 
 def SDL_AtomicDecRef(a: LP_SDL_AtomicInt) -> ctypes.c_int:
-    return SDL_AtomicAdd(a, -1) == 1
+    return dll.SDL_AtomicAdd(a, -1) == 1
 
 SDL_FUNC("SDL_AtomicCompareAndSwapPointer", ctypes.c_bool, ctypes.POINTER(ctypes.c_void_p), ctypes.c_void_p, ctypes.c_void_p)
 SDL_FUNC("SDL_AtomicSetPtr", ctypes.c_void_p, ctypes.POINTER(ctypes.c_void_p), ctypes.c_void_p)

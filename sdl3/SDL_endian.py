@@ -1,6 +1,9 @@
-from .__init__ import sys
+from .__init__ import sys, ctypes, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
 import array
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_LIL_ENDIAN, SDL_BIG_ENDIAN = 1234, 4321
 SDL_BYTEORDER = SDL_LIL_ENDIAN \

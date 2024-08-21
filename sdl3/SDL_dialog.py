@@ -1,6 +1,9 @@
-from .__init__ import ctypes, SDL_FUNC
+from .__init__ import ctypes, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
 from .SDL_video import SDL_Window
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 class SDL_DialogFileFilter(ctypes.Structure):
     _fields_ = [

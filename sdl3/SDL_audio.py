@@ -1,8 +1,11 @@
-from .__init__ import ctypes, SDL_FUNC
+from .__init__ import ctypes, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
 from .SDL_endian import SDL_BYTEORDER, SDL_LIL_ENDIAN
 from .SDL_properties import SDL_PropertiesID
 from .SDL_iostream import SDL_IOStream
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_AUDIO_MASK_BITSIZE = 0xFF
 SDL_AUDIO_MASK_FLOAT = 1 << 8
