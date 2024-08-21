@@ -1,4 +1,4 @@
-import sys, os, inspect, ctypes, ctypes.wintypes as wintypes
+import sys, os, inspect, ctypes
 
 SDL_DLL, SDL_IMAGE_DLL, SDL_MIXER_DLL, SDL_NET_DLL, SDL_RTF_DLL, SDL_TTF_DLL = \
     "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_net", "SDL3_rtf", "SDL3_ttf"
@@ -19,6 +19,7 @@ __docs_file__ = os.path.join(os.path.dirname(__file__), "__docs__.py")
 
 __initialized__ = __name__.split(".")[0] in sys.modules if "." in __name__ else False
 __module__ = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
+__loader__ = (lambda path: None) if sys.platform != "win32" else ctypes.windll.LoadLibrary
 
 if not __initialized__:
     functions, dllMap, dll = {}, {}, None
@@ -26,7 +27,7 @@ if not __initialized__:
 
     for key, value in SDL_DLL_VAR_MAP.items():
         dllMap[value], functions[value] = \
-            ctypes.windll.LoadLibrary(os.path.join(binaryPath, f"{value}.dll")), {}
+            __loader__(os.path.join(binaryPath, f"{value}.dll")), {}
 
 else:
     functions, dllMap, dll, binaryPath = \
