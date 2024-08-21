@@ -9,20 +9,24 @@ class CustomInstall(install):
         
     def run(self) -> None:
         super(install, self).run()
-        os.environ["PYSDL3_DISABLE_DOCS"] = "0"
-        sdl3 = __import__("sdl3")
 
-        if not (len(sdl3.functions) > 0):
-            print("something went wrong.", flush = True)
+        if sys.platform in ["win32"]:
+            os.environ["PYSDL3_DISABLE_DOCS"] = "0"
+            print("generating '__docs__.py'.", flush = True)
+            sdl3 = __import__("sdl3")
+            loaded = sum(len(v) for k, v in sdl3.functions.items())
 
-        else:
-            print(f"loaded {len(sdl3.functions)} functions.", flush = True)
+            if loaded > 0:
+                print(f"loaded {loaded} functions.", flush = True)
+
+            else:
+                print("something went wrong.", flush = True)
 
 def main(argv):
     data = {
         "name": "PySDL3",
         "packages": ["sdl3", "sdl3.bin"],
-        "version": "0.4.0a1",
+        "version": "0.4.0a2",
         "description": "A pure Python wrapper for SDL3.",
         "long_description": open("README.md", "r", encoding = "utf-8").read(),
         "long_description_content_type": "text/markdown",
