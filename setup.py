@@ -26,18 +26,31 @@ def main(argv):
     data = {
         "name": "PySDL3",
         "packages": ["sdl3", "sdl3.bin"],
-        "version": "0.4.0a3",
+        "version": "0.4.0a4",
         "description": "A pure Python wrapper for SDL3.",
         "long_description": open("README.md", "r", encoding = "utf-8").read(),
         "long_description_content_type": "text/markdown",
         "url": "https://github.com/Aermoss/PySDL3",
+        "download_url": "https://pypi.python.org/pypi/PySDL3",
         "author": "Yusuf Rençber",
         "author_email": "aermoss.0@gmail.com",
         "license": "MIT",
         "include_package_data": True,
         "install_requires": [],
-        "python_requires": ">=3.9",
-        "cmdclass": {"install": CustomInstall}
+        "cmdclass": {"install": CustomInstall},
+        "classifiers": [
+            "Development Status :: 3 - Alpha",
+            "Intended Audience :: Developers",
+            "License :: OSI Approved :: MIT License",
+            "Operating System :: Microsoft :: Windows",
+            "Programming Language :: Python :: 3.9",
+            "Programming Language :: Python :: 3.10",
+            "Programming Language :: Python :: 3.11",
+            "Programming Language :: Python :: 3.12",
+            "Programming Language :: Python :: 3.13",
+            "Programming Language :: Python :: 3.14",
+            "Topic :: Software Development :: Libraries :: Python Modules"
+        ]
     }
 
     setuptools.setup(**data)
