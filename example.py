@@ -2,7 +2,7 @@ import sdl3, ctypes, os, \
     sys, colorsys, time
 
 def main(argv):
-    print(f"loaded {len(sdl3.functions)} functions.")
+    print(f"loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
     result = sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_TIMER | sdl3.SDL_INIT_AUDIO)
 
     if result:
@@ -36,7 +36,7 @@ def main(argv):
     audioStream = sdl3.SDL_CreateAudioStream(ctypes.byref(audioSpec), ctypes.byref(audioSpec))
     sdl3.SDL_PutAudioStreamData(audioStream, audioBuffer, audioSize.value)
     sdl3.SDL_BindAudioStream(currentAudioDevice, audioStream)
-    sdl3.SDL_SetAudioStreamFrequencyRatio(audioStream, 0.1)
+    sdl3.SDL_SetAudioStreamFrequencyRatio(audioStream, 1.0)
     
     running, hue, last = True, 0.0, 0.0
 
