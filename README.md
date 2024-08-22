@@ -1,7 +1,5 @@
 # PySDL3
 
-<meta name="google-site-verification" content="r3rBqcUtT1MoCTTdm9gjDzVuTYOqyWTGD2b2fmAA2eg" />
-
 [![Logo](https://github.com/Aermoss/PySDL3/blob/main/logo.png?raw=true)](https://github.com/Aermoss/PySDL3)
 
 [![Deploy](https://github.com/Aermoss/PySDL3/actions/workflows/python-publish.yml/badge.svg)](https://github.com/Aermoss/PySDL3/actions/workflows/python-publish.yml)
