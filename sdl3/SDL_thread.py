@@ -1,5 +1,5 @@
-from .__init__ import ctypes, dll, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+from .__init__ import ctypes, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_GET_DLL, SDL_DLL
 
 SDL_SET_CURRENT_DLL(SDL_DLL)
 
@@ -28,8 +28,11 @@ SDL_EndThreadFunction = SDL_FunctionPointer(lambda: ...)
 SDL_FUNC("SDL_CreateThreadRuntime", ctypes.POINTER(SDL_Thread), SDL_ThreadFunction, ctypes.c_char_p, ctypes.c_void_p, SDL_FunctionPointer, SDL_FunctionPointer)
 SDL_FUNC("SDL_CreateThreadWithPropertiesRuntime", ctypes.POINTER(SDL_Thread), SDL_PropertiesID, SDL_FunctionPointer, SDL_FunctionPointer)
 
-SDL_CreateThread = lambda fn, name, data: dll.SDL_CreateThreadRuntime(fn, name, data, SDL_BeginThreadFunction, SDL_EndThreadFunction)
-SDL_CreateThreadWithProperties = lambda props: dll.SDL_CreateThreadWithPropertiesRuntime(props, SDL_BeginThreadFunction, SDL_EndThreadFunction)
+SDL_CreateThread = lambda fn, name, data: \
+    SDL_GET_DLL(SDL_DLL).SDL_CreateThreadRuntime(fn, name, data, SDL_BeginThreadFunction, SDL_EndThreadFunction)
+
+SDL_CreateThreadWithProperties = lambda props: \
+    SDL_GET_DLL(SDL_DLL).SDL_CreateThreadWithPropertiesRuntime(props, SDL_BeginThreadFunction, SDL_EndThreadFunction)
 
 SDL_PROP_THREAD_CREATE_ENTRY_FUNCTION_POINTER = "SDL.thread.create.entry_function"
 SDL_PROP_THREAD_CREATE_NAME_STRING = "SDL.thread.create.name"

@@ -1,5 +1,5 @@
-from .__init__ import os, inspect, ctypes, dll, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+from .__init__ import os, inspect, ctypes, \
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_GET_DLL, SDL_DLL
 
 SDL_SET_CURRENT_DLL(SDL_DLL)
 
@@ -44,7 +44,8 @@ def SDL_enabled_assert(condition: ctypes.c_bool) -> None:
 
         data = SDL_AssertData()
         data.condition = "<condition>".encode()
-        state = dll.SDL_ReportAssertion(ctypes.byref(data), current.f_code.co_name.encode(), os.path.split(current.f_code.co_filename)[-1].encode(), current.f_lineno)
+        state = SDL_GET_DLL(SDL_DLL).SDL_ReportAssertion \
+            (ctypes.byref(data), current.f_code.co_name.encode(), os.path.split(current.f_code.co_filename)[-1].encode(), current.f_lineno)
 
         if state in [SDL_ASSERTION_RETRY]:
             continue
