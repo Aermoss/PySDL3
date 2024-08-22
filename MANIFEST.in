@@ -1,3 +1,4 @@
 include sdl3/*
 exclude sdl3/__docs__.py
 include sdl3/bin/*
+include logo.png
