@@ -1,5 +1,6 @@
 # PySDL3
 
+[![Logo](logo.png)](https://github.com/Aermoss/PySDL3)
 [![Deploy](https://github.com/Aermoss/PySDL3/actions/workflows/python-publish.yml/badge.svg)](https://github.com/Aermoss/PySDL3/actions/workflows/python-publish.yml)
 [![PyPI Versions](https://img.shields.io/pypi/pyversions/PySDL3)](https://pypi.org/project/PySDL3)
 [![PyPI](https://img.shields.io/pypi/v/PySDL3.svg)](https://pypi.org/project/PySDL3)
@@ -9,7 +10,7 @@ PySDL3 is a pure Python wrapper around the SDL3, SDL3\_mixer, SDL3\_image, SDL3\
 ## Getting Started
 Just run one of the following commands in a terminal:
 ```
-# To install the latest stable version from PyPi:
+# To install the latest stable version from PyPI:
 pip install --upgrade PySDL3
 
 # To install the latest development version from GitHub:
