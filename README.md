@@ -1,6 +1,6 @@
 # PySDL3
 
-[![Logo](logo.png)](https://github.com/Aermoss/PySDL3)
+[![Logo](https://github.com/Aermoss/PySDL3/blob/main/logo.png?raw=true)](https://github.com/Aermoss/PySDL3)
 
 [![Deploy](https://github.com/Aermoss/PySDL3/actions/workflows/python-publish.yml/badge.svg)](https://github.com/Aermoss/PySDL3/actions/workflows/python-publish.yml)
 [![PyPI Versions](https://img.shields.io/pypi/pyversions/PySDL3)](https://pypi.org/project/PySDL3)
@@ -23,3 +23,6 @@ Pre-built binaries are provided within the module so there are no additional req
 
 ## Documentation
 There is no documentation available for now, but the function definitions are exactly the same as the SDL3 function definitions, so you can use the documentation of SDL3.
+
+## License
+PySDL3 is available under the MIT license. See the LICENSE file for more info.
