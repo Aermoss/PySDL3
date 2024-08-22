@@ -48,3 +48,9 @@ from .SDL_timer import *
 from .SDL_touch import *
 from .SDL_version import *
 from .SDL_video import *
+
+from .SDL_image import *
+from .SDL_mixer import *
+from .SDL_net import *
+from .SDL_ttf import *
+from .SDL_rtf import *
