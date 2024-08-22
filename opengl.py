@@ -93,7 +93,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
         self.mousePressed = [False, False, False]
 
 def main(argv):
-    print(f"loaded {len(sdl3.functions)} functions.")
+    print(f"loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
 
     if sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_TIMER):
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
