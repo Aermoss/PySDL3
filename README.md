@@ -1,6 +1,7 @@
 # PySDL3
 
 [![Logo](logo.png)](https://github.com/Aermoss/PySDL3)
+
 [![Deploy](https://github.com/Aermoss/PySDL3/actions/workflows/python-publish.yml/badge.svg)](https://github.com/Aermoss/PySDL3/actions/workflows/python-publish.yml)
 [![PyPI Versions](https://img.shields.io/pypi/pyversions/PySDL3)](https://pypi.org/project/PySDL3)
 [![PyPI](https://img.shields.io/pypi/v/PySDL3.svg)](https://pypi.org/project/PySDL3)
