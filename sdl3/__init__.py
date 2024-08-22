@@ -98,7 +98,7 @@ if not __initialized__ and not __disable_docs__:
                 definitions += "\n\n"
 
         if index != len(__module__.functions) - 1 and len(list(__module__.functions.values())[index + 1]) != 0:
-            definitions += "\n"
+            definitions += "\n\n"
 
     for i in types:
         result += f"class {i}(ctypes._Pointer):\n"
