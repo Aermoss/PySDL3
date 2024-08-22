@@ -26,7 +26,7 @@ def main(argv):
     data = {
         "name": "PySDL3",
         "packages": ["sdl3", "sdl3.bin"],
-        "version": "0.4.1a0",
+        "version": "0.4.2a0",
         "description": "A pure Python wrapper for SDL3.",
         "long_description": open("README.md", "r", encoding = "utf-8").read(),
         "long_description_content_type": "text/markdown",
