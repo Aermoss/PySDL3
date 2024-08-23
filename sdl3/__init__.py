@@ -1,4 +1,4 @@
-import sys, os, inspect, ctypes
+import sys, os, inspect, ctypes, array
 
 SDL_DLL, SDL_IMAGE_DLL, SDL_MIXER_DLL, SDL_NET_DLL, SDL_RTF_DLL, SDL_TTF_DLL = \
     "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_net", "SDL3_rtf", "SDL3_ttf"
@@ -19,7 +19,7 @@ __docs_file__ = os.path.join(os.path.dirname(__file__), "__docs__.py")
 
 __initialized__ = __name__.split(".")[0] in sys.modules if "." in __name__ else False
 __module__ = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
-__loader__ = (lambda path: None) if sys.platform != "win32" else ctypes.windll.LoadLibrary
+__loader__ = ctypes.CDLL if "win32" not in sys.platform else ctypes.windll.LoadLibrary
 
 if not __initialized__:
     functions, dllMap, dll = {}, {}, None
@@ -27,11 +27,21 @@ if not __initialized__:
 
     for key, value in SDL_DLL_VAR_MAP.items():
         dllMap[value], functions[value] = \
-            __loader__(os.path.join(binaryPath, f"{value}.dll")), {}
+            __loader__(os.path.join(binaryPath, ("{}.dll" if "win32" in sys.platform else "lib{}.so").format(value))), {}
 
 else:
     functions, dllMap, dll, binaryPath = \
         __module__.functions, __module__.dllMap, __module__.dll, __module__.binaryPath
+
+def SDL_DEREFERENCE(value):
+    if isinstance(value, ctypes._Pointer):
+        return value.contents
+    
+    elif hasattr(value, "_obj"):
+        return value._obj
+    
+    else:
+        return value
 
 def SDL_FUNC_CACHE(func):
     cache = {}
@@ -73,14 +83,22 @@ from .SDL import *
 if not __initialized__ and not __disable_docs__:
     result = "from .SDL import *\n\n"
     result += f"from .__init__ import ctypes, SDL_GET_DLL, \\\n"
-    result += f"    {", ".join(list(SDL_DLL_VAR_MAP.keys()))}\n\n"
+    result += f"    {', '.join(list(SDL_DLL_VAR_MAP.keys()))}\n\n"
     types, definitions = set(), ""
 
     def getName(i):
         if i is None: return "None"
-        name = i.__name__.replace("CFunctionType", "_CFuncPtr")
-        if "SDL_" in name or "LP_" in name: types.add(name); return name
-        else: return f"ctypes.{name}"
+        if "CFunctionType" in i.__name__:
+            return "ctypes._Pointer"
+
+        if "LP_" in i.__name__ or not i.__name__.startswith("c_"):
+            if "LP_" in i.__name__:
+                types.add(i.__name__)
+
+            return i.__name__
+        
+        else:
+            return f"ctypes.{i.__name__}"
 
     for index, dll in enumerate(__module__.functions):
         if len(__module__.functions[dll]) == 0: continue
@@ -90,9 +108,9 @@ if not __initialized__ and not __disable_docs__:
             retType, args = \
                 __module__.functions[dll][name].restype, __module__.functions[dll][name].argtypes
 
-            definitions += f"def {name}({", ".join([f"_{index}: {getName(i)}" for index, i in enumerate(args)])}) -> {getName(retType)}:\n"
+            definitions += f"def {name}({', '.join([f'_{index}: {getName(i)}' for index, i in enumerate(args)])}) -> {getName(retType)}:\n"
             definitions += f"    \"\"\"This function is auto-generated.\"\"\"\n"
-            definitions += f"    return SDL_GET_DLL({SDL_DLL_VAR_MAP_INV[dll]}).{name}({", ".join([f"_{index}" for index, i in enumerate(args)])})"
+            definitions += f"    return SDL_GET_DLL({SDL_DLL_VAR_MAP_INV[dll]}).{name}({', '.join([f'_{index}' for index, i in enumerate(args)])})"
 
             if _index != len(__module__.functions[dll]) - 1:
                 definitions += "\n\n"
@@ -101,7 +119,8 @@ if not __initialized__ and not __disable_docs__:
             definitions += "\n\n"
 
     for i in types:
-        result += f"class {i}(ctypes._Pointer):\n"
+        count, name = i.count("LP_"), i.replace("LP_", "")
+        result += f"class {i}({'ctypes.POINTER(' * count}{'ctypes.' if name.startswith('c_') else ''}{name}{')' * count}):\n"
         result += f"    \"\"\"This class is auto-generated.\"\"\"\n\n"
 
     with open(__docs_file__, "w") as file:
