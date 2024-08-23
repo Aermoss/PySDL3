@@ -7,7 +7,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
     """Basic SDL3 integration implementation."""
     MOUSE_WHEEL_OFFSET_SCALE = 0.5
 
-    def __init__(self, window):
+    def __init__(self, window: sdl3.LP_SDL_Window) -> None:
         super(SDL3Renderer, self).__init__()
         self.window = window
 
@@ -45,7 +45,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
         self.io.key_map[imgui.KEY_Y] = sdl3.SDL_SCANCODE_Y
         self.io.key_map[imgui.KEY_Z] = sdl3.SDL_SCANCODE_Z
 
-    def processEvent(self, event):
+    def processEvent(self, event: sdl3.SDL_Event) -> None:
         if event.type == sdl3.SDL_EVENT_MOUSE_WHEEL:
             self.mouseWheel = event.wheel.y * self.MOUSE_WHEEL_OFFSET_SCALE
 
@@ -72,7 +72,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
             for char in event.text.text.decode("utf-8"):
                 self.io.add_input_character(ord(char))
 
-    def processInputs(self):
+    def processInputs(self) -> None:
         width, height = ctypes.c_int(0), ctypes.c_int(0)
         sdl3.SDL_GetWindowSize(self.window, ctypes.byref(width), ctypes.byref(height))
         self.io.display_size, self.io.display_fb_scale = (width.value, height.value), (1, 1)
@@ -92,7 +92,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
         self.io.mouse_wheel, self.mouseWheel = self.mouseWheel, 0
         self.mousePressed = [False, False, False]
 
-def main(argv):
+def main(argv: list[str]) -> int:
     print(f"loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
 
     if sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_TIMER):
