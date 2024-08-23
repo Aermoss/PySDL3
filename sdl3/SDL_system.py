@@ -1,9 +1,9 @@
 from .__init__ import sys, ctypes, \
     SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
-
 from .SDL_video import SDL_DisplayID
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 if "win32" in sys.platform:
     import ctypes.wintypes as wintypes

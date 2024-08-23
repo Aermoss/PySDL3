@@ -1,11 +1,11 @@
 from .__init__ import ctypes, \
     SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_GET_DLL, SDL_DLL
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
-
 from .SDL_atomic import SDL_AtomicInt
 from .SDL_stdinc import SDL_FunctionPointer
 from .SDL_properties import SDL_PropertiesID
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 class SDL_Thread(ctypes.Structure):
     ...

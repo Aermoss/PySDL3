@@ -1,8 +1,6 @@
 from .__init__ import ctypes, \
     SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
-
 from .SDL_events import SDL_Event
 from .SDL_rect import SDL_Point, SDL_FPoint, SDL_Rect, SDL_FRect
 from .SDL_pixels import SDL_Color, SDL_FColor, SDL_PixelFormat
@@ -10,6 +8,8 @@ from .SDL_surface import SDL_Surface, SDL_ScaleMode, SDL_FlipMode
 from .SDL_video import SDL_Window, SDL_WindowFlags
 from .SDL_properties import SDL_PropertiesID
 from .SDL_blendmode import SDL_BlendMode
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_SOFTWARE_RENDERER = "software"
 

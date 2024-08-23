@@ -1,7 +1,5 @@
-from .__init__ import sys, ctypes, \
+from .__init__ import sys, ctypes, array, \
     SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
-
-import array
 
 SDL_SET_CURRENT_DLL(SDL_DLL)
 

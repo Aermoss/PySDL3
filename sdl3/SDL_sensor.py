@@ -1,9 +1,9 @@
 from .__init__ import ctypes, \
     SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
-
 from .SDL_properties import SDL_PropertiesID
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 class SDL_Sensor(ctypes.Structure):
     ...

@@ -1,10 +1,10 @@
 from .__init__ import ctypes, \
     SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
-
 from .SDL_filesystem import SDL_EnumerateDirectoryCallback, SDL_PathInfo, SDL_GlobFlags
 from .SDL_properties import SDL_PropertiesID
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 class SDL_StorageInterface(ctypes.Structure):
     _fields_ = [

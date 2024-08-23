@@ -1,9 +1,9 @@
 from .__init__ import ctypes, \
     SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
-
 from .SDL_video import SDL_Window
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_MessageBoxFlags = ctypes.c_uint32
 

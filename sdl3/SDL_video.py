@@ -1,13 +1,13 @@
 from .__init__ import ctypes, \
     SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
-
 from .SDL_properties import SDL_PropertiesID
 from .SDL_surface import SDL_Surface
 from .SDL_pixels import SDL_PixelFormat
 from .SDL_rect import SDL_Point, SDL_Rect
 from .SDL_stdinc import SDL_FunctionPointer
+
+SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_DisplayID = ctypes.c_uint32
 SDL_WindowID = ctypes.c_uint32
