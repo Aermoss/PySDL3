@@ -29,6 +29,7 @@ classifiers = [
 
 [project.urls]
 Repository = "https://github.com/Aermoss/PySDL3"
+Issues = "https://github.com/Aermoss/PySDL3/issues"
 
 [tool.setuptools]
 packages = ["sdl3", "sdl3.bin"]
