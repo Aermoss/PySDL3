@@ -75,9 +75,9 @@ def main(argv: list[str]) -> int:
     sinceLastFrame, frames, frameCooldown = 0.0, 0.0, 1.0
     textTexture, textFRect = None, sdl3.SDL_FRect()
 
-    while running:
-        event = sdl3.SDL_Event()
+    event = sdl3.SDL_Event()
 
+    while running:
         while sdl3.SDL_PollEvent(ctypes.byref(event)):
             match event.type:
                 case sdl3.SDL_EVENT_QUIT:
