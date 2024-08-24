@@ -7,6 +7,87 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
     """Basic SDL3 integration implementation."""
     MOUSE_WHEEL_OFFSET_SCALE = 0.5
 
+    @staticmethod
+    def setCustomStyle() -> None:
+        style = imgui.get_style()
+        style.colors[imgui.COLOR_TEXT] = imgui.Vec4(1.00, 1.00, 1.00, 1.00)
+        style.colors[imgui.COLOR_TEXT_DISABLED] = imgui.Vec4(0.50, 0.50, 0.50, 1.00)
+        style.colors[imgui.COLOR_WINDOW_BACKGROUND] = imgui.Vec4(0.00, 0.00, 0.00, 0.39)
+        style.colors[imgui.COLOR_CHILD_BACKGROUND] = imgui.Vec4(0.00, 0.00, 0.00, 0.00)
+        style.colors[imgui.COLOR_POPUP_BACKGROUND] = imgui.Vec4(0.00, 0.00, 0.00, 0.63)
+        style.colors[imgui.COLOR_BORDER] = imgui.Vec4(1.00, 1.00, 1.00, 0.31)
+        style.colors[imgui.COLOR_BORDER_SHADOW] = imgui.Vec4(0.00, 0.00, 0.00, 0.00)
+        style.colors[imgui.COLOR_FRAME_BACKGROUND] = imgui.Vec4(0.00, 0.00, 0.00, 0.63)
+        style.colors[imgui.COLOR_FRAME_BACKGROUND_HOVERED] = imgui.Vec4(0.23, 0.23, 0.23, 0.63)
+        style.colors[imgui.COLOR_FRAME_BACKGROUND_ACTIVE] = imgui.Vec4(0.19, 0.19, 0.19, 0.39)
+        style.colors[imgui.COLOR_TITLE_BACKGROUND] = imgui.Vec4(0.00, 0.00, 0.00, 0.63)
+        style.colors[imgui.COLOR_TITLE_BACKGROUND_ACTIVE] = imgui.Vec4(0.00, 0.00, 0.00, 1.00)
+        style.colors[imgui.COLOR_TITLE_BACKGROUND_COLLAPSED] = imgui.Vec4(0.00, 0.00, 0.00, 0.35)
+        style.colors[imgui.COLOR_MENUBAR_BACKGROUND] = imgui.Vec4(0.00, 0.00, 0.00, 0.78)
+        style.colors[imgui.COLOR_SCROLLBAR_BACKGROUND] = imgui.Vec4(0.05, 0.05, 0.05, 0.54)
+        style.colors[imgui.COLOR_SCROLLBAR_GRAB] = imgui.Vec4(0.34, 0.34, 0.34, 0.63)
+        style.colors[imgui.COLOR_SCROLLBAR_GRAB_HOVERED] = imgui.Vec4(0.50, 0.50, 0.50, 0.63)
+        style.colors[imgui.COLOR_SCROLLBAR_GRAB_ACTIVE] = imgui.Vec4(0.38, 0.38, 0.38, 0.63)
+        style.colors[imgui.COLOR_CHECK_MARK] = imgui.Vec4(0.22, 0.55, 0.74, 1.00)
+        style.colors[imgui.COLOR_SLIDER_GRAB] = imgui.Vec4(0.34, 0.34, 0.34, 0.54)
+        style.colors[imgui.COLOR_SLIDER_GRAB_ACTIVE] = imgui.Vec4(0.56, 0.56, 0.56, 0.54)
+        style.colors[imgui.COLOR_BUTTON] = imgui.Vec4(0.00, 0.00, 0.00, 0.63)
+        style.colors[imgui.COLOR_BUTTON_HOVERED] = imgui.Vec4(0.20, 0.22, 0.23, 0.63)
+        style.colors[imgui.COLOR_BUTTON_ACTIVE] = imgui.Vec4(0.19, 0.19, 0.19, 0.39)
+        style.colors[imgui.COLOR_HEADER] = imgui.Vec4(0.20, 0.20, 0.20, 0.78)
+        style.colors[imgui.COLOR_HEADER_HOVERED] = imgui.Vec4(0.29, 0.29, 0.29, 0.78)
+        style.colors[imgui.COLOR_HEADER_ACTIVE] = imgui.Vec4(0.19, 0.19, 0.19, 0.15)
+        style.colors[imgui.COLOR_SEPARATOR] = imgui.Vec4(0.28, 0.28, 0.28, 0.29)
+        style.colors[imgui.COLOR_SEPARATOR_HOVERED] = imgui.Vec4(0.44, 0.44, 0.44, 0.29)
+        style.colors[imgui.COLOR_SEPARATOR_ACTIVE] = imgui.Vec4(0.40, 0.44, 0.47, 1.00)
+        style.colors[imgui.COLOR_RESIZE_GRIP] = imgui.Vec4(0.28, 0.28, 0.28, 0.29)
+        style.colors[imgui.COLOR_RESIZE_GRIP_HOVERED] = imgui.Vec4(0.44, 0.44, 0.44, 0.29)
+        style.colors[imgui.COLOR_RESIZE_GRIP_ACTIVE] = imgui.Vec4(0.40, 0.44, 0.47, 1.00)
+        style.colors[imgui.COLOR_TAB] = imgui.Vec4(0.00, 0.00, 0.00, 0.52)
+        style.colors[imgui.COLOR_TAB_HOVERED] = imgui.Vec4(0.20, 0.20, 0.20, 0.36)
+        style.colors[imgui.COLOR_TAB_ACTIVE] = imgui.Vec4(0.14, 0.14, 0.14, 1.00)
+        style.colors[imgui.COLOR_TAB_UNFOCUSED] = imgui.Vec4(0.00, 0.00, 0.00, 0.52)
+        style.colors[imgui.COLOR_TAB_UNFOCUSED_ACTIVE] = imgui.Vec4(0.14, 0.14, 0.14, 1.00)
+        style.colors[imgui.COLOR_PLOT_LINES] = imgui.Vec4(1.00, 0.00, 0.00, 1.00)
+        style.colors[imgui.COLOR_PLOT_LINES_HOVERED] = imgui.Vec4(1.00, 0.00, 0.00, 1.00)
+        style.colors[imgui.COLOR_PLOT_HISTOGRAM] = imgui.Vec4(1.00, 0.00, 0.00, 1.00)
+        style.colors[imgui.COLOR_PLOT_HISTOGRAM_HOVERED] = imgui.Vec4(1.00, 0.00, 0.00, 1.00)
+        style.colors[imgui.COLOR_TABLE_HEADER_BACKGROUND] = imgui.Vec4(0.00, 0.00, 0.00, 0.52)
+        style.colors[imgui.COLOR_TABLE_BORDER_STRONG] = imgui.Vec4(0.00, 0.00, 0.00, 0.52)
+        style.colors[imgui.COLOR_TABLE_BORDER_LIGHT] = imgui.Vec4(0.28, 0.28, 0.28, 0.29)
+        style.colors[imgui.COLOR_TABLE_ROW_BACKGROUND] = imgui.Vec4(0.00, 0.00, 0.00, 0.00)
+        style.colors[imgui.COLOR_TABLE_ROW_BACKGROUND_ALT] = imgui.Vec4(1.00, 1.00, 1.00, 0.06)
+        style.colors[imgui.COLOR_TEXT_SELECTED_BACKGROUND] = imgui.Vec4(0.20, 0.22, 0.23, 1.00)
+        style.colors[imgui.COLOR_DRAG_DROP_TARGET] = imgui.Vec4(0.33, 0.67, 0.86, 1.00)
+        style.colors[imgui.COLOR_NAV_HIGHLIGHT] = imgui.Vec4(1.00, 0.00, 0.00, 1.00)
+        style.colors[imgui.COLOR_NAV_WINDOWING_HIGHLIGHT] = imgui.Vec4(1.00, 0.00, 0.00, 0.70)
+        style.colors[imgui.COLOR_NAV_WINDOWING_DIM_BACKGROUND] = imgui.Vec4(1.00, 0.00, 0.00, 0.20)
+        style.colors[imgui.COLOR_MODAL_WINDOW_DIM_BACKGROUND] = imgui.Vec4(1.00, 0.00, 0.00, 0.35)
+
+        style.window_padding = imgui.Vec2(6.0, 6.0)
+        style.frame_padding = imgui.Vec2(5.0, 2.0)
+        style.cell_padding = imgui.Vec2(6.0, 6.0)
+        style.item_spacing = imgui.Vec2(6.0, 6.0)
+        style.item_inner_spacing = imgui.Vec2(6.0, 6.0)
+        style.touch_extra_padding = imgui.Vec2(0.0, 0.0)
+        style.window_title_align = imgui.Vec2(0.5, 0.5)
+        style.indent_spacing = 25.0
+        style.scrollbar_size = 10.0
+        style.grab_min_size = 10.0
+        style.window_border_size = 1.0
+        style.child_border_size = 1.0
+        style.popup_border_size = 1.0
+        style.frame_border_size = 1.0
+        style.tab_border_size = 1.0
+        style.window_rounding = 5.0
+        style.child_rounding = 4.0
+        style.frame_rounding = 2.0
+        style.popup_rounding = 4.0
+        style.scrollbar_rounding = 9.0
+        style.grab_rounding = 2.0
+        style.log_slider_deadzone = 4.0
+        style.tab_rounding = 4.0
+
     def __init__(self, window: sdl3.LP_SDL_Window) -> None:
         super(SDL3Renderer, self).__init__()
         self.window = window
@@ -78,7 +159,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
         self.io.display_size, self.io.display_fb_scale = (width.value, height.value), (1, 1)
         
         currentTime = sdl3.SDL_GetTicks() / 1000.0
-        self.io.delta_time = currentTime - self.lastTime
+        self.io.delta_time = abs(currentTime - self.lastTime)
         self.lastTime = currentTime
 
         x, y = ctypes.c_float(0.0), ctypes.c_float(0.0)
@@ -125,7 +206,7 @@ def main(argv: list[str]) -> int:
 
     imgui.create_context()
     imgui.get_io().ini_file_name = None
-    imgui.style_colors_dark()
+    SDL3Renderer.setCustomStyle()
 
     renderer = SDL3Renderer(window)
     running, hue, last = True, 0.0, 0.0
