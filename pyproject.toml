@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "PySDL3"
-version = "0.6.1a0"
+version = "0.6.1a1"
 description = "A pure Python wrapper for SDL3."
 readme = "README.md"
 authors = [
     {name = "Yusuf Rençber", email = "aermoss.0@gmail.com"}
 ]
-license = {file = "LICENSE"}
+license = {text = "MIT License"}
 dependencies  = []
 classifiers = [
     "Development Status :: 3 - Alpha",
