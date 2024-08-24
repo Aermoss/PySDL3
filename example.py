@@ -60,7 +60,7 @@ def main(argv: list[str]) -> int:
 
     frect = sdl3.SDL_FRect()
     sdl3.SDL_RectToFRect(ctypes.byref(rect), ctypes.byref(frect))
-    running, hue, lastTime, scale = True, 0.0, 0.0, 0.75
+    running, hue, lastTime, scale = True, 0.0, time.time(), 0.75
 
     sdl3.TTF_Init()
     font = sdl3.TTF_OpenFont("res/example.ttf".encode(), 32)
