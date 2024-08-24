@@ -21,10 +21,10 @@ pip install --upgrade git+https://github.com/Aermoss/PySDL3.git
 ```
 
 ## Requirements
-Pre-built binaries are provided within the module so there are no additional requirements.
+There are no additional requirements since the pre-built binaries are provided within the module.
 
 ## Documentation
-There is no documentation available for now, but the function definitions are exactly the same as the SDL3 function definitions, so you can use the documentation of SDL3.
+PySDL3 doesn't provide any documentation at the moment, but since the functions are exactly the same, you can use the official [documentation of SDL3](https://wiki.libsdl.org/SDL3).
 
 ## License
-PySDL3 is available under the MIT license. See the LICENSE file for more info.
+PySDL3 is available under the MIT license. See the [LICENSE](https://github.com/Aermoss/PySDL3/blob/main/LICENSE) file for more info.
