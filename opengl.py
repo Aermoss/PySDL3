@@ -90,16 +90,9 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
 
     def __init__(self, window: sdl3.LP_SDL_Window) -> None:
         super(SDL3Renderer, self).__init__()
+        
         self.window = window
-
         self.lastTime = sdl3.SDL_GetTicks() / 1000.0
-        self.mousePressed = [False, False, False]
-        self.mouseWheel = 0.0
-
-        width, height = ctypes.c_int(0), ctypes.c_int(0)
-        sdl3.SDL_GetWindowSize(self.window, ctypes.byref(width), ctypes.byref(height))
-
-        self.io.display_size = width.value, height.value
         self.io.get_clipboard_text_fn = lambda: sdl3.SDL_GetClipboardText()
         self.io.set_clipboard_text_fn = lambda text: sdl3.SDL_SetClipboardText(text.encode())
 
@@ -127,20 +120,20 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
         self.io.key_map[imgui.KEY_Z] = sdl3.SDL_SCANCODE_Z
 
     def processEvent(self, event: sdl3.SDL_Event) -> None:
-        if event.type == sdl3.SDL_EVENT_MOUSE_WHEEL:
-            self.mouseWheel = event.wheel.y * self.MOUSE_WHEEL_OFFSET_SCALE
+        if event.type in [sdl3.SDL_EVENT_MOUSE_WHEEL]:
+            self.io.mouse_wheel = event.wheel.y * self.MOUSE_WHEEL_OFFSET_SCALE
 
-        if event.type == sdl3.SDL_EVENT_MOUSE_BUTTON_DOWN:
-            if event.button.button == sdl3.SDL_BUTTON_LEFT:
-                self.mousePressed[0] = True
+        if event.type in [sdl3.SDL_EVENT_MOUSE_BUTTON_UP, sdl3.SDL_EVENT_MOUSE_BUTTON_DOWN]:
+            buttons = [sdl3.SDL_BUTTON_LEFT, sdl3.SDL_BUTTON_RIGHT, sdl3.SDL_BUTTON_MIDDLE]
 
-            if event.button.button == sdl3.SDL_BUTTON_RIGHT:
-                self.mousePressed[1] = True
+            if event.button.button in buttons:
+                self.io.mouse_down[buttons.index(event.button.button)] = event.type == sdl3.SDL_EVENT_MOUSE_BUTTON_DOWN
 
-            if event.button.button == sdl3.SDL_BUTTON_MIDDLE:
-                self.mousePressed[2] = True
+        if event.type in [sdl3.SDL_EVENT_MOUSE_MOTION]:
+            self.io.mouse_pos = (event.motion.x, event.motion.y) \
+                if sdl3.SDL_GetWindowFlags(self.window) & sdl3.SDL_WINDOW_MOUSE_FOCUS else (-1, -1)
 
-        if event.type == sdl3.SDL_EVENT_KEY_UP or event.type == sdl3.SDL_EVENT_KEY_DOWN:
+        if event.type in [sdl3.SDL_EVENT_KEY_UP, sdl3.SDL_EVENT_KEY_DOWN]:
             if event.key.scancode < sdl3.SDL_NUM_SCANCODES:
                 self.io.keys_down[event.key.scancode] = event.type == sdl3.SDL_EVENT_KEY_DOWN
 
@@ -154,24 +147,16 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
                 self.io.add_input_character(ord(char))
 
     def processInputs(self) -> None:
+        """This function should be called before processing events."""
+
         width, height = ctypes.c_int(0), ctypes.c_int(0)
         sdl3.SDL_GetWindowSize(self.window, ctypes.byref(width), ctypes.byref(height))
         self.io.display_size, self.io.display_fb_scale = (width.value, height.value), (1, 1)
+        self.io.mouse_wheel = 0
         
         currentTime = sdl3.SDL_GetTicks() / 1000.0
         self.io.delta_time = abs(currentTime - self.lastTime)
         self.lastTime = currentTime
-
-        x, y = ctypes.c_float(0.0), ctypes.c_float(0.0)
-        mouseMask = sdl3.SDL_GetMouseState(ctypes.byref(x), ctypes.byref(y))
-        x, y = int(x.value), int(y.value)
-
-        self.io.mouse_pos = (x, y) if sdl3.SDL_GetWindowFlags(self.window) & sdl3.SDL_WINDOW_MOUSE_FOCUS else (-1, -1)
-        self.io.mouse_down[0] = self.mousePressed[0] or (mouseMask & sdl3.SDL_BUTTON(sdl3.SDL_BUTTON_LEFT)) != 0
-        self.io.mouse_down[1] = self.mousePressed[1] or (mouseMask & sdl3.SDL_BUTTON(sdl3.SDL_BUTTON_RIGHT)) != 0
-        self.io.mouse_down[2] = self.mousePressed[2] or (mouseMask & sdl3.SDL_BUTTON(sdl3.SDL_BUTTON_MIDDLE)) != 0
-        self.io.mouse_wheel, self.mouseWheel = self.mouseWheel, 0
-        self.mousePressed = [False, False, False]
 
 def main(argv: list[str]) -> int:
     print(f"loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
@@ -180,15 +165,9 @@ def main(argv: list[str]) -> int:
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
         return 1
     
-    sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_DEPTH_SIZE, 24)
-    sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_STENCIL_SIZE, 8)
-    sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_DOUBLEBUFFER, 1)
-    sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_ACCELERATED_VISUAL, 1)
-    sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_MULTISAMPLEBUFFERS, 1)
-    sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_MULTISAMPLESAMPLES, 8)
     sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_CONTEXT_MAJOR_VERSION, 4)
     sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_CONTEXT_MINOR_VERSION, 6)
-    sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_CONTEXT_PROFILE_MASK, sdl3.SDL_GL_CONTEXT_PROFILE_CORE)
+    sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_CONTEXT_PROFILE_MASK, sdl3.SDL_GL_CONTEXT_PROFILE_COMPATIBILITY)
     sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_CONTEXT_FLAGS, sdl3.SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG)
     window = sdl3.SDL_CreateWindow("Aermoss".encode(), 1200, 600, sdl3.SDL_WINDOW_OPENGL | sdl3.SDL_WINDOW_RESIZABLE)
 
@@ -209,11 +188,13 @@ def main(argv: list[str]) -> int:
     SDL3Renderer.setCustomStyle()
 
     renderer = SDL3Renderer(window)
-    running, hue, last = True, 0.0, 0.0
+    running, hue, lastTime = True, 0.0, time.time()
     event = sdl3.SDL_Event()
 
     while running:
-        while sdl3.SDL_PollEvent(event):
+        renderer.processInputs()
+
+        while sdl3.SDL_PollEvent(ctypes.byref(event)):
             renderer.processEvent(event)
 
             match event.type:
@@ -224,12 +205,10 @@ def main(argv: list[str]) -> int:
                     if event.key.key == sdl3.SDLK_ESCAPE:
                         running = False
 
-        last, delta = \
-            time.time(), time.time() - last
+        lastTime, deltaTime = \
+            time.time(), time.time() - lastTime
 
-        hue += 0.5 * delta
-        renderer.processInputs()
-
+        hue = (hue + 0.5 * deltaTime) % 360.0
         gl.glClearColor(*colorsys.hsv_to_rgb(hue, 1.0, 0.1), 1.0)
         gl.glClear(gl.GL_COLOR_BUFFER_BIT)
         imgui.new_frame()
@@ -238,6 +217,7 @@ def main(argv: list[str]) -> int:
         imgui.text("This is some useful text.")
         imgui.end()
 
+        imgui.end_frame()
         imgui.render()
         renderer.render(imgui.get_draw_data())
         sdl3.SDL_GL_SwapWindow(window)
@@ -245,15 +225,11 @@ def main(argv: list[str]) -> int:
     renderer.shutdown()
     # imgui.destroy_context()
 
+    sdl3.SDL_GL_MakeCurrent(window, None)
     sdl3.SDL_GL_DestroyContext(context)
     sdl3.SDL_DestroyWindow(window)
     sdl3.SDL_Quit()
     return 0
 
 if __name__ == "__main__":
-    try:
-        os._exit(main(sys.argv))
-
-    except Exception as e:
-        print(f"error: {e}")
-        os._exit(1)
+    os._exit(main(sys.argv))
