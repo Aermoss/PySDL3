@@ -154,8 +154,8 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
         self.io.display_size, self.io.display_fb_scale = (width.value, height.value), (1, 1)
         self.io.mouse_wheel = 0
         
-        currentTime = sdl3.SDL_GetTicks() / 1000.0
-        self.io.delta_time = abs(currentTime - self.lastTime)
+        currentTime = sdl3.SDL_GetTicks() / 1000.0; deltaTime = currentTime - self.lastTime
+        self.io.delta_time = 1.0 / 1000.0 if deltaTime <= 0.0 else deltaTime
         self.lastTime = currentTime
 
 def main(argv: list[str]) -> int:
@@ -177,7 +177,6 @@ def main(argv: list[str]) -> int:
 
     context = sdl3.SDL_GL_CreateContext(window)
     sdl3.SDL_GL_MakeCurrent(window, context)
-    sdl3.SDL_GL_SetSwapInterval(1)
 
     if not context:
         print(f"failed to create context: {sdl3.SDL_GetError().decode().lower()}.", flush = True)
@@ -190,6 +189,8 @@ def main(argv: list[str]) -> int:
     renderer = SDL3Renderer(window)
     running, hue, lastTime = True, 0.0, time.time()
     event = sdl3.SDL_Event()
+
+    active = True
 
     while running:
         renderer.processInputs()
