@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "PySDL3"
-version = "0.6.2a0"
+version = "0.6.3a0"
 description = "A pure Python wrapper for SDL3."
 readme = "README.md"
 authors = [
