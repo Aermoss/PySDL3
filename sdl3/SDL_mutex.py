@@ -5,7 +5,7 @@ SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_MUTEX_TIMEDOUT = 1
 
-class SDL_Mutex(ctypes.Structure):
+class SDL_Mutex(ctypes.c_void_p):
     ...
 
 SDL_FUNC("SDL_CreateMutex", ctypes.POINTER(SDL_Mutex))
@@ -14,7 +14,7 @@ SDL_FUNC("SDL_TryLockMutex", ctypes.c_int, ctypes.POINTER(SDL_Mutex))
 SDL_FUNC("SDL_UnlockMutex", None, ctypes.POINTER(SDL_Mutex))
 SDL_FUNC("SDL_DestroyMutex", None, ctypes.POINTER(SDL_Mutex))
 
-class SDL_RWLock(ctypes.Structure):
+class SDL_RWLock(ctypes.c_void_p):
     ...
 
 SDL_RWLOCK_TIMEDOUT = SDL_MUTEX_TIMEDOUT
@@ -27,7 +27,7 @@ SDL_FUNC("SDL_TryLockRWLockForWriting", ctypes.c_int, ctypes.POINTER(SDL_RWLock)
 SDL_FUNC("SDL_UnlockRWLock", None, ctypes.POINTER(SDL_RWLock))
 SDL_FUNC("SDL_DestroyRWLock", None, ctypes.POINTER(SDL_RWLock))
 
-class SDL_Semaphore(ctypes.Structure):
+class SDL_Semaphore(ctypes.c_void_p):
     ...
 
 SDL_FUNC("SDL_CreateSemaphore", ctypes.POINTER(SDL_Semaphore), ctypes.c_uint32)
@@ -38,7 +38,7 @@ SDL_FUNC("SDL_WaitSemaphoreTimeout", ctypes.c_int, ctypes.POINTER(SDL_Semaphore)
 SDL_FUNC("SDL_SignalSemaphore", ctypes.c_int, ctypes.POINTER(SDL_Semaphore))
 SDL_FUNC("SDL_GetSemaphoreValue", ctypes.c_uint32, ctypes.POINTER(SDL_Semaphore))
 
-class SDL_Condition(ctypes.Structure):
+class SDL_Condition(ctypes.c_void_p):
     ...
 
 SDL_FUNC("SDL_CreateCondition", ctypes.POINTER(SDL_Condition))

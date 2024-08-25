@@ -6,13 +6,13 @@ from .SDL_stdinc import SDL_FunctionPointer
 
 SDL_SET_CURRENT_DLL(SDL_DLL)
 
-class VkInstance(ctypes.Structure):
+class VkInstance(ctypes.c_void_p):
     ...
 
-class VkPhysicalDevice(ctypes.Structure):
+class VkPhysicalDevice(ctypes.c_void_p):
     ...
 
-class VkAllocationCallbacks(ctypes.Structure):
+class VkAllocationCallbacks(ctypes.c_void_p):
     ...
     
 VkSurfaceKHR = ctypes.c_uint64

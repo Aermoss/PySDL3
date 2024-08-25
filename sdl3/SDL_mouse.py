@@ -8,7 +8,7 @@ SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_MouseID = ctypes.c_uint32
 
-class SDL_Cursor(ctypes.Structure):
+class SDL_Cursor(ctypes.c_void_p):
     ...
 
 SDL_SystemCursor = ctypes.c_int

@@ -71,7 +71,7 @@ MUS_OPUS = 10
 MUS_WAVPACK = 11
 MUS_GME = 12
 
-class Mix_Music(ctypes.Structure):
+class Mix_Music(ctypes.c_void_p):
     ...
 
 SDL_FUNC("Mix_OpenAudio", ctypes.c_int, SDL_AudioDeviceID, ctypes.POINTER(SDL_AudioSpec))

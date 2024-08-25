@@ -29,7 +29,7 @@ class SDL_IOStreamInterface(ctypes.Structure):
         ("close", ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p))
     ]
 
-class SDL_IOStream(ctypes.Structure):
+class SDL_IOStream(ctypes.c_void_p):
     ...
 
 SDL_FUNC("SDL_IOFromFile", ctypes.POINTER(SDL_IOStream), ctypes.c_char_p, ctypes.c_char_p)

@@ -34,10 +34,10 @@ SDL_LOGICAL_PRESENTATION_LETTERBOX = 2
 SDL_LOGICAL_PRESENTATION_OVERSCAN = 3
 SDL_LOGICAL_PRESENTATION_INTEGER_SCALE = 4
 
-class SDL_Renderer(ctypes.Structure):
+class SDL_Renderer(ctypes.c_void_p):
     ...
 
-class SDL_Texture(ctypes.Structure):
+class SDL_Texture(ctypes.c_void_p):
     ...
 
 SDL_FUNC("SDL_GetNumRenderDrivers", ctypes.c_int)

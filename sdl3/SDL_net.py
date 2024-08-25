@@ -21,7 +21,7 @@ SDL_FUNC("SDLNet_Version", ctypes.c_int)
 SDL_FUNC("SDLNet_Init", ctypes.c_int)
 SDL_FUNC("SDLNet_Quit", None)
 
-class SDLNet_Address(ctypes.Structure):
+class SDLNet_Address(ctypes.c_void_p):
     ...
 
 SDL_FUNC("SDLNet_ResolveHostname", ctypes.POINTER(SDLNet_Address), ctypes.c_char_p)
@@ -35,13 +35,13 @@ SDL_FUNC("SDLNet_CompareAddresses", ctypes.c_int, ctypes.POINTER(SDLNet_Address)
 SDL_FUNC("SDLNet_GetLocalAddresses", ctypes.POINTER(ctypes.POINTER(SDLNet_Address)), ctypes.POINTER(ctypes.c_int))
 SDL_FUNC("SDLNet_FreeLocalAddresses", None, ctypes.POINTER(ctypes.POINTER(SDLNet_Address)))
 
-class SDLNet_StreamSocket(ctypes.Structure):
+class SDLNet_StreamSocket(ctypes.c_void_p):
     ...
 
 SDL_FUNC("SDLNet_CreateClient", ctypes.POINTER(SDLNet_StreamSocket), ctypes.POINTER(SDLNet_Address), ctypes.c_uint16)
 SDL_FUNC("SDLNet_WaitUntilConnected", ctypes.c_int, ctypes.POINTER(SDLNet_StreamSocket), ctypes.c_int32)
 
-class SDLNet_Server(ctypes.Structure):
+class SDLNet_Server(ctypes.c_void_p):
     ...
 
 SDL_FUNC("SDLNet_CreateServer", ctypes.POINTER(SDLNet_Server), ctypes.POINTER(SDLNet_Address), ctypes.c_uint16)
@@ -56,7 +56,7 @@ SDL_FUNC("SDLNet_ReadFromStreamSocket", ctypes.c_int, ctypes.POINTER(SDLNet_Stre
 SDL_FUNC("SDLNet_SimulateStreamPacketLoss", None, ctypes.POINTER(SDLNet_StreamSocket), ctypes.c_int)
 SDL_FUNC("SDLNet_DestroyStreamSocket", None, ctypes.POINTER(SDLNet_StreamSocket))
 
-class SDLNet_DatagramSocket(ctypes.Structure):
+class SDLNet_DatagramSocket(ctypes.c_void_p):
     ...
 
 class SDLNet_Datagram(ctypes.Structure):

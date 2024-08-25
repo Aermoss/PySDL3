@@ -3,7 +3,7 @@ from .__init__ import ctypes, \
 
 SDL_SET_CURRENT_DLL(SDL_DLL)
 
-class SDL_hid_device(ctypes.Structure):
+class SDL_hid_device(ctypes.c_void_p):
     ...
 
 SDL_hid_bus_type = ctypes.c_int

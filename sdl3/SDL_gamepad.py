@@ -13,7 +13,7 @@ from .SDL_joystick import SDL_Joystick, SDL_JoystickID, SDL_JoystickConnectionSt
 
 SDL_SET_CURRENT_DLL(SDL_DLL)
 
-class SDL_Gamepad(ctypes.Structure):
+class SDL_Gamepad(ctypes.c_void_p):
     ...
 
 SDL_GamepadType = ctypes.c_int

@@ -9,7 +9,7 @@ SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_CameraID = ctypes.c_uint32
 
-class SDL_Camera(ctypes.Structure):
+class SDL_Camera(ctypes.c_void_p):
     ...
 
 class SDL_CameraSpec(ctypes.Structure):

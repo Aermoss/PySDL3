@@ -19,7 +19,7 @@ __docs_file__ = os.path.join(os.path.dirname(__file__), "__docs__.py")
 
 __initialized__ = __name__.split(".")[0] in sys.modules if "." in __name__ else False
 __module__ = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
-__loader__ = ctypes.CDLL if "win32" not in sys.platform else ctypes.windll.LoadLibrary
+__loader__ = ctypes.CDLL if "win32" not in sys.platform else ctypes.WinDLL
 
 if not __initialized__:
     functions, dllMap, dll = {}, {}, None

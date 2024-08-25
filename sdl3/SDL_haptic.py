@@ -5,7 +5,7 @@ from .SDL_joystick import SDL_Joystick
 
 SDL_SET_CURRENT_DLL(SDL_DLL)
 
-class SDL_Haptic(ctypes.Structure):
+class SDL_Haptic(ctypes.c_void_p):
     ...
 
 SDL_HAPTIC_CONSTANT = 1 << 0

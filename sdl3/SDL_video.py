@@ -20,7 +20,7 @@ SDL_SYSTEM_THEME_UNKNOWN = 0
 SDL_SYSTEM_THEME_LIGHT = 1
 SDL_SYSTEM_THEME_DARK = 2
 
-class SDL_DisplayModeData(ctypes.Structure):
+class SDL_DisplayModeData(ctypes.c_void_p):
     ...
 
 class SDL_DisplayMode(ctypes.Structure):
@@ -44,7 +44,7 @@ SDL_ORIENTATION_LANDSCAPE_FLIPPED = 2
 SDL_ORIENTATION_PORTRAIT = 3
 SDL_ORIENTATION_PORTRAIT_FLIPPED = 4
 
-class SDL_Window(ctypes.Structure):
+class SDL_Window(ctypes.c_void_p):
     ...
 
 SDL_WindowFlags = ctypes.c_uint64

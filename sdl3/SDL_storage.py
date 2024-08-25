@@ -21,7 +21,7 @@ class SDL_StorageInterface(ctypes.Structure):
         ("space_remaining", ctypes.CFUNCTYPE(ctypes.c_uint64, ctypes.c_void_p))
     ]
 
-class SDL_Storage(ctypes.Structure):
+class SDL_Storage(ctypes.c_void_p):
     ...
 
 SDL_FUNC("SDL_OpenTitleStorage", ctypes.POINTER(SDL_Storage), ctypes.c_char_p, SDL_PropertiesID)

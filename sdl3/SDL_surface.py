@@ -30,7 +30,7 @@ SDL_FLIP_NONE = 0
 SDL_FLIP_HORIZONTAL = 1
 SDL_FLIP_VERTICAL = 2
 
-class SDL_SurfaceData(ctypes.Structure):
+class SDL_SurfaceData(ctypes.c_void_p):
     ...
 
 class SDL_Surface(ctypes.Structure):

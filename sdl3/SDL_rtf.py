@@ -23,7 +23,7 @@ SDL_RTF_VERSION_ATLEAST = lambda x, y, z: \
 
 SDL_FUNC("RTF_Version", ctypes.c_int)
 
-class RTF_Context(ctypes.Structure):
+class RTF_Context(ctypes.c_void_p):
     ...
 
 RTF_FontFamily = ctypes.c_int

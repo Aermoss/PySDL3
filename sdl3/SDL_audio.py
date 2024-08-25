@@ -60,7 +60,7 @@ class SDL_AudioSpec(ctypes.Structure):
 
 SDL_AUDIO_FRAMESIZE = lambda x: SDL_AUDIO_BYTESIZE(x.format) * x.channels
 
-class SDL_AudioStream(ctypes.Structure):
+class SDL_AudioStream(ctypes.c_void_p):
     ...
 
 SDL_FUNC("SDL_GetNumAudioDrivers", ctypes.c_int)

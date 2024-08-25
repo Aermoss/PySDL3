@@ -8,7 +8,7 @@ from .SDL_guid import SDL_GUID
 
 SDL_SET_CURRENT_DLL(SDL_DLL)
 
-class SDL_Joystick(ctypes.Structure):
+class SDL_Joystick(ctypes.c_void_p):
     ...
 
 SDL_JoystickID = ctypes.c_uint32

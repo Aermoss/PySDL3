@@ -29,7 +29,7 @@ UNICODE_BOM_SWAPPED = 0xFFFE
 
 SDL_FUNC("TTF_ByteSwappedUNICODE", None, ctypes.c_bool)
 
-class TTF_Font(ctypes.Structure):
+class TTF_Font(ctypes.c_void_p):
     ...
 
 SDL_FUNC("TTF_Init", ctypes.c_int)
