@@ -1,7 +1,7 @@
 from .__init__ import ctypes, \
     SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
-from .SDL_video import SDL_WindowID, SDL_DisplayID
+from .SDL_video import SDL_Window, SDL_WindowID, SDL_DisplayID
 from .SDL_sensor import SDL_SensorID
 from .SDL_joystick import SDL_JoystickID
 from .SDL_keyboard import SDL_KeyboardID
@@ -595,4 +595,32 @@ class SDL_Event(ctypes.Union):
         ("clipboard", SDL_ClipboardEvent)
     ]
 
-SDL_FUNC("SDL_PollEvent", ctypes.c_int, ctypes.POINTER(SDL_Event))
+SDL_FUNC("SDL_PumpEvents", None)
+
+SDL_EventAction = ctypes.c_int
+
+SDL_ADDEVENT = 0
+SDL_PEEKEVENT = 1
+SDL_GETEVENT = 2
+
+SDL_FUNC("SDL_PeepEvents", ctypes.c_int, ctypes.POINTER(SDL_Event), ctypes.c_int, SDL_EventAction, ctypes.c_uint32, ctypes.c_uint32)
+SDL_FUNC("SDL_HasEvent", ctypes.c_bool, ctypes.c_uint32)
+SDL_FUNC("SDL_HasEvents", ctypes.c_bool, ctypes.c_uint32, ctypes.c_uint32)
+SDL_FUNC("SDL_FlushEvent", None, ctypes.c_uint32)
+SDL_FUNC("SDL_FlushEvents", None, ctypes.c_uint32, ctypes.c_uint32)
+SDL_FUNC("SDL_PollEvent", ctypes.c_bool, ctypes.POINTER(SDL_Event))
+SDL_FUNC("SDL_WaitEvent", ctypes.c_bool, ctypes.POINTER(SDL_Event))
+SDL_FUNC("SDL_WaitEventTimeout", ctypes.c_bool, ctypes.POINTER(SDL_Event), ctypes.c_int32)
+SDL_FUNC("SDL_PushEvent", ctypes.c_bool, ctypes.POINTER(SDL_Event))
+
+SDL_EventFilter = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.POINTER(SDL_Event))
+
+SDL_FUNC("SDL_SetEventFilter", None, SDL_EventFilter, ctypes.c_void_p)
+SDL_FUNC("SDL_GetEventFilter", ctypes.c_bool, ctypes.POINTER(SDL_EventFilter), ctypes.POINTER(ctypes.c_void_p))
+SDL_FUNC("SDL_AddEventWatch", ctypes.c_bool, SDL_EventFilter, ctypes.c_void_p)
+SDL_FUNC("SDL_DelEventWatch", None, SDL_EventFilter, ctypes.c_void_p)
+SDL_FUNC("SDL_FilterEvents", None, SDL_EventFilter, ctypes.c_void_p)
+SDL_FUNC("SDL_SetEventEnabled", None, ctypes.c_uint32, ctypes.c_bool)
+SDL_FUNC("SDL_EventEnabled", ctypes.c_bool, ctypes.c_uint32)
+SDL_FUNC("SDL_RegisterEvents", ctypes.c_uint32, ctypes.c_int)
+SDL_FUNC("SDL_GetWindowFromEvent", ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Event))
