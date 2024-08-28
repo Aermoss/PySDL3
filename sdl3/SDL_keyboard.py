@@ -21,13 +21,13 @@ SDL_FUNC("SDL_GetModState", SDL_Keymod)
 SDL_FUNC("SDL_SetModState", None, SDL_Keymod)
 SDL_FUNC("SDL_GetKeyFromScancode", SDL_Keycode, SDL_Scancode, SDL_Keymod, ctypes.c_bool)
 SDL_FUNC("SDL_GetScancodeFromKey", SDL_Scancode, SDL_Keycode, ctypes.POINTER(SDL_Keymod))
-SDL_FUNC("SDL_SetScancodeName", ctypes.c_int, SDL_Scancode, ctypes.c_char_p)
+SDL_FUNC("SDL_SetScancodeName", ctypes.c_bool, SDL_Scancode, ctypes.c_char_p)
 SDL_FUNC("SDL_GetScancodeName", ctypes.c_char_p, SDL_Scancode)
 SDL_FUNC("SDL_GetScancodeFromName", SDL_Scancode, ctypes.c_char_p)
 SDL_FUNC("SDL_GetKeyName", ctypes.c_char_p, SDL_Keycode)
 SDL_FUNC("SDL_GetKeyFromName", SDL_Keycode, ctypes.c_char_p)
 
-SDL_FUNC("SDL_StartTextInput", ctypes.c_int, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_StartTextInput", ctypes.c_bool, ctypes.POINTER(SDL_Window))
 
 SDL_TextInputType = ctypes.c_int
 
@@ -48,7 +48,7 @@ SDL_CAPITALIZE_SENTENCES = 1
 SDL_CAPITALIZE_WORDS = 2
 SDL_CAPITALIZE_LETTERS = 3
 
-SDL_FUNC("SDL_StartTextInputWithProperties", ctypes.c_int, ctypes.POINTER(SDL_Window), SDL_PropertiesID)
+SDL_FUNC("SDL_StartTextInputWithProperties", ctypes.c_bool, ctypes.POINTER(SDL_Window), SDL_PropertiesID)
 
 SDL_PROP_TEXTINPUT_TYPE_NUMBER = "SDL.textinput.type"
 SDL_PROP_TEXTINPUT_CAPITALIZATION_NUMBER = "SDL.textinput.capitalization"
@@ -57,9 +57,9 @@ SDL_PROP_TEXTINPUT_MULTILINE_BOOLEAN = "SDL.textinput.multiline"
 SDL_PROP_TEXTINPUT_ANDROID_INPUTTYPE_NUMBER = "SDL.textinput.android.inputtype"
 
 SDL_FUNC("SDL_TextInputActive", ctypes.c_bool, ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_StopTextInput", ctypes.c_int, ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_ClearComposition", ctypes.c_int, ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_SetTextInputArea", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Rect), ctypes.c_int)
-SDL_FUNC("SDL_GetTextInputArea", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Rect), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_StopTextInput", ctypes.c_bool, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_ClearComposition", ctypes.c_bool, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_SetTextInputArea", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Rect), ctypes.c_int)
+SDL_FUNC("SDL_GetTextInputArea", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Rect), ctypes.POINTER(ctypes.c_int))
 SDL_FUNC("SDL_HasScreenKeyboardSupport", ctypes.c_bool)
 SDL_FUNC("SDL_ScreenKeyboardShown", ctypes.c_bool, ctypes.POINTER(SDL_Window))

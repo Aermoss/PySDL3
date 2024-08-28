@@ -168,8 +168,8 @@ SDL_PROP_DISPLAY_HDR_ENABLED_BOOLEAN = "SDL.display.HDR_enabled"
 SDL_PROP_DISPLAY_KMSDRM_PANEL_ORIENTATION_NUMBER = "SDL.display.KMSDRM.panel_orientation"
 
 SDL_FUNC("SDL_GetDisplayName", ctypes.c_char_p, SDL_DisplayID)
-SDL_FUNC("SDL_GetDisplayBounds", ctypes.c_int, SDL_DisplayID, ctypes.POINTER(SDL_Rect))
-SDL_FUNC("SDL_GetDisplayUsableBounds", ctypes.c_int, SDL_DisplayID, ctypes.POINTER(SDL_Rect))
+SDL_FUNC("SDL_GetDisplayBounds", ctypes.c_bool, SDL_DisplayID, ctypes.POINTER(SDL_Rect))
+SDL_FUNC("SDL_GetDisplayUsableBounds", ctypes.c_bool, SDL_DisplayID, ctypes.POINTER(SDL_Rect))
 
 SDL_FUNC("SDL_GetNaturalDisplayOrientation", SDL_DisplayOrientation, SDL_DisplayID)
 SDL_FUNC("SDL_GetCurrentDisplayOrientation", SDL_DisplayOrientation, SDL_DisplayID)
@@ -177,7 +177,7 @@ SDL_FUNC("SDL_GetCurrentDisplayOrientation", SDL_DisplayOrientation, SDL_Display
 SDL_FUNC("SDL_GetDisplayContentScale", ctypes.c_float, SDL_DisplayID)
 
 SDL_FUNC("SDL_GetFullscreenDisplayModes", ctypes.POINTER(ctypes.POINTER(SDL_DisplayMode)), SDL_DisplayID, ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("SDL_GetClosestFullscreenDisplayMode", ctypes.c_int, SDL_DisplayID, ctypes.c_int, ctypes.c_int, ctypes.c_float, ctypes.c_bool, ctypes.POINTER(SDL_DisplayMode))
+SDL_FUNC("SDL_GetClosestFullscreenDisplayMode", ctypes.c_bool, SDL_DisplayID, ctypes.c_int, ctypes.c_int, ctypes.c_float, ctypes.c_bool, ctypes.POINTER(SDL_DisplayMode))
 
 SDL_FUNC("SDL_GetDesktopDisplayMode", ctypes.POINTER(SDL_DisplayMode), SDL_DisplayID)
 SDL_FUNC("SDL_GetCurrentDisplayMode", ctypes.POINTER(SDL_DisplayMode), SDL_DisplayID)
@@ -189,7 +189,7 @@ SDL_FUNC("SDL_GetDisplayForWindow", SDL_DisplayID, ctypes.POINTER(SDL_Window))
 SDL_FUNC("SDL_GetWindowPixelDensity", ctypes.c_float, ctypes.POINTER(SDL_Window))
 SDL_FUNC("SDL_GetWindowDisplayScale", ctypes.c_float, ctypes.POINTER(SDL_Window))
 
-SDL_FUNC("SDL_SetWindowFullscreenMode", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_DisplayMode))
+SDL_FUNC("SDL_SetWindowFullscreenMode", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_DisplayMode))
 SDL_FUNC("SDL_GetWindowFullscreenMode", ctypes.POINTER(SDL_DisplayMode), ctypes.POINTER(SDL_Window))
 
 SDL_FUNC("SDL_GetWindowICCProfile", ctypes.c_void_p, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_size_t))
@@ -279,76 +279,76 @@ SDL_PROP_WINDOW_X11_WINDOW_NUMBER = "SDL.window.x11.window"
 
 SDL_FUNC("SDL_GetWindowFlags", SDL_WindowFlags, ctypes.POINTER(SDL_Window))
 
-SDL_FUNC("SDL_SetWindowTitle", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_char_p)
+SDL_FUNC("SDL_SetWindowTitle", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_char_p)
 SDL_FUNC("SDL_GetWindowTitle", ctypes.c_char_p, ctypes.POINTER(SDL_Window))
 
-SDL_FUNC("SDL_SetWindowIcon", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Surface))
+SDL_FUNC("SDL_SetWindowIcon", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Surface))
 
-SDL_FUNC("SDL_SetWindowPosition", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
-SDL_FUNC("SDL_GetWindowPosition", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_SetWindowPosition", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
+SDL_FUNC("SDL_GetWindowPosition", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
-SDL_FUNC("SDL_SetWindowSize", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
-SDL_FUNC("SDL_GetWindowSize", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_SetWindowSize", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
+SDL_FUNC("SDL_GetWindowSize", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
-SDL_FUNC("SDL_GetWindowSafeArea", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Rect))
+SDL_FUNC("SDL_GetWindowSafeArea", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Rect))
 
-SDL_FUNC("SDL_SetWindowAspectRatio", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_float, ctypes.c_float)
-SDL_FUNC("SDL_GetWindowAspectRatio", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))
+SDL_FUNC("SDL_SetWindowAspectRatio", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_float, ctypes.c_float)
+SDL_FUNC("SDL_GetWindowAspectRatio", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))
 
-SDL_FUNC("SDL_GetWindowBordersSize", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("SDL_GetWindowSizeInPixels", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GetWindowBordersSize", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GetWindowSizeInPixels", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
-SDL_FUNC("SDL_SetWindowMinimumSize", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
-SDL_FUNC("SDL_GetWindowMinimumSize", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_SetWindowMinimumSize", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
+SDL_FUNC("SDL_GetWindowMinimumSize", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
-SDL_FUNC("SDL_SetWindowMaximumSize", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
-SDL_FUNC("SDL_GetWindowMaximumSize", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_SetWindowMaximumSize", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
+SDL_FUNC("SDL_GetWindowMaximumSize", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
-SDL_FUNC("SDL_SetWindowBordered", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_bool)
-SDL_FUNC("SDL_SetWindowResizable", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_bool)
-SDL_FUNC("SDL_SetWindowAlwaysOnTop", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_bool)
+SDL_FUNC("SDL_SetWindowBordered", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_bool)
+SDL_FUNC("SDL_SetWindowResizable", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_bool)
+SDL_FUNC("SDL_SetWindowAlwaysOnTop", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_bool)
 
-SDL_FUNC("SDL_ShowWindow", ctypes.c_int, ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_HideWindow", ctypes.c_int, ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_RaiseWindow", ctypes.c_int, ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_MaximizeWindow", ctypes.c_int, ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_MinimizeWindow", ctypes.c_int, ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_RestoreWindow", ctypes.c_int, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_ShowWindow", ctypes.c_bool, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_HideWindow", ctypes.c_bool, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_RaiseWindow", ctypes.c_bool, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_MaximizeWindow", ctypes.c_bool, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_MinimizeWindow", ctypes.c_bool, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_RestoreWindow", ctypes.c_bool, ctypes.POINTER(SDL_Window))
 
-SDL_FUNC("SDL_SetWindowFullscreen", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_bool)
-SDL_FUNC("SDL_SyncWindow", ctypes.c_int, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_SetWindowFullscreen", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_bool)
+SDL_FUNC("SDL_SyncWindow", ctypes.c_bool, ctypes.POINTER(SDL_Window))
 SDL_FUNC("SDL_WindowHasSurface", ctypes.c_bool, ctypes.POINTER(SDL_Window))
 
 SDL_FUNC("SDL_GetWindowSurface", ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_SetWindowSurfaceVSync", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_int)
+SDL_FUNC("SDL_SetWindowSurfaceVSync", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_int)
 
 SDL_WINDOW_SURFACE_VSYNC_DISABLED = 0
 SDL_WINDOW_SURFACE_VSYNC_ADAPTIVE = -1
 
-SDL_FUNC("SDL_GetWindowSurfaceVSync", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GetWindowSurfaceVSync", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.c_int))
 
-SDL_FUNC("SDL_UpdateWindowSurface", ctypes.c_int, ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_UpdateWindowSurfaceRects", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Rect), ctypes.c_int)
-SDL_FUNC("SDL_DestroyWindowSurface", ctypes.c_int, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_UpdateWindowSurface", ctypes.c_bool, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_UpdateWindowSurfaceRects", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Rect), ctypes.c_int)
+SDL_FUNC("SDL_DestroyWindowSurface", ctypes.c_bool, ctypes.POINTER(SDL_Window))
 
-SDL_FUNC("SDL_SetWindowKeyboardGrab", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_bool)
-SDL_FUNC("SDL_SetWindowMouseGrab", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_bool)
+SDL_FUNC("SDL_SetWindowKeyboardGrab", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_bool)
+SDL_FUNC("SDL_SetWindowMouseGrab", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_bool)
 
 SDL_FUNC("SDL_GetWindowKeyboardGrab", ctypes.c_bool, ctypes.POINTER(SDL_Window))
 SDL_FUNC("SDL_GetWindowMouseGrab", ctypes.c_bool, ctypes.POINTER(SDL_Window))
 
 SDL_FUNC("SDL_GetGrabbedWindow", ctypes.POINTER(SDL_Window))
 
-SDL_FUNC("SDL_SetWindowMouseRect", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Rect))
+SDL_FUNC("SDL_SetWindowMouseRect", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Rect))
 SDL_FUNC("SDL_GetWindowMouseRect", ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Window))
 
-SDL_FUNC("SDL_SetWindowOpacity", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_float)
+SDL_FUNC("SDL_SetWindowOpacity", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_float)
 SDL_FUNC("SDL_GetWindowOpacity", ctypes.c_float, ctypes.POINTER(SDL_Window))
 
-SDL_FUNC("SDL_SetWindowModalFor", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_SetWindowFocusable", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_bool)
+SDL_FUNC("SDL_SetWindowModalFor", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_SetWindowFocusable", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_bool)
 
-SDL_FUNC("SDL_ShowWindowSystemMenu", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
+SDL_FUNC("SDL_ShowWindowSystemMenu", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
 
 SDL_HitTestResult = ctypes.c_int
 
@@ -365,17 +365,17 @@ SDL_HITTEST_RESIZE_LEFT = 9
 
 SDL_HitTest = ctypes.CFUNCTYPE(SDL_HitTestResult, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Point), ctypes.c_void_p)
 
-SDL_FUNC("SDL_SetWindowHitTest", ctypes.c_int, ctypes.POINTER(SDL_Window), SDL_HitTest, ctypes.c_void_p)
-SDL_FUNC("SDL_SetWindowShape", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Surface))
+SDL_FUNC("SDL_SetWindowHitTest", ctypes.c_bool, ctypes.POINTER(SDL_Window), SDL_HitTest, ctypes.c_void_p)
+SDL_FUNC("SDL_SetWindowShape", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Surface))
 
-SDL_FUNC("SDL_FlashWindow", ctypes.c_int, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_FlashOperation))
+SDL_FUNC("SDL_FlashWindow", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_FlashOperation))
 SDL_FUNC("SDL_DestroyWindow", None, ctypes.POINTER(SDL_Window))
 
 SDL_FUNC("SDL_ScreenSaverEnabled", ctypes.c_bool)
-SDL_FUNC("SDL_EnableScreenSaver", ctypes.c_int)
-SDL_FUNC("SDL_DisableScreenSaver", ctypes.c_int)
+SDL_FUNC("SDL_EnableScreenSaver", ctypes.c_bool)
+SDL_FUNC("SDL_DisableScreenSaver", ctypes.c_bool)
 
-SDL_FUNC("SDL_GL_LoadLibrary", ctypes.c_int, ctypes.c_char_p)
+SDL_FUNC("SDL_GL_LoadLibrary", ctypes.c_bool, ctypes.c_char_p)
 SDL_FUNC("SDL_GL_GetProcAddress", SDL_FunctionPointer, ctypes.c_char_p)
 SDL_FUNC("SDL_EGL_GetProcAddress", SDL_FunctionPointer, ctypes.c_char_p)
 SDL_FUNC("SDL_GL_UnloadLibrary", None)
@@ -383,11 +383,11 @@ SDL_FUNC("SDL_GL_UnloadLibrary", None)
 SDL_FUNC("SDL_GL_ExtensionSupported", ctypes.c_bool, ctypes.c_char_p)
 
 SDL_FUNC("SDL_GL_ResetAttributes", None)
-SDL_FUNC("SDL_GL_SetAttribute", ctypes.c_int, SDL_GLattr, ctypes.c_int)
-SDL_FUNC("SDL_GL_GetAttribute", ctypes.c_int, SDL_GLattr, ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GL_SetAttribute", ctypes.c_bool, SDL_GLattr, ctypes.c_int)
+SDL_FUNC("SDL_GL_GetAttribute", ctypes.c_bool, SDL_GLattr, ctypes.POINTER(ctypes.c_int))
 
 SDL_FUNC("SDL_GL_CreateContext", SDL_GLContext, ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_GL_MakeCurrent", ctypes.c_int, ctypes.POINTER(SDL_Window), SDL_GLContext)
+SDL_FUNC("SDL_GL_MakeCurrent", ctypes.c_bool, ctypes.POINTER(SDL_Window), SDL_GLContext)
 
 SDL_FUNC("SDL_GL_GetCurrentWindow", ctypes.POINTER(SDL_Window))
 SDL_FUNC("SDL_GL_GetCurrentContext", SDL_GLContext)
@@ -398,8 +398,8 @@ SDL_FUNC("SDL_EGL_GetWindowSurface", SDL_EGLSurface, ctypes.POINTER(SDL_Window))
 
 SDL_FUNC("SDL_EGL_SetAttributeCallbacks", None, SDL_EGLAttribArrayCallback, SDL_EGLIntArrayCallback, SDL_EGLIntArrayCallback)
 
-SDL_FUNC("SDL_GL_SetSwapInterval", ctypes.c_int, ctypes.c_int)
-SDL_FUNC("SDL_GL_GetSwapInterval", ctypes.c_int, ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GL_SetSwapInterval", ctypes.c_bool, ctypes.c_int)
+SDL_FUNC("SDL_GL_GetSwapInterval", ctypes.c_bool, ctypes.POINTER(ctypes.c_int))
 
-SDL_FUNC("SDL_GL_SwapWindow", ctypes.c_int, ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_GL_DestroyContext", ctypes.c_int, SDL_GLContext)
+SDL_FUNC("SDL_GL_SwapWindow", ctypes.c_bool, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_GL_DestroyContext", ctypes.c_bool, SDL_GLContext)

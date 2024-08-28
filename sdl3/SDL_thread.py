@@ -42,12 +42,12 @@ SDL_PROP_THREAD_CREATE_STACKSIZE_NUMBER = "SDL.thread.create.stacksize"
 SDL_FUNC("SDL_GetThreadName", ctypes.c_char_p, ctypes.POINTER(SDL_Thread))
 SDL_FUNC("SDL_GetCurrentThreadID", SDL_ThreadID)
 SDL_FUNC("SDL_GetThreadID", SDL_ThreadID, ctypes.POINTER(SDL_Thread))
-SDL_FUNC("SDL_SetThreadPriority", ctypes.c_int, SDL_ThreadPriority)
+SDL_FUNC("SDL_SetThreadPriority", ctypes.c_bool, SDL_ThreadPriority)
 SDL_FUNC("SDL_WaitThread", None, ctypes.POINTER(SDL_Thread), ctypes.POINTER(ctypes.c_int))
 SDL_FUNC("SDL_DetachThread", None, ctypes.POINTER(SDL_Thread))
 SDL_FUNC("SDL_GetTLS", ctypes.c_void_p, ctypes.POINTER(SDL_TLSID))
 
 SDL_TLSDestructorCallback = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
 
-SDL_FUNC("SDL_SetTLS", ctypes.c_int, ctypes.POINTER(SDL_TLSID), ctypes.c_void_p, SDL_TLSDestructorCallback)
+SDL_FUNC("SDL_SetTLS", ctypes.c_bool, ctypes.POINTER(SDL_TLSID), ctypes.c_void_p, SDL_TLSDestructorCallback)
 SDL_FUNC("SDL_CleanupTLS", None)

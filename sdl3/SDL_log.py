@@ -40,7 +40,7 @@ SDL_FUNC("SDL_SetLogPriorities", None, SDL_LogPriority)
 SDL_FUNC("SDL_SetLogPriority", None, ctypes.c_int, SDL_LogPriority)
 SDL_FUNC("SDL_GetLogPriority", SDL_LogPriority, ctypes.c_int)
 SDL_FUNC("SDL_ResetLogPriorities", None)
-SDL_FUNC("SDL_SetLogPriorityPrefix", ctypes.c_int, SDL_LogPriority, ctypes.c_char_p)
+SDL_FUNC("SDL_SetLogPriorityPrefix", ctypes.c_bool, SDL_LogPriority, ctypes.c_char_p)
 
 SDL_FUNC("SDL_Log", None, ctypes.c_char_p)
 SDL_FUNC("SDL_LogVerbose", None, ctypes.c_int, ctypes.c_char_p)

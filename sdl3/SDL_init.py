@@ -28,14 +28,14 @@ SDL_AppIterate_func = ctypes.CFUNCTYPE(SDL_AppResult, ctypes.c_void_p)
 SDL_AppEvent_func = ctypes.CFUNCTYPE(SDL_AppResult, ctypes.c_void_p, ctypes.POINTER(SDL_Event))
 SDL_AppQuit_func = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
 
-SDL_FUNC("SDL_Init", ctypes.c_int, SDL_InitFlags)
-SDL_FUNC("SDL_InitSubSystem", ctypes.c_int, SDL_InitFlags)
+SDL_FUNC("SDL_Init", ctypes.c_bool, SDL_InitFlags)
+SDL_FUNC("SDL_InitSubSystem", ctypes.c_bool, SDL_InitFlags)
 SDL_FUNC("SDL_QuitSubSystem", None, SDL_InitFlags)
 SDL_FUNC("SDL_WasInit", SDL_InitFlags, SDL_InitFlags)
 SDL_FUNC("SDL_Quit", None)
 
-SDL_FUNC("SDL_SetAppMetadata", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_SetAppMetadataProperty", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p)
+SDL_FUNC("SDL_SetAppMetadata", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)
+SDL_FUNC("SDL_SetAppMetadataProperty", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p)
 
 SDL_PROP_APP_METADATA_NAME_STRING = "SDL.app.metadata.name"
 SDL_PROP_APP_METADATA_VERSION_STRING = "SDL.app.metadata.version"

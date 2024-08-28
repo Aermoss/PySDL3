@@ -21,7 +21,7 @@ SDL_MIXER_VERSION_ATLEAST = lambda x, y, z: \
 
 SDL_FUNC("Mix_Version", ctypes.c_int)
 
-MIX_InitFlags = ctypes.c_int
+MIX_InitFlags = ctypes.c_uint32
 
 MIX_INIT_FLAC = 0x00000001
 MIX_INIT_MOD = 0x00000002
@@ -31,7 +31,7 @@ MIX_INIT_MID = 0x00000020
 MIX_INIT_OPUS = 0x00000040
 MIX_INIT_WAVPACK = 0x00000080
 
-SDL_FUNC("Mix_Init", ctypes.c_int, MIX_InitFlags)
+SDL_FUNC("Mix_Init", MIX_InitFlags, MIX_InitFlags)
 SDL_FUNC("Mix_Quit", None)
 
 MIX_CHANNELS = 8
@@ -74,9 +74,9 @@ MUS_GME = 12
 class Mix_Music(ctypes.c_void_p):
     ...
 
-SDL_FUNC("Mix_OpenAudio", ctypes.c_int, SDL_AudioDeviceID, ctypes.POINTER(SDL_AudioSpec))
+SDL_FUNC("Mix_OpenAudio", ctypes.c_bool, SDL_AudioDeviceID, ctypes.POINTER(SDL_AudioSpec))
 SDL_FUNC("Mix_PauseAudio", None, ctypes.c_int)
-SDL_FUNC("Mix_QuerySpec", ctypes.c_int, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(SDL_AudioFormat), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("Mix_QuerySpec", ctypes.c_bool, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(SDL_AudioFormat), ctypes.POINTER(ctypes.c_int))
 SDL_FUNC("Mix_AllocateChannels", ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_LoadWAV_IO", ctypes.POINTER(Mix_Chunk), ctypes.POINTER(SDL_IOStream), ctypes.c_bool)
 SDL_FUNC("Mix_LoadWAV", ctypes.POINTER(Mix_Chunk), ctypes.c_char_p)
@@ -119,28 +119,28 @@ MIX_CHANNEL_POST = -2
 Mix_EffectFunc_t = ctypes.CFUNCTYPE(None, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)
 Mix_EffectDone_t = ctypes.CFUNCTYPE(None, ctypes.c_int, ctypes.c_void_p)
 
-SDL_FUNC("Mix_RegisterEffect", ctypes.c_int, ctypes.c_int, Mix_EffectFunc_t, Mix_EffectDone_t, ctypes.c_void_p)
-SDL_FUNC("Mix_UnregisterEffect", ctypes.c_int, ctypes.c_int, Mix_EffectFunc_t)
-SDL_FUNC("Mix_UnregisterAllEffects", ctypes.c_int, ctypes.c_int)
+SDL_FUNC("Mix_RegisterEffect", ctypes.c_bool, ctypes.c_int, Mix_EffectFunc_t, Mix_EffectDone_t, ctypes.c_void_p)
+SDL_FUNC("Mix_UnregisterEffect", ctypes.c_bool, ctypes.c_int, Mix_EffectFunc_t)
+SDL_FUNC("Mix_UnregisterAllEffects", ctypes.c_bool, ctypes.c_int)
 
 MIX_EFFECTSMAXSPEED = "MIX_EFFECTSMAXSPEED"
 
-SDL_FUNC("Mix_SetPanning", ctypes.c_int, ctypes.c_int, ctypes.c_uint8, ctypes.c_uint8)
-SDL_FUNC("Mix_SetPosition", ctypes.c_int, ctypes.c_int, ctypes.c_int16, ctypes.c_uint8)
-SDL_FUNC("Mix_SetDistance", ctypes.c_int, ctypes.c_int, ctypes.c_uint8)
-SDL_FUNC("Mix_SetReverseStereo", ctypes.c_int, ctypes.c_int, ctypes.c_int)
+SDL_FUNC("Mix_SetPanning", ctypes.c_bool, ctypes.c_int, ctypes.c_uint8, ctypes.c_uint8)
+SDL_FUNC("Mix_SetPosition", ctypes.c_bool, ctypes.c_int, ctypes.c_int16, ctypes.c_uint8)
+SDL_FUNC("Mix_SetDistance", ctypes.c_bool, ctypes.c_int, ctypes.c_uint8)
+SDL_FUNC("Mix_SetReverseStereo", ctypes.c_bool, ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_ReserveChannels", ctypes.c_int, ctypes.c_int)
-SDL_FUNC("Mix_GroupChannel", ctypes.c_int, ctypes.c_int, ctypes.c_int)
-SDL_FUNC("Mix_GroupChannels", ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)
+SDL_FUNC("Mix_GroupChannel", ctypes.c_bool, ctypes.c_int, ctypes.c_int)
+SDL_FUNC("Mix_GroupChannels", ctypes.c_bool, ctypes.c_int, ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_GroupAvailable", ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_GroupCount", ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_GroupOldest", ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_GroupNewer", ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_PlayChannel", ctypes.c_int, ctypes.c_int, ctypes.POINTER(Mix_Chunk), ctypes.c_int)
 SDL_FUNC("Mix_PlayChannelTimed", ctypes.c_int, ctypes.c_int, ctypes.POINTER(Mix_Chunk), ctypes.c_int, ctypes.c_int)
-SDL_FUNC("Mix_PlayMusic", ctypes.c_int, ctypes.POINTER(Mix_Music), ctypes.c_int)    
-SDL_FUNC("Mix_FadeInMusic", ctypes.c_int, ctypes.POINTER(Mix_Music), ctypes.c_int, ctypes.c_int)
-SDL_FUNC("Mix_FadeInMusicPos", ctypes.c_int, ctypes.POINTER(Mix_Music), ctypes.c_int, ctypes.c_int, ctypes.c_double)
+SDL_FUNC("Mix_PlayMusic", ctypes.c_bool, ctypes.POINTER(Mix_Music), ctypes.c_int)    
+SDL_FUNC("Mix_FadeInMusic", ctypes.c_bool, ctypes.POINTER(Mix_Music), ctypes.c_int, ctypes.c_int)
+SDL_FUNC("Mix_FadeInMusicPos", ctypes.c_bool, ctypes.POINTER(Mix_Music), ctypes.c_int, ctypes.c_int, ctypes.c_double)
 SDL_FUNC("Mix_FadeInChannel", ctypes.c_int, ctypes.c_int, ctypes.POINTER(Mix_Chunk), ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_FadeInChannelTimed", ctypes.c_int, ctypes.c_int, ctypes.POINTER(Mix_Chunk), ctypes.c_int, ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_Volume", ctypes.c_int, ctypes.c_int, ctypes.c_int)
@@ -148,45 +148,43 @@ SDL_FUNC("Mix_VolumeChunk", ctypes.c_int, ctypes.POINTER(Mix_Chunk), ctypes.c_in
 SDL_FUNC("Mix_VolumeMusic", ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_GetMusicVolume", ctypes.c_int, ctypes.POINTER(Mix_Music))
 SDL_FUNC("Mix_MasterVolume", ctypes.c_int, ctypes.c_int)
-SDL_FUNC("Mix_HaltChannel", ctypes.c_int, ctypes.c_int)
-SDL_FUNC("Mix_HaltGroup", ctypes.c_int, ctypes.c_int)
-SDL_FUNC("Mix_HaltMusic", ctypes.c_int)
+SDL_FUNC("Mix_HaltChannel", None, ctypes.c_int)
+SDL_FUNC("Mix_HaltGroup", None, ctypes.c_int)
+SDL_FUNC("Mix_HaltMusic", None)
 SDL_FUNC("Mix_ExpireChannel", ctypes.c_int, ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_FadeOutChannel", ctypes.c_int, ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_FadeOutGroup", ctypes.c_int, ctypes.c_int, ctypes.c_int)
-SDL_FUNC("Mix_FadeOutMusic", ctypes.c_int, ctypes.c_int)
+SDL_FUNC("Mix_FadeOutMusic", ctypes.c_bool, ctypes.c_int)
 SDL_FUNC("Mix_FadingMusic", Mix_Fading)
 SDL_FUNC("Mix_FadingChannel", Mix_Fading, ctypes.c_int)
 SDL_FUNC("Mix_Pause", None, ctypes.c_int)
-SDL_FUNC("Mix_PauseGroup", ctypes.c_int, ctypes.c_int)
+SDL_FUNC("Mix_PauseGroup", None, ctypes.c_int)
 SDL_FUNC("Mix_Resume", None, ctypes.c_int)
-SDL_FUNC("Mix_ResumeGroup", ctypes.c_int, ctypes.c_int)
+SDL_FUNC("Mix_ResumeGroup", None, ctypes.c_int)
 SDL_FUNC("Mix_Paused", ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_PauseMusic", None)
 SDL_FUNC("Mix_ResumeMusic", None)
 SDL_FUNC("Mix_RewindMusic", None)
-SDL_FUNC("Mix_PausedMusic", ctypes.c_int)
-SDL_FUNC("Mix_ModMusicJumpToOrder", ctypes.c_int, ctypes.c_int)
-SDL_FUNC("Mix_StartTrack", ctypes.c_int, ctypes.POINTER(Mix_Music), ctypes.c_int)
+SDL_FUNC("Mix_PausedMusic", ctypes.c_bool)
+SDL_FUNC("Mix_ModMusicJumpToOrder", ctypes.c_bool, ctypes.c_int)
+SDL_FUNC("Mix_StartTrack", ctypes.c_bool, ctypes.POINTER(Mix_Music), ctypes.c_int)
 SDL_FUNC("Mix_GetNumTracks", ctypes.c_int, ctypes.POINTER(Mix_Music))
-SDL_FUNC("Mix_SetMusicPosition", ctypes.c_int, ctypes.c_double)
+SDL_FUNC("Mix_SetMusicPosition", ctypes.c_bool, ctypes.c_double)
 SDL_FUNC("Mix_GetMusicPosition", ctypes.c_double, ctypes.POINTER(Mix_Music))
 SDL_FUNC("Mix_MusicDuration", ctypes.c_double, ctypes.POINTER(Mix_Music))
 SDL_FUNC("Mix_GetMusicLoopStartTime", ctypes.c_double, ctypes.POINTER(Mix_Music))
 SDL_FUNC("Mix_GetMusicLoopEndTime", ctypes.c_double, ctypes.POINTER(Mix_Music))
 SDL_FUNC("Mix_GetMusicLoopLengthTime", ctypes.c_double, ctypes.POINTER(Mix_Music))
 SDL_FUNC("Mix_Playing", ctypes.c_int, ctypes.c_int)
-SDL_FUNC("Mix_PlayingMusic", ctypes.c_int)
-SDL_FUNC("Mix_SetMusicCMD", ctypes.c_int, ctypes.c_char_p)
-SDL_FUNC("Mix_SetSynchroValue", ctypes.c_int, ctypes.c_int)
-SDL_FUNC("Mix_GetSynchroValue", ctypes.c_int)
-SDL_FUNC("Mix_SetSoundFonts", ctypes.c_int, ctypes.c_char_p)
+SDL_FUNC("Mix_PlayingMusic", ctypes.c_bool)
+SDL_FUNC("Mix_SetMusicCMD", ctypes.c_bool, ctypes.c_char_p)
+SDL_FUNC("Mix_SetSoundFonts", ctypes.c_bool, ctypes.c_char_p)
 SDL_FUNC("Mix_GetSoundFonts", ctypes.c_char_p)
 
-Mix_EachSoundFontCallback = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p, ctypes.c_void_p)
+Mix_EachSoundFontCallback = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_char_p, ctypes.c_void_p)
 
-SDL_FUNC("Mix_EachSoundFont", ctypes.c_int, Mix_EachSoundFontCallback, ctypes.c_void_p)
-SDL_FUNC("Mix_SetTimidityCfg", ctypes.c_int, ctypes.c_char_p)
+SDL_FUNC("Mix_EachSoundFont", ctypes.c_bool, Mix_EachSoundFontCallback, ctypes.c_void_p)
+SDL_FUNC("Mix_SetTimidityCfg", ctypes.c_bool, ctypes.c_char_p)
 SDL_FUNC("Mix_GetTimidityCfg", ctypes.c_char_p)
 SDL_FUNC("Mix_GetChunk", ctypes.POINTER(Mix_Chunk), ctypes.c_int)
 SDL_FUNC("Mix_CloseAudio", None)

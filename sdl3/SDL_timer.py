@@ -31,4 +31,4 @@ SDL_FUNC("SDL_AddTimer", SDL_TimerID, ctypes.c_uint32, SDL_TimerCallback, ctypes
 SDL_NSTimerCallback = ctypes.CFUNCTYPE(ctypes.c_uint64, ctypes.c_void_p, SDL_TimerID, ctypes.c_uint64)
 
 SDL_FUNC("SDL_AddTimerNS", SDL_TimerID, ctypes.c_uint64, SDL_NSTimerCallback, ctypes.c_void_p)
-SDL_FUNC("SDL_RemoveTimer", ctypes.c_int, SDL_TimerID)
+SDL_FUNC("SDL_RemoveTimer", ctypes.c_bool, SDL_TimerID)

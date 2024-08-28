@@ -64,7 +64,7 @@ def SDL_RectEquals(a: LP_SDL_Rect, b: LP_SDL_Rect) -> bool:
 
 SDL_FUNC("SDL_HasRectIntersection", ctypes.c_bool, ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Rect))
 SDL_FUNC("SDL_GetRectIntersection", ctypes.c_bool, ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Rect))
-SDL_FUNC("SDL_GetRectUnion", ctypes.c_int, ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Rect))
+SDL_FUNC("SDL_GetRectUnion", ctypes.c_bool, ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Rect))
 SDL_FUNC("SDL_GetRectEnclosingPoints", ctypes.c_bool, ctypes.POINTER(SDL_Point), ctypes.c_int, ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Rect))
 SDL_FUNC("SDL_GetRectAndLineIntersection", ctypes.c_bool, ctypes.POINTER(SDL_Rect), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
@@ -86,6 +86,6 @@ def SDL_RectsEqualFloat(a: LP_SDL_FRect, b: LP_SDL_FRect) -> bool:
 
 SDL_FUNC("SDL_HasRectIntersectionFloat", ctypes.c_bool, ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect))
 SDL_FUNC("SDL_GetRectIntersectionFloat", ctypes.c_bool, ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect))
-SDL_FUNC("SDL_GetRectUnionFloat", ctypes.c_int, ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect))
+SDL_FUNC("SDL_GetRectUnionFloat", ctypes.c_bool, ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect))
 SDL_FUNC("SDL_GetRectEnclosingPointsFloat", ctypes.c_bool, ctypes.POINTER(SDL_FPoint), ctypes.c_int, ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect))
 SDL_FUNC("SDL_GetRectAndLineIntersectionFloat", ctypes.c_bool, ctypes.POINTER(SDL_FRect), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))

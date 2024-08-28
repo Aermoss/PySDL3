@@ -29,10 +29,10 @@ SDL_TimeFormat = ctypes.c_int
 SDL_TIME_FORMAT_24HR = 0
 SDL_TIME_FORMAT_12HR = 1
 
-SDL_FUNC("SDL_GetDateTimeLocalePreferences", ctypes.c_int, ctypes.POINTER(SDL_DateFormat), ctypes.POINTER(SDL_TimeFormat))
-SDL_FUNC("SDL_GetCurrentTime", ctypes.c_int, ctypes.POINTER(SDL_Time))
-SDL_FUNC("SDL_TimeToDateTime", ctypes.c_int, SDL_Time, ctypes.POINTER(SDL_DateTime), ctypes.c_bool)
-SDL_FUNC("SDL_DateTimeToTime", ctypes.c_int, ctypes.POINTER(SDL_DateTime), ctypes.POINTER(SDL_Time))
+SDL_FUNC("SDL_GetDateTimeLocalePreferences", ctypes.c_bool, ctypes.POINTER(SDL_DateFormat), ctypes.POINTER(SDL_TimeFormat))
+SDL_FUNC("SDL_GetCurrentTime", ctypes.c_bool, ctypes.POINTER(SDL_Time))
+SDL_FUNC("SDL_TimeToDateTime", ctypes.c_bool, SDL_Time, ctypes.POINTER(SDL_DateTime), ctypes.c_bool)
+SDL_FUNC("SDL_DateTimeToTime", ctypes.c_bool, ctypes.POINTER(SDL_DateTime), ctypes.POINTER(SDL_Time))
 SDL_FUNC("SDL_TimeToWindows", None, SDL_Time, ctypes.POINTER(ctypes.c_uint32), ctypes.POINTER(ctypes.c_uint32))
 SDL_FUNC("SDL_TimeFromWindows", SDL_Time, ctypes.c_uint32, ctypes.c_uint32)
 SDL_FUNC("SDL_GetDaysInMonth", ctypes.c_int, ctypes.c_int, ctypes.c_int)

@@ -26,7 +26,7 @@ class SDL_IOStreamInterface(ctypes.Structure):
         ("seek", ctypes.CFUNCTYPE(ctypes.c_int64, ctypes.c_void_p, ctypes.c_int64, SDL_IOWhence)),
         ("read", ctypes.CFUNCTYPE(ctypes.c_size_t, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t, ctypes.POINTER(SDL_IOStatus))),
         ("write", ctypes.CFUNCTYPE(ctypes.c_size_t, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t, ctypes.POINTER(SDL_IOStatus))),
-        ("close", ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p))
+        ("close", ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p))
     ]
 
 class SDL_IOStream(ctypes.c_void_p):
@@ -46,7 +46,7 @@ SDL_PROP_IOSTREAM_DYNAMIC_MEMORY_POINTER = "SDL.iostream.dynamic.memory"
 SDL_PROP_IOSTREAM_DYNAMIC_CHUNKSIZE_NUMBER = "SDL.iostream.dynamic.chunksize"
 
 SDL_FUNC("SDL_OpenIO", ctypes.POINTER(SDL_IOStream), ctypes.POINTER(SDL_IOStreamInterface), ctypes.c_void_p)
-SDL_FUNC("SDL_CloseIO", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("SDL_CloseIO", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
 
 SDL_FUNC("SDL_GetIOProperties", SDL_PropertiesID, ctypes.POINTER(SDL_IOStream))
 SDL_FUNC("SDL_GetIOStatus", SDL_IOStatus, ctypes.POINTER(SDL_IOStream))

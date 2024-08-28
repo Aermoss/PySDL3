@@ -45,13 +45,13 @@ SDL_GlobFlags = ctypes.c_uint32
 
 SDL_GLOB_CASEINSENSITIVE = 1 << 0
 
-SDL_FUNC("SDL_CreateDirectory", ctypes.c_int, ctypes.c_char_p)
+SDL_FUNC("SDL_CreateDirectory", ctypes.c_bool, ctypes.c_char_p)
 
 SDL_EnumerateDirectoryCallback = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p)
 
-SDL_FUNC("SDL_EnumerateDirectory", ctypes.c_int, ctypes.c_char_p, SDL_EnumerateDirectoryCallback, ctypes.c_void_p)
-SDL_FUNC("SDL_RemovePath", ctypes.c_int, ctypes.c_char_p)
-SDL_FUNC("SDL_RenamePath", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_CopyFile", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_GetPathInfo", ctypes.c_int, ctypes.c_char_p, ctypes.POINTER(SDL_PathInfo))
+SDL_FUNC("SDL_EnumerateDirectory", ctypes.c_bool, ctypes.c_char_p, SDL_EnumerateDirectoryCallback, ctypes.c_void_p)
+SDL_FUNC("SDL_RemovePath", ctypes.c_bool, ctypes.c_char_p)
+SDL_FUNC("SDL_RenamePath", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p)
+SDL_FUNC("SDL_CopyFile", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p)
+SDL_FUNC("SDL_GetPathInfo", ctypes.c_bool, ctypes.c_char_p, ctypes.POINTER(SDL_PathInfo))
 SDL_FUNC("SDL_GlobDirectory", ctypes.POINTER(ctypes.c_char_p), ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER(SDL_GlobFlags), ctypes.POINTER(ctypes.c_int))

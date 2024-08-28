@@ -1,5 +1,5 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_GET_DLL, SDL_IMAGE_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_IMAGE_DLL
 
 from .SDL_surface import SDL_Surface
 from .SDL_render import SDL_Texture, SDL_Renderer
@@ -22,7 +22,7 @@ SDL_IMAGE_VERSION_ATLEAST = lambda x, y, z: \
 
 SDL_FUNC("IMG_Version", ctypes.c_int)
 
-IMG_InitFlags = ctypes.c_int
+IMG_InitFlags = ctypes.c_uint32
 
 IMG_INIT_JPG = 0x00000001
 IMG_INIT_PNG = 0x00000002
@@ -31,7 +31,7 @@ IMG_INIT_WEBP = 0x00000008
 IMG_INIT_JXL = 0x00000010
 IMG_INIT_AVIF = 0x00000020
 
-SDL_FUNC("IMG_Init", ctypes.c_int, IMG_InitFlags)
+SDL_FUNC("IMG_Init", IMG_InitFlags, IMG_InitFlags)
 SDL_FUNC("IMG_Quit", None)
 
 SDL_FUNC("IMG_LoadTyped_IO", ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_bool, ctypes.c_char_p)
@@ -42,24 +42,24 @@ SDL_FUNC("IMG_LoadTexture", ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Rend
 SDL_FUNC("IMG_LoadTexture_IO", ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_IOStream), ctypes.c_bool)
 SDL_FUNC("IMG_LoadTextureTyped_IO", ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_IOStream), ctypes.c_bool, ctypes.c_char_p)
 
-SDL_FUNC("IMG_isAVIF", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isICO", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isCUR", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isBMP", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isGIF", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isJPG", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isJXL", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isLBM", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isPCX", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isPNG", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isPNM", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isSVG", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isQOI", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isTIF", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isXCF", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isXPM", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isXV", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
-SDL_FUNC("IMG_isWEBP", ctypes.c_int, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isAVIF", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isICO", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isCUR", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isBMP", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isGIF", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isJPG", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isJXL", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isLBM", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isPCX", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isPNG", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isPNM", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isSVG", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isQOI", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isTIF", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isXCF", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isXPM", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isXV", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
+SDL_FUNC("IMG_isWEBP", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
 
 SDL_FUNC("IMG_LoadAVIF_IO", ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream))
 SDL_FUNC("IMG_LoadICO_IO", ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream))
@@ -85,12 +85,12 @@ SDL_FUNC("IMG_LoadSizedSVG_IO", ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_
 SDL_FUNC("IMG_ReadXPMFromArray", ctypes.POINTER(SDL_Surface), ctypes.POINTER(ctypes.c_char_p))
 SDL_FUNC("IMG_ReadXPMFromArrayToRGB888", ctypes.POINTER(SDL_Surface), ctypes.POINTER(ctypes.c_char_p))
 
-SDL_FUNC("IMG_SaveAVIF", ctypes.c_int, ctypes.POINTER(SDL_Surface), ctypes.c_char_p, ctypes.c_int)
-SDL_FUNC("IMG_SaveAVIF_IO", ctypes.c_int, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_int, ctypes.c_int)
-SDL_FUNC("IMG_SavePNG", ctypes.c_int, ctypes.POINTER(SDL_Surface), ctypes.c_char_p)
-SDL_FUNC("IMG_SavePNG_IO", ctypes.c_int, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_int)
-SDL_FUNC("IMG_SaveJPG", ctypes.c_int, ctypes.POINTER(SDL_Surface), ctypes.c_char_p, ctypes.c_int)
-SDL_FUNC("IMG_SaveJPG_IO", ctypes.c_int, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_int, ctypes.c_int)
+SDL_FUNC("IMG_SaveAVIF", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.c_char_p, ctypes.c_int)
+SDL_FUNC("IMG_SaveAVIF_IO", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_int, ctypes.c_int)
+SDL_FUNC("IMG_SavePNG", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.c_char_p)
+SDL_FUNC("IMG_SavePNG_IO", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_int)
+SDL_FUNC("IMG_SaveJPG", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.c_char_p, ctypes.c_int)
+SDL_FUNC("IMG_SaveJPG_IO", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_int, ctypes.c_int)
 
 class IMG_Animation(ctypes.Structure):
     _fields_ = [
@@ -107,6 +107,3 @@ SDL_FUNC("IMG_LoadAnimationTyped_IO", ctypes.POINTER(IMG_Animation), ctypes.POIN
 SDL_FUNC("IMG_FreeAnimation", None, ctypes.POINTER(IMG_Animation))
 SDL_FUNC("IMG_LoadGIFAnimation_IO", ctypes.POINTER(IMG_Animation), ctypes.POINTER(SDL_IOStream))
 SDL_FUNC("IMG_LoadWEBPAnimation_IO", ctypes.POINTER(IMG_Animation), ctypes.POINTER(SDL_IOStream))
-
-IMG_SetError = SDL_GET_DLL(SDL_DLL).SDL_SetError
-IMG_GetError = SDL_GET_DLL(SDL_DLL).SDL_GetError

@@ -57,5 +57,5 @@ class SDL_MessageBoxData(ctypes.Structure):
         ("colorScheme", ctypes.POINTER(SDL_MessageBoxColorScheme))
     ]
 
-SDL_FUNC("SDL_ShowMessageBox", ctypes.c_int, ctypes.POINTER(SDL_MessageBoxData), ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("SDL_ShowSimpleMessageBox", ctypes.c_int, SDL_MessageBoxFlags, ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_ShowMessageBox", ctypes.c_bool, ctypes.POINTER(SDL_MessageBoxData), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_ShowSimpleMessageBox", ctypes.c_bool, SDL_MessageBoxFlags, ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER(SDL_Window))

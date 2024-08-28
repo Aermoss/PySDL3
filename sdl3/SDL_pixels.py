@@ -327,11 +327,11 @@ class SDL_PixelFormatDetails(ctypes.Structure):
     ]
 
 SDL_FUNC("SDL_GetPixelFormatName", ctypes.c_char_p, SDL_PixelFormat)
-SDL_FUNC("SDL_GetMasksForPixelFormat", ctypes.c_int, SDL_PixelFormat, ctypes.POINTER(ctypes.c_int32), ctypes.POINTER(ctypes.c_uint32), ctypes.POINTER(ctypes.c_uint32), ctypes.POINTER(ctypes.c_uint32), ctypes.POINTER(ctypes.c_uint32))
+SDL_FUNC("SDL_GetMasksForPixelFormat", ctypes.c_bool, SDL_PixelFormat, ctypes.POINTER(ctypes.c_int32), ctypes.POINTER(ctypes.c_uint32), ctypes.POINTER(ctypes.c_uint32), ctypes.POINTER(ctypes.c_uint32), ctypes.POINTER(ctypes.c_uint32))
 SDL_FUNC("SDL_GetPixelFormatForMasks", SDL_PixelFormat, ctypes.c_int32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32)
 SDL_FUNC("SDL_GetPixelFormatDetails", ctypes.POINTER(SDL_PixelFormatDetails), SDL_PixelFormat)
 SDL_FUNC("SDL_CreatePalette", ctypes.POINTER(SDL_Palette), ctypes.c_int)
-SDL_FUNC("SDL_SetPaletteColors", ctypes.c_int, ctypes.POINTER(SDL_Palette), ctypes.POINTER(SDL_Color), ctypes.c_int, ctypes.c_int)
+SDL_FUNC("SDL_SetPaletteColors", ctypes.c_bool, ctypes.POINTER(SDL_Palette), ctypes.POINTER(SDL_Color), ctypes.c_int, ctypes.c_int)
 SDL_FUNC("SDL_DestroyPalette", None, ctypes.POINTER(SDL_Palette))
 SDL_FUNC("SDL_MapRGB", ctypes.c_uint32, ctypes.POINTER(SDL_PixelFormatDetails), ctypes.POINTER(SDL_Palette), ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8)
 SDL_FUNC("SDL_MapRGBA", ctypes.c_uint32, ctypes.POINTER(SDL_PixelFormatDetails), ctypes.POINTER(SDL_Palette), ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8)

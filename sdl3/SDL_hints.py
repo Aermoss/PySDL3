@@ -237,14 +237,14 @@ SDL_HINT_DEFAULT = 0
 SDL_HINT_NORMAL = 1
 SDL_HINT_OVERRIDE = 2
 
-SDL_FUNC("SDL_SetHintWithPriority", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, SDL_HintPriority)
-SDL_FUNC("SDL_SetHint", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_ResetHint", ctypes.c_int, ctypes.c_char_p)
+SDL_FUNC("SDL_SetHintWithPriority", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p, SDL_HintPriority)
+SDL_FUNC("SDL_SetHint", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p)
+SDL_FUNC("SDL_ResetHint", ctypes.c_bool, ctypes.c_char_p)
 SDL_FUNC("SDL_ResetHints", None)
 SDL_FUNC("SDL_GetHint", ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_GetHintBoolean", ctypes.c_bool, ctypes.c_char_p, ctypes.c_bool)
 
 SDL_HintCallback = ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)
 
-SDL_FUNC("SDL_AddHintCallback", ctypes.c_int, ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p)
+SDL_FUNC("SDL_AddHintCallback", ctypes.c_bool, ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p)
 SDL_FUNC("SDL_DelHintCallback", None, ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p)
