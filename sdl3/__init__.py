@@ -38,10 +38,10 @@ def SDL_SET_TEXT_ATTR(color):
 
     else:
         if color == 7:
-            print("\u001b[0m", end = "", flush = True)
+            print("\u001b[39m", end = "", flush = True)
 
         elif color == 13:
-            print("\u001b[31;1m", end = "", flush = True)
+            print("\u001b[35m", end = "", flush = True)
 
         elif color == 12:
             print("\u001b[31m", end = "", flush = True)
