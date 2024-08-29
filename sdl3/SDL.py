@@ -49,8 +49,13 @@ from .SDL_touch import *
 from .SDL_version import *
 from .SDL_video import *
 
+import sys, platform
+
 from .SDL_image import *
 from .SDL_mixer import *
 from .SDL_net import *
-from .SDL_ttf import *
-from .SDL_rtf import *
+
+if not (sys.platform in ["linux"] and platform.machine() in ["aarch64"]):
+    # SDL_ttf and SDL_rtf are not supported on linux-aarch64 for now.
+    from .SDL_ttf import *
+    from .SDL_rtf import *
