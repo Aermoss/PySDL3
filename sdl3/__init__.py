@@ -1,4 +1,11 @@
-import sys, os, inspect, ctypes, array
+"""A pure Python wrapper for SDL3."""
+
+__version__ = "0.7.0a0"
+
+import sys, os, requests, ctypes, platform, inspect, array
+
+if "PYSDL3_DISABLE_CHECK_VERSION" not in os.environ:
+    os.environ["PYSDL3_DISABLE_CHECK_VERSION"] = "0"
 
 SDL_DLL, SDL_IMAGE_DLL, SDL_MIXER_DLL, SDL_NET_DLL, SDL_RTF_DLL, SDL_TTF_DLL = \
     "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_net", "SDL3_rtf", "SDL3_ttf"
@@ -15,19 +22,55 @@ if "PYSDL3_DISABLE_DOCS" not in os.environ:
     os.environ["PYSDL3_DISABLE_DOCS"] = "0"
 
 __disable_docs__ = 0 < int(os.environ.get("PYSDL3_DISABLE_DOCS"))
+__disable_check_version__ = 0 < int(os.environ.get("PYSDL3_DISABLE_CHECK_VERSION"))
 __docs_file__ = os.path.join(os.path.dirname(__file__), "__docs__.py")
 
 __initialized__ = __name__.split(".")[0] in sys.modules if "." in __name__ else False
 __module__ = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
-__loader__ = ctypes.CDLL if "win32" not in sys.platform else ctypes.WinDLL
+__loader__ = ctypes.CDLL if sys.platform not in ["win32"] else ctypes.WinDLL
+__binary_folder__ = "windows-x86_64" if sys.platform in ["win32"] \
+    else ("linux-aarch64" if platform.machine() in ["aarch64"] else "linux-x86_64")
+
+def SDL_SET_TEXT_ATTR(color):
+    if sys.platform in ["win32"]:
+        console_handle = ctypes.windll.kernel32.GetStdHandle(-11)
+        ctypes.windll.kernel32.SetConsoleTextAttribute(console_handle, color)
+
+    else:
+        if color == 7:
+            print("\u001b[0m", end = "", flush = True)
+
+        elif color == 13:
+            print("\u001b[31;1m", end = "", flush = True)
+
+        elif color == 12:
+            print("\u001b[31m", end = "", flush = True)
+
+        else:
+            ...
 
 if not __initialized__:
+    if not __disable_check_version__:
+        try:
+            version = requests.get(f"https://pypi.org/pypi/PySDL3/json", timeout = 0.5).json()["info"]["version"]
+
+            if __version__ != version:
+                SDL_SET_TEXT_ATTR(13)
+                print(f"you are using an older version of pysdl3 (current: {__version__}, lastest: {version}).")
+                SDL_SET_TEXT_ATTR(7)
+                
+        except:
+            ...
+
     functions, dllMap, dll = {}, {}, None
     binaryPath = os.path.join(os.path.dirname(__file__), "bin")
 
     for key, value in SDL_DLL_VAR_MAP.items():
+        if __binary_folder__ in ["linux-aarch64"] and key in [SDL_TTF_DLL, SDL_RTF_DLL]:
+            continue
+
         dllMap[value], functions[value] = \
-            __loader__(os.path.join(binaryPath, ("{}.dll" if "win32" in sys.platform else "lib{}.so").format(value))), {}
+            __loader__(os.path.join(binaryPath, __binary_folder__, ("{}.dll" if sys.platform in ["win32"] else "lib{}.so").format(value))), {}
 
 else:
     functions, dllMap, dll, binaryPath = \
