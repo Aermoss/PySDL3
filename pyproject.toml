@@ -1,17 +1,16 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "PySDL3"
-version = "0.6.4a0"
 description = "A pure Python wrapper for SDL3."
 readme = "README.md"
 authors = [
     {name = "Yusuf Rençber", email = "aermoss.0@gmail.com"}
 ]
-license = {text = "MIT License"}
-dependencies  = []
+dependencies  = ["requests"]
+dynamic = ["version"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -41,3 +40,6 @@ include-package-data = false
 
 [tool.setuptools.exclude-package-data]
 "sdl3" = ["__docs__.py"]
+
+[tool.setuptools.dynamic]
+version = {attr = "sdl3.__version__"}
