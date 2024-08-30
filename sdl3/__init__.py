@@ -2,10 +2,7 @@
 
 __version__ = "0.7.0a3"
 
-import sys, os, requests, ctypes, platform, inspect, array
-
-if "PYSDL3_DISABLE_CHECK_VERSION" not in os.environ:
-    os.environ["PYSDL3_DISABLE_CHECK_VERSION"] = "0"
+import sys, os, requests, ctypes, platform, atexit, inspect, array
 
 SDL_DLL, SDL_IMAGE_DLL, SDL_MIXER_DLL, SDL_NET_DLL, SDL_RTF_DLL, SDL_TTF_DLL = \
     "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_net", "SDL3_rtf", "SDL3_ttf"
@@ -18,17 +15,27 @@ for i in locals().copy():
 
 SDL_DLL_VAR_MAP_INV = {v: k for k, v in SDL_DLL_VAR_MAP.items()}
 
-if "PYSDL3_DISABLE_DOCS" not in os.environ:
-    os.environ["PYSDL3_DISABLE_DOCS"] = "0"
+for key in ["PYSDL3_DISABLE_DOCS", "PYSDL3_DISABLE_CHECK_VERSION", "PYSDL3_ENABLE_INSTANCE_TRACKING", "PYSDL3_ENABLE_FORCE_CLOSE"]:
+    if key not in os.environ:
+        os.environ[key] = "0"
 
-__disable_docs__ = 0 < int(os.environ.get("PYSDL3_DISABLE_DOCS"))
-__disable_check_version__ = 0 < int(os.environ.get("PYSDL3_DISABLE_CHECK_VERSION"))
+__docs__ = not 0 < int(os.environ.get("PYSDL3_DISABLE_DOCS"))
+__check_version__ = not 0 < int(os.environ.get("PYSDL3_DISABLE_CHECK_VERSION"))
+__instance_tracking__ = 0 < int(os.environ.get("PYSDL3_ENABLE_INSTANCE_TRACKING"))
+__force_close__ = 0 < int(os.environ.get("PYSDL3_ENABLE_FORCE_CLOSE"))
 __docs_file__ = os.path.join(os.path.dirname(__file__), "__docs__.py")
+
+if __force_close__:
+    def SDL_EXIT(code):
+        atexit._run_exitfuncs()
+        os._exit(code)
+
+    sys.exit = SDL_EXIT
 
 __initialized__ = __name__.split(".")[0] in sys.modules if "." in __name__ else False
 __module__ = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
 __loader__ = ctypes.CDLL if sys.platform not in ["win32"] else ctypes.WinDLL
-__binary_folder__ = "windows-x86_64" if sys.platform in ["win32"] \
+__platform__ = "windows-x86_64" if sys.platform in ["win32"] \
     else ("linux-aarch64" if platform.machine() in ["aarch64"] else "linux-x86_64")
 
 def SDL_SET_TEXT_ATTR(color):
@@ -50,31 +57,27 @@ def SDL_SET_TEXT_ATTR(color):
             ...
 
 if not __initialized__:
-    if not __disable_check_version__:
+    if __check_version__:
         try:
             version = requests.get(f"https://pypi.org/pypi/PySDL3/json", timeout = 0.5).json()["info"]["version"]
 
             if __version__ != version:
                 SDL_SET_TEXT_ATTR(13)
-                print(f"you are using an older version of pysdl3 (current: {__version__}, lastest: {version}).")
+                print(f"you are using an older version of pysdl3 (current: {__version__}, lastest: {version}).", flush = True)
                 SDL_SET_TEXT_ATTR(7)
                 
         except:
             ...
 
-    functions, dllMap, dll = {}, {}, None
+    functions, instances, dllMap, dll = {}, {}, {}, None
     binaryPath = os.path.join(os.path.dirname(__file__), "bin")
 
     for key, value in SDL_DLL_VAR_MAP.items():
-        if __binary_folder__ in ["linux-aarch64"] and key in [SDL_TTF_DLL, SDL_RTF_DLL]:
+        if __platform__ in ["linux-aarch64"] and key in [SDL_TTF_DLL, SDL_RTF_DLL]:
             continue
 
         dllMap[value], functions[value] = \
-            __loader__(os.path.join(binaryPath, __binary_folder__, ("{}.dll" if sys.platform in ["win32"] else "lib{}.so").format(value))), {}
-
-else:
-    functions, dllMap, dll, binaryPath = \
-        __module__.functions, __module__.dllMap, __module__.dll, __module__.binaryPath
+            __loader__(os.path.join(binaryPath, __platform__, ("{}.dll" if sys.platform in ["win32"] else "lib{}.so").format(value))), {}
 
 def SDL_DEREFERENCE(value):
     if isinstance(value, ctypes._Pointer):
@@ -101,10 +104,10 @@ def SDL_FUNC_CACHE(func):
 
 @SDL_FUNC_CACHE
 def SDL_GET_DLL_NAME(dll):
-    return {v: k for k, v in dllMap.items()}[dll]
+    return {v: k for k, v in __module__.dllMap.items()}[dll]
         
 def SDL_GET_DLL(name):
-    return dllMap[name]
+    return __module__.dllMap[name]
 
 def SDL_SET_CURRENT_DLL(name):
     __module__.dll = SDL_GET_DLL(name)
@@ -118,14 +121,55 @@ def SDL_GET_FUNCTION_DLL(name):
 def SDL_FUNC(name, retType, *args):
     dll = SDL_GET_CURRENT_DLL(); func = getattr(dll, name)
     func.__dll__, func.restype, func.argtypes = dll, retType, args
-    if __disable_docs__: setattr(__module__, name, func)
+    if not __docs__: setattr(__module__, name, func)
     __module__.functions[SDL_GET_DLL_NAME(dll)][name] = func
+
+if __instance_tracking__:
+    if not __initialized__ and not __docs__:
+        SDL_SET_TEXT_ATTR(13)
+        print("instance tracker needs type hint generation system to work.", flush = True)
+        SDL_SET_TEXT_ATTR(7)
+
+    @atexit.register
+    def SDL_CHECK_INSTANCES():
+        if __module__.instances is not None:
+
+            for i in __module__.instances:
+                if len(__module__.instances[i]) != 0:
+                    SDL_SET_TEXT_ATTR(13)
+
+                    print(len(__module__.instances[i]), f"instance{'s' if len(__module__.instances[i]) > 1 else ''} of", i, \
+                        f"{'are' if len(__module__.instances[i]) > 1 else 'is'} not destroyed.", flush = True)
+                    
+                    SDL_SET_TEXT_ATTR(7)
+
+            __module__.instances = None
+
+    def SDL_INSTANCE_TRACKER_REGISTER(name, func, *args):
+        if name not in __module__.instances:
+            __module__.instances[name] = []
+
+        value = func(*args)
+
+        if isinstance(value, ctypes._Pointer):
+            __module__.instances[name].append(value)
+
+        return value
+
+    def SDL_INSTANCE_TRACKER_UNREGISTER(name, func, *args):
+        value = func(*args)
+
+        if name in __module__.instances:
+            if len(args) != 0 and isinstance(args[0], ctypes._Pointer) and args[0] in __module__.instances[name]:
+                __module__.instances[name].remove(args[0])
+
+        return value
 
 from .SDL import *
 
-if not __initialized__ and not __disable_docs__:
+if not __initialized__ and __docs__:
     result = "from .SDL import *\n\n"
-    result += f"from .__init__ import ctypes, SDL_GET_DLL, \\\n"
+    result += f"from .__init__ import ctypes, SDL_GET_DLL, {'SDL_INSTANCE_TRACKER_REGISTER, SDL_INSTANCE_TRACKER_UNREGISTER, ' if __instance_tracking__ else ''}\\\n"
     result += f"    {', '.join(list(SDL_DLL_VAR_MAP.keys()))}\n\n"
     types, definitions = set(), ""
 
@@ -150,10 +194,37 @@ if not __initialized__ and not __disable_docs__:
         for _index, name in enumerate(__module__.functions[dll]):
             retType, args = \
                 __module__.functions[dll][name].restype, __module__.functions[dll][name].argtypes
-
+            
+            createState, destroyState, renderState, freeState, closeState, loadState, openState = \
+                "Create" in name, "Destroy" in name, "Render" in name and "Renderer" not in name, "Free" in name, "Close" in name, "Load" in name, "Open" in name and "Show" not in name
+            
+            if renderState and retType:
+                if "Surface" not in retType.__name__:
+                    renderState = False
+            
             definitions += f"def {name}({', '.join([f'_{index}: {getName(i)}' for index, i in enumerate(args)])}) -> {getName(retType)}:\n"
             definitions += f"    \"\"\"This function is auto-generated.\"\"\"\n"
-            definitions += f"    return SDL_GET_DLL({SDL_DLL_VAR_MAP_INV[dll]}).{name}({', '.join([f'_{index}' for index, i in enumerate(args)])})"
+
+            if (createState or destroyState or renderState or freeState or closeState or loadState or openState) and __instance_tracking__:
+                keyword = {createState: "Create", destroyState: "Destroy", renderState: "Render", freeState: "Free", closeState: "Close", loadState: "Load", openState: "Open"}[True]
+                _name = name[name.find(keyword) + len(keyword):]
+
+                for i in ["With", "From"]:
+                    if i in _name:
+                        _name = _name[:_name.find(i)]
+
+                if "_" in _name:
+                    _name = _name.split("_")[0]
+
+                if (renderState or loadState or openState) and retType:
+                    if retType.__name__.startswith("LP_"):
+                        _name = retType.__name__.split("_")[-1]
+                    
+                definitions += f"    return {'SDL_INSTANCE_TRACKER_REGISTER' if (createState or renderState or loadState or openState) else 'SDL_INSTANCE_TRACKER_UNREGISTER'}" \
+                    + f"(\"{_name}\", SDL_GET_DLL({SDL_DLL_VAR_MAP_INV[dll]}).{name}, {', '.join([f'_{index}' for index, i in enumerate(args)])})"
+
+            else:
+                definitions += f"    return SDL_GET_DLL({SDL_DLL_VAR_MAP_INV[dll]}).{name}({', '.join([f'_{index}' for index, i in enumerate(args)])})"
 
             if _index != len(__module__.functions[dll]) - 1:
                 definitions += "\n\n"

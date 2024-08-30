@@ -1,5 +1,9 @@
-import sdl3, ctypes, os, \
-    sys, colorsys, time
+import sys, os
+
+os.environ["PYSDL3_ENABLE_INSTANCE_TRACKING"] = "1"
+os.environ["PYSDL3_ENABLE_FORCE_CLOSE"] = "1"
+
+import sdl3, ctypes, colorsys, time
 
 def countLines() -> int:
     lines = 0
@@ -107,9 +111,10 @@ def main(argv: list[str]) -> int:
             framesPerSecond = int(frames / sinceLastFrame)
             sinceLastFrame, frames = 0.0, 0.0
 
-            if textTexture:
+            if textTexture is not None:
                 sdl3.SDL_DestroySurface(textSurface)
                 sdl3.SDL_DestroyTexture(textTexture)
+                textSurface, textTexture = None, None
 
             textSurface = sdl3.TTF_RenderText_Solid(font, f"FPS: {framesPerSecond}".encode(), sdl3.SDL_Color(255, 255, 255, 255))
             textTexture = sdl3.SDL_CreateTextureFromSurface(renderer, textSurface)
@@ -129,7 +134,7 @@ def main(argv: list[str]) -> int:
 
         sdl3.SDL_RenderPresent(renderer)
 
-    if textTexture:
+    if textTexture is not None:
         sdl3.SDL_DestroySurface(textSurface)
         sdl3.SDL_DestroyTexture(textTexture)
 
@@ -153,4 +158,4 @@ def main(argv: list[str]) -> int:
     return 0
 
 if __name__ == "__main__":
-    os._exit(main(sys.argv))
+    sys.exit(main(sys.argv))
