@@ -114,7 +114,6 @@ def main(argv: list[str]) -> int:
             if textTexture is not None:
                 sdl3.SDL_DestroySurface(textSurface)
                 sdl3.SDL_DestroyTexture(textTexture)
-                textSurface, textTexture = None, None
 
             textSurface = sdl3.TTF_RenderText_Solid(font, f"FPS: {framesPerSecond}".encode(), sdl3.SDL_Color(255, 255, 255, 255))
             textTexture = sdl3.SDL_CreateTextureFromSurface(renderer, textSurface)
