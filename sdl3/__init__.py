@@ -1,6 +1,6 @@
 """A pure Python wrapper for SDL3."""
 
-__version__ = "0.7.0a3"
+__version__ = "0.7.1a0"
 
 import sys, os, requests, ctypes, platform, atexit, inspect, array
 
