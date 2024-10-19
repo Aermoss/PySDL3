@@ -143,6 +143,11 @@ SDL_EVENT_CAMERA_DEVICE_DENIED = 0x1403
 SDL_EVENT_RENDER_TARGETS_RESET = 0x2000
 SDL_EVENT_RENDER_DEVICE_RESET = 0x2001
 
+SDL_EVENT_PRIVATE0 = 0x4000
+SDL_EVENT_PRIVATE1 = 0x4001
+SDL_EVENT_PRIVATE2 = 0x4002
+SDL_EVENT_PRIVATE3 = 0x4003
+
 SDL_EVENT_POLL_SENTINEL = 0x7F00
 SDL_EVENT_USER = 0x8000
 SDL_EVENT_LAST = 0xFFFF
@@ -194,8 +199,8 @@ class SDL_KeyboardEvent(ctypes.Structure):
         ("key", SDL_Keycode),
         ("mod", SDL_Keymod),
         ("raw", ctypes.c_uint16),
-        ("state", ctypes.c_uint8),
-        ("repeat", ctypes.c_uint8)
+        ("down", ctypes.c_bool),
+        ("repeat", ctypes.c_bool)
     ]
 
 class SDL_TextEditingEvent(ctypes.Structure):
@@ -218,7 +223,10 @@ class SDL_TextEditingCandidatesEvent(ctypes.Structure):
         ("candidates", ctypes.POINTER(ctypes.c_char_p)),
         ("num_candidates", ctypes.c_int32),
         ("selected_candidate", ctypes.c_int32),
-        ("horizontal", ctypes.c_bool)
+        ("horizontal", ctypes.c_bool),
+        ("padding1", ctypes.c_uint8),
+        ("padding2", ctypes.c_uint8),
+        ("padding3", ctypes.c_uint8)
     ]
 
 class SDL_TextInputEvent(ctypes.Structure):
@@ -260,7 +268,7 @@ class SDL_MouseButtonEvent(ctypes.Structure):
         ("windowID", SDL_WindowID),
         ("which", SDL_MouseID),
         ("button", ctypes.c_uint8),
-        ("state", ctypes.c_uint8),
+        ("down", ctypes.c_bool),
         ("clicks", ctypes.c_uint8),
         ("padding", ctypes.c_uint8),
         ("x", ctypes.c_float),
@@ -328,7 +336,7 @@ class SDL_JoyButtonEvent(ctypes.Structure):
         ("timestamp", ctypes.c_uint64),
         ("which", SDL_JoystickID),
         ("button", ctypes.c_uint8),
-        ("state", ctypes.c_uint8),
+        ("down", ctypes.c_bool),
         ("padding1", ctypes.c_uint8),
         ("padding2", ctypes.c_uint8)
     ]
@@ -372,7 +380,7 @@ class SDL_GamepadButtonEvent(ctypes.Structure):
         ("timestamp", ctypes.c_uint64),
         ("which", SDL_JoystickID),
         ("button", ctypes.c_uint8),
-        ("state", ctypes.c_uint8),
+        ("down", ctypes.c_bool),
         ("padding1", ctypes.c_uint8),
         ("padding2", ctypes.c_uint8)
     ]
@@ -415,7 +423,7 @@ class SDL_AudioDeviceEvent(ctypes.Structure):
         ("reserved", ctypes.c_uint32),
         ("timestamp", ctypes.c_uint64),
         ("which", SDL_AudioDeviceID),
-        ("recording", ctypes.c_uint8),
+        ("recording", ctypes.c_bool),
         ("padding1", ctypes.c_uint8),
         ("padding2", ctypes.c_uint8),
         ("padding3", ctypes.c_uint8)
@@ -475,8 +483,8 @@ class SDL_PenTouchEvent(ctypes.Structure):
         ("pen_state", SDL_PenInputFlags),
         ("x", ctypes.c_float),
         ("y", ctypes.c_float),
-        ("eraser", ctypes.c_uint8),
-        ("state", ctypes.c_uint8)
+        ("eraser", ctypes.c_bool),
+        ("down", ctypes.c_bool)
     ]
 
 class SDL_PenButtonEvent(ctypes.Structure):
@@ -490,7 +498,7 @@ class SDL_PenButtonEvent(ctypes.Structure):
         ("x", ctypes.c_float),
         ("y", ctypes.c_float),
         ("button", ctypes.c_uint8),
-        ("state", ctypes.c_uint8)
+        ("down", ctypes.c_bool)
     ]
 
 class SDL_PenAxisEvent(ctypes.Structure):
@@ -523,7 +531,10 @@ class SDL_ClipboardEvent(ctypes.Structure):
     _fields_ = [
         ("type", SDL_EventType),
         ("reserved", ctypes.c_uint32),
-        ("timestamp", ctypes.c_uint64)
+        ("timestamp", ctypes.c_uint64),
+        ("owner", ctypes.c_bool),
+        ("n_mime_types", ctypes.c_int32),
+        ("mime_types", ctypes.POINTER(ctypes.c_char_p))
     ]
 
 class SDL_SensorEvent(ctypes.Structure):
@@ -618,7 +629,7 @@ SDL_EventFilter = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.POINTE
 SDL_FUNC("SDL_SetEventFilter", None, SDL_EventFilter, ctypes.c_void_p)
 SDL_FUNC("SDL_GetEventFilter", ctypes.c_bool, ctypes.POINTER(SDL_EventFilter), ctypes.POINTER(ctypes.c_void_p))
 SDL_FUNC("SDL_AddEventWatch", ctypes.c_bool, SDL_EventFilter, ctypes.c_void_p)
-SDL_FUNC("SDL_DelEventWatch", None, SDL_EventFilter, ctypes.c_void_p)
+SDL_FUNC("SDL_RemoveEventWatch", None, SDL_EventFilter, ctypes.c_void_p)
 SDL_FUNC("SDL_FilterEvents", None, SDL_EventFilter, ctypes.c_void_p)
 SDL_FUNC("SDL_SetEventEnabled", None, ctypes.c_uint32, ctypes.c_bool)
 SDL_FUNC("SDL_EventEnabled", ctypes.c_bool, ctypes.c_uint32)
