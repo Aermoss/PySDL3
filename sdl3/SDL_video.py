@@ -102,8 +102,8 @@ SDL_EGLSurface = ctypes.c_void_p
 SDL_EGLAttrib = ctypes.c_longlong
 SDL_EGLint = ctypes.c_int
 
-SDL_EGLAttribArrayCallback = ctypes.CFUNCTYPE(ctypes.POINTER(SDL_EGLAttrib))
-SDL_EGLIntArrayCallback = ctypes.CFUNCTYPE(ctypes.POINTER(SDL_EGLint))
+SDL_EGLAttribArrayCallback = ctypes.CFUNCTYPE(ctypes.POINTER(SDL_EGLAttrib), ctypes.c_void_p)
+SDL_EGLIntArrayCallback = ctypes.CFUNCTYPE(ctypes.POINTER(SDL_EGLint), ctypes.c_void_p, SDL_EGLDisplay, SDL_EGLConfig)
 
 SDL_GLattr = ctypes.c_int
 
