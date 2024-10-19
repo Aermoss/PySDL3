@@ -348,7 +348,8 @@ SDL_FUNC("SDL_GetWindowMouseRect", ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_
 SDL_FUNC("SDL_SetWindowOpacity", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_float)
 SDL_FUNC("SDL_GetWindowOpacity", ctypes.c_float, ctypes.POINTER(SDL_Window))
 
-SDL_FUNC("SDL_SetWindowModalFor", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_SetWindowParent", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_SetWindowModal", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_bool)
 SDL_FUNC("SDL_SetWindowFocusable", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_bool)
 
 SDL_FUNC("SDL_ShowWindowSystemMenu", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
