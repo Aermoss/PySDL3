@@ -5,7 +5,7 @@ SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_CACHELINE_SIZE = 128
 
-SDL_FUNC("SDL_GetCPUCount", ctypes.c_int)
+SDL_FUNC("SDL_GetNumLogicalCPUCores", ctypes.c_int)
 SDL_FUNC("SDL_GetCPUCacheLineSize", ctypes.c_int)
 
 SDL_FUNC("SDL_HasAltiVec", ctypes.c_bool)
