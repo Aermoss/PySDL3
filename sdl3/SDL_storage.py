@@ -8,6 +8,7 @@ SDL_SET_CURRENT_DLL(SDL_DLL)
 
 class SDL_StorageInterface(ctypes.Structure):
     _fields_ = [
+        ("version", ctypes.c_uint32),
         ("close", ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p)),
         ("ready", ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p)),
         ("enumerate", ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p, SDL_EnumerateDirectoryCallback, ctypes.c_void_p)),
