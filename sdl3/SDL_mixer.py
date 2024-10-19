@@ -58,18 +58,17 @@ MIX_FADING_IN = 2
 Mix_MusicType = ctypes.c_int
 
 MUS_NONE = 0
-MUS_CMD = 1
-MUS_WAV = 2
-MUS_MOD = 3
-MUS_MID = 4
-MUS_OGG = 5
-MUS_MP3 = 6
-MUS_MP3_MAD_UNUSED = 7
-MUS_FLAC = 8
-MUS_MODPLUG_UNUSED = 9
-MUS_OPUS = 10
-MUS_WAVPACK = 11
-MUS_GME = 12
+MUS_WAV = 1
+MUS_MOD = 2
+MUS_MID = 3
+MUS_OGG = 4
+MUS_MP3 = 5
+MUS_MP3_MAD_UNUSED = 6
+MUS_FLAC = 7
+MUS_MODPLUG_UNUSED = 8
+MUS_OPUS = 9
+MUS_WAVPACK = 10
+MUS_GME = 11
 
 class Mix_Music(ctypes.c_void_p):
     ...
@@ -177,7 +176,6 @@ SDL_FUNC("Mix_GetMusicLoopEndTime", ctypes.c_double, ctypes.POINTER(Mix_Music))
 SDL_FUNC("Mix_GetMusicLoopLengthTime", ctypes.c_double, ctypes.POINTER(Mix_Music))
 SDL_FUNC("Mix_Playing", ctypes.c_int, ctypes.c_int)
 SDL_FUNC("Mix_PlayingMusic", ctypes.c_bool)
-SDL_FUNC("Mix_SetMusicCMD", ctypes.c_bool, ctypes.c_char_p)
 SDL_FUNC("Mix_SetSoundFonts", ctypes.c_bool, ctypes.c_char_p)
 SDL_FUNC("Mix_GetSoundFonts", ctypes.c_char_p)
 
