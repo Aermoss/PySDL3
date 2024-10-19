@@ -19,7 +19,7 @@ def main(argv: list[str]) -> int:
     print(f"total lines of code: {countLines()}.")
     print(f"loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
 
-    if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_TIMER | sdl3.SDL_INIT_AUDIO):
+    if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_AUDIO):
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
         return -1
     
@@ -60,7 +60,7 @@ def main(argv: list[str]) -> int:
     running, hue, lastTime, scale = True, 0.0, time.time(), 0.75
 
     sdl3.TTF_Init()
-    font = sdl3.TTF_OpenFont("res/example.ttf".encode(), 32)
+    font = sdl3.TTF_OpenFont("res/example.ttf".encode(), 32.0)
 
     if currentAudioDevice:
         sdl3.Mix_Init(sdl3.MIX_INIT_WAVPACK)
@@ -115,7 +115,7 @@ def main(argv: list[str]) -> int:
                 sdl3.SDL_DestroySurface(textSurface)
                 sdl3.SDL_DestroyTexture(textTexture)
 
-            textSurface = sdl3.TTF_RenderText_Solid(font, f"FPS: {framesPerSecond}".encode(), sdl3.SDL_Color(255, 255, 255, 255))
+            textSurface = sdl3.TTF_RenderText_Blended(font, f"FPS: {framesPerSecond}".encode(), 0, sdl3.SDL_Color(255, 255, 255, 255))
             textTexture = sdl3.SDL_CreateTextureFromSurface(renderer, textSurface)
 
             textRect = sdl3.SDL_Rect()
