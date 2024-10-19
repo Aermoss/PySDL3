@@ -257,3 +257,7 @@ SDL_RENDERER_VSYNC_DISABLED = 0
 SDL_RENDERER_VSYNC_ADAPTIVE = -1
 
 SDL_FUNC("SDL_GetRenderVSync", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_int))
+
+SDL_DEBUG_TEXT_FONT_CHARACTER_SIZE = 8
+
+SDL_FUNC("SDL_RenderDebugText", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float, ctypes.c_char_p)
