@@ -91,7 +91,10 @@ SDL_FLASH_CANCEL = 0
 SDL_FLASH_BRIEFLY = 1
 SDL_FLASH_UNTIL_FOCUSED = 2
 
-SDL_GLContext = ctypes.c_void_p
+class SDL_GLContextState(ctypes.c_void_p):
+    ...
+
+SDL_GLContext = ctypes.POINTER(SDL_GLContextState)
 
 SDL_EGLDisplay = ctypes.c_void_p
 SDL_EGLConfig = ctypes.c_void_p
