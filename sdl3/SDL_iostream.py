@@ -22,10 +22,12 @@ SDL_IO_SEEK_END = 2
 
 class SDL_IOStreamInterface(ctypes.Structure):
     _fields_ = [
+        ("version", ctypes.c_uint32),
         ("size", ctypes.CFUNCTYPE(ctypes.c_int64, ctypes.c_void_p)),
         ("seek", ctypes.CFUNCTYPE(ctypes.c_int64, ctypes.c_void_p, ctypes.c_int64, SDL_IOWhence)),
         ("read", ctypes.CFUNCTYPE(ctypes.c_size_t, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t, ctypes.POINTER(SDL_IOStatus))),
         ("write", ctypes.CFUNCTYPE(ctypes.c_size_t, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t, ctypes.POINTER(SDL_IOStatus))),
+        ("flush", ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.POINTER(SDL_IOStatus))),
         ("close", ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p))
     ]
 
@@ -36,9 +38,14 @@ SDL_FUNC("SDL_IOFromFile", ctypes.POINTER(SDL_IOStream), ctypes.c_char_p, ctypes
 
 SDL_PROP_IOSTREAM_WINDOWS_HANDLE_POINTER = "SDL.iostream.windows.handle"
 SDL_PROP_IOSTREAM_STDIO_FILE_POINTER = "SDL.iostream.stdio.file"
+SDL_PROP_IOSTREAM_FILE_DESCRIPTOR_NUMBER = "SDL.iostream.file_descriptor"
 SDL_PROP_IOSTREAM_ANDROID_AASSET_POINTER = "SDL.iostream.android.aasset"
 
 SDL_FUNC("SDL_IOFromMem", ctypes.POINTER(SDL_IOStream), ctypes.c_void_p, ctypes.c_size_t)
+
+SDL_PROP_IOSTREAM_MEMORY_POINTER = "SDL.iostream.memory.base"
+SDL_PROP_IOSTREAM_MEMORY_SIZE_NUMBER = "SDL.iostream.memory.size"
+
 SDL_FUNC("SDL_IOFromConstMem", ctypes.POINTER(SDL_IOStream), ctypes.c_void_p, ctypes.c_size_t)
 SDL_FUNC("SDL_IOFromDynamicMem", ctypes.POINTER(SDL_IOStream))
 
@@ -59,6 +66,8 @@ SDL_FUNC("SDL_WriteIO", ctypes.c_size_t, ctypes.POINTER(SDL_IOStream), ctypes.c_
 
 SDL_FUNC("SDL_IOprintf", ctypes.c_size_t, ctypes.POINTER(SDL_IOStream), ctypes.c_char_p)
 SDL_FUNC("SDL_IOvprintf", ctypes.c_size_t, ctypes.POINTER(SDL_IOStream), ctypes.c_char_p, ctypes.c_void_p)
+
+SDL_FUNC("SDL_FlushIO", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
 
 SDL_FUNC("SDL_LoadFile_IO", ctypes.c_void_p, ctypes.POINTER(SDL_IOStream), ctypes.POINTER(ctypes.c_size_t), ctypes.c_bool)
 SDL_FUNC("SDL_LoadFile", ctypes.c_void_p, ctypes.c_char_p, ctypes.POINTER(ctypes.c_size_t))
