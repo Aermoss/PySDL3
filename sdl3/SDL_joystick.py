@@ -25,6 +25,7 @@ SDL_JOYSTICK_TYPE_GUITAR = 6
 SDL_JOYSTICK_TYPE_DRUM_KIT = 7
 SDL_JOYSTICK_TYPE_ARCADE_PAD = 8
 SDL_JOYSTICK_TYPE_THROTTLE = 9
+SDL_JOYSTICK_TYPE_COUNT = 10
 
 SDL_JoystickConnectionState = ctypes.c_int
 
@@ -35,8 +36,6 @@ SDL_JOYSTICK_CONNECTION_WIRELESS = 2
 
 SDL_JOYSTICK_AXIS_MAX = 32767
 SDL_JOYSTICK_AXIS_MIN = -32768
-
-SDL_IPHONE_MAX_GFORCE = 5.0
 
 SDL_FUNC("SDL_LockJoysticks", None)
 SDL_FUNC("SDL_UnlockJoysticks", None)
@@ -148,7 +147,7 @@ SDL_HAT_RIGHTDOWN = SDL_HAT_RIGHT | SDL_HAT_DOWN
 SDL_HAT_LEFTUP = SDL_HAT_LEFT | SDL_HAT_UP
 SDL_HAT_LEFTDOWN = SDL_HAT_LEFT | SDL_HAT_DOWN
 
-SDL_FUNC("SDL_GetJoystickButton", ctypes.c_uint8, ctypes.POINTER(SDL_Joystick), ctypes.c_int)
+SDL_FUNC("SDL_GetJoystickButton", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_int)
 SDL_FUNC("SDL_RumbleJoystick", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_uint16, ctypes.c_uint16, ctypes.c_uint32)
 SDL_FUNC("SDL_RumbleJoystickTriggers", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_uint16, ctypes.c_uint16, ctypes.c_uint32)
 SDL_FUNC("SDL_SetJoystickLED", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8)
