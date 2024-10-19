@@ -47,7 +47,13 @@ SDL_GLOB_CASEINSENSITIVE = 1 << 0
 
 SDL_FUNC("SDL_CreateDirectory", ctypes.c_bool, ctypes.c_char_p)
 
-SDL_EnumerateDirectoryCallback = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p)
+SDL_EnumerationResult = ctypes.c_int
+
+SDL_ENUM_CONTINUE = 0
+SDL_ENUM_SUCCESS = 1
+SDL_ENUM_FAILURE = 2
+
+SDL_EnumerateDirectoryCallback = ctypes.CFUNCTYPE(SDL_EnumerationResult, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p)
 
 SDL_FUNC("SDL_EnumerateDirectory", ctypes.c_bool, ctypes.c_char_p, SDL_EnumerateDirectoryCallback, ctypes.c_void_p)
 SDL_FUNC("SDL_RemovePath", ctypes.c_bool, ctypes.c_char_p)
