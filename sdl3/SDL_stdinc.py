@@ -66,9 +66,22 @@ SDL_FUNC("SDL_aligned_alloc", ctypes.c_void_p, ctypes.c_size_t, ctypes.c_size_t)
 SDL_FUNC("SDL_aligned_free", None, ctypes.c_void_p)
 
 SDL_FUNC("SDL_GetNumAllocations", ctypes.c_int)
+
+class SDL_Environment(ctypes.c_void_p):
+    ...
+
+SDL_FUNC("SDL_GetEnvironment", ctypes.POINTER(SDL_Environment))
+SDL_FUNC("SDL_CreateEnvironment", ctypes.POINTER(SDL_Environment), ctypes.c_bool)
+SDL_FUNC("SDL_GetEnvironmentVariable", ctypes.c_char_p, ctypes.POINTER(SDL_Environment), ctypes.c_char_p)
+SDL_FUNC("SDL_GetEnvironmentVariables", ctypes.POINTER(ctypes.c_char_p), ctypes.POINTER(SDL_Environment))
+SDL_FUNC("SDL_SetEnvironmentVariable", ctypes.c_bool, ctypes.POINTER(SDL_Environment), ctypes.c_char_p, ctypes.c_char_p, ctypes.c_bool)
+SDL_FUNC("SDL_UnsetEnvironmentVariable", ctypes.c_bool, ctypes.POINTER(SDL_Environment), ctypes.c_char_p)
+SDL_FUNC("SDL_DestroyEnvironment", None, ctypes.POINTER(SDL_Environment))
+
 SDL_FUNC("SDL_getenv", ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_setenv", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int)
-SDL_FUNC("SDL_unsetenv", ctypes.c_int, ctypes.c_char_p)
+SDL_FUNC("SDL_getenv_unsafe", ctypes.c_char_p, ctypes.c_char_p)
+SDL_FUNC("SDL_setenv_unsafe", ctypes.c_char_p, ctypes.c_char_p)
+SDL_FUNC("SDL_unsetenv_unsafe", ctypes.c_char_p, ctypes.c_char_p)
 
 SDL_CompareCallback = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)
 
@@ -103,6 +116,7 @@ SDL_FUNC("SDL_tolower", ctypes.c_int, ctypes.c_int)
 
 SDL_FUNC("SDL_crc16", ctypes.c_uint16, ctypes.c_uint16, ctypes.c_void_p, ctypes.c_size_t)
 SDL_FUNC("SDL_crc32", ctypes.c_uint32, ctypes.c_uint32, ctypes.c_void_p, ctypes.c_size_t)
+SDL_FUNC("SDL_murmur3_32", ctypes.c_uint32, ctypes.c_void_p, ctypes.c_size_t, ctypes.c_uint32)
 
 SDL_FUNC("SDL_memcpy", ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t)
 SDL_FUNC("SDL_memmove", ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t)
@@ -170,6 +184,7 @@ SDL_FUNC("SDL_strncasecmp", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctyp
 SDL_INVALID_UNICODE_CODEPOINT = 0xFFFD
 
 SDL_FUNC("SDL_StepUTF8", ctypes.c_uint32, ctypes.POINTER(ctypes.c_char_p), ctypes.POINTER(ctypes.c_size_t))
+SDL_FUNC("SDL_StepBackUTF8", ctypes.c_uint32, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p))
 SDL_FUNC("SDL_UCS4ToUTF8", ctypes.c_char_p, ctypes.c_uint32, ctypes.c_char_p)
 
 SDL_FUNC("SDL_sscanf", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p)

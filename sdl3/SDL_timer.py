@@ -22,6 +22,7 @@ SDL_FUNC("SDL_GetPerformanceCounter", ctypes.c_uint64)
 SDL_FUNC("SDL_GetPerformanceFrequency", ctypes.c_uint64)
 SDL_FUNC("SDL_Delay", None, ctypes.c_uint32)
 SDL_FUNC("SDL_DelayNS", None, ctypes.c_uint64)
+SDL_FUNC("SDL_DelayPrecise", None, ctypes.c_uint64)
 
 SDL_TimerID = ctypes.c_uint32
 SDL_TimerCallback = ctypes.CFUNCTYPE(ctypes.c_uint32, ctypes.c_void_p, SDL_TimerID, ctypes.c_uint32)

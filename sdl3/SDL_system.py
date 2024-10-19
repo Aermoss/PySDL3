@@ -26,6 +26,18 @@ if sys.platform in ["linux"]:
     SDL_FUNC("SDL_SetLinuxThreadPriorityAndPolicy", ctypes.c_bool, ctypes.c_int64, ctypes.c_int, ctypes.c_int)
 
 SDL_FUNC("SDL_IsTablet", ctypes.c_bool)
+SDL_FUNC("SDL_IsTV", ctypes.c_bool)
+
+SDL_Sandbox = ctypes.c_int
+
+SDL_SANDBOX_NONE = 0
+SDL_SANDBOX_UNKNOWN_CONTAINER = 1
+SDL_SANDBOX_FLATPAK = 2
+SDL_SANDBOX_SNAP = 3
+SDL_SANDBOX_MACOS = 4
+
+SDL_FUNC("SDL_GetSandbox", SDL_Sandbox)
+
 SDL_FUNC("SDL_OnApplicationWillTerminate", None)
 SDL_FUNC("SDL_OnApplicationDidReceiveMemoryWarning", None)
 SDL_FUNC("SDL_OnApplicationWillEnterBackground", None)

@@ -4,6 +4,7 @@ from .__init__ import ctypes, \
 SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_FUNC("SDL_SetError", ctypes.c_bool, ctypes.c_char_p)
+SDL_FUNC("SDL_SetErrorV", ctypes.c_bool, ctypes.c_char_p, ctypes.c_void_p)
 SDL_FUNC("SDL_OutOfMemory", ctypes.c_bool)
 SDL_FUNC("SDL_GetError", ctypes.c_char_p)
 SDL_FUNC("SDL_ClearError", ctypes.c_bool)
