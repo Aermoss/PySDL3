@@ -26,7 +26,7 @@ SDL_APP_FAILURE = 2
 SDL_AppInit_func = ctypes.CFUNCTYPE(SDL_AppResult, ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.POINTER(ctypes.c_char_p))
 SDL_AppIterate_func = ctypes.CFUNCTYPE(SDL_AppResult, ctypes.c_void_p)
 SDL_AppEvent_func = ctypes.CFUNCTYPE(SDL_AppResult, ctypes.c_void_p, ctypes.POINTER(SDL_Event))
-SDL_AppQuit_func = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
+SDL_AppQuit_func = ctypes.CFUNCTYPE(None, ctypes.c_void_p, SDL_AppResult)
 
 SDL_FUNC("SDL_Init", ctypes.c_bool, SDL_InitFlags)
 SDL_FUNC("SDL_InitSubSystem", ctypes.c_bool, SDL_InitFlags)
