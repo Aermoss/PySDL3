@@ -251,4 +251,4 @@ SDL_FUNC("SDL_GetHintBoolean", ctypes.c_bool, ctypes.c_char_p, ctypes.c_bool)
 SDL_HintCallback = ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)
 
 SDL_FUNC("SDL_AddHintCallback", ctypes.c_bool, ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p)
-SDL_FUNC("SDL_DelHintCallback", None, ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p)
+SDL_FUNC("SDL_RemoveHintCallback", None, ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p)
