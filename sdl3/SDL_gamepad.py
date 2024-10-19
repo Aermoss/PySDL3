@@ -188,7 +188,7 @@ SDL_FUNC("SDL_GetGamepadAxis", ctypes.c_int16, ctypes.POINTER(SDL_Gamepad), SDL_
 SDL_FUNC("SDL_GetGamepadButtonFromString", SDL_GamepadButton, ctypes.c_char_p)
 SDL_FUNC("SDL_GetGamepadStringForButton", ctypes.c_char_p, SDL_GamepadButton)
 SDL_FUNC("SDL_GamepadHasButton", ctypes.c_bool, ctypes.POINTER(SDL_Gamepad), SDL_GamepadButton)
-SDL_FUNC("SDL_GetGamepadButton", ctypes.c_uint8, ctypes.POINTER(SDL_Gamepad), SDL_GamepadButton)
+SDL_FUNC("SDL_GetGamepadButton", ctypes.c_bool, ctypes.POINTER(SDL_Gamepad), SDL_GamepadButton)
 SDL_FUNC("SDL_GetGamepadButtonLabelForType", SDL_GamepadButtonLabel, SDL_GamepadType, SDL_GamepadButton)
 SDL_FUNC("SDL_GetGamepadButtonLabel", SDL_GamepadButtonLabel, ctypes.POINTER(SDL_Gamepad), SDL_GamepadButton)
 SDL_FUNC("SDL_GetNumGamepadTouchpads", ctypes.c_int, ctypes.POINTER(SDL_Gamepad))
