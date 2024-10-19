@@ -1,6 +1,9 @@
 from .__init__ import ctypes, \
     SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
 
+from.SDL_atomic import SDL_AtomicInt
+from .SDL_thread import SDL_ThreadID
+
 SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_MUTEX_TIMEDOUT = 1
@@ -47,3 +50,22 @@ SDL_FUNC("SDL_SignalCondition", None, ctypes.POINTER(SDL_Condition))
 SDL_FUNC("SDL_BroadcastCondition", None, ctypes.POINTER(SDL_Condition))
 SDL_FUNC("SDL_WaitCondition", None, ctypes.POINTER(SDL_Condition), ctypes.POINTER(SDL_Mutex))
 SDL_FUNC("SDL_WaitConditionTimeout", ctypes.c_bool, ctypes.POINTER(SDL_Condition), ctypes.POINTER(SDL_Mutex), ctypes.c_int32)
+
+SDL_InitStatus = ctypes.c_int
+
+SDL_INIT_STATUS_UNINITIALIZED = 0
+SDL_INIT_STATUS_INITIALIZING = 1
+SDL_INIT_STATUS_INITIALIZED = 2
+SDL_INIT_STATUS_UNINITIALIZING = 3
+
+class SDL_InitState(ctypes.Structure):
+    _fields_ = [
+        ("status", SDL_AtomicInt),
+        ("error", SDL_ThreadID),
+        ("reserved", ctypes.c_void_p)
+    ]
+
+SDL_FUNC("SDL_ShouldInit", ctypes.c_bool, ctypes.POINTER(SDL_InitState))
+SDL_FUNC("SDL_ShouldQuit", ctypes.c_bool, ctypes.POINTER(SDL_InitState))
+
+SDL_FUNC("SDL_SetInitialized", None, ctypes.POINTER(SDL_InitState), ctypes.c_bool)
