@@ -39,11 +39,11 @@ SDL_MESSAGEBOX_COLOR_TEXT = 1
 SDL_MESSAGEBOX_COLOR_BUTTON_BORDER = 2
 SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND = 3
 SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED = 4
-SDL_MESSAGEBOX_COLOR_MAX = 5
+SDL_MESSAGEBOX_COLOR_COUNT = 5
 
 class SDL_MessageBoxColorScheme(ctypes.Structure):
     _fields_ = [
-        ("colors", SDL_MessageBoxColor * SDL_MESSAGEBOX_COLOR_MAX)
+        ("colors", SDL_MessageBoxColor * SDL_MESSAGEBOX_COLOR_COUNT)
     ]
 
 class SDL_MessageBoxData(ctypes.Structure):
