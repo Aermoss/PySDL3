@@ -34,6 +34,7 @@ from .SDL_pen import *
 from .SDL_pixels import *
 from .SDL_platform import *
 from .SDL_power import *
+from .SDL_process import *
 from .SDL_properties import *
 from .SDL_rect import *
 from .SDL_render import *
@@ -58,4 +59,5 @@ from .SDL_net import *
 if not (sys.platform in ["linux"] and platform.machine() in ["aarch64"]):
     # SDL_ttf and SDL_rtf are not supported on linux-aarch64 for now.
     from .SDL_ttf import *
+    from .SDL_textengine import *
     from .SDL_rtf import *
