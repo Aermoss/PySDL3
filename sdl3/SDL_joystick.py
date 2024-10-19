@@ -67,6 +67,7 @@ class SDL_VirtualJoystickSensorDesc(ctypes.Structure):
 
 class SDL_VirtualJoystickDesc(ctypes.Structure):
     _fields_ = [
+        ("version", ctypes.c_uint32),
         ("type", ctypes.c_uint16),
         ("padding", ctypes.c_uint16),
         ("vendor_id", ctypes.c_uint16),
