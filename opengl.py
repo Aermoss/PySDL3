@@ -139,7 +139,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
                 if sdl3.SDL_GetWindowFlags(self.window) & sdl3.SDL_WINDOW_MOUSE_FOCUS else (-1, -1)
 
         if event.type in [sdl3.SDL_EVENT_KEY_UP, sdl3.SDL_EVENT_KEY_DOWN]:
-            if event.key.scancode < sdl3.SDL_NUM_SCANCODES:
+            if event.key.scancode < sdl3.SDL_SCANCODE_COUNT:
                 self.io.keys_down[event.key.scancode] = event.type == sdl3.SDL_EVENT_KEY_DOWN
 
             self.io.key_shift = (sdl3.SDL_GetModState() & sdl3.SDL_KMOD_SHIFT) != 0
