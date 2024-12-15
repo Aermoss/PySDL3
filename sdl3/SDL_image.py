@@ -22,18 +22,6 @@ SDL_IMAGE_VERSION_ATLEAST = lambda x, y, z: \
 
 SDL_FUNC("IMG_Version", ctypes.c_int)
 
-IMG_InitFlags = ctypes.c_uint32
-
-IMG_INIT_JPG = 0x00000001
-IMG_INIT_PNG = 0x00000002
-IMG_INIT_TIF = 0x00000004
-IMG_INIT_WEBP = 0x00000008
-IMG_INIT_JXL = 0x00000010
-IMG_INIT_AVIF = 0x00000020
-
-SDL_FUNC("IMG_Init", IMG_InitFlags, IMG_InitFlags)
-SDL_FUNC("IMG_Quit", None)
-
 SDL_FUNC("IMG_LoadTyped_IO", ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_bool, ctypes.c_char_p)
 SDL_FUNC("IMG_Load", ctypes.POINTER(SDL_Surface), ctypes.c_char_p)
 SDL_FUNC("IMG_Load_IO", ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_bool)
