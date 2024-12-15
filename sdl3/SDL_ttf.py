@@ -46,6 +46,11 @@ TTF_PROP_FONT_CREATE_HORIZONTAL_DPI_NUMBER = "SDL_ttf.font.create.hdpi"
 TTF_PROP_FONT_CREATE_VERTICAL_DPI_NUMBER = "SDL_ttf.font.create.vdpi"
 
 SDL_FUNC("TTF_GetFontProperties", SDL_PropertiesID, ctypes.POINTER(TTF_Font))
+
+TTF_PROP_FONT_OUTLINE_LINE_CAP_NUMBER = "SDL_ttf.font.outline.line_cap"
+TTF_PROP_FONT_OUTLINE_LINE_JOIN_NUMBER = "SDL_ttf.font.outline.line_join"
+TTF_PROP_FONT_OUTLINE_MITER_LIMIT_NUMBER = "SDL_ttf.font.outline.miter_limit"
+
 SDL_FUNC("TTF_GetFontGeneration", ctypes.c_uint32, ctypes.POINTER(TTF_Font))
 
 SDL_FUNC("TTF_SetFontSize", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_float)
