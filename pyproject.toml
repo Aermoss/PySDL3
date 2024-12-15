@@ -5,25 +5,24 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "PySDL3"
 description = "A pure Python wrapper for SDL3."
-readme = "README.md"
+readme = {file = "README.md", content-type = "text/markdown"}
 authors = [
     {name = "Yusuf Rençber", email = "aermoss.0@gmail.com"}
 ]
 dependencies  = ["requests", "aiohttp"]
 dynamic = ["version"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: POSIX :: Linux",
     "Operating System :: Microsoft :: Windows",
+    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
-    "Topic :: Software Development :: Libraries :: Python Modules"
+    "Programming Language :: Python :: 3.14"
 ]
 
 [project.urls]
