@@ -142,6 +142,7 @@ SDL_EVENT_CAMERA_DEVICE_DENIED = 0x1403
 
 SDL_EVENT_RENDER_TARGETS_RESET = 0x2000
 SDL_EVENT_RENDER_DEVICE_RESET = 0x2001
+SDL_EVENT_RENDER_DEVICE_LOST = 0x2002
 
 SDL_EVENT_PRIVATE0 = 0x4000
 SDL_EVENT_PRIVATE1 = 0x4001
@@ -437,6 +438,14 @@ class SDL_CameraDeviceEvent(ctypes.Structure):
         ("which", SDL_CameraID)
     ]
 
+class SDL_RenderEvent(ctypes.Structure):
+    _fields_ = [
+        ("type", SDL_EventType),
+        ("reserved", ctypes.c_uint32),
+        ("timestamp", ctypes.c_uint64),
+        ("windowID", SDL_WindowID)
+    ]
+
 class SDL_TouchFingerEvent(ctypes.Structure):
     _fields_ = [
         ("type", SDL_EventType),
@@ -602,6 +611,7 @@ class SDL_Event(ctypes.Union):
         ("pmotion", SDL_PenMotionEvent),
         ("pbutton", SDL_PenButtonEvent),
         ("paxis", SDL_PenAxisEvent),
+        ("render", SDL_RenderEvent),
         ("drop", SDL_DropEvent),
         ("clipboard", SDL_ClipboardEvent)
     ]
