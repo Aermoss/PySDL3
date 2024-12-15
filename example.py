@@ -38,7 +38,8 @@ def main(argv: list[str]) -> int:
         print(f"failed to get audio devices: {sdl3.SDL_GetError().decode().lower()}.")
         return -1
 
-    currentAudioDevice = sdl3.SDL_OpenAudioDevice(audioDevices[0], None)
+    audioDevice = sdl3.SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK if True else audioDevices[0]
+    currentAudioDevice = sdl3.SDL_OpenAudioDevice(audioDevice, None)
     
     if currentAudioDevice:
         print(f"current audio device: {sdl3.SDL_GetAudioDeviceName(currentAudioDevice).decode().lower()}.")
