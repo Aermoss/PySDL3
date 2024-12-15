@@ -74,11 +74,11 @@ SDL_FUNC("IMG_ReadXPMFromArray", ctypes.POINTER(SDL_Surface), ctypes.POINTER(cty
 SDL_FUNC("IMG_ReadXPMFromArrayToRGB888", ctypes.POINTER(SDL_Surface), ctypes.POINTER(ctypes.c_char_p))
 
 SDL_FUNC("IMG_SaveAVIF", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.c_char_p, ctypes.c_int)
-SDL_FUNC("IMG_SaveAVIF_IO", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_int, ctypes.c_int)
+SDL_FUNC("IMG_SaveAVIF_IO", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_bool, ctypes.c_int)
 SDL_FUNC("IMG_SavePNG", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.c_char_p)
-SDL_FUNC("IMG_SavePNG_IO", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_int)
+SDL_FUNC("IMG_SavePNG_IO", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_bool)
 SDL_FUNC("IMG_SaveJPG", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.c_char_p, ctypes.c_int)
-SDL_FUNC("IMG_SaveJPG_IO", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_int, ctypes.c_int)
+SDL_FUNC("IMG_SaveJPG_IO", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_IOStream), ctypes.c_bool, ctypes.c_int)
 
 class IMG_Animation(ctypes.Structure):
     _fields_ = [
