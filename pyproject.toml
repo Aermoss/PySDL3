@@ -9,7 +9,7 @@ readme = "README.md"
 authors = [
     {name = "Yusuf Rençber", email = "aermoss.0@gmail.com"}
 ]
-dependencies  = ["requests"]
+dependencies  = ["requests", "aiohttp"]
 dynamic = ["version"]
 classifiers = [
     "Development Status :: 3 - Alpha",
