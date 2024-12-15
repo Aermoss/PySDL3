@@ -105,7 +105,7 @@ SDL_EGLint = ctypes.c_int
 SDL_EGLAttribArrayCallback = ctypes.CFUNCTYPE(ctypes.POINTER(SDL_EGLAttrib), ctypes.c_void_p)
 SDL_EGLIntArrayCallback = ctypes.CFUNCTYPE(ctypes.POINTER(SDL_EGLint), ctypes.c_void_p, SDL_EGLDisplay, SDL_EGLConfig)
 
-SDL_GLattr = ctypes.c_int
+SDL_GLAttr = ctypes.c_int
 
 SDL_GL_RED_SIZE = 0
 SDL_GL_GREEN_SIZE = 1
@@ -136,25 +136,25 @@ SDL_GL_CONTEXT_NO_ERROR = 25
 SDL_GL_FLOATBUFFERS = 26
 SDL_GL_EGL_PLATFORM = 27
 
-SDL_GLprofile = ctypes.c_int
+SDL_GLProfile = ctypes.c_uint32
 
 SDL_GL_CONTEXT_PROFILE_CORE = 0x0001
 SDL_GL_CONTEXT_PROFILE_COMPATIBILITY = 0x0002
 SDL_GL_CONTEXT_PROFILE_ES = 0x0004
 
-SDL_GLcontextFlag = ctypes.c_int
+SDL_GLContextFlag = ctypes.c_uint32
 
 SDL_GL_CONTEXT_DEBUG_FLAG = 0x0001
 SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG = 0x0002
 SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG = 0x0004
 SDL_GL_CONTEXT_RESET_ISOLATION_FLAG = 0x0008
 
-SDL_GLcontextReleaseFlag = ctypes.c_int
+SDL_GLContextReleaseFlag = ctypes.c_uint32
 
 SDL_GL_CONTEXT_RELEASE_BEHAVIOR_NONE = 0x0000
 SDL_GL_CONTEXT_RELEASE_BEHAVIOR_FLUSH = 0x0001
 
-SDL_GLContextResetNotification = ctypes.c_int
+SDL_GLContextResetNotification = ctypes.c_uint32
 
 SDL_GL_CONTEXT_RESET_NO_NOTIFICATION = 0x0000
 SDL_GL_CONTEXT_RESET_LOSE_CONTEXT = 0x0001
@@ -270,6 +270,7 @@ SDL_PROP_WINDOW_WIN32_HDC_POINTER = "SDL.window.win32.hdc"
 SDL_PROP_WINDOW_WIN32_INSTANCE_POINTER = "SDL.window.win32.instance"
 SDL_PROP_WINDOW_WAYLAND_DISPLAY_POINTER = "SDL.window.wayland.display"
 SDL_PROP_WINDOW_WAYLAND_SURFACE_POINTER = "SDL.window.wayland.surface"
+SDL_PROP_WINDOW_WAYLAND_VIEWPORT_POINTER = "SDL.window.wayland.viewport"
 SDL_PROP_WINDOW_WAYLAND_EGL_WINDOW_POINTER = "SDL.window.wayland.egl_window"
 SDL_PROP_WINDOW_WAYLAND_XDG_SURFACE_POINTER = "SDL.window.wayland.xdg_surface"
 SDL_PROP_WINDOW_WAYLAND_XDG_TOPLEVEL_POINTER = "SDL.window.wayland.xdg_toplevel"
@@ -387,8 +388,8 @@ SDL_FUNC("SDL_GL_UnloadLibrary", None)
 SDL_FUNC("SDL_GL_ExtensionSupported", ctypes.c_bool, ctypes.c_char_p)
 
 SDL_FUNC("SDL_GL_ResetAttributes", None)
-SDL_FUNC("SDL_GL_SetAttribute", ctypes.c_bool, SDL_GLattr, ctypes.c_int)
-SDL_FUNC("SDL_GL_GetAttribute", ctypes.c_bool, SDL_GLattr, ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GL_SetAttribute", ctypes.c_bool, SDL_GLAttr, ctypes.c_int)
+SDL_FUNC("SDL_GL_GetAttribute", ctypes.c_bool, SDL_GLAttr, ctypes.POINTER(ctypes.c_int))
 
 SDL_FUNC("SDL_GL_CreateContext", SDL_GLContext, ctypes.POINTER(SDL_Window))
 SDL_FUNC("SDL_GL_MakeCurrent", ctypes.c_bool, ctypes.POINTER(SDL_Window), SDL_GLContext)
