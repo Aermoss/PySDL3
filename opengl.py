@@ -1,10 +1,4 @@
-import sys, os
-
-os.environ["PYSDL3_ENABLE_INSTANCE_TRACKING"] = "1"
-os.environ["PYSDL3_ENABLE_FORCE_CLOSE"] = "1"
-
-import ctypes, imgui, colorsys, \
-    time, sdl3, OpenGL.GL as gl
+import sys, os, ctypes, imgui, colorsys, time, sdl3, OpenGL.GL as gl
 
 from imgui.integrations.opengl import ProgrammablePipelineRenderer
 

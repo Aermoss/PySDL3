@@ -1,9 +1,4 @@
-import sys, os
-
-os.environ["PYSDL3_ENABLE_INSTANCE_TRACKING"] = "1"
-os.environ["PYSDL3_ENABLE_FORCE_CLOSE"] = "1"
-
-import sdl3, ctypes, colorsys, time
+import sys, os, sdl3, ctypes, colorsys, time
 
 def countLines() -> int:
     lines = 0
