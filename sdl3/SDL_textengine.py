@@ -5,6 +5,7 @@ from .SDL_mouse import SDL_MouseID
 from .SDL_rect import SDL_Rect
 from .SDL_properties import SDL_PropertiesID
 from .SDL_ttf import TTF_Font, TTF_Text, TTF_SubString
+from .SDL_pixels import SDL_FColor
 
 SDL_SET_CURRENT_DLL(SDL_TTF_DLL)
 
@@ -51,6 +52,7 @@ class TTF_TextEngine(ctypes.Structure):
 class TTF_TextData(ctypes.Structure):
     _fields_ = [
         ("font", ctypes.POINTER(TTF_Font)),
+        ("color", SDL_FColor),
         ("needs_layout_update", ctypes.c_bool),
         ("layout", ctypes.POINTER(TTF_TextLayout)),
         ("x", ctypes.c_int),
