@@ -5,7 +5,7 @@ SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_MAJOR_VERSION = 3
 SDL_MINOR_VERSION = 1
-SDL_MICRO_VERSION = 5
+SDL_MICRO_VERSION = 7
 
 SDL_VERSIONNUM = lambda major, minor, patch: \
     major * 1000000 + minor * 1000 + patch
