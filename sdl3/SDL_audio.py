@@ -76,6 +76,8 @@ SDL_FUNC("SDL_GetAudioDeviceFormat", ctypes.c_bool, SDL_AudioDeviceID, ctypes.PO
 SDL_FUNC("SDL_GetAudioDeviceChannelMap", ctypes.POINTER(ctypes.c_int), SDL_AudioDeviceID, ctypes.POINTER(ctypes.c_int))
 
 SDL_FUNC("SDL_OpenAudioDevice", SDL_AudioDeviceID, SDL_AudioDeviceID, ctypes.POINTER(SDL_AudioSpec))
+SDL_FUNC("SDL_IsAudioDevicePhysical", ctypes.c_bool, SDL_AudioDeviceID)
+SDL_FUNC("SDL_IsAudioDevicePlayback", ctypes.c_bool, SDL_AudioDeviceID)
 SDL_FUNC("SDL_PauseAudioDevice", ctypes.c_bool, SDL_AudioDeviceID)
 SDL_FUNC("SDL_ResumeAudioDevice", ctypes.c_bool, SDL_AudioDeviceID)
 SDL_FUNC("SDL_AudioDevicePaused", ctypes.c_bool, SDL_AudioDeviceID)

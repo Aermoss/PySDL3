@@ -72,6 +72,9 @@ SDL_FUNC("SDL_FlushIO", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))
 SDL_FUNC("SDL_LoadFile_IO", ctypes.c_void_p, ctypes.POINTER(SDL_IOStream), ctypes.POINTER(ctypes.c_size_t), ctypes.c_bool)
 SDL_FUNC("SDL_LoadFile", ctypes.c_void_p, ctypes.c_char_p, ctypes.POINTER(ctypes.c_size_t))
 
+SDL_FUNC("SDL_SaveFile_IO", ctypes.c_bool, ctypes.POINTER(SDL_IOStream), ctypes.POINTER(ctypes.c_void_p), ctypes.c_size_t, ctypes.c_bool)
+SDL_FUNC("SDL_SaveFile", ctypes.c_bool, ctypes.c_char_p, ctypes.POINTER(ctypes.c_void_p), ctypes.c_size_t)
+
 SDL_FUNC("SDL_ReadU8", ctypes.c_bool, ctypes.POINTER(SDL_IOStream), ctypes.POINTER(ctypes.c_uint8))
 SDL_FUNC("SDL_ReadS8", ctypes.c_bool, ctypes.POINTER(SDL_IOStream), ctypes.POINTER(ctypes.c_int8))
 SDL_FUNC("SDL_ReadU16LE", ctypes.c_bool, ctypes.POINTER(SDL_IOStream), ctypes.POINTER(ctypes.c_uint16))

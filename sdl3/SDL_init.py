@@ -33,6 +33,10 @@ SDL_FUNC("SDL_QuitSubSystem", None, SDL_InitFlags)
 SDL_FUNC("SDL_WasInit", SDL_InitFlags, SDL_InitFlags)
 SDL_FUNC("SDL_Quit", None)
 
+SDL_FUNC("SDL_IsMainThread", ctypes.c_bool)
+SDL_MainThreadCallback = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
+SDL_FUNC("SDL_RunOnMainThread", ctypes.c_bool, SDL_MainThreadCallback, ctypes.c_void_p, ctypes.c_bool)
+
 SDL_FUNC("SDL_SetAppMetadata", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_SetAppMetadataProperty", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p)
 

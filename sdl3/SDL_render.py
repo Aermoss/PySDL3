@@ -233,6 +233,7 @@ SDL_FUNC("SDL_RenderFillRects", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), cty
 
 SDL_FUNC("SDL_RenderTexture", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect))
 SDL_FUNC("SDL_RenderTextureRotated", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect), ctypes.c_double, ctypes.POINTER(SDL_FPoint), SDL_FlipMode)
+SDL_FUNC("SDL_RenderTextureAffine", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FPoint), ctypes.POINTER(SDL_FPoint), ctypes.POINTER(SDL_FPoint))
 SDL_FUNC("SDL_RenderTextureTiled", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_FRect), ctypes.c_float, ctypes.POINTER(SDL_FRect))
 SDL_FUNC("SDL_RenderTexture9Grid", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_FRect), ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.POINTER(SDL_FRect))
 

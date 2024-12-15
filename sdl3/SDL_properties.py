@@ -4,7 +4,6 @@ from .__init__ import ctypes, \
 SDL_SET_CURRENT_DLL(SDL_DLL)
 
 SDL_PropertiesID = ctypes.c_uint32
-
 SDL_PropertyType = ctypes.c_int
 
 SDL_PROPERTY_TYPE_INVALID = 0
