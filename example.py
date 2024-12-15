@@ -48,7 +48,6 @@ def main(argv: list[str]) -> int:
     if currentAudioDevice:
         print(f"current audio device: {sdl3.SDL_GetAudioDeviceName(currentAudioDevice).decode().lower()}.")
 
-    sdl3.IMG_Init(sdl3.IMG_INIT_JPG | sdl3.IMG_INIT_PNG)
     surface = sdl3.IMG_Load("res/example.png".encode())
     texture = sdl3.SDL_CreateTextureFromSurface(renderer, surface)
 
@@ -149,7 +148,6 @@ def main(argv: list[str]) -> int:
 
     sdl3.SDL_DestroySurface(surface)
     sdl3.SDL_DestroyTexture(texture)
-    sdl3.IMG_Quit()
 
     sdl3.SDL_DestroyRenderer(renderer)
     sdl3.SDL_DestroyWindow(window)
