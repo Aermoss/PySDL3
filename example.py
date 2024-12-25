@@ -97,7 +97,7 @@ def main(argv: list[str]) -> int:
             time.time(), time.time() - lastTime
 
         hue, frames = (hue + 0.5 * deltaTime) % 1.0, frames + 1.0
-        sdl3.SDL_SetRenderDrawColorFloat(renderer, *colorsys.hsv_to_rgb(hue, 1.0, 0.1), 255.0)
+        sdl3.SDL_SetRenderDrawColorFloat(renderer, *colorsys.hsv_to_rgb(hue, 1.0, 0.1), 1.0)
         sdl3.SDL_RenderClear(renderer)
         sdl3.SDL_RenderTexture(renderer, texture, None, ctypes.byref(frect))
         sinceLastFrame += deltaTime
