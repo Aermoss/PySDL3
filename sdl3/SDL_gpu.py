@@ -98,7 +98,6 @@ SDL_GPU_TEXTUREFORMAT_BC5_RG_UNORM = 17
 SDL_GPU_TEXTUREFORMAT_BC7_RGBA_UNORM = 18
 
 SDL_GPU_TEXTUREFORMAT_BC6H_RGB_FLOAT = 19
-
 SDL_GPU_TEXTUREFORMAT_BC6H_RGB_UFLOAT = 20
 
 SDL_GPU_TEXTUREFORMAT_R8_SNORM = 21
@@ -788,6 +787,7 @@ class SDL_GPUStorageTextureReadWriteBinding(ctypes.Structure):
 
 SDL_FUNC("SDL_GPUSupportsShaderFormats", ctypes.c_bool, SDL_GPUShaderFormat, ctypes.c_char_p)
 SDL_FUNC("SDL_GPUSupportsProperties", ctypes.c_bool, SDL_PropertiesID)
+
 SDL_FUNC("SDL_CreateGPUDevice", ctypes.POINTER(SDL_GPUDevice), SDL_GPUShaderFormat, ctypes.c_bool, ctypes.c_char_p)
 SDL_FUNC("SDL_CreateGPUDeviceWithProperties", ctypes.POINTER(SDL_GPUDevice), SDL_PropertiesID)
 
