@@ -162,7 +162,7 @@ def main(argv: list[str]) -> int:
 
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS):
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
-        return 1
+        return -1
     
     sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_CONTEXT_MAJOR_VERSION, 4)
     sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_CONTEXT_MINOR_VERSION, 6)
@@ -172,14 +172,14 @@ def main(argv: list[str]) -> int:
 
     if not window:
         print(f"failed to create window: {sdl3.SDL_GetError().decode().lower()}.", flush = True)
-        return 1
+        return -1
 
     context = sdl3.SDL_GL_CreateContext(window)
     sdl3.SDL_GL_MakeCurrent(window, context)
 
     if not context:
         print(f"failed to create context: {sdl3.SDL_GetError().decode().lower()}.", flush = True)
-        return 1
+        return -1
 
     imgui.create_context()
     imgui.get_io().ini_file_name = None
