@@ -62,15 +62,13 @@ if not __initialized__:
         functions[value], dllMap[value] = {}, (ctypes.WinDLL if "win32" in sys.platform else ctypes.CDLL) \
             (os.path.join(binaryPath, ("{}.dll" if "win32" in sys.platform else "lib{}.so").format(value)))
 
+def SDL_ARRAY(*args, **kwargs):
+    return ((kwargs.get("type") or args[0].__class__) * len(args))(*args), len(args)
+
 def SDL_DEREFERENCE(value):
-    if isinstance(value, ctypes._Pointer):
-        return value.contents
-    
-    elif hasattr(value, "_obj"):
-        return value._obj
-    
-    else:
-        return value
+    if isinstance(value, ctypes._Pointer): return value.contents
+    elif hasattr(value, "_obj"): return value._obj
+    else: return value
 
 def SDL_FUNC_CACHE(func):
     cache = {}
