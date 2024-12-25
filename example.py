@@ -1,14 +1,7 @@
 import sys, os, sdl3, ctypes, colorsys, time
 
 def countLines() -> int:
-    lines = 0
-
-    for i in os.listdir("sdl3"):
-        if i.endswith(".py"):
-            with open(f"sdl3/{i}", "r") as file:
-                lines += file.read().count("\n") + 1
-
-    return lines
+    return sum([open(f"sdl3/{i}", "r").read().count("\n") + 1 for i in os.listdir("sdl3") if i.endswith(".py")])
 
 def main(argv: list[str]) -> int:
     print(f"total lines of code: {countLines()}.")
