@@ -16,6 +16,13 @@ class Vertex(ctypes.Structure):
         ("color", ctypes.c_float * 3)
     ]
 
+class UniformData(ctypes.Structure):
+    _fields_ = [
+        ("color0", ctypes.c_float * 4),
+        ("color1", ctypes.c_float * 4),
+        ("color2", ctypes.c_float * 4)
+    ]
+
 def main(argv: list[str]) -> int:
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_AUDIO):
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
@@ -38,13 +45,13 @@ def main(argv: list[str]) -> int:
         print(f"failed to claim window for gpu device: {sdl3.SDL_GetError().decode().lower()}")
         return -1
 
-    vertexShader = sdl3.SDL_CreateGPUShader(device, sdl3.SDL_GPUShaderCreateInfo(*shader.vertexData, entrypoint = "main".encode(), format = sdl3.SDL_GPU_SHADERFORMAT_SPIRV, stage = sdl3.SDL_GPU_SHADERSTAGE_VERTEX))
+    vertexShader = sdl3.SDL_CreateGPUShader(device, sdl3.SDL_GPUShaderCreateInfo(*shader.vertexData, entrypoint = "main".encode(), format = sdl3.SDL_GPU_SHADERFORMAT_SPIRV, stage = sdl3.SDL_GPU_SHADERSTAGE_VERTEX, num_uniform_buffers = 1))
     fragmentShader = sdl3.SDL_CreateGPUShader(device, sdl3.SDL_GPUShaderCreateInfo(*shader.fragmentData, entrypoint = "main".encode(), format = sdl3.SDL_GPU_SHADERFORMAT_SPIRV, stage = sdl3.SDL_GPU_SHADERSTAGE_FRAGMENT))
 
     pipeline = sdl3.SDL_CreateGPUGraphicsPipeline(device, sdl3.SDL_GPUGraphicsPipelineCreateInfo(vertexShader, fragmentShader, primitive_type = sdl3.SDL_GPU_PRIMITIVETYPE_TRIANGLELIST,
         target_info = sdl3.SDL_GPUGraphicsPipelineTargetInfo(*sdl3.SDL_ARRAY(sdl3.SDL_GPUColorTargetDescription(sdl3.SDL_GetGPUSwapchainTextureFormat(device, window)))),
         vertex_input_state = sdl3.SDL_GPUVertexInputState(*sdl3.SDL_ARRAY(sdl3.SDL_GPUVertexBufferDescription(0, ctypes.sizeof(Vertex), sdl3.SDL_GPU_VERTEXINPUTRATE_VERTEX, 0)),
-            *sdl3.SDL_ARRAY(sdl3.SDL_GPUVertexAttribute(0, 0, sdl3.SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3, 0), sdl3.SDL_GPUVertexAttribute(1, 0, sdl3.SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3, ctypes.sizeof(ctypes.c_float) * 3)))
+            *sdl3.SDL_ARRAY(sdl3.SDL_GPUVertexAttribute(0, 0, sdl3.SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3, 0)))
     ))
     
     sdl3.SDL_ReleaseGPUShader(device, fragmentShader)
@@ -58,9 +65,9 @@ def main(argv: list[str]) -> int:
     transferBuffer = sdl3.SDL_CreateGPUTransferBuffer(device, sdl3.SDL_GPUTransferBufferCreateInfo(sdl3.SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD, ctypes.sizeof(Vertex) * 3))
 
     transferData = ctypes.cast(sdl3.SDL_MapGPUTransferBuffer(device, transferBuffer, False), ctypes.POINTER(Vertex))
-    transferData[0] = Vertex(sdl3.SDL_ARRAY(-0.5, -0.5, 0.0, type = ctypes.c_float)[0], sdl3.SDL_ARRAY(1.0, 0.0, 0.0, type = ctypes.c_float)[0])
-    transferData[1] = Vertex(sdl3.SDL_ARRAY( 0.5, -0.5, 0.0, type = ctypes.c_float)[0], sdl3.SDL_ARRAY(0.0, 1.0, 0.0, type = ctypes.c_float)[0])
-    transferData[2] = Vertex(sdl3.SDL_ARRAY( 0.0,  0.5, 0.0, type = ctypes.c_float)[0], sdl3.SDL_ARRAY(0.0, 0.0, 1.0, type = ctypes.c_float)[0])
+    transferData[0] = Vertex(sdl3.SDL_ARRAY(-0.5, -0.5, 0.0, type = ctypes.c_float)[0])
+    transferData[1] = Vertex(sdl3.SDL_ARRAY( 0.5, -0.5, 0.0, type = ctypes.c_float)[0])
+    transferData[2] = Vertex(sdl3.SDL_ARRAY( 0.0,  0.5, 0.0, type = ctypes.c_float)[0])
     sdl3.SDL_UnmapGPUTransferBuffer(device, transferBuffer)
 
     commandBuffer = sdl3.SDL_AcquireGPUCommandBuffer(device)
@@ -70,7 +77,7 @@ def main(argv: list[str]) -> int:
 
     sdl3.SDL_SubmitGPUCommandBuffer(commandBuffer)
     sdl3.SDL_ReleaseGPUTransferBuffer(device, transferBuffer)
-    lastTime, hue = time.time(), 0.0
+    uniformData, lastTime, hue = UniformData(), time.time(), 0.0
 
     while running:
         while sdl3.SDL_PollEvent(ctypes.byref(event)):
@@ -99,11 +106,16 @@ def main(argv: list[str]) -> int:
             time.time(), time.time() - lastTime
 
         colorTargetInfo = sdl3.SDL_GPUColorTargetInfo(swapChainTexture, load_op = sdl3.SDL_GPU_LOADOP_CLEAR,
-            clear_color = sdl3.SDL_FColor(*colorsys.hsv_to_rgb(hue := (hue + 0.5 * deltaTime) % 1.0, 1.0, 0.1), 1.0))
+            clear_color = sdl3.SDL_FColor(*colorsys.hsv_to_rgb(hue := (hue + 0.25 * deltaTime), 1.0, 0.0), 1.0))
+        
+        uniformData.color0 = sdl3.SDL_ARRAY(*colorsys.hsv_to_rgb(hue + 0.48, 1.0, 1.0), 1.0, type = ctypes.c_float)[0]
+        uniformData.color1 = sdl3.SDL_ARRAY(*colorsys.hsv_to_rgb(hue + 0.32, 1.0, 1.0), 1.0, type = ctypes.c_float)[0]
+        uniformData.color2 = sdl3.SDL_ARRAY(*colorsys.hsv_to_rgb(hue + 0.64, 1.0, 1.0), 1.0, type = ctypes.c_float)[0]
 
         renderPass = sdl3.SDL_BeginGPURenderPass(commandBuffer, ctypes.byref(colorTargetInfo), 1, None)
         sdl3.SDL_BindGPUGraphicsPipeline(renderPass, pipeline)
         sdl3.SDL_BindGPUVertexBuffers(renderPass, 0, sdl3.SDL_GPUBufferBinding(vertexBuffer, 0), 1)
+        sdl3.SDL_PushGPUVertexUniformData(commandBuffer, 0, ctypes.byref(uniformData), ctypes.sizeof(uniformData))
         sdl3.SDL_DrawGPUPrimitives(renderPass, 3, 1, 0, 0)
         sdl3.SDL_EndGPURenderPass(renderPass)
 
