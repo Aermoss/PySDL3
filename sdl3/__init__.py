@@ -1,8 +1,8 @@
 """A pure Python wrapper for SDL3."""
 
-__version__ = "0.8.0b0"
+__version__ = "0.8.1b0"
 
-import sys, os, requests, ctypes, platform, asyncio, aiohttp, re, inspect, array
+import sys, os, requests, ctypes, platform, asyncio, aiohttp, re, inspect, array, atexit
 
 SDL_DLL, SDL_IMAGE_DLL, SDL_MIXER_DLL, SDL_NET_DLL, SDL_RTF_DLL, SDL_TTF_DLL = \
     "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_net", "SDL3_rtf", "SDL3_ttf"
@@ -15,11 +15,8 @@ for i in locals().copy():
 
 SDL_DLL_VAR_MAP_INV = {value: key for key, value in SDL_DLL_VAR_MAP.items()}
 
-for key, value in {"PYSDL3_DOC_GENERATOR": "1", "PYSDL3_VERSION_CHECK": "1"}.items():
-    if key not in os.environ: os.environ[key] = value
-
 __doc_file__ = os.path.join(os.path.dirname(__file__), "__doc__.py")
-__doc_generator__ = int(os.environ.get("PYSDL3_DOC_GENERATOR")) > 0
+__doc_generator__ = int(os.environ.get("PYSDL3_DOC_GENERATOR", "1")) > 0
 
 __initialized__ = __name__.split(".")[0] in sys.modules if "." in __name__ else False
 __module__ = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
@@ -43,7 +40,7 @@ def SDL_SET_TEXT_ATTR(color):
             ...
 
 if not __initialized__:
-    if int(os.environ.get("PYSDL3_VERSION_CHECK")) > 0:
+    if int(os.environ.get("PYSDL3_VERSION_CHECK", "1")) > 0:
         try:
             version = requests.get(f"https://pypi.org/pypi/PySDL3/json", timeout = 0.5).json()["info"]["version"]
 
