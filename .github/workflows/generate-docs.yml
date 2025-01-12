@@ -37,10 +37,10 @@ jobs:
 
           if [ "$RUNNER_OS" == "macOS" ]; then
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $GITHUB_ENV
-            eval "$(/opt/homebrew/bin/brew shellenv)"
             echo "/opt/homebrew/lib" >> $GITHUB_ENV
             brew reinstall freetype
+            install_name_tool -add_rpath /opt/homebrew/lib ./sdl3/bin/darwin-arm64/libSDL3_ttf.dylib
+            otool -L ./sdl3/bin/darwin-arm64/libSDL3_ttf.dylib
           fi
 
       - name: Generate docs.
