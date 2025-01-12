@@ -53,11 +53,12 @@ if not __initialized__:
             ...
 
     functions, instances, dllMap, dll = {}, {}, {}, None
-    binaryPath = os.path.join(os.path.dirname(__file__), "bin", f"{platform.system().lower()}-{platform.machine().lower().replace('x86_64', 'amd64').replace('aarch64', 'arm64')}")
+    _os, arch = platform.system(), platform.machine().lower().replace('x86_64', 'amd64').replace('aarch64', 'arm64')
+    binaryPath = os.path.join(os.path.dirname(__file__), "bin", f"{_os.lower()}-{arch}")
 
     for key, value in SDL_DLL_VAR_MAP.items():
         functions[value], dllMap[value] = {}, (ctypes.WinDLL if "win32" in sys.platform else ctypes.CDLL) \
-            (os.path.join(binaryPath, ("{}.dll" if "win32" in sys.platform else "lib{}.so").format(value)))
+            (os.path.join(binaryPath, {"Darwin": "lib{}.dylib", "Linux": "lib{}.so", "Windows": "{}.dll"}[_os].format(value)))
 
 def SDL_ARRAY(*args, **kwargs):
     return ((kwargs.get("type") or args[0].__class__) * len(args))(*args), len(args)
