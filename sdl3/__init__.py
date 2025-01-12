@@ -258,7 +258,7 @@ from .SDL import *
 
 if not __initialized__:
     if __doc_generator__:
-        if not os.path.exists(__doc_file__) or True:
+        if not os.path.exists(__doc_file__):
             with open(__doc_file__, "w") as file:
                 file.write(SDL_GET_OR_GENERATE_DOCS())
 
