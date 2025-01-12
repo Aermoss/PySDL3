@@ -41,6 +41,7 @@ jobs:
             brew reinstall freetype
             install_name_tool -add_rpath /opt/homebrew/lib ./sdl3/bin/darwin-arm64/libSDL3_ttf.dylib
             otool -L ./sdl3/bin/darwin-arm64/libSDL3_ttf.dylib
+            echo "DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
           fi
 
       - name: Generate docs.
