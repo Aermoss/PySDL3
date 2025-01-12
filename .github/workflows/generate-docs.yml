@@ -51,3 +51,5 @@ jobs:
           asset_path: sdl3/__doc__.py
           asset_name: ${{ matrix.platform }}-docs.py
           asset_content_type: text/plain
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
