@@ -242,13 +242,28 @@ def SDL_GENERATE_DOCS():
 
     return f"{result}\n{definitions}"
 
+def SDL_GET_OR_GENERATE_DOCS():
+    if os.path.exists(__doc_file__):
+        with open(__doc_file__, "r") as file:
+            return file.read()
+
+    for release in requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases").json():
+        if release["tag_name"] != __version__:
+            continue
+
+        for asset in release["assets"]:
+            if asset["name"] != f"{SDL_SYSTEM.lower()}-docs.py": continue
+            return requests.get(asset["browser_download_url"]).text
+        
+    return SDL_GENERATE_DOCS()
+
 from .SDL import *
 
 if not __initialized__:
     if __doc_generator__:
-        if not os.path.exists(__doc_file__):
+        if not os.path.exists(__doc_file__) or True:
             with open(__doc_file__, "w") as file:
-                file.write(SDL_GENERATE_DOCS())
+                file.write(SDL_GET_OR_GENERATE_DOCS())
 
         from .__doc__ import *
 
