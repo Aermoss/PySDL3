@@ -1,9 +1,9 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_mouse import SDL_MouseID
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_TouchID = ctypes.c_uint64
 SDL_FingerID = ctypes.c_uint64

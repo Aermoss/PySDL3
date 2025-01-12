@@ -1,9 +1,9 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_stdinc import SDL_Time
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_FUNC("SDL_GetBasePath", ctypes.c_char_p)
 SDL_FUNC("SDL_GetPrefPath", ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)

@@ -1,12 +1,12 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_IMAGE_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_IMAGE_BINARY
 
 from .SDL_surface import SDL_Surface
 from .SDL_render import SDL_Texture, SDL_Renderer
 from .SDL_iostream import SDL_IOStream
 from .SDL_version import SDL_VERSIONNUM
 
-SDL_SET_CURRENT_DLL(SDL_IMAGE_DLL)
+SDL_SET_CURRENT_BINARY(SDL_IMAGE_BINARY)
 
 SDL_IMAGE_MAJOR_VERSION = 3
 SDL_IMAGE_MINOR_VERSION = 1

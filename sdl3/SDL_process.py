@@ -1,10 +1,10 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
 from .SDL_iostream import SDL_IOStream
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 class SDL_Process(ctypes.c_void_p):
     ...

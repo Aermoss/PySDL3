@@ -1,5 +1,5 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_TTF_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_TTF_BINARY
 
 from .SDL_mouse import SDL_MouseID
 from .SDL_rect import SDL_Rect
@@ -7,7 +7,7 @@ from .SDL_properties import SDL_PropertiesID
 from .SDL_ttf import TTF_Font, TTF_Text, TTF_SubString
 from .SDL_pixels import SDL_FColor
 
-SDL_SET_CURRENT_DLL(SDL_TTF_DLL)
+SDL_SET_CURRENT_BINARY(SDL_TTF_BINARY)
 
 TTF_DrawCommand = ctypes.c_int
 

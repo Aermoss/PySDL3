@@ -1,9 +1,9 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_joystick import SDL_Joystick
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 class SDL_Haptic(ctypes.c_void_p):
     ...

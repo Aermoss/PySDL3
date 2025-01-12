@@ -1,7 +1,7 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 class SDL_AsyncIO(ctypes.c_void_p):
     ...
@@ -16,7 +16,7 @@ SDL_AsyncIOResult = ctypes.c_int
 
 SDL_ASYNCIO_COMPLETE = 0
 SDL_ASYNCIO_FAILURE = 1
-SDL_ASYNCIO_CANCELLED = 2
+SDL_ASYNCIO_CANCELED = 2
 
 class SDL_AsyncIOOutcome(ctypes.Structure):
     _fields_ = [

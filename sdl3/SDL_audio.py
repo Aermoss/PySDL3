@@ -1,11 +1,11 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_endian import SDL_BYTEORDER, SDL_LIL_ENDIAN
 from .SDL_properties import SDL_PropertiesID
 from .SDL_iostream import SDL_IOStream
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_AUDIO_MASK_BITSIZE = 0xFF
 SDL_AUDIO_MASK_FLOAT = 1 << 8
@@ -110,6 +110,7 @@ SDL_FUNC("SDL_FlushAudioStream", ctypes.c_bool, ctypes.POINTER(SDL_AudioStream))
 SDL_FUNC("SDL_ClearAudioStream", ctypes.c_bool, ctypes.POINTER(SDL_AudioStream))
 SDL_FUNC("SDL_PauseAudioStreamDevice", ctypes.c_bool, ctypes.POINTER(SDL_AudioStream))
 SDL_FUNC("SDL_ResumeAudioStreamDevice", ctypes.c_bool, ctypes.POINTER(SDL_AudioStream))
+SDL_FUNC("SDL_AudioStreamDevicePaused", ctypes.c_bool, ctypes.POINTER(SDL_AudioStream))
 SDL_FUNC("SDL_LockAudioStream", ctypes.c_bool, ctypes.POINTER(SDL_AudioStream))
 SDL_FUNC("SDL_UnlockAudioStream", ctypes.c_bool, ctypes.POINTER(SDL_AudioStream))
 

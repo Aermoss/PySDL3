@@ -2,16 +2,17 @@
 
 __version__ = "0.8.1b0"
 
-import sys, os, requests, ctypes, platform, asyncio, aiohttp, re, inspect, array, atexit
+import sys, os, requests, ctypes, platform, keyword, inspect, \
+    asyncio, aiohttp, re, typing, array, atexit, packaging.version
 
-SDL_DLL, SDL_IMAGE_DLL, SDL_MIXER_DLL, SDL_NET_DLL, SDL_RTF_DLL, SDL_TTF_DLL = \
+SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_NET_BINARY, SDL_RTF_BINARY, SDL_TTF_BINARY = \
     "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_net", "SDL3_rtf", "SDL3_ttf"
 
-SDL_DLL_VAR_MAP = {}
+SDL_BINARY_VAR_MAP = {}
 
 for i in locals().copy():
-    if i.startswith("SDL_") and i.endswith("_DLL"):
-        SDL_DLL_VAR_MAP[i] = locals()[i]
+    if i.startswith("SDL_") and i.endswith("_BINARY"):
+        SDL_BINARY_VAR_MAP[i] = locals()[i]
 
 SDL_BINARY_VAR_MAP_INV = {value: key for key, value in SDL_BINARY_VAR_MAP.items()}
 SDL_REPOSITORIES = {k.replace("3", ""): v for k, v in SDL_BINARY_VAR_MAP_INV.items()}
@@ -26,9 +27,9 @@ __initialized__ = __name__.split(".")[0] in sys.modules if "." in __name__ else 
 __module__ = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
 
 def SDL_SET_TEXT_ATTR(color):
-    if sys.platform in ["win32"]:
-        console_handle = ctypes.windll.kernel32.GetStdHandle(-11)
-        ctypes.windll.kernel32.SetConsoleTextAttribute(console_handle, color)
+    if SDL_SYSTEM in ["Windows"]:
+        consoleHandle = ctypes.windll.kernel32.GetStdHandle(-11)
+        ctypes.windll.kernel32.SetConsoleTextAttribute(consoleHandle, color)
 
     else:
         if color == 7:
@@ -85,26 +86,27 @@ def SDL_FUNC_CACHE(func):
     return wrapper
 
 @SDL_FUNC_CACHE
-def SDL_GET_DLL_NAME(dll):
-    return {v: k for k, v in __module__.dllMap.items()}[dll]
+def SDL_GET_BINARY_NAME(binary):
+    return {v: k for k, v in __module__.binaryMap.items()}[binary]
 
-def SDL_GET_DLL(name):
-    return __module__.dllMap[name]
+def SDL_GET_BINARY(name):
+    return __module__.binaryMap[name]
 
-def SDL_SET_CURRENT_DLL(name):
-    __module__.dll = SDL_GET_DLL(name)
+def SDL_SET_CURRENT_BINARY(name):
+    __module__.binary = SDL_GET_BINARY(name)
 
-def SDL_GET_CURRENT_DLL():
-    return __module__.dll
+def SDL_GET_CURRENT_BINARY():
+    return __module__.binary
 
-def SDL_GET_FUNCTION_DLL(name):
-    return __module__.functions[name].__dll__
+def SDL_GET_FUNCTION_BINARY(name):
+    return __module__.functions[name].__binary__
 
 def SDL_FUNC(name, retType, *args):
-    func = getattr(dll := SDL_GET_CURRENT_DLL(), name)
-    func.__dll__, func.restype, func.argtypes = dll, retType, args
+    func = getattr(binary := SDL_GET_CURRENT_BINARY(), name)
+    func.__binary__, func.restype, func.argtypes = binary, retType, args
     if not __doc_generator__: setattr(__module__, name, func)
-    __module__.functions[SDL_GET_DLL_NAME(dll)][name] = func
+    __module__.functions[SDL_GET_BINARY_NAME(binary)][name] = func
+
 async def SDL_GET_LATEST_RELEASES():
     session, releases, tasks = aiohttp.ClientSession(), {}, []
 

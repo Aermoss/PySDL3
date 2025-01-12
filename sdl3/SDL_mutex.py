@@ -1,10 +1,10 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from.SDL_atomic import SDL_AtomicInt
 from .SDL_thread import SDL_ThreadID
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_MUTEX_TIMEDOUT = 1
 

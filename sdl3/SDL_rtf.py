@@ -1,5 +1,5 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_GET_DLL, SDL_RTF_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_RTF_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_Color
 from .SDL_render import SDL_Renderer, SDL_Texture
@@ -7,7 +7,7 @@ from .SDL_version import SDL_VERSIONNUM
 from .SDL_iostream import SDL_IOStream
 from .SDL_rect import SDL_Rect
 
-SDL_SET_CURRENT_DLL(SDL_RTF_DLL)
+SDL_SET_CURRENT_BINARY(SDL_RTF_BINARY)
 
 SDL_RTF_MAJOR_VERSION = 3
 SDL_RTF_MINOR_VERSION = 0
@@ -66,5 +66,5 @@ SDL_FUNC("RTF_GetHeight", ctypes.c_int, ctypes.POINTER(RTF_Context), ctypes.c_in
 SDL_FUNC("RTF_Render", None, ctypes.POINTER(RTF_Context), ctypes.POINTER(SDL_Rect), ctypes.c_int)
 SDL_FUNC("RTF_FreeContext", None, ctypes.POINTER(RTF_Context))
 
-RTF_SetError = SDL_GET_DLL(SDL_DLL).SDL_SetError
-RTF_GetError = SDL_GET_DLL(SDL_DLL).SDL_GetError
+RTF_SetError = SDL_GET_BINARY(SDL_BINARY).SDL_SetError
+RTF_GetError = SDL_GET_BINARY(SDL_BINARY).SDL_GetError

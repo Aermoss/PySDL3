@@ -1,5 +1,5 @@
-from .__init__ import ctypes, sys, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_GET_DLL, SDL_TTF_DLL, SDL_DLL
+from .__init__ import ctypes, SDL_SYSTEM, \
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_TTF_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_Color, SDL_FColor
 from .SDL_gpu import SDL_GPUDevice, SDL_GPUTexture
@@ -8,9 +8,9 @@ from .SDL_render import SDL_Renderer
 from .SDL_surface import SDL_Surface
 from .SDL_iostream import SDL_IOStream
 from .SDL_version import SDL_VERSIONNUM
-from .SDL_rect import SDL_Rect
+from .SDL_rect import SDL_Rect, SDL_FPoint
 
-SDL_SET_CURRENT_DLL(SDL_TTF_DLL)
+SDL_SET_CURRENT_BINARY(SDL_TTF_BINARY)
 
 SDL_TTF_MAJOR_VERSION = 3
 SDL_TTF_MINOR_VERSION = 0
@@ -59,16 +59,20 @@ SDL_FUNC("TTF_SetFontSizeDPI", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c
 SDL_FUNC("TTF_GetFontSize", ctypes.c_float, ctypes.POINTER(TTF_Font))
 SDL_FUNC("TTF_GetFontDPI", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
+TTF_FontStyleFlags = ctypes.c_uint32
+
 TTF_STYLE_NORMAL = 0x00
 TTF_STYLE_BOLD = 0x01
 TTF_STYLE_ITALIC = 0x02
 TTF_STYLE_UNDERLINE = 0x04
 TTF_STYLE_STRIKETHROUGH = 0x08
 
-SDL_FUNC("TTF_SetFontStyle", None, ctypes.POINTER(TTF_Font), ctypes.c_int)
-SDL_FUNC("TTF_GetFontStyle", ctypes.c_int, ctypes.POINTER(TTF_Font))
+SDL_FUNC("TTF_SetFontStyle", None, ctypes.POINTER(TTF_Font), TTF_FontStyleFlags)
+SDL_FUNC("TTF_GetFontStyle", TTF_FontStyleFlags, ctypes.POINTER(TTF_Font))
 SDL_FUNC("TTF_SetFontOutline", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_int)
 SDL_FUNC("TTF_GetFontOutline", ctypes.c_int, ctypes.POINTER(TTF_Font))
+
+TTF_HintingFlags = ctypes.c_int
 
 TTF_HINTING_NORMAL = 0
 TTF_HINTING_LIGHT = 1
@@ -76,8 +80,8 @@ TTF_HINTING_MONO = 2
 TTF_HINTING_NONE = 3
 TTF_HINTING_LIGHT_SUBPIXEL = 4
 
-SDL_FUNC("TTF_SetFontHinting", None, ctypes.POINTER(TTF_Font), ctypes.c_int)
-SDL_FUNC("TTF_GetFontHinting", ctypes.c_int, ctypes.POINTER(TTF_Font))
+SDL_FUNC("TTF_SetFontHinting", None, ctypes.POINTER(TTF_Font), TTF_HintingFlags)
+SDL_FUNC("TTF_GetFontHinting", TTF_HintingFlags, ctypes.POINTER(TTF_Font))
 
 SDL_FUNC("TTF_SetFontSDF", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_bool)
 SDL_FUNC("TTF_GetFontSDF", ctypes.c_bool, ctypes.POINTER(TTF_Font))
@@ -172,10 +176,8 @@ class TTF_GPUAtlasDrawSequence(ctypes.c_void_p):
 class TTF_GPUAtlasDrawSequence(ctypes.Structure):
     _fields_ = [
         ("atlas_texture", ctypes.POINTER(SDL_GPUTexture)),
-        ("xy", ctypes.POINTER(ctypes.c_float)),
-        ("xy_stride", ctypes.c_int),
-        ("uv", ctypes.POINTER(ctypes.c_float)),
-        ("uv_stride", ctypes.c_int),
+        ("xy", ctypes.POINTER(SDL_FPoint)),
+        ("uv", ctypes.POINTER(SDL_FPoint)),
         ("num_vertices", ctypes.c_int),
         ("indices", ctypes.POINTER(ctypes.c_int)),
         ("num_indices", ctypes.c_int),
@@ -185,9 +187,18 @@ class TTF_GPUAtlasDrawSequence(ctypes.Structure):
 SDL_FUNC("TTF_GetGPUTextDrawData", ctypes.POINTER(TTF_GPUAtlasDrawSequence), ctypes.POINTER(TTF_Text))
 SDL_FUNC("TTF_DestroyGPUTextEngine", None, ctypes.POINTER(TTF_TextEngine))
 
+TTF_GPUTextEngineWinding = ctypes.c_int
+
+TTF_GPU_TEXTENGINE_WINDING_INVALID = -1,
+TTF_GPU_TEXTENGINE_WINDING_CLOCKWISE = 0
+TTF_GPU_TEXTENGINE_WINDING_COUNTER_CLOCKWISE = 1
+
+SDL_FUNC("TTF_SetGPUTextEngineWinding", None, ctypes.POINTER(TTF_TextEngine), TTF_GPUTextEngineWinding)
+SDL_FUNC("TTF_GetGPUTextEngineWinding", TTF_GPUTextEngineWinding, ctypes.POINTER(TTF_TextEngine))
+
 SDL_FUNC("TTF_CreateText", ctypes.POINTER(TTF_Text), ctypes.POINTER(TTF_TextEngine), ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t)
 
-if "win32" in sys.platform:
+if SDL_SYSTEM in ["Windows"]:
     SDL_FUNC("TTF_GetTextProperties", SDL_PropertiesID, ctypes.POINTER(TTF_Text))
 
 SDL_FUNC("TTF_SetTextEngine", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.POINTER(TTF_TextEngine))

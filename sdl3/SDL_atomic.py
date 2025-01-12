@@ -1,7 +1,7 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_GET_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_SpinLock = ctypes.c_int
 
@@ -26,10 +26,10 @@ class LP_SDL_AtomicInt(ctypes._Pointer):
     ...
 
 def SDL_AtomicIncRef(a: LP_SDL_AtomicInt) -> ctypes.c_int:
-    return SDL_GET_DLL(SDL_DLL).SDL_AddAtomicInt(a, 1)
+    return SDL_GET_BINARY(SDL_BINARY).SDL_AddAtomicInt(a, 1)
 
 def SDL_AtomicDecRef(a: LP_SDL_AtomicInt) -> ctypes.c_int:
-    return SDL_GET_DLL(SDL_DLL).SDL_AddAtomicInt(a, -1) == 1
+    return SDL_GET_BINARY(SDL_BINARY).SDL_AddAtomicInt(a, -1) == 1
 
 class SDL_AtomicU32(ctypes.Structure):
     _fields_ = [

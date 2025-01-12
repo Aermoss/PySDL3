@@ -1,5 +1,5 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_guid import SDL_GUID
 from .SDL_power import SDL_PowerState
@@ -11,7 +11,7 @@ from .SDL_joystick import SDL_Joystick, SDL_JoystickID, SDL_JoystickConnectionSt
     SDL_PROP_JOYSTICK_CAP_PLAYER_LED_BOOLEAN, SDL_PROP_JOYSTICK_CAP_RUMBLE_BOOLEAN, \
     SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 class SDL_Gamepad(ctypes.c_void_p):
     ...

@@ -1,5 +1,5 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
 from .SDL_surface import SDL_Surface
@@ -7,7 +7,7 @@ from .SDL_pixels import SDL_PixelFormat
 from .SDL_rect import SDL_Point, SDL_Rect
 from .SDL_stdinc import SDL_FunctionPointer
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_DisplayID = ctypes.c_uint32
 SDL_WindowID = ctypes.c_uint32
@@ -401,7 +401,7 @@ SDL_FUNC("SDL_EGL_GetCurrentDisplay", SDL_EGLDisplay)
 SDL_FUNC("SDL_EGL_GetCurrentConfig", SDL_EGLConfig)
 SDL_FUNC("SDL_EGL_GetWindowSurface", SDL_EGLSurface, ctypes.POINTER(SDL_Window))
 
-SDL_FUNC("SDL_EGL_SetAttributeCallbacks", None, SDL_EGLAttribArrayCallback, SDL_EGLIntArrayCallback, SDL_EGLIntArrayCallback)
+SDL_FUNC("SDL_EGL_SetAttributeCallbacks", None, SDL_EGLAttribArrayCallback, SDL_EGLIntArrayCallback, SDL_EGLIntArrayCallback, ctypes.c_void_p)
 
 SDL_FUNC("SDL_GL_SetSwapInterval", ctypes.c_bool, ctypes.c_int)
 SDL_FUNC("SDL_GL_GetSwapInterval", ctypes.c_bool, ctypes.POINTER(ctypes.c_int))

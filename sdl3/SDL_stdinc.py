@@ -1,7 +1,7 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_GET_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_arraysize = lambda array: ctypes.sizeof(array) // ctypes.sizeof(array[0])
 
@@ -80,8 +80,8 @@ SDL_FUNC("SDL_DestroyEnvironment", None, ctypes.POINTER(SDL_Environment))
 
 SDL_FUNC("SDL_getenv", ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_getenv_unsafe", ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_setenv_unsafe", ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_unsetenv_unsafe", ctypes.c_char_p, ctypes.c_char_p)
+SDL_FUNC("SDL_setenv_unsafe", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int)
+SDL_FUNC("SDL_unsetenv_unsafe", ctypes.c_int, ctypes.c_char_p)
 
 SDL_CompareCallback = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)
 
@@ -123,9 +123,9 @@ SDL_FUNC("SDL_memmove", ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctype
 SDL_FUNC("SDL_memset", ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_size_t)
 SDL_FUNC("SDL_memset4", ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint32, ctypes.c_size_t)
 
-SDL_zero = lambda x: SDL_GET_DLL(SDL_DLL).SDL_memset(ctypes.byref(x), 0, ctypes.sizeof(x))
-SDL_zerop = lambda x: SDL_GET_DLL(SDL_DLL).SDL_memset(x, 0, ctypes.sizeof(x.contents))
-SDL_zeroa = lambda x: SDL_GET_DLL(SDL_DLL).SDL_memset(x, 0, ctypes.sizeof(x))
+SDL_zero = lambda x: SDL_GET_BINARY(SDL_BINARY).SDL_memset(ctypes.byref(x), 0, ctypes.sizeof(x))
+SDL_zerop = lambda x: SDL_GET_BINARY(SDL_BINARY).SDL_memset(x, 0, ctypes.sizeof(x.contents))
+SDL_zeroa = lambda x: SDL_GET_BINARY(SDL_BINARY).SDL_memset(x, 0, ctypes.sizeof(x))
 
 SDL_FUNC("SDL_memcmp", ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t)
 
@@ -255,29 +255,30 @@ SDL_FUNC("SDL_sqrtf", ctypes.c_float, ctypes.c_float)
 SDL_FUNC("SDL_tan", ctypes.c_double, ctypes.c_double)
 SDL_FUNC("SDL_tanf", ctypes.c_float, ctypes.c_float)
 
-SDL_ICONV_ERROR = -1
-SDL_ICONV_E2BIG = -2
-SDL_ICONV_EILSEQ = -3
-SDL_ICONV_EINVAL = -4
-
 class SDL_iconv_t(ctypes.c_void_p):
     ...
 
 SDL_FUNC("SDL_iconv_open", SDL_iconv_t, ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_iconv_close", ctypes.c_int, SDL_iconv_t)
 SDL_FUNC("SDL_iconv", ctypes.c_size_t, SDL_iconv_t, ctypes.POINTER(ctypes.c_char_p), ctypes.POINTER(ctypes.c_size_t), ctypes.POINTER(ctypes.c_char_p), ctypes.POINTER(ctypes.c_size_t))
+
+SDL_ICONV_ERROR = -1
+SDL_ICONV_E2BIG = -2
+SDL_ICONV_EILSEQ = -3
+SDL_ICONV_EINVAL = -4
+
 SDL_FUNC("SDL_iconv_string", ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_size_t)
 
 SDL_iconv_utf8_locale = lambda s: \
-    SDL_GET_DLL(SDL_DLL).SDL_iconv_string("".encode(), "UTF-8".encode(), s.encode(), SDL_GET_DLL(SDL_DLL).SDL_strlen(s.encode()) + 1)
+    SDL_GET_BINARY(SDL_BINARY).SDL_iconv_string("".encode(), "UTF-8".encode(), s.encode(), SDL_GET_BINARY(SDL_BINARY).SDL_strlen(s.encode()) + 1)
 
 SDL_iconv_utf8_ucs2 = lambda s: \
-    SDL_GET_DLL(SDL_DLL).SDL_iconv_string("UCS-2".encode(), "UTF-8".encode(), s.encode(), SDL_GET_DLL(SDL_DLL).SDL_strlen(s.encode()) + 1)
+    SDL_GET_BINARY(SDL_BINARY).SDL_iconv_string("UCS-2".encode(), "UTF-8".encode(), s.encode(), SDL_GET_BINARY(SDL_BINARY).SDL_strlen(s.encode()) + 1)
 
 SDL_iconv_utf8_ucs4 = lambda s: \
-    SDL_GET_DLL(SDL_DLL).SDL_iconv_string("UCS-4".encode(), "UTF-8".encode(), S.encode(), SDL_GET_DLL(SDL_DLL).SDL_strlen(s.encode()) + 1)
+    SDL_GET_BINARY(SDL_BINARY).SDL_iconv_string("UCS-4".encode(), "UTF-8".encode(), s.encode(), SDL_GET_BINARY(SDL_BINARY).SDL_strlen(s.encode()) + 1)
 
 SDL_iconv_wchar_utf8 = lambda s: \
-    SDL_GET_DLL(SDL_DLL).SDL_iconv_string("UTF-8".encode(), "WCHAR_T".encode(), s.encode(), (SDL_GET_DLL(SDL_DLL).SDL_wcslen(s.encode()) + 1) * ctypes.sizeof(ctypes.c_wchar))
+    SDL_GET_BINARY(SDL_BINARY).SDL_iconv_string("UTF-8".encode(), "WCHAR_T".encode(), s.encode(), (SDL_GET_BINARY(SDL_BINARY).SDL_wcslen(s.encode()) + 1) * ctypes.sizeof(ctypes.c_wchar))
 
 SDL_FunctionPointer = ctypes.CFUNCTYPE(None)

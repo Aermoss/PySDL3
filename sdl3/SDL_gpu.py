@@ -1,5 +1,5 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
 from .SDL_surface import SDL_FlipMode
@@ -7,7 +7,7 @@ from .SDL_video import SDL_Window
 from .SDL_pixels import SDL_FColor
 from .SDL_rect import SDL_Rect
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 class SDL_GPUDevice(ctypes.c_void_p):
     ...
@@ -409,7 +409,7 @@ SDL_GPUSwapchainComposition = ctypes.c_int
 SDL_GPU_SWAPCHAINCOMPOSITION_SDR = 0
 SDL_GPU_SWAPCHAINCOMPOSITION_SDR_LINEAR = 1
 SDL_GPU_SWAPCHAINCOMPOSITION_HDR_EXTENDED_LINEAR = 2
-SDL_GPU_SWAPCHAINCOMPOSITION_HDR10_ST2048 = 3
+SDL_GPU_SWAPCHAINCOMPOSITION_HDR10_ST2084 = 3
 
 class SDL_GPUViewport(ctypes.Structure):
     _fields_ = [
@@ -599,13 +599,6 @@ class SDL_GPUTextureCreateInfo(ctypes.Structure):
         ("sample_count", SDL_GPUSampleCount),
         ("props", SDL_PropertiesID)
     ]
-
-SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_R_FLOAT = "SDL.gpu.createtexture.d3d12.clear.r"
-SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_G_FLOAT = "SDL.gpu.createtexture.d3d12.clear.g"
-SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_B_FLOAT = "SDL.gpu.createtexture.d3d12.clear.b"
-SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_A_FLOAT = "SDL.gpu.createtexture.d3d12.clear.a"
-SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_DEPTH_FLOAT = "SDL.gpu.createtexture.d3d12.clear.depth"
-SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_STENCIL_UINT8 = "SDL.gpu.createtexture.d3d12.clear.stencil"
 
 class SDL_GPUBufferCreateInfo(ctypes.Structure):
     _fields_ = [
@@ -814,6 +807,14 @@ SDL_FUNC("SDL_CreateGPUGraphicsPipeline", ctypes.POINTER(SDL_GPUGraphicsPipeline
 SDL_FUNC("SDL_CreateGPUSampler", ctypes.POINTER(SDL_GPUSampler), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUSamplerCreateInfo))
 SDL_FUNC("SDL_CreateGPUShader", ctypes.POINTER(SDL_GPUShader), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUShaderCreateInfo))
 SDL_FUNC("SDL_CreateGPUTexture", ctypes.POINTER(SDL_GPUTexture), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUTextureCreateInfo))
+
+SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_R_FLOAT = "SDL.gpu.createtexture.d3d12.clear.r"
+SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_G_FLOAT = "SDL.gpu.createtexture.d3d12.clear.g"
+SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_B_FLOAT = "SDL.gpu.createtexture.d3d12.clear.b"
+SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_A_FLOAT = "SDL.gpu.createtexture.d3d12.clear.a"
+SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_DEPTH_FLOAT = "SDL.gpu.createtexture.d3d12.clear.depth"
+SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_STENCIL_UINT8 = "SDL.gpu.createtexture.d3d12.clear.stencil"
+
 SDL_FUNC("SDL_CreateGPUBuffer", ctypes.POINTER(SDL_GPUBuffer), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUBufferCreateInfo))
 SDL_FUNC("SDL_CreateGPUTransferBuffer", ctypes.POINTER(SDL_GPUTransferBuffer), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUTransferBufferCreateInfo))
 

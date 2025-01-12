@@ -1,5 +1,5 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_PixelFormat, SDL_Colorspace, SDL_Palette
 from .SDL_properties import SDL_PropertiesID
@@ -7,7 +7,7 @@ from .SDL_blendmode import SDL_BlendMode
 from .SDL_iostream import SDL_IOStream
 from .SDL_rect import SDL_Rect
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_SurfaceFlags = ctypes.c_uint32
 

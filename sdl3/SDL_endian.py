@@ -1,14 +1,16 @@
 from .__init__ import sys, ctypes, array, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_LIL_ENDIAN, SDL_BIG_ENDIAN = 1234, 4321
 SDL_BYTEORDER = SDL_LIL_ENDIAN \
     if sys.byteorder == "little" else SDL_BIG_ENDIAN
 
+sys.byteorder
+
 def SDL_Swap16(x):
-    return (x << 8 & 0xFF00) | (x >> 8 & 0x00FF)
+    return ((x << 8) & 0xFF00) | ((x >> 8) & 0x00FF)
 
 def SDL_Swap32(x):
     return ((x << 24) & 0xFF000000) | ((x << 8) & 0x00FF0000) | ((x >> 8) & 0x0000FF00) | ((x >> 24) & 0x000000FF)

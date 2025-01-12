@@ -1,12 +1,12 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_sensor import SDL_SensorType
 from .SDL_properties import SDL_PropertiesID
 from .SDL_power import SDL_PowerState
 from .SDL_guid import SDL_GUID
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 class SDL_Joystick(ctypes.c_void_p):
     ...

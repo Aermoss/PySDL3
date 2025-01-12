@@ -1,9 +1,9 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_DEREFERENCE, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_DEREFERENCE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_stdinc import SDL_FLT_EPSILON
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 class SDL_Point(ctypes.Structure):
     _fields_ = [

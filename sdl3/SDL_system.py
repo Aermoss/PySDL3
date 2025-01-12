@@ -1,11 +1,11 @@
-from .__init__ import sys, ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+from .__init__ import ctypes, SDL_SYSTEM, \
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_DisplayID
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-if sys.platform in ["win32"]:
+if SDL_SYSTEM in ["Windows"]:
     import ctypes.wintypes as wintypes
 
     MSG = wintypes.tagMSG
@@ -21,7 +21,7 @@ if sys.platform in ["win32"]:
     SDL_X11EventHook = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.POINTER(XEvent))
     SDL_FUNC("SDL_SetX11EventHook", None, SDL_X11EventHook, ctypes.c_void_p) 
 
-if sys.platform in ["linux"]:
+if SDL_SYSTEM in ["Linux"]:
     SDL_FUNC("SDL_SetLinuxThreadPriority", ctypes.c_bool, ctypes.c_int64, ctypes.c_int)
     SDL_FUNC("SDL_SetLinuxThreadPriorityAndPolicy", ctypes.c_bool, ctypes.c_int64, ctypes.c_int, ctypes.c_int)
 

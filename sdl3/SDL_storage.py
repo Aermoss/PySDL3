@@ -1,10 +1,10 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_filesystem import SDL_EnumerateDirectoryCallback, SDL_PathInfo, SDL_GlobFlags
 from .SDL_properties import SDL_PropertiesID
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 class SDL_StorageInterface(ctypes.Structure):
     _fields_ = [
@@ -27,7 +27,7 @@ class SDL_Storage(ctypes.c_void_p):
 
 SDL_FUNC("SDL_OpenTitleStorage", ctypes.POINTER(SDL_Storage), ctypes.c_char_p, SDL_PropertiesID)
 SDL_FUNC("SDL_OpenUserStorage", ctypes.POINTER(SDL_Storage), ctypes.c_char_p, ctypes.c_char_p, SDL_PropertiesID)
-SDL_FUNC("SDL_OpenFileStorage", ctypes.POINTER(SDL_Storage), ctypes.c_char_p, SDL_PropertiesID)
+SDL_FUNC("SDL_OpenFileStorage", ctypes.POINTER(SDL_Storage), ctypes.c_char_p)
 SDL_FUNC("SDL_OpenStorage", ctypes.POINTER(SDL_Storage), ctypes.POINTER(SDL_StorageInterface), ctypes.c_void_p)
 SDL_FUNC("SDL_CloseStorage", ctypes.c_bool, ctypes.POINTER(SDL_Storage))
 SDL_FUNC("SDL_StorageReady", ctypes.c_bool, ctypes.POINTER(SDL_Storage))

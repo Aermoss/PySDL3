@@ -1,5 +1,5 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_events import SDL_Event
 from .SDL_rect import SDL_Point, SDL_FPoint, SDL_Rect, SDL_FRect
@@ -9,7 +9,7 @@ from .SDL_video import SDL_Window, SDL_WindowFlags
 from .SDL_properties import SDL_PropertiesID
 from .SDL_blendmode import SDL_BlendMode
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_SOFTWARE_RENDERER = "software"
 
@@ -89,6 +89,7 @@ SDL_PROP_RENDERER_VULKAN_DEVICE_POINTER = "SDL.renderer.vulkan.device"
 SDL_PROP_RENDERER_VULKAN_GRAPHICS_QUEUE_FAMILY_INDEX_NUMBER = "SDL.renderer.vulkan.graphics_queue_family_index"
 SDL_PROP_RENDERER_VULKAN_PRESENT_QUEUE_FAMILY_INDEX_NUMBER = "SDL.renderer.vulkan.present_queue_family_index"
 SDL_PROP_RENDERER_VULKAN_SWAPCHAIN_IMAGE_COUNT_NUMBER = "SDL.renderer.vulkan.swapchain_image_count"
+SDL_PROP_RENDERER_GPU_DEVICE_POINTER = "SDL.renderer.gpu.device"
 
 SDL_FUNC("SDL_GetRenderOutputSize", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 SDL_FUNC("SDL_GetCurrentRenderOutputSize", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
@@ -182,8 +183,8 @@ SDL_FUNC("SDL_UnlockTexture", None, ctypes.POINTER(SDL_Texture))
 SDL_FUNC("SDL_SetRenderTarget", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture))
 SDL_FUNC("SDL_GetRenderTarget", ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Renderer))
 
-SDL_FUNC("SDL_SetRenderLogicalPresentation", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_int, ctypes.c_int, SDL_RendererLogicalPresentation, SDL_ScaleMode)
-SDL_FUNC("SDL_GetRenderLogicalPresentation", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(SDL_RendererLogicalPresentation), ctypes.POINTER(SDL_ScaleMode))
+SDL_FUNC("SDL_SetRenderLogicalPresentation", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_int, ctypes.c_int, SDL_RendererLogicalPresentation)
+SDL_FUNC("SDL_GetRenderLogicalPresentation", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(SDL_RendererLogicalPresentation))
 SDL_FUNC("SDL_GetRenderLogicalPresentationRect", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Rect))
 
 SDL_FUNC("SDL_RenderCoordinatesFromWindow", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float, ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))
@@ -262,3 +263,4 @@ SDL_FUNC("SDL_GetRenderVSync", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctyp
 SDL_DEBUG_TEXT_FONT_CHARACTER_SIZE = 8
 
 SDL_FUNC("SDL_RenderDebugText", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float, ctypes.c_char_p)
+SDL_FUNC("SDL_RenderDebugTextFormat", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float, ctypes.c_char_p)

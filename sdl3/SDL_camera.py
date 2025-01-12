@@ -1,11 +1,11 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_PixelFormat, SDL_Colorspace
 from .SDL_properties import SDL_PropertiesID
 from .SDL_surface import SDL_Surface
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_CameraID = ctypes.c_uint32
 

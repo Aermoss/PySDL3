@@ -1,5 +1,5 @@
 from .__init__ import ctypes, \
-    SDL_FUNC, SDL_SET_CURRENT_DLL, SDL_DLL
+    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window, SDL_WindowID, SDL_DisplayID
 from .SDL_sensor import SDL_SensorID
@@ -14,7 +14,7 @@ from .SDL_camera import SDL_CameraID
 from .SDL_pen import SDL_PenID, SDL_PenInputFlags, SDL_PenAxis
 from .SDL_touch import SDL_TouchID, SDL_FingerID
 
-SDL_SET_CURRENT_DLL(SDL_DLL)
+SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_EventType = ctypes.c_int
 
@@ -111,6 +111,7 @@ SDL_EVENT_GAMEPAD_STEAM_HANDLE_UPDATED = 0x65B
 SDL_EVENT_FINGER_DOWN = 0x700
 SDL_EVENT_FINGER_UP = 0x701
 SDL_EVENT_FINGER_MOTION = 0x702
+SDL_EVENT_FINGER_CANCELED = 0x703
 
 SDL_EVENT_CLIPBOARD_UPDATE = 0x900
 
@@ -542,7 +543,7 @@ class SDL_ClipboardEvent(ctypes.Structure):
         ("reserved", ctypes.c_uint32),
         ("timestamp", ctypes.c_uint64),
         ("owner", ctypes.c_bool),
-        ("n_mime_types", ctypes.c_int32),
+        ("num_mime_types", ctypes.c_int32),
         ("mime_types", ctypes.POINTER(ctypes.c_char_p))
     ]
 
