@@ -37,11 +37,7 @@ jobs:
 
           if [ "$RUNNER_OS" == "macOS" ]; then
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            otool -L ./sdl3/bin/darwin-arm64/libSDL3_ttf.dylib
-            brew reinstall freetype
-            otool -L ./sdl3/bin/darwin-arm64/libSDL3_ttf.dylib
             install_name_tool -add_rpath /opt/homebrew/lib ./sdl3/bin/darwin-arm64/libSDL3_ttf.dylib
-            otool -L ./sdl3/bin/darwin-arm64/libSDL3_ttf.dylib
           fi
 
       - name: Generate docs.
