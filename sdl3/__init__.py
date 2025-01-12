@@ -1,30 +1,30 @@
 """A pure Python wrapper for SDL3."""
 
-__version__ = "0.9.1b0"
+__version__ = "0.9.1b1"
 
-import sys, os, requests, ctypes, platform, keyword, inspect, \
+import sys, os, requests, ctypes, platform, keyword, inspect, types, \
     asyncio, aiohttp, re, typing, array, atexit, packaging.version
 
 SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_NET_BINARY, SDL_RTF_BINARY, SDL_TTF_BINARY = \
     "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_net", "SDL3_rtf", "SDL3_ttf"
 
-SDL_BINARY_VAR_MAP = {}
+SDL_BINARY_VAR_MAP: typing.Dict[str, str] = {}
 
 for i in locals().copy():
     if i.startswith("SDL_") and i.endswith("_BINARY"):
         SDL_BINARY_VAR_MAP[i] = locals()[i]
 
-SDL_BINARY_VAR_MAP_INV = {value: key for key, value in SDL_BINARY_VAR_MAP.items()}
-SDL_REPOSITORIES = {k.replace("3", ""): v for k, v in SDL_BINARY_VAR_MAP_INV.items()}
+SDL_BINARY_VAR_MAP_INV: typing.Dict[str, str] = {value: key for key, value in SDL_BINARY_VAR_MAP.items()}
+SDL_REPOSITORIES: typing.List[str] = [key.replace("3", "") for key, _ in SDL_BINARY_VAR_MAP_INV.items()]
 
 SDL_SYSTEM, SDL_ARCH = platform.system(), platform.machine().upper().replace("X86_64", "AMD64").replace("AARCH64", "ARM64")
-SDL_BINARY_NAME_FORMAT = {"Darwin": "lib{}.dylib", "Linux": "lib{}.so", "Windows": "{}.dll"}
+SDL_BINARY_NAME_FORMAT: typing.Dict[str, str] = {"Darwin": "lib{}.dylib", "Linux": "lib{}.so", "Windows": "{}.dll"}
 
 __doc_file__: str = os.path.join(os.path.dirname(__file__), "__doc__.py")
 __doc_generator__: int = int(os.environ.get("SDL_DOC_GENERATOR", "1")) > 0
 
 __initialized__: bool = __name__.split(".")[0] in sys.modules if "." in __name__ else False
-__module__: MoudleType = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
+__module__: types.ModuleType = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
 
 def SDL_SET_TEXT_ATTR(color: int) -> None:
     if SDL_SYSTEM in ["Windows"]:
