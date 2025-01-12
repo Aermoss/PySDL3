@@ -1,0 +1,47 @@
+name: Generate Docs
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            platform: linux
+
+          - os: windows-latest
+            platform: windows
+
+          - os: macos-latest
+            platform: darwin
+
+    steps:
+      - name: Checkout code.
+        uses: actions/checkout@v4
+
+      - name: Setup up python.
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies.
+        run: |
+          pip install -r requirements.txt
+
+      - name: Generate docs.
+        run: |
+          python -c "import sdl3"
+
+      - name: Upload asset.
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: sdl3/__doc__.py
+          asset_name: ${{ matrix.platform }}-docs.py
+          asset_content_type: text/plain
