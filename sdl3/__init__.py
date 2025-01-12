@@ -1,6 +1,6 @@
 """A pure Python wrapper for SDL3."""
 
-__version__ = "0.9.0b11"
+__version__ = "0.9.0b12"
 
 import sys, os, requests, ctypes, platform, keyword, inspect, \
     asyncio, aiohttp, re, typing, array, atexit, packaging.version
@@ -243,16 +243,17 @@ def SDL_GENERATE_DOCS():
     return f"{result}\n{definitions}"
 
 def SDL_GET_OR_GENERATE_DOCS():
-    for release in requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases").json():
-        if release["tag_name"] != __version__:
-            continue
+    try:
+        for release in requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases").json():
+            if release["tag_name"] != __version__:
+                continue
 
-        for asset in release["assets"]:
-            if asset["name"] != f"{SDL_SYSTEM.lower()}-docs.py": continue
-            print(asset)
-            return requests.get(asset["browser_download_url"]).text
+            for asset in release["assets"]:
+                if asset["name"] != f"{SDL_SYSTEM.lower()}-docs.py": continue
+                return requests.get(asset["browser_download_url"]).text
 
-    return SDL_GENERATE_DOCS()
+    finally:
+        return SDL_GENERATE_DOCS()
 
 from .SDL import *
 
