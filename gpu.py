@@ -23,7 +23,7 @@ class UniformData(ctypes.Structure):
         ("color2", ctypes.c_float * 4)
     ]
 
-def main(argv: list[str]) -> int:
+def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_AUDIO):
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
         return -1
@@ -128,6 +128,3 @@ def main(argv: list[str]) -> int:
     sdl3.SDL_DestroyWindow(window)
     sdl3.SDL_Quit()
     return 0
-
-if __name__ == "__main__":
-    os._exit(main(sys.argv))

@@ -1,9 +1,9 @@
-import sys, os, sdl3, ctypes, colorsys, time
+import os, sdl3, ctypes, colorsys, time
 
 def countLines() -> int:
     return sum([open(f"sdl3/{i}", "r").read().count("\n") + 1 for i in os.listdir("sdl3") if i.endswith(".py")])
 
-def main(argv: list[str]) -> int:
+def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     print(f"total lines of code: {countLines()}.")
     print(f"loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
 
@@ -142,6 +142,3 @@ def main(argv: list[str]) -> int:
     sdl3.SDL_DestroyWindow(window)
     sdl3.SDL_Quit()
     return 0
-
-if __name__ == "__main__":
-    os._exit(main(sys.argv))

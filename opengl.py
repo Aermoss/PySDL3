@@ -1,4 +1,4 @@
-import sys, os, ctypes, imgui, colorsys, time, sdl3, OpenGL.GL as gl
+import ctypes, imgui, colorsys, time, sdl3, OpenGL.GL as gl
 
 from imgui.integrations.opengl import ProgrammablePipelineRenderer
 
@@ -157,7 +157,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
         self.io.delta_time = 1.0 / 1000.0 if deltaTime <= 0.0 else deltaTime
         self.lastTime = currentTime
 
-def main(argv: list[str]) -> int:
+def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     print(f"loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
 
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS):
@@ -228,6 +228,3 @@ def main(argv: list[str]) -> int:
     sdl3.SDL_DestroyWindow(window)
     sdl3.SDL_Quit()
     return 0
-
-if __name__ == "__main__":
-    os._exit(main(sys.argv))
