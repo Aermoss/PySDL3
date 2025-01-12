@@ -56,6 +56,7 @@ from .SDL_thread import *
 from .SDL_time import *
 from .SDL_timer import *
 from .SDL_touch import *
+from .SDL_tray import *
 from .SDL_ttf import *
 from .SDL_version import *
 from .SDL_video import *
