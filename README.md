@@ -12,7 +12,7 @@ PySDL3 is a pure Python wrapper around the SDL3, SDL3\_mixer, SDL3\_image, SDL3\
 
 ## Getting Started
 Just run one of the following commands in a terminal:
-```
+```bash
 # To install the latest stable version from PyPI:
 pip install --upgrade PySDL3
 
@@ -22,6 +22,11 @@ pip install --upgrade git+https://github.com/Aermoss/PySDL3.git
 
 ## Requirements
 There are no additional requirements since the pre-built binaries are provided within the module.
+
+### Supported Platforms
+* **Darwin** (AMD64, ARM64)
+* **Linux** (AMD64, ARM64)
+* **Windows** (AMD64)
 
 ## Documentation
 PySDL3 doesn't provide any documentation at the moment, but since the functions are exactly the same, you can use the official [documentation of SDL3](https://wiki.libsdl.org/SDL3).
