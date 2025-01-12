@@ -20,13 +20,13 @@ SDL_REPOSITORIES = {k.replace("3", ""): v for k, v in SDL_BINARY_VAR_MAP_INV.ite
 SDL_SYSTEM, SDL_ARCH = platform.system(), platform.machine().upper().replace("X86_64", "AMD64").replace("AARCH64", "ARM64")
 SDL_BINARY_NAME_FORMAT = {"Darwin": "lib{}.dylib", "Linux": "lib{}.so", "Windows": "{}.dll"}
 
-__doc_file__ = os.path.join(os.path.dirname(__file__), "__doc__.py")
-__doc_generator__ = int(os.environ.get("SDL_DOC_GENERATOR", "1")) > 0
+__doc_file__: str = os.path.join(os.path.dirname(__file__), "__doc__.py")
+__doc_generator__: int = int(os.environ.get("SDL_DOC_GENERATOR", "1")) > 0
 
-__initialized__ = __name__.split(".")[0] in sys.modules if "." in __name__ else False
-__module__ = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
+__initialized__: bool = __name__.split(".")[0] in sys.modules if "." in __name__ else False
+__module__: MoudleType = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
 
-def SDL_SET_TEXT_ATTR(color):
+def SDL_SET_TEXT_ATTR(color: int) -> None:
     if SDL_SYSTEM in ["Windows"]:
         consoleHandle = ctypes.windll.kernel32.GetStdHandle(-11)
         ctypes.windll.kernel32.SetConsoleTextAttribute(consoleHandle, color)
@@ -64,18 +64,18 @@ if not __initialized__:
         functions[value], binaryMap[value] = {}, (ctypes.WinDLL if SDL_SYSTEM in ["Windows"] else ctypes.CDLL) \
             (os.path.join(binaryPath, SDL_BINARY_NAME_FORMAT[SDL_SYSTEM].format(value)))
 
-def SDL_ARRAY(*args, **kwargs):
+def SDL_ARRAY(*args: typing.List[typing.Any], **kwargs: typing.Dict[str, typing.Any]) -> typing.Tuple[ctypes.Array[typing.Any], int]:
     return ((kwargs.get("type") or args[0].__class__) * len(args))(*args), len(args)
 
-def SDL_DEREFERENCE(value):
+def SDL_DEREFERENCE(value: typing.Any) -> typing.Any:
     if isinstance(value, ctypes._Pointer): return value.contents
     elif hasattr(value, "_obj"): return value._obj
     else: return value
 
-def SDL_FUNC_CACHE(func):
+def SDL_FUNC_CACHE(func: typing.Callable) -> typing.Callable:
     cache = {}
 
-    def wrapper(*args):
+    def __inner__(*args: typing.List[typing.Any]) -> typing.Any:
         if args in cache:
             return cache[args]
         
@@ -83,31 +83,31 @@ def SDL_FUNC_CACHE(func):
             cache[args] = func(*args)
             return cache[args]
 
-    return wrapper
+    return __inner__
 
 @SDL_FUNC_CACHE
-def SDL_GET_BINARY_NAME(binary):
+def SDL_GET_BINARY_NAME(binary: typing.Any) -> str:
     return {v: k for k, v in __module__.binaryMap.items()}[binary]
 
-def SDL_GET_BINARY(name):
+def SDL_GET_BINARY(name: str) -> typing.Any:
     return __module__.binaryMap[name]
 
-def SDL_SET_CURRENT_BINARY(name):
+def SDL_SET_CURRENT_BINARY(name: str) -> None:
     __module__.binary = SDL_GET_BINARY(name)
 
-def SDL_GET_CURRENT_BINARY():
+def SDL_GET_CURRENT_BINARY() -> typing.Any:
     return __module__.binary
 
-def SDL_GET_FUNCTION_BINARY(name):
+def SDL_GET_FUNCTION_BINARY(name: str) -> typing.Any:
     return __module__.functions[name].__binary__
 
-def SDL_FUNC(name, retType, *args):
+def SDL_FUNC(name: str, retType: typing.Any, *args: typing.List[typing.Any]) -> None:
     func = getattr(binary := SDL_GET_CURRENT_BINARY(), name)
     func.__binary__, func.restype, func.argtypes = binary, retType, args
     if not __doc_generator__: setattr(__module__, name, func)
     __module__.functions[SDL_GET_BINARY_NAME(binary)][name] = func
 
-async def SDL_GET_LATEST_RELEASES():
+async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
     session, releases, tasks = aiohttp.ClientSession(), {}, []
 
     for repo in SDL_REPOSITORIES:
@@ -139,7 +139,7 @@ async def SDL_GET_LATEST_RELEASES():
     await session.close()
     return releases
 
-async def SDL_GET_FUNCTION_DOCS(urls):
+async def SDL_GET_FUNCTION_DOCS(urls: typing.List[str]) -> typing.Tuple[typing.List[str], typing.List[typing.List[str]]]:
     session, tasks = aiohttp.ClientSession(), []
 
     for url in urls:
@@ -183,7 +183,7 @@ async def SDL_GET_FUNCTION_DOCS(urls):
     await session.close()
     return descriptions, arguments
 
-def SDL_GENERATE_DOCS():
+def SDL_GENERATE_DOCS() -> str:
     __index, (descriptions, arguments) = -1, \
         asyncio.run(SDL_GET_FUNCTION_DOCS([f"https://wiki.libsdl.org/{module}/{name}" for module in __module__.functions for name in __module__.functions[module]]))
 
@@ -242,25 +242,25 @@ def SDL_GENERATE_DOCS():
 
     return f"{result}\n{definitions}"
 
-def SDL_GET_OR_GENERATE_DOCS():
-    try:
-        for release in requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases").json():
-            if release["tag_name"] != __version__:
-                continue
+def SDL_GET_OR_GENERATE_DOCS() -> bytes:
+    for release in requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases").json():
+        if release["tag_name"] != f"v{__version__}":
+            continue
 
-            for asset in release["assets"]:
-                if asset["name"] != f"{SDL_SYSTEM.lower()}-docs.py": continue
-                return requests.get(asset["browser_download_url"]).text
+        for asset in release["assets"]:
+            if asset["name"] != f"{SDL_SYSTEM.lower()}-docs.py": continue
+            response, data = requests.get(asset["browser_download_url"]), bytearray()
+            [data.extend(i) for i in response.iter_content(chunk_size = 8192)]
+            return data
 
-    finally:
-        return SDL_GENERATE_DOCS()
+    return SDL_GENERATE_DOCS().encode("utf-8")
 
 from .SDL import *
 
 if not __initialized__:
     if __doc_generator__:
         if not os.path.exists(__doc_file__):
-            with open(__doc_file__, "w") as file:
+            with open(__doc_file__, "wb") as file:
                 file.write(SDL_GET_OR_GENERATE_DOCS())
 
         from .__doc__ import *
