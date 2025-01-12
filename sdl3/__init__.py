@@ -243,15 +243,19 @@ def SDL_GENERATE_DOCS() -> str:
     return f"{result}\n{definitions}"
 
 def SDL_GET_OR_GENERATE_DOCS() -> bytes:
-    for release in requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases").json():
-        if release["tag_name"] != f"v{__version__}":
-            continue
+    try:
+        for release in requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases").json():
+            if release["tag_name"] != f"v{__version__}":
+                continue
 
-        for asset in release["assets"]:
-            if asset["name"] != f"{SDL_SYSTEM.lower()}-docs.py": continue
-            response, data = requests.get(asset["browser_download_url"]), bytearray()
-            [data.extend(i) for i in response.iter_content(chunk_size = 8192)]
-            return data
+            for asset in release["assets"]:
+                if asset["name"] != f"{SDL_SYSTEM.lower()}-docs.py": continue
+                response, data = requests.get(asset["browser_download_url"]), bytearray()
+                [data.extend(i) for i in response.iter_content(chunk_size = 8192)]
+                return data
+            
+    except Exception as exc:
+        print(f"failed to get docs from github: {str(exc).lower()}.", flush = True)
 
     return SDL_GENERATE_DOCS().encode("utf-8")
 
