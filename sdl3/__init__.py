@@ -13,10 +13,14 @@ for i in locals().copy():
     if i.startswith("SDL_") and i.endswith("_DLL"):
         SDL_DLL_VAR_MAP[i] = locals()[i]
 
-SDL_DLL_VAR_MAP_INV = {value: key for key, value in SDL_DLL_VAR_MAP.items()}
+SDL_BINARY_VAR_MAP_INV = {value: key for key, value in SDL_BINARY_VAR_MAP.items()}
+SDL_REPOSITORIES = {k.replace("3", ""): v for k, v in SDL_BINARY_VAR_MAP_INV.items()}
+
+SDL_SYSTEM, SDL_ARCH = platform.system(), platform.machine().upper().replace("X86_64", "AMD64").replace("AARCH64", "ARM64")
+SDL_BINARY_NAME_FORMAT = {"Darwin": "lib{}.dylib", "Linux": "lib{}.so", "Windows": "{}.dll"}
 
 __doc_file__ = os.path.join(os.path.dirname(__file__), "__doc__.py")
-__doc_generator__ = int(os.environ.get("PYSDL3_DOC_GENERATOR", "1")) > 0
+__doc_generator__ = int(os.environ.get("SDL_DOC_GENERATOR", "1")) > 0
 
 __initialized__ = __name__.split(".")[0] in sys.modules if "." in __name__ else False
 __module__ = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
@@ -40,11 +44,11 @@ def SDL_SET_TEXT_ATTR(color):
             ...
 
 if not __initialized__:
-    if int(os.environ.get("PYSDL3_VERSION_CHECK", "1")) > 0:
+    if int(os.environ.get("SDL_VERSION_CHECK", "1")) > 0:
         try:
             version = requests.get(f"https://pypi.org/pypi/PySDL3/json", timeout = 0.5).json()["info"]["version"]
 
-            if __version__ != version:
+            if packaging.version.parse(__version__) < packaging.version.parse(version):
                 SDL_SET_TEXT_ATTR(13)
                 print(f"you are using an older version of pysdl3 (current: {__version__}, lastest: {version}).", flush = True)
                 SDL_SET_TEXT_ATTR(7)
@@ -52,13 +56,12 @@ if not __initialized__:
         except:
             ...
 
-    functions, instances, dllMap, dll = {}, {}, {}, None
-    _os, arch = platform.system(), platform.machine().lower().replace('x86_64', 'amd64').replace('aarch64', 'arm64')
-    binaryPath = os.path.join(os.path.dirname(__file__), "bin", f"{_os.lower()}-{arch}")
+    functions, instances, binaryMap, binary = {}, {}, {}, None
+    binaryPath = os.path.join(os.path.dirname(__file__), "bin", f"{SDL_SYSTEM.lower()}-{SDL_ARCH.lower()}")
 
-    for key, value in SDL_DLL_VAR_MAP.items():
-        functions[value], dllMap[value] = {}, (ctypes.WinDLL if "win32" in sys.platform else ctypes.CDLL) \
-            (os.path.join(binaryPath, {"Darwin": "lib{}.dylib", "Linux": "lib{}.so", "Windows": "{}.dll"}[_os].format(value)))
+    for key, value in SDL_BINARY_VAR_MAP.items():
+        functions[value], binaryMap[value] = {}, (ctypes.WinDLL if SDL_SYSTEM in ["Windows"] else ctypes.CDLL) \
+            (os.path.join(binaryPath, SDL_BINARY_NAME_FORMAT[SDL_SYSTEM].format(value)))
 
 def SDL_ARRAY(*args, **kwargs):
     return ((kwargs.get("type") or args[0].__class__) * len(args))(*args), len(args)
@@ -102,8 +105,39 @@ def SDL_FUNC(name, retType, *args):
     func.__dll__, func.restype, func.argtypes = dll, retType, args
     if not __doc_generator__: setattr(__module__, name, func)
     __module__.functions[SDL_GET_DLL_NAME(dll)][name] = func
+async def SDL_GET_LATEST_RELEASES():
+    session, releases, tasks = aiohttp.ClientSession(), {}, []
 
-async def SDL_GET_DESCRIPTIONS(urls):
+    for repo in SDL_REPOSITORIES:
+        url = f"https://api.github.com/repos/libsdl-org/{repo}/releases"
+        print(f"sending a request to \"{url}\".", flush = True)
+        tasks.append(asyncio.create_task(session.get(url, ssl = False)))
+
+    responses = await asyncio.gather(*tasks)
+    print(f"response gathering completed ({len(responses)} response(s)).", flush = True)
+
+    for response, repo in zip(responses, SDL_REPOSITORIES):
+        if response.status != 200:
+            print((await response.json())["message"].lower(), flush = True)
+            if response.status == 403: await session.close(); return releases
+            print(f"failed to get latest releases of \"{response.url}\", skipping (status: {response.status}).", flush = True)
+            releases[repo] = None
+
+        else:
+            latestRelease = (None, None)
+
+            for release in await response.json():
+                score = packaging.version.parse(release["tag_name"].split("-")[1])
+
+                if not latestRelease[0] or score > latestRelease[0]:
+                    latestRelease = (score, release["tag_name"])
+
+            releases[repo] = latestRelease[1]
+
+    await session.close()
+    return releases
+
+async def SDL_GET_FUNCTION_DOCS(urls):
     session, tasks = aiohttp.ClientSession(), []
 
     for url in urls:
@@ -112,15 +146,22 @@ async def SDL_GET_DESCRIPTIONS(urls):
     
     responses = await asyncio.gather(*tasks)
     print(f"response gathering completed ({len(responses)} response(s)).\n", end = "", flush = True)
-    descriptions = []
+    descriptions, arguments = [], []
 
-    for response in responses:
+    for response, url in zip(responses, urls):
         if response.status != 200:
             print(f"failed to get description of \"{response.url}\", skipping (status: {response.status}).\n", end = "", flush = True)
             descriptions.append(None)
+            arguments.append(None)
 
         else:
             content = (await response.content.read()).decode()
+
+            if "no such page" in content.lower():
+                print(f"no such page found for \"{response.url}\", skipping.\n", end = "", flush = True)
+                descriptions.append(None)
+                arguments.append(None)
+                continue
 
             for a, b in zip(list(re.finditer(r"<p>", content)), list(re.finditer(r"</p>", content))):
                 if content[a.end()] == "<": continue
@@ -128,23 +169,32 @@ async def SDL_GET_DESCRIPTIONS(urls):
                 descriptions.append(description.replace("<em>", "").replace("</em>", "").replace("<code>", "`").replace("</code>", "`").replace("<strong>", "").replace("</strong>", ""))
                 break
 
-        response.close()
+            for a, b in zip(list(re.finditer(r"<code([a-zA-Z0-9_=#\s\"\-]*)>", content)), list(re.finditer(r"</code>", content))):
+                if "sourceCode c" not in content[a.start():a.end()]: continue
+                text = re.sub(r"<(/)?([a-zA-Z0-9_=#\s\"\-]+)>", r"", content[a.end():b.start()]).split(";")[0]
+                if "\n" in text: text = " ".join(text.split("\n"))
+                text = text[text.index("(") + 1:text.index(")") + 1].replace(")", ",").replace("[", "").replace("]", "")
+                if text == "void,": text = ""
+                arguments.append([text[arg.start():arg.end() - 1] for arg in re.finditer(r"([a-zA-Z0-9_]+)\,", text)])
+                break
 
     await session.close()
-    return descriptions
+    return descriptions, arguments
 
 def SDL_GENERATE_DOCS():
-    __index, descriptions = -1, \
-        asyncio.run(SDL_GET_DESCRIPTIONS([f"https://wiki.libsdl.org/{module}/{name}" for module in __module__.functions for name in __module__.functions[module]]))
+    __index, (descriptions, arguments) = -1, \
+        asyncio.run(SDL_GET_FUNCTION_DOCS([f"https://wiki.libsdl.org/{module}/{name}" for module in __module__.functions for name in __module__.functions[module]]))
 
     for module in __module__.functions:
         for name in __module__.functions[module]:
-            __module__.functions[module][name].__doc__ = descriptions[__index := __index + 1]
+            __index = __index + 1
+            __module__.functions[module][name].__doc__ = \
+                (descriptions[__index], arguments[__index])
 
     result = "\"\"\"This file is auto-generated.\"\"\"\n\n"
     result += "from .SDL import *\n\n"
-    result += f"from .__init__ import ctypes, SDL_GET_DLL, \\\n"
-    result += f"    {', '.join(list(SDL_DLL_VAR_MAP.keys()))}\n\n"
+    result += f"from .__init__ import ctypes, typing, SDL_GET_BINARY, \\\n"
+    result += f"    {', '.join(list(SDL_BINARY_VAR_MAP.keys()))}\n\n"
     types, definitions = set(), ""
 
     def SDL_GET_NAME(i):
@@ -163,21 +213,20 @@ def SDL_GENERATE_DOCS():
 
     for index, module in enumerate(__module__.functions):
         if len(__module__.functions[module]) == 0: continue
-        definitions += f"# {module}.dll implementation.\n\n"
+        definitions += f"# {SDL_BINARY_NAME_FORMAT[platform.system()].format(module)} implementation.\n\n"
 
         for _index, name in enumerate(__module__.functions[module]):
-            retType, args = \
-                __module__.functions[module][name].restype, __module__.functions[module][name].argtypes
+            retType, argtypes, (description, arguments) = \
+                __module__.functions[module][name].restype, __module__.functions[module][name].argtypes, __module__.functions[module][name].__doc__
 
-            definitions += f"def {name}({', '.join([f'_{index}: {SDL_GET_NAME(i)}' for index, i in enumerate(args)])}) -> {SDL_GET_NAME(retType)}:\n"
+            assert arguments is None or (arguments is not None and len(arguments) == len(argtypes)), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{name}'."
+            arguments = [f"{'_' if arguments is None or arguments[i] in keyword.kwlist else ''}{i if arguments is None else arguments[i]}" for i in range(len(argtypes))]
+            definitions += f"def {name}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)])}) -> {SDL_GET_NAME(retType)}:\n"
             definitions += f"    \"\"\"\n"
-
-            if __module__.functions[module][name].__doc__ is not None and "no such page" not in __module__.functions[module][name].__doc__.lower():
-                definitions += f"    {__module__.functions[module][name].__doc__}\n"
-
+            if description is not None: definitions += f"    {description}\n"
             definitions += f"    https://wiki.libsdl.org/{module}/{name}\n"
             definitions += f"    \"\"\"\n"
-            definitions += f"    return SDL_GET_DLL({SDL_DLL_VAR_MAP_INV[module]}).{name}({', '.join([f'_{index}' for index, i in enumerate(args)])})"
+            definitions += f"    return SDL_GET_BINARY({SDL_BINARY_VAR_MAP_INV[module]}).{name}({', '.join(arguments)})"
 
             if _index != len(__module__.functions[module]) - 1:
                 definitions += "\n\n"
@@ -187,10 +236,9 @@ def SDL_GENERATE_DOCS():
 
     for i in types:
         count, name = i.count("LP_"), i.replace("LP_", "")
-        result += f"class {i}({'ctypes.POINTER(' * count}{'ctypes.' if name.startswith('c_') else ''}{name}{')' * count}):\n"
-        result += f"    ...\n\n"
+        result += f"{i}: typing.TypeAlias = {'ctypes.POINTER(' * count}{'ctypes.' if name.startswith('c_') else ''}{name}{')' * count} # type: ignore\n"
 
-    return result + definitions
+    return f"{result}\n{definitions}"
 
 from .SDL import *
 
