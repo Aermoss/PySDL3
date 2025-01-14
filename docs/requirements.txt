@@ -1,3 +1,4 @@
+sphinx-rtd-theme
 requests
 aiohttp
 packaging
