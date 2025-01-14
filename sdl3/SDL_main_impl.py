@@ -26,5 +26,8 @@ if not int(os.environ.get("SDL_MAIN_HANDLED", "0")) > 0 and not int(os.environ.g
         @atexit.register
         def SDL_ATEXIT_HANDLER() -> ...:
             if main := (getattr(__main__, "SDL_main", None) or getattr(__main__, "main", None)):
-                if not isinstance(main, SDL_main_func): main = SDL_main_func(main)
+                if not isinstance(main, SDL_main_func):
+                    if main.__name__ == "main": return
+                    main = SDL_main_func(main)
+
                 return SDL_GET_BINARY(SDL_BINARY).SDL_RunApp(len(sys.argv), (ctypes.c_char_p * len(sys.argv))(*[i.encode() for i in sys.argv]), main, None)
