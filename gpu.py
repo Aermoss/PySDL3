@@ -23,6 +23,7 @@ class UniformData(ctypes.Structure):
         ("color2", ctypes.c_float * 4)
     ]
 
+@sdl3.SDL_main_func
 def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_AUDIO):
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")

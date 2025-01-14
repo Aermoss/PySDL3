@@ -157,6 +157,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
         self.io.delta_time = 1.0 / 1000.0 if deltaTime <= 0.0 else deltaTime
         self.lastTime = currentTime
 
+@sdl3.SDL_main_func
 def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     print(f"loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
 
