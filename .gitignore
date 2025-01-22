@@ -1,6 +1,7 @@
 shaders/
 docs/_build/
-sdl3/__pycache__/
 sdl3/__doc__.py
+sdl3/__pycache__/
+__pycache__/
 embed.py
 *.pyc
