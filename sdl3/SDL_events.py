@@ -566,7 +566,7 @@ class SDL_QuitEvent(ctypes.Structure):
 
 class SDL_UserEvent(ctypes.Structure):
     _fields_ = [
-        ("type", SDL_EventType),
+        ("type", ctypes.c_uint32),
         ("reserved", ctypes.c_uint32),
         ("timestamp", ctypes.c_uint64),
         ("windowID", SDL_WindowID),
@@ -614,7 +614,8 @@ class SDL_Event(ctypes.Union):
         ("paxis", SDL_PenAxisEvent),
         ("render", SDL_RenderEvent),
         ("drop", SDL_DropEvent),
-        ("clipboard", SDL_ClipboardEvent)
+        ("clipboard", SDL_ClipboardEvent),
+        ("padding", ctypes.c_uint8 * 128)
     ]
 
 SDL_FUNC("SDL_PumpEvents", None)
