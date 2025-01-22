@@ -29,8 +29,8 @@ SDL_THREAD_COMPLETE = 3
 
 SDL_ThreadFunction = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p)
 
-SDL_BeginThreadFunction = SDL_FunctionPointer(lambda: ...)
-SDL_EndThreadFunction = SDL_FunctionPointer(lambda: ...)
+SDL_BeginThreadFunction = SDL_FunctionPointer(0)
+SDL_EndThreadFunction = SDL_FunctionPointer(0)
 
 SDL_FUNC("SDL_CreateThreadRuntime", ctypes.POINTER(SDL_Thread), SDL_ThreadFunction, ctypes.c_char_p, ctypes.c_void_p, SDL_FunctionPointer, SDL_FunctionPointer)
 SDL_FUNC("SDL_CreateThreadWithPropertiesRuntime", ctypes.POINTER(SDL_Thread), SDL_PropertiesID, SDL_FunctionPointer, SDL_FunctionPointer)
