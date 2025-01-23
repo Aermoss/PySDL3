@@ -36,8 +36,5 @@ include-package-data = true
 "sdl3.bin" = ["*.dll", "*.so", "*.dylib"]
 "sdl3" = ["*.py"]
 
-[tool.setuptools.exclude-package-data]
-"sdl3" = ["__docs__.py"]
-
 [tool.setuptools.dynamic]
 version = {attr = "sdl3.__version__"}
