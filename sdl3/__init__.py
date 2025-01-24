@@ -2,8 +2,8 @@
 
 __version__ = "0.9.1b2"
 
-import sys, os, requests, ctypes, platform, keyword, inspect, types, \
-    asyncio, aiohttp, re, typing, array, atexit, packaging.version
+import sys, os, requests, ctypes, platform, keyword, inspect, types, re, \
+    asyncio, aiohttp, zipfile, typing, array, atexit, packaging.version
 
 SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_TTF_BINARY, SDL_RTF_BINARY, SDL_NET_BINARY = \
     "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_ttf", "SDL3_rtf", "SDL3_net"
@@ -32,39 +32,79 @@ __doc_generator__: int = int(os.environ.get("SDL_DOC_GENERATOR", "1")) > 0
 __initialized__: bool = __name__.split(".")[0] in sys.modules if "." in __name__ else False
 __module__: types.ModuleType = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
 
-def SDL_SET_TEXT_ATTR(color: int) -> None:
-    if SDL_SYSTEM in ["Windows"]:
-        consoleHandle = ctypes.windll.kernel32.GetStdHandle(-11)
-        ctypes.windll.kernel32.SetConsoleTextAttribute(consoleHandle, color)
+def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_ARCH) -> None:
+    """Download specific SDL3 binaries to the given path."""
+    assert system.capitalize() in ["Darwin", "Linux", "Windows"], "Unknown system."
+    assert arch.upper() in ["AMD64", "ARM64"], "Unknown architecture."
+    if not os.path.exists(path): os.makedirs(path)
 
-    else:
-        if color == 7:
-            print("\u001b[39m", end = "", flush = True)
+    try:
+        for release in requests.get("https://api.github.com/repos/Aermoss/PySDL3-Build/releases").json():
+            for asset in release["assets"]:
+                if asset["name"] != f"{system.capitalize()}-{arch.upper()}-{release['tag_name']}.zip":
+                    continue
 
-        elif color == 13:
-            print("\u001b[35m", end = "", flush = True)
+                with requests.get(asset["browser_download_url"], stream = True) as response:
+                    assert response.status_code == 200, f"failed to get binaries from github, status: {response.status_code}."
+                    size, current = int(response.headers.get("content-length", 0)), 0
 
-        elif color == 12:
-            print("\u001b[31m", end = "", flush = True)
+                    with open(os.path.join(path, asset["name"]), "wb") as file:
+                        for chunk in response.iter_content(chunk_size = 8192):
+                            if chunk: file.write(chunk); current += len(chunk)
+                            print("\33[35m", f"downloading '{asset['browser_download_url']}'... {current / size * 100:.1f}% ({current / (1024 ** 2):.2f}/{size / (1024 ** 2):.2f} MB).", "\33[0m", sep = "", end = "\r", flush = True)
 
-        else:
-            ...
+                        print("\n", end = "", flush = True)
+
+                    with zipfile.ZipFile(os.path.join(path, asset["name"]), "r") as ref:
+                        for name in ref.namelist():
+                            if os.path.exists(os.path.join(path, name)):
+                                os.remove(os.path.join(path, name))
+
+                        ref.extractall(path)
+
+                    os.remove(os.path.join(path, asset["name"]))
+                    return
+                
+    except requests.RequestException as exc:
+        print("\33[31m", f"failed to download binaries, exception: {str(exc).lower()}", "\33[0m", sep = "", flush = True)
+
+def SDL_COUNT_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_ARCH) -> typing.Tuple[typing.List[str], typing.List[str]]:
+    """Count redundant files and missing specific SDL3 binaries in the given path."""
+    assert system.capitalize() in ["Darwin", "Linux", "Windows"], "Unknown system."
+    assert arch.upper() in ["AMD64", "ARM64"], "Unknown architecture."
+    if not os.path.exists(path): os.makedirs(path)
+
+    redundant, missing = [], \
+        [SDL_BINARY_NAME_FORMAT[system].format(i) for i in SDL_BINARY_VAR_MAP_INV.keys()]
+
+    for i in os.listdir(path):
+        if os.path.isdir(os.path.join(path, i)): continue
+        if i in missing: missing.remove(i)
+        else: redundant.append(i)
+
+    return redundant, missing
 
 if not __initialized__:
-    if int(os.environ.get("SDL_VERSION_CHECK", "1")) > 0:
+    if int(os.environ.get("SDL_CHECK_VERSION", "1")) > 0:
         try:
             version = requests.get(f"https://pypi.org/pypi/PySDL3/json", timeout = 0.5).json()["info"]["version"]
 
             if packaging.version.parse(__version__) < packaging.version.parse(version):
-                SDL_SET_TEXT_ATTR(13)
-                print(f"you are using an older version of pysdl3 (current: {__version__}, lastest: {version}).", flush = True)
-                SDL_SET_TEXT_ATTR(7)
+                print("\33[35m", f"you are using an older version of pysdl3 (current: {__version__}, lastest: {version}).", "\33[0m", sep = "", flush = True)
 
-        except:
+        except requests.RequestException:
             ...
 
-    functions, instances, binaryMap, binary = {}, {}, {}, None
-    binaryPath = os.path.join(os.path.dirname(__file__), "bin", f"{SDL_SYSTEM.lower()}-{SDL_ARCH.lower()}")
+    modules, binaryMap, currentBinary = {}, {}, None
+    binaryPath = os.environ.get("SDL_BINARY_PATH", os.path.join(os.path.dirname(__file__), "bin"))
+    redundant, missing = SDL_COUNT_BINARIES(binaryPath, SDL_SYSTEM, SDL_ARCH)
+
+    if redundant and not int(os.environ.get("SDL_IGNORE_REDUNDANT_FILES", "0")) > 0:
+        print("\33[35m", f"redundant file(s) detected in binary folder: {', '.join(redundant)}.", "\33[0m", sep = "", flush = True)
+
+    if missing and int(os.environ.get("SDL_DOWNLOAD_BINARIES", "1")) > 0:
+        print("\33[35m", f"missing binaries detected: {', '.join(missing)}.", "\33[0m", sep = "", flush = True)
+        SDL_DOWNLOAD_BINARIES(binaryPath, SDL_SYSTEM, SDL_ARCH)
 
     for key, value in SDL_BINARY_VAR_MAP.items():
         modules[value], binaryMap[value] = {}, (ctypes.WinDLL if SDL_SYSTEM in ["Windows"] else ctypes.CDLL) \
