@@ -61,7 +61,7 @@ if not __initialized__:
     binaryPath = os.path.join(os.path.dirname(__file__), "bin", f"{SDL_SYSTEM.lower()}-{SDL_ARCH.lower()}")
 
     for key, value in SDL_BINARY_VAR_MAP.items():
-        functions[value], binaryMap[value] = {}, (ctypes.WinDLL if SDL_SYSTEM in ["Windows"] else ctypes.CDLL) \
+        modules[value], binaryMap[value] = {}, (ctypes.WinDLL if SDL_SYSTEM in ["Windows"] else ctypes.CDLL) \
             (os.path.join(binaryPath, SDL_BINARY_NAME_FORMAT[SDL_SYSTEM].format(value)))
 
 def SDL_ARRAY(*args: typing.List[typing.Any], **kwargs: typing.Dict[str, typing.Any]) -> typing.Tuple[ctypes.Array[typing.Any], int]:
@@ -105,7 +105,7 @@ def SDL_FUNC(name: str, retType: typing.Any, *args: typing.List[typing.Any]) -> 
     func = getattr(binary := SDL_GET_CURRENT_BINARY(), name)
     func.__binary__, func.restype, func.argtypes = binary, retType, args
     if not __doc_generator__: setattr(__module__, name, func)
-    __module__.functions[SDL_GET_BINARY_NAME(binary)][name] = func
+    __module__.modules[SDL_GET_BINARY_NAME(binary)][name] = func
 
 async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
     session, releases, tasks = aiohttp.ClientSession(), {}, []
@@ -185,12 +185,12 @@ async def SDL_GET_FUNCTION_DOCS(urls: typing.List[str]) -> typing.Tuple[typing.L
 
 def SDL_GENERATE_DOCS() -> str:
     __index, (descriptions, arguments) = -1, \
-        asyncio.run(SDL_GET_FUNCTION_DOCS([f"https://wiki.libsdl.org/{module}/{name}" for module in __module__.functions for name in __module__.functions[module]]))
+        asyncio.run(SDL_GET_FUNC_DESCRIPTIONS([(module, func) for module in __module__.modules for func in __module__.modules[module]]))
 
-    for module in __module__.functions:
-        for name in __module__.functions[module]:
+    for module in __module__.modules:
+        for name in __module__.modules[module]:
             __index = __index + 1
-            __module__.functions[module][name].__doc__ = \
+            __module__.modules[module][name].__doc__ = \
                 (descriptions[__index], arguments[__index])
 
     result = "\"\"\"This file is auto-generated.\"\"\"\n\n"
@@ -213,13 +213,13 @@ def SDL_GENERATE_DOCS() -> str:
         else:
             return f"ctypes.{i.__name__}"
 
-    for index, module in enumerate(__module__.functions):
-        if len(__module__.functions[module]) == 0: continue
+    for index, module in enumerate(__module__.modules):
+        if len(__module__.modules[module]) == 0: continue
         definitions += f"# {SDL_BINARY_NAME_FORMAT[platform.system()].format(module)} implementation.\n\n"
 
-        for _index, name in enumerate(__module__.functions[module]):
+        for _index, name in enumerate(__module__.modules[module]):
             retType, argtypes, (description, arguments) = \
-                __module__.functions[module][name].restype, __module__.functions[module][name].argtypes, __module__.functions[module][name].__doc__
+                __module__.modules[module][name].restype, __module__.modules[module][name].argtypes, __module__.modules[module][name].__doc__
 
             assert arguments is None or (arguments is not None and len(arguments) == len(argtypes)), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{name}'."
             arguments = [f"{'_' if arguments is None or arguments[i] in keyword.kwlist else ''}{i if arguments is None else arguments[i]}" for i in range(len(argtypes))]
@@ -230,10 +230,10 @@ def SDL_GENERATE_DOCS() -> str:
             definitions += f"    \"\"\"\n"
             definitions += f"    return SDL_GET_BINARY({SDL_BINARY_VAR_MAP_INV[module]}).{name}({', '.join(arguments)})"
 
-            if _index != len(__module__.functions[module]) - 1:
+            if _index != len(__module__.modules[module]) - 1:
                 definitions += "\n\n"
 
-        if index != len(__module__.functions) - 1 and len(list(__module__.functions.values())[index + 1]) != 0:
+        if index != len(__module__.modules) - 1 and len(list(__module__.modules.values())[index + 1]) != 0:
             definitions += "\n\n"
 
     for i in types:

@@ -159,7 +159,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
 
 @sdl3.SDL_main_func
 def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
-    print(f"loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
+    print(f"loaded {sum(len(v) for k, v in sdl3.modules.items())} functions.")
 
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS):
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
