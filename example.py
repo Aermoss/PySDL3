@@ -2,8 +2,7 @@ import os, sdl3, ctypes, colorsys, time
 
 @sdl3.SDL_main_func
 def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
-    print(f"total lines of code: {sum([open(f'sdl3/{i}', 'r').read().count('\n') + 1 for i in os.listdir('sdl3') if i.endswith('.py')])}.")
-    print(f"loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
+    print(f"total lines of code: {sum([len(open(f'sdl3/{i}', 'r').readlines()) for i in os.listdir('sdl3') if i.endswith('.py')])}.")
 
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_AUDIO):
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
