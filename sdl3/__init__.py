@@ -5,8 +5,8 @@ __version__ = "0.9.1b2"
 import sys, os, requests, ctypes, platform, keyword, inspect, types, \
     asyncio, aiohttp, re, typing, array, atexit, packaging.version
 
-SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_NET_BINARY, SDL_RTF_BINARY, SDL_TTF_BINARY = \
-    "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_net", "SDL3_rtf", "SDL3_ttf"
+SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_TTF_BINARY, SDL_RTF_BINARY, SDL_NET_BINARY = \
+    "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_ttf", "SDL3_rtf", "SDL3_net"
 
 SDL_BINARY_VAR_MAP: typing.Dict[str, str] = {}
 
