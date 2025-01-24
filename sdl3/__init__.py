@@ -267,13 +267,15 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
                 continue
 
             for asset in release["assets"]:
-                if asset["name"] != f"{SDL_SYSTEM.lower()}-docs.py": continue
-                response, data = requests.get(asset["browser_download_url"]), bytearray()
-                [data.extend(i) for i in response.iter_content(chunk_size = 8192)]
-                return data
+                if asset["name"] != f"{SDL_SYSTEM}-Docs.py":
+                    continue
+
+                with requests.get(asset["browser_download_url"], stream = True) as response:
+                    assert response.status_code == 200, f"failed to get docs from github, status: {response.status_code}."
+                    return bytearray().join([chunk for chunk in response.iter_content(chunk_size = 8192) if chunk])
             
-    except Exception as exc:
-        print(f"failed to get docs from github: {str(exc).lower()}.", flush = True)
+    except requests.RequestException as exc:
+        print(f"failed to get docs from github, exception: {str(exc).lower()}.", flush = True)
 
     return SDL_GENERATE_DOCS().encode("utf-8")
 
