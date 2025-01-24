@@ -17,7 +17,13 @@ for i in locals().copy():
 SDL_BINARY_VAR_MAP_INV: typing.Dict[str, str] = {value: key for key, value in SDL_BINARY_VAR_MAP.items()}
 SDL_REPOSITORIES: typing.List[str] = [key.replace("3", "") for key, _ in SDL_BINARY_VAR_MAP_INV.items()]
 
-SDL_SYSTEM, SDL_ARCH = platform.system(), platform.machine().upper().replace("X86_64", "AMD64").replace("AARCH64", "ARM64")
+def SDL_FORMAT_ARCH(arch: str) -> str:
+    """Format the architecture string."""
+    if arch.lower() in ["x64", "x86_64", "amd64"]: return "AMD64"
+    if arch.lower() in ["aarch64", "arm64"]: return "ARM64"
+    assert False, "Unknown architecture."
+
+SDL_SYSTEM, SDL_ARCH = platform.system(), SDL_FORMAT_ARCH(platform.machine())
 SDL_BINARY_NAME_FORMAT: typing.Dict[str, str] = {"Darwin": "lib{}.dylib", "Linux": "lib{}.so", "Windows": "{}.dll"}
 
 __doc_file__: str = os.path.join(os.path.dirname(__file__), "__doc__.py")
