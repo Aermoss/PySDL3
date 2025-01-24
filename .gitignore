@@ -1,4 +1,5 @@
 shaders/
+sdl3/bin/
 docs/_build/
 sdl3/__doc__.py
 sdl3/__pycache__/
