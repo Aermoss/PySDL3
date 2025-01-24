@@ -71,14 +71,17 @@ if not __initialized__:
             (os.path.join(binaryPath, SDL_BINARY_NAME_FORMAT[SDL_SYSTEM].format(value)))
 
 def SDL_ARRAY(*args: typing.List[typing.Any], **kwargs: typing.Dict[str, typing.Any]) -> typing.Tuple[ctypes.Array[typing.Any], int]:
+    """Create a ctypes array."""
     return ((kwargs.get("type") or args[0].__class__) * len(args))(*args), len(args)
 
 def SDL_DEREFERENCE(value: typing.Any) -> typing.Any:
+    """Dereference a ctypes pointer or object."""
     if isinstance(value, ctypes._Pointer): return value.contents
     elif hasattr(value, "_obj"): return value._obj
     else: return value
 
-def SDL_FUNC_CACHE(func: typing.Callable) -> typing.Callable:
+def SDL_CACHE_FUNC(func: typing.Callable) -> typing.Callable:
+    """Simple function cache decorator."""
     cache = {}
 
     def __inner__(*args: typing.List[typing.Any]) -> typing.Any:
@@ -91,29 +94,32 @@ def SDL_FUNC_CACHE(func: typing.Callable) -> typing.Callable:
 
     return __inner__
 
-@SDL_FUNC_CACHE
+@SDL_CACHE_FUNC
 def SDL_GET_BINARY_NAME(binary: typing.Any) -> str:
+    """Get the name of an SDL3 binary."""
     return {v: k for k, v in __module__.binaryMap.items()}[binary]
 
 def SDL_GET_BINARY(name: str) -> typing.Any:
+    """Get an SDL3 binary by its name."""
     return __module__.binaryMap[name]
 
 def SDL_SET_CURRENT_BINARY(name: str) -> None:
-    __module__.binary = SDL_GET_BINARY(name)
+    """Set the current SDL3 binary by its name."""
+    __module__.currentBinary = SDL_GET_BINARY(name)
 
 def SDL_GET_CURRENT_BINARY() -> typing.Any:
-    return __module__.binary
-
-def SDL_GET_FUNCTION_BINARY(name: str) -> typing.Any:
-    return __module__.functions[name].__binary__
+    """Get the current SDL3 binary."""
+    return __module__.currentBinary
 
 def SDL_FUNC(name: str, retType: typing.Any, *args: typing.List[typing.Any]) -> None:
+    """Define an SDL3 function."""
     func = getattr(binary := SDL_GET_CURRENT_BINARY(), name)
     func.__binary__, func.restype, func.argtypes = binary, retType, args
     if not __doc_generator__: setattr(__module__, name, func)
     __module__.modules[SDL_GET_BINARY_NAME(binary)][name] = func
 
 async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
+    """Get latest releases of SDL3 modules from their official github repositories."""
     session, releases, tasks = aiohttp.ClientSession(), {}, []
 
     for repo in SDL_REPOSITORIES:
@@ -145,10 +151,12 @@ async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
     await session.close()
     return releases
 
-async def SDL_GET_FUNCTION_DOCS(urls: typing.List[str]) -> typing.Tuple[typing.List[str], typing.List[typing.List[str]]]:
+async def SDL_GET_FUNC_DESCRIPTIONS(funcs: typing.List[typing.Tuple[str, str]]) -> typing.Tuple[typing.List[str], typing.List[typing.List[str]]]:
+    """Get descriptions and arguments of SDL3 functions from the official SDL3 wiki."""
     session, tasks = aiohttp.ClientSession(), []
 
-    for url in urls:
+    for module, func in funcs:
+        url = f"https://wiki.libsdl.org/{module}/{func}"
         print(f"sending a request to \"{url}\".\n", end = "", flush = True)
         tasks.append(asyncio.create_task(session.get(url, ssl = False)))
     
@@ -156,7 +164,7 @@ async def SDL_GET_FUNCTION_DOCS(urls: typing.List[str]) -> typing.Tuple[typing.L
     print(f"response gathering completed ({len(responses)} response(s)).\n", end = "", flush = True)
     descriptions, arguments = [], []
 
-    for response, url in zip(responses, urls):
+    for response in responses:
         if response.status != 200:
             print(f"failed to get description of \"{response.url}\", skipping (status: {response.status}).\n", end = "", flush = True)
             descriptions.append(None)
@@ -190,6 +198,8 @@ async def SDL_GET_FUNCTION_DOCS(urls: typing.List[str]) -> typing.Tuple[typing.L
     return descriptions, arguments
 
 def SDL_GENERATE_DOCS() -> str:
+    """Generate type hints and documentation for SDL3 functions."""
+
     __index, (descriptions, arguments) = -1, \
         asyncio.run(SDL_GET_FUNC_DESCRIPTIONS([(module, func) for module in __module__.modules for func in __module__.modules[module]]))
 
@@ -249,6 +259,8 @@ def SDL_GENERATE_DOCS() -> str:
     return f"{result}\n{definitions}"
 
 def SDL_GET_OR_GENERATE_DOCS() -> bytes:
+    """Get type hints and documentation for SDL3 functions from github or generate it."""
+
     try:
         for release in requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases").json():
             if release["tag_name"] != f"v{__version__}":
