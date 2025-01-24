@@ -6,20 +6,21 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{matrix.os}}
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        system: [Linux, Darwin, Windows]
+
         include:
-          - os: ubuntu-latest
-            platform: linux
+          - system: Linux
+            os: ubuntu-latest
 
-          - os: windows-latest
-            platform: windows
+          - system: Darwin
+            os: macos-latest
 
-          - os: macos-latest
-            platform: darwin
+          - system: Windows
+            os: windows-latest
 
     steps:
       - name: Checkout code.
@@ -46,9 +47,9 @@ jobs:
       - name: Upload asset.
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
+          upload_url: ${{github.event.release.upload_url}}
           asset_path: sdl3/__doc__.py
-          asset_name: ${{ matrix.platform }}-docs.py
+          asset_name: ${{matrix.system}}-Docs.py
           asset_content_type: text/plain
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{secrets.PERSONAL_ACCESS_TOKEN}}
