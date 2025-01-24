@@ -84,13 +84,10 @@ def SDL_CACHE_FUNC(func: typing.Callable) -> typing.Callable:
     """Simple function cache decorator."""
     cache = {}
 
-    def __inner__(*args: typing.List[typing.Any]) -> typing.Any:
-        if args in cache:
-            return cache[args]
-        
-        else:
-            cache[args] = func(*args)
-            return cache[args]
+    def __inner__(*args: typing.List[typing.Any], **kwargs: typing.Dict[str, typing.Any]) -> typing.Any:
+        _hash = hash((args, tuple(frozenset(sorted(kwargs.items())))))
+        if _hash not in cache: cache.update({_hash: func(*args, **kwargs)})
+        return cache.get(_hash, None)
 
     return __inner__
 
