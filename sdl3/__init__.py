@@ -38,13 +38,18 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
     assert arch.upper() in ["AMD64", "ARM64"], "Unknown architecture."
     if not os.path.exists(path): os.makedirs(path)
 
+    headers = {"Accept": "application/vnd.github+json"}
+
+    if "SDL_GITHUB_TOKEN" in os.environ:
+        headers["Authorization"] = f"Bearer {os.environ['SDL_GITHUB_TOKEN']}"
+
     try:
-        for release in requests.get("https://api.github.com/repos/Aermoss/PySDL3-Build/releases").json():
+        for release in requests.get("https://api.github.com/repos/Aermoss/PySDL3-Build/releases", headers = headers).json():
             for asset in release["assets"]:
                 if asset["name"] != f"{system.capitalize()}-{arch.upper()}-{release['tag_name']}.zip":
                     continue
 
-                with requests.get(asset["browser_download_url"], stream = True) as response:
+                with requests.get(asset["browser_download_url"], headers = headers, stream = True) as response:
                     assert response.status_code == 200, f"failed to get binaries from github, status: {response.status_code}."
                     size, current = int(response.headers.get("content-length", 0)), 0
 
@@ -158,11 +163,15 @@ def SDL_FUNC(name: str, retType: typing.Any, *args: typing.List[typing.Any]) -> 
 async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
     """Get latest releases of SDL3 modules from their official github repositories."""
     session, releases, tasks = aiohttp.ClientSession(), {}, []
+    headers = {"Accept": "application/vnd.github+json"}
+
+    if "SDL_GITHUB_TOKEN" in os.environ:
+        headers["Authorization"] = f"Bearer {os.environ['SDL_GITHUB_TOKEN']}"
 
     for repo in SDL_REPOSITORIES:
         url = f"https://api.github.com/repos/libsdl-org/{repo}/releases"
         print(f"sending a request to \"{url}\".", flush = True)
-        tasks.append(asyncio.create_task(session.get(url, ssl = False)))
+        tasks.append(asyncio.create_task(session.get(url, headers = headers, ssl = False)))
 
     responses = await asyncio.gather(*tasks)
     print(f"response gathering completed ({len(responses)} response(s)).", flush = True)
@@ -293,7 +302,12 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
     """Get type hints and documentation for SDL3 functions from github or generate it."""
 
     try:
-        for release in requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases").json():
+        headers = {"Accept": "application/vnd.github+json"}
+
+        if "SDL_GITHUB_TOKEN" in os.environ:
+            headers["Authorization"] = f"Bearer {os.environ['SDL_GITHUB_TOKEN']}"
+
+        for release in requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases", headers = headers).json():
             if release["tag_name"] != f"v{__version__}":
                 continue
 
@@ -301,7 +315,7 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
                 if asset["name"] != f"{SDL_SYSTEM}-Docs.py":
                     continue
 
-                with requests.get(asset["browser_download_url"], stream = True) as response:
+                with requests.get(asset["browser_download_url"], headers = headers, stream = True) as response:
                     assert response.status_code == 200, f"failed to get docs from github, status: {response.status_code}."
                     return bytearray().join([chunk for chunk in response.iter_content(chunk_size = 8192) if chunk])
             
