@@ -29,11 +29,10 @@ Repository = "https://github.com/Aermoss/PySDL3"
 Issues = "https://github.com/Aermoss/PySDL3/issues"
 
 [tool.setuptools]
-packages = ["sdl3", "sdl3.bin"]
+packages = ["sdl3"]
 include-package-data = true
 
 [tool.setuptools.package-data]
-"sdl3.bin" = ["*.dll", "*.so", "*.dylib"]
 "sdl3" = ["*.py"]
 
 [tool.setuptools.dynamic]
