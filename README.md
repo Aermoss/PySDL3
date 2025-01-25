@@ -28,7 +28,7 @@ There are no additional requirements since PySDL3 will download all the necessar
 
 *SDL3 binaries will be downloaded from [PySDL3-Build](https://github.com/Aermoss/PySDL3-Build) repository, if you want to use your own binaries please read the [documentation](https://pysdl3.readthedocs.io/en/latest/install.html#custom-binaries).*
 
-### Supported Platforms
+### Supported Platforms:
 * **Linux** (AMD64, ARM64)
 * **Windows** (AMD64, ARM64)
 * **Darwin** (AMD64, ARM64)
@@ -39,4 +39,4 @@ The [documentation of PySDL3](https://pysdl3.readthedocs.io) can be found at: ht
 *If you can't find what you are looking for there, it is highly recommended to look at the [official documentation of SDL3](https://wiki.libsdl.org/SDL3) since everything is defined exactly the same.*
 
 ## License
-PySDL3 is available under the MIT license, see the [LICENSE](https://github.com/Aermoss/PySDL3/blob/main/LICENSE) file for more info.
+PySDL3 is available under the MIT license, see the [LICENSE](https://github.com/Aermoss/PySDL3/blob/main/LICENSE) file for more information.
