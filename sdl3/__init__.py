@@ -256,9 +256,9 @@ def SDL_GENERATE_DOCS() -> str:
     def SDL_GET_NAME(i):
         if i is None: return "None"
         if "CFunctionType" in i.__name__: return "ctypes._Pointer"
-        if "LP_" in i.__name__ or not i.__name__.startswith("c_"):
-            types.add(i.__name__); return i.__name__
-        else: return f"ctypes.{i.__name__}"
+        if i.__name__.startswith("LP_"): types.add(i.__name__)
+        if i.__name__.startswith("c_"): return f"ctypes.{i.__name__}"
+        return i.__name__
 
     for index, module in enumerate(__module__.modules):
         if len(__module__.modules[module]) == 0: continue
