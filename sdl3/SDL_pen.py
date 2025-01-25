@@ -1,9 +1,16 @@
 from .__init__ import ctypes, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
+from .SDL_touch import SDL_TouchID
+from .SDL_mouse import SDL_MouseID
+
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_PenID = ctypes.c_uint32
+
+SDL_PEN_MOUSEID = SDL_MouseID(-2)
+SDL_PEN_TOUCHID = SDL_TouchID(-2)
+
 SDL_PenInputFlags = ctypes.c_uint32
 
 SDL_PEN_INPUT_DOWN = 1 << 0
