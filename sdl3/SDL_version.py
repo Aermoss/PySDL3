@@ -4,8 +4,8 @@ from .__init__ import ctypes, \
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_MAJOR_VERSION = 3
-SDL_MINOR_VERSION = 1
-SDL_MICRO_VERSION = 9
+SDL_MINOR_VERSION = 2
+SDL_MICRO_VERSION = 1
 
 SDL_VERSIONNUM = lambda major, minor, patch: \
     major * 1000000 + minor * 1000 + patch
