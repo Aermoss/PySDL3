@@ -242,29 +242,23 @@ def SDL_GENERATE_DOCS() -> str:
 
     for module in __module__.modules:
         for name in __module__.modules[module]:
-            __index = __index + 1
             __module__.modules[module][name].__doc__ = \
-                (descriptions[__index], arguments[__index])
+                (descriptions[__index := __index + 1], arguments[__index])
 
-    result = "\"\"\"This file is auto-generated.\"\"\"\n\n"
-    result += "from .SDL import *\n\n"
-    result += f"from .__init__ import ctypes, typing, SDL_GET_BINARY, \\\n"
-    result += f"    {', '.join(list(SDL_BINARY_VAR_MAP.keys()))}\n\n"
+    result = "\"\"\"This file is auto-generated.\"\"\"\n\nfrom .SDL import *\n\n"
+    result += "from .__init__ import ctypes, typing, SDL_GET_BINARY, \\\n"
+    result += f"{' ' * 4}{', '.join(list(SDL_BINARY_VAR_MAP.keys()))}\n\n"
+    result += f"class POINTER:\n{' ' * 4}\"\"\"Simple pointer type.\"\"\"\n"
+    result += f"{' ' * 4}@classmethod\n{' ' * 4}def __class_getitem__(cls, item):\n"
+    result += f"{' ' * 8}return ctypes.POINTER(item)\n\n"
     types, definitions = set(), ""
 
     def SDL_GET_NAME(i):
         if i is None: return "None"
-        if "CFunctionType" in i.__name__:
-            return "ctypes._Pointer"
-
+        if "CFunctionType" in i.__name__: return "ctypes._Pointer"
         if "LP_" in i.__name__ or not i.__name__.startswith("c_"):
-            if "LP_" in i.__name__:
-                types.add(i.__name__)
-
-            return i.__name__
-        
-        else:
-            return f"ctypes.{i.__name__}"
+            types.add(i.__name__); return i.__name__
+        else: return f"ctypes.{i.__name__}"
 
     for index, module in enumerate(__module__.modules):
         if len(__module__.modules[module]) == 0: continue
@@ -277,11 +271,11 @@ def SDL_GENERATE_DOCS() -> str:
             assert arguments is None or (arguments is not None and len(arguments) == len(argtypes)), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{name}'."
             arguments = [f"{'_' if arguments is None or arguments[i] in keyword.kwlist else ''}{i if arguments is None else arguments[i]}" for i in range(len(argtypes))]
             definitions += f"def {name}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)])}) -> {SDL_GET_NAME(retType)}:\n"
-            definitions += f"    \"\"\"\n"
+            definitions += f"{' ' * 4}\"\"\"\n"
             if description is not None: definitions += f"    {description}\n"
-            definitions += f"    https://wiki.libsdl.org/{module}/{name}\n"
-            definitions += f"    \"\"\"\n"
-            definitions += f"    return SDL_GET_BINARY({SDL_BINARY_VAR_MAP_INV[module]}).{name}({', '.join(arguments)})"
+            definitions += f"{' ' * 4}https://wiki.libsdl.org/{module}/{name}\n"
+            definitions += f"{' ' * 4}\"\"\"\n"
+            definitions += f"{' ' * 4}return SDL_GET_BINARY({SDL_BINARY_VAR_MAP_INV[module]}).{name}({', '.join(arguments)})"
 
             if _index != len(__module__.modules[module]) - 1:
                 definitions += "\n\n"
@@ -291,7 +285,7 @@ def SDL_GENERATE_DOCS() -> str:
 
     for i in types:
         count, name = i.count("LP_"), i.replace("LP_", "")
-        result += f"{i}: typing.TypeAlias = {'ctypes.POINTER(' * count}{'ctypes.' if name.startswith('c_') else ''}{name}{')' * count} # type: ignore\n"
+        result += f"{i}: typing.TypeAlias = {'POINTER[' * count}{'ctypes.' if name.startswith('c_') else ''}{name}{']' * count}\n"
 
     return f"{result}\n{definitions}"
 
