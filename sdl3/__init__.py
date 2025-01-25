@@ -310,7 +310,7 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
 
     return SDL_GENERATE_DOCS().encode("utf-8")
 
-from .SDL import *
+from sdl3.SDL import *
 
 if not __initialized__:
     if __doc_generator__:
