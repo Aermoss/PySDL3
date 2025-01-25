@@ -1,6 +1,6 @@
 """A pure Python wrapper for SDL3."""
 
-__version__ = "0.9.2b2"
+__version__ = "0.9.2b3"
 
 import sys, os, requests, ctypes, platform, keyword, inspect, types, re, \
     asyncio, aiohttp, zipfile, typing, array, atexit, packaging.version
