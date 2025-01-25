@@ -9,6 +9,7 @@ jobs:
     runs-on: ${{matrix.os}}
 
     strategy:
+      fail-fast: false
       matrix:
         system: [Linux, Darwin, Windows]
 
@@ -36,11 +37,12 @@ jobs:
         run: |
           python -m pip install .
 
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            install_name_tool -add_rpath /opt/homebrew/lib ./sdl3/bin/darwin-arm64/libSDL3_ttf.dylib
+          if [ "${{matrix.system}}" == "Darwin" ]; then
+            echo "DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
           fi
 
       - name: Generate docs.
+        shell: bash
         run: |
           python -c "import sdl3"
 
