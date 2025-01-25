@@ -1,9 +1,9 @@
-from .__init__ import sys, os, ctypes, atexit, SDL_GET_BINARY, SDL_BINARY
+from .__init__ import sys, os, ctypes, atexit, typing, SDL_GET_BINARY, SDL_BINARY
 
 from .SDL_main import SDL_main_func, \
     SDL_AppEvent_func, SDL_AppInit_func, SDL_AppIterate_func, SDL_AppQuit_func
 
-class LP_c_char_p(ctypes.POINTER(ctypes.c_char_p)): ...
+LP_c_char_p: typing.TypeAlias = ctypes.POINTER(ctypes.c_char_p) # type: ignore
 
 if not int(os.environ.get("SDL_MAIN_HANDLED", "0")) > 0 and not int(os.environ.get("SDL_MAIN_NOIMPL", "0")) > 0:
     import __main__
