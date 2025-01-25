@@ -45,6 +45,8 @@ jobs:
         shell: bash
         run: |
           python -c "import sdl3"
+        env:
+          SDL_GITHUB_TOKEN: ${{secrets.PERSONAL_ACCESS_TOKEN}}
 
       - name: Upload asset.
         uses: actions/upload-release-asset@v1
