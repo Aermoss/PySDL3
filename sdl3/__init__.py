@@ -326,7 +326,19 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
 
 from sdl3.SDL import *
 
+SDL_VERSIONNUM_STRING = lambda num: \
+    f"{SDL_VERSIONNUM_MAJOR(num)}.{SDL_VERSIONNUM_MINOR(num)}.{SDL_VERSIONNUM_MICRO(num)}"
+
+SDL_BINARY_VERSION, SDL_IMAGE_BINARY_VERSION, SDL_MIXER_BINARY_VERSION, SDL_TTF_BINARY_VERSION, SDL_RTF_BINARY_VERSION, SDL_NET_BINARY_VERSION = \
+    SDL_GET_BINARY(SDL_BINARY).SDL_GetVersion(), SDL_GET_BINARY(SDL_IMAGE_BINARY).IMG_Version(), SDL_GET_BINARY(SDL_MIXER_BINARY).Mix_Version(), \
+        SDL_GET_BINARY(SDL_TTF_BINARY).TTF_Version(), SDL_GET_BINARY(SDL_RTF_BINARY).RTF_Version(), SDL_GET_BINARY(SDL_NET_BINARY).SDLNet_Version()
+
 if not __initialized__:
+    if int(os.environ.get("SDL_CHECK_BINARY_VERSION", "1")) > 0:
+        for i in SDL_BINARY_VAR_MAP:
+            if (binaryVersion := locals()[f"{i}_VERSION"]) != (version := locals()[f"{i.replace('_BINARY', '')}_VERSION"]):
+                print("\33[35m", f"version mismatch with binary: '{SDL_BINARY_NAME_FORMAT[SDL_SYSTEM].format(SDL_BINARY_VAR_MAP[i])}' (expected: {SDL_VERSIONNUM_STRING(version)}, got: {SDL_VERSIONNUM_STRING(binaryVersion)}).", "\33[0m", sep = "", flush = True)
+
     if __doc_generator__:
         if not os.path.exists(__doc_file__):
             with open(__doc_file__, "wb") as file:
