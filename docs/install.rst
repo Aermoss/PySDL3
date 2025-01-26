@@ -48,5 +48,8 @@ but still make sure you have all 6 binaries installed, **otherwise it will not w
 
 If there are other files you want to keep in the binary path, you can disable the warning message by setting the ``SDL_IGNORE_REDUNDANT_FILES`` environment variable to "1".
 
+If the versions of your binaries are different from the implementation version of PySDL3, you can disable the warning messages by setting the ``SDL_CHECK_BINARY_VERSION``
+environment variable to "0" but **be aware that using an older binary version may cause unexpected behavior**.
+
 .. _PyPI: https://pypi.org/project/PySDL3
 .. _GitHub: https://github.com/Aermoss/PySDL3
