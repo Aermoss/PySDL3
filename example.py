@@ -14,7 +14,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     renderDrivers = [sdl3.SDL_GetRenderDriver(i).decode() for i in range(sdl3.SDL_GetNumRenderDrivers())]
     tryGetDriver, tryUseVulkan = lambda order, drivers: next((i for i in order if i in drivers), None), False
     renderDriver = tryGetDriver((["vulkan"] if tryUseVulkan else []) + ["opengl", "software"], renderDrivers)
-    print(f"available render drivers: {', '.join(renderDrivers)}. (current: {renderDriver})")
+    print(f"available render drivers: {', '.join(renderDrivers)} (current: {renderDriver}).")
     renderer = sdl3.SDL_CreateRenderer(window, renderDriver.encode())
 
     if not renderer:
@@ -22,7 +22,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
         return -1
     
     audioDrivers = [sdl3.SDL_GetAudioDriver(i).decode() for i in range(sdl3.SDL_GetNumAudioDrivers())]
-    print(f"available audio drivers: {', '.join(audioDrivers)}. (current: {sdl3.SDL_GetCurrentAudioDriver().decode().lower()})")
+    print(f"available audio drivers: {', '.join(audioDrivers)} (current: {sdl3.SDL_GetCurrentAudioDriver().decode().lower()}).")
     audioDevices = sdl3.SDL_GetAudioPlaybackDevices(None)
 
     if not audioDevices:
