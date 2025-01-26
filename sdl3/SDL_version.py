@@ -10,8 +10,8 @@ SDL_MICRO_VERSION = 1
 SDL_VERSIONNUM = lambda major, minor, patch: \
     major * 1000000 + minor * 1000 + patch
 
-SDL_VERSIONNUM_MAJOR = lambda version: version / 1000000
-SDL_VERSIONNUM_MINOR = lambda version: (version / 1000) % 1000
+SDL_VERSIONNUM_MAJOR = lambda version: int(version / 1000000)
+SDL_VERSIONNUM_MINOR = lambda version: int(version / 1000) % 1000
 SDL_VERSIONNUM_MICRO = lambda version: version % 1000
 
 SDL_VERSION = SDL_VERSIONNUM(SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_MICRO_VERSION)
