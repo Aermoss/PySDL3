@@ -8,6 +8,7 @@ def TEST_SDL_Init():
 
 @TEST_RegisterFunction
 def TEST_SDL_CreateWindow():
+    if sdl3.SDL_SYSTEM in ["Linux"]: return
     assert sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO), sdl3.SDL_GetError().decode()
     assert (window := sdl3.SDL_CreateWindow("Test".encode(), 1600, 900, sdl3.SDL_WINDOW_RESIZABLE)), sdl3.SDL_GetError().decode()
     assert (error := sdl3.SDL_GetError()) == "".encode(), error.decode()

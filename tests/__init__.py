@@ -26,5 +26,5 @@ def TEST_RunAllTests():
             print("\33[31m", f"Test '{func.__name__}' failed: {error}", "\33[0m", sep = "", flush = True)
             failed += 1
 
-    print("\33[35m", f"{successful} tests passed, {failed} tests failed.", "\33[0m", sep = "", flush = True)
+    print("\33[35m", f"{successful} test(s) passed, {failed} test(s) failed.", "\33[0m", sep = "", flush = True)
     if failed: os._exit(-1)
