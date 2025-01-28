@@ -27,4 +27,4 @@ def TEST_RunAllTests():
             failed += 1
 
     print("\33[35m", f"{successful} tests passed, {failed} tests failed.", "\33[0m", sep = "", flush = True)
-    assert not failed, "There are some failed tests."
+    if failed: os._exit(-1)
