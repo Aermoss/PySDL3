@@ -126,7 +126,7 @@ SDL_FUNC("TTF_RenderGlyph_Solid", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TT
 SDL_FUNC("TTF_SetFontDirection", ctypes.c_bool, ctypes.POINTER(TTF_Font), TTF_Direction)
 SDL_FUNC("TTF_GetFontDirection", TTF_Direction, ctypes.POINTER(TTF_Font))
 SDL_FUNC("TTF_SetFontScript", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p)
-SDL_FUNC("TTF_GetGlyphScript", ctypes.c_bool, ctypes.c_uint32, ctypes.c_char_p, ctypes.c_size_t)
+SDL_FUNC("TTF_GetGlyphScript", ctypes.c_uint32, ctypes.c_uint32)
 SDL_FUNC("TTF_SetFontLanguage", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p)
 SDL_FUNC("TTF_FontHasGlyph", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_uint32)
 SDL_FUNC("TTF_GetGlyphImage", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_uint32)
