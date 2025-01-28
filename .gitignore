@@ -3,6 +3,7 @@ sdl3/bin/
 docs/_build/
 sdl3/__doc__.py
 sdl3/__pycache__/
+tests/__pycache__/
 __pycache__/
 embed.py
 test.py
