@@ -16,14 +16,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Python.
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.13"
 
       - name: Install dependencies.
+        shell: bash
         run: python -m pip install --upgrade pip build
 
       - name: Build package.
+        shell: bash
         run: python -m build
 
       - name: Publish package.
