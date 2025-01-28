@@ -1,26 +1,28 @@
-import os, sys, atexit
+import os, sys, atexit, typing
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import sdl3
+import sdl3, ctypes
 
 functions = {}
 
-def TEST_RegisterFunction(systems):
+def TEST_RegisterFunction(systems: typing.List[str]) -> typing.Callable:
     return lambda func: functions.update({func: systems})
 
 class TEST_PassFunction(Exception):
     ...
 
 from tests.TEST_init import *
+from tests.TEST_video import *
 
 @atexit.register
-def TEST_RunAllTests():
+def TEST_RunAllTests() -> None:
     if not functions: return
     passed, failed = 0, 0
 
     for func, systems in functions.items():
         try:
+            sdl3.SDL_ClearError()
             if sdl3.SDL_SYSTEM in systems: func()
             else: raise TEST_PassFunction()
             print("\33[32m", f"Test '{func.__name__}' passed.", "\33[0m", sep = "", flush = True)
