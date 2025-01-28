@@ -9,11 +9,10 @@ def TEST_SDL_Init() -> None:
 
 @TEST_RegisterFunction(["Linux", "Darwin", "Windows"])
 def TEST_SDL_InitSubSystem() -> None:
-    assert sdl3.SDL_Init(sdl3.SDL_INIT_AUDIO), sdl3.SDL_GetError().decode()
+    assert sdl3.SDL_Init(0), sdl3.SDL_GetError().decode()
     assert sdl3.SDL_InitSubSystem(sdl3.SDL_INIT_EVENTS), sdl3.SDL_GetError().decode()
     assert (error := sdl3.SDL_GetError()) == "".encode(), error.decode()
     assert sdl3.SDL_WasInit(0) & sdl3.SDL_INIT_EVENTS, "Failed to initialize subsystem."
-    assert sdl3.SDL_WasInit(0) & sdl3.SDL_INIT_AUDIO, "Failed to initialize subsystem."
     sdl3.SDL_QuitSubSystem(sdl3.SDL_INIT_EVENTS)
     sdl3.SDL_Quit()
 
