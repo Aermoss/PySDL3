@@ -1,14 +1,13 @@
-from .__init__ import sdl3, TEST_RegisterFunction
+from .__init__ import sdl3, TEST_RegisterFunction, TEST_PassFunction
 
-@TEST_RegisterFunction
+@TEST_RegisterFunction(["Linux", "Darwin", "Windows"])
 def TEST_SDL_Init():
     assert sdl3.SDL_Init(0), sdl3.SDL_GetError().decode()
     assert (error := sdl3.SDL_GetError()) == "".encode(), error.decode()
     sdl3.SDL_Quit()
 
-@TEST_RegisterFunction
+@TEST_RegisterFunction(["Darwin", "Windows"])
 def TEST_SDL_CreateWindow():
-    if sdl3.SDL_SYSTEM in ["Linux"]: return
     assert sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO), sdl3.SDL_GetError().decode()
     assert (window := sdl3.SDL_CreateWindow("Test".encode(), 1600, 900, sdl3.SDL_WINDOW_RESIZABLE)), sdl3.SDL_GetError().decode()
     assert (error := sdl3.SDL_GetError()) == "".encode(), error.decode()

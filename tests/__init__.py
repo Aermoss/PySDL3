@@ -4,27 +4,34 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import sdl3
 
-functions = []
+functions = {}
 
-def TEST_RegisterFunction(func):
-    functions.append(func)
+def TEST_RegisterFunction(systems):
+    return lambda func: functions.update({func: systems})
+
+class TEST_PassFunction(Exception):
+    ...
 
 from tests.TEST_init import *
 
 @atexit.register
 def TEST_RunAllTests():
     if not functions: return
-    successful, failed = 0, 0
+    passed, failed = 0, 0
 
-    for func in functions:
+    for func, systems in functions.items():
         try:
-            func()
+            if sdl3.SDL_SYSTEM in systems: func()
+            else: raise TEST_PassFunction()
             print("\33[32m", f"Test '{func.__name__}' passed.", "\33[0m", sep = "", flush = True)
-            successful += 1
+            passed += 1
+
+        except TEST_PassFunction as error:
+            print("\33[33m", f"Test '{func.__name__}' is not supported on {sdl3.SDL_SYSTEM}.", "\33[0m", sep = "", flush = True)
 
         except AssertionError as error:
             print("\33[31m", f"Test '{func.__name__}' failed: {error}", "\33[0m", sep = "", flush = True)
             failed += 1
 
-    print("\33[35m", f"{successful} test(s) passed, {failed} test(s) failed.", "\33[0m", sep = "", flush = True)
+    print("\33[35m", f"{passed} test(s) passed, {failed} test(s) failed.", "\33[0m", sep = "", flush = True)
     if failed: os._exit(-1)
