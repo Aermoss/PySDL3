@@ -32,6 +32,6 @@ jobs:
       - name: Run tests.
         shell: bash
         run: |
-          python -c "import sdl3"
+          python -c "import tests"
         env:
           SDL_GITHUB_TOKEN: ${{secrets.PERSONAL_ACCESS_TOKEN}}
