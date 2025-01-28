@@ -2,7 +2,7 @@
 
 [![Logo](https://github.com/Aermoss/PySDL3/blob/main/res/logo.png?raw=true)](https://github.com/Aermoss/PySDL3)
 
-[![Deploy](https://github.com/Aermoss/PySDL3/actions/workflows/python-publish.yml/badge.svg)](https://github.com/Aermoss/PySDL3/actions/workflows/python-publish.yml)
+[![Tests](https://github.com/Aermoss/PySDL3/actions/workflows/run_tests.yml/badge.svg)](https://github.com/Aermoss/PySDL3/actions/workflows/run_tests.yml)
 [![PyPI Python Versions](https://img.shields.io/pypi/pyversions/PySDL3)](https://pypi.org/project/PySDL3)
 [![PyPI Version](https://img.shields.io/pypi/v/PySDL3.svg)](https://pypi.org/project/PySDL3)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/PySDL3.svg)](https://pypi.org/project/PySDL3)
