@@ -29,8 +29,17 @@ SDL_FLIP_NONE = 0
 SDL_FLIP_HORIZONTAL = 1
 SDL_FLIP_VERTICAL = 2
 
-class SDL_Surface(ctypes.c_void_p):
-    ...
+class SDL_Surface(ctypes.Structure):
+    _fields_ = [
+        ("flags", SDL_SurfaceFlags),
+        ("format", SDL_PixelFormat),
+        ("w", ctypes.c_int),
+        ("h", ctypes.c_int),
+        ("pitch", ctypes.c_int),
+        ("pixels", ctypes.c_void_p),
+        ("refcount", ctypes.c_int),
+        ("reserved", ctypes.c_void_p)
+    ]
 
 SDL_FUNC("SDL_CreateSurface", ctypes.POINTER(SDL_Surface), ctypes.c_int, ctypes.c_int, SDL_PixelFormat)
 SDL_FUNC("SDL_CreateSurfaceFrom", ctypes.POINTER(SDL_Surface), ctypes.c_int, ctypes.c_int, SDL_PixelFormat, ctypes.c_void_p, ctypes.c_int)

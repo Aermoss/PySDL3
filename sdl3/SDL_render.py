@@ -37,8 +37,13 @@ SDL_LOGICAL_PRESENTATION_INTEGER_SCALE = 4
 class SDL_Renderer(ctypes.c_void_p):
     ...
 
-class SDL_Texture(ctypes.c_void_p):
-    ...
+class SDL_Texture(ctypes.Structure):
+    _fields_ = [
+        ("format", SDL_PixelFormat),
+        ("w", ctypes.c_int),
+        ("h", ctypes.c_int),
+        ("refcount", ctypes.c_int)
+    ]
 
 SDL_FUNC("SDL_GetNumRenderDrivers", ctypes.c_int)
 SDL_FUNC("SDL_GetRenderDriver", ctypes.c_char_p, ctypes.c_int)
