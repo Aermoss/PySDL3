@@ -36,20 +36,20 @@ SDL_FUNC("TTF_OpenFont", ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_flo
 SDL_FUNC("TTF_OpenFontIO", ctypes.POINTER(TTF_Font), ctypes.POINTER(SDL_IOStream), ctypes.c_bool, ctypes.c_float)
 SDL_FUNC("TTF_OpenFontWithProperties", ctypes.POINTER(TTF_Font), SDL_PropertiesID)
 
-TTF_PROP_FONT_CREATE_FILENAME_STRING = "SDL_ttf.font.create.filename"
-TTF_PROP_FONT_CREATE_IOSTREAM_POINTER = "SDL_ttf.font.create.iostream"
-TTF_PROP_FONT_CREATE_IOSTREAM_OFFSET_NUMBER = "SDL_ttf.font.create.iostream.offset"
-TTF_PROP_FONT_CREATE_IOSTREAM_AUTOCLOSE_BOOLEAN = "SDL_ttf.font.create.iostream.autoclose"
-TTF_PROP_FONT_CREATE_SIZE_FLOAT = "SDL_ttf.font.create.size"
-TTF_PROP_FONT_CREATE_FACE_NUMBER = "SDL_ttf.font.create.face"
-TTF_PROP_FONT_CREATE_HORIZONTAL_DPI_NUMBER = "SDL_ttf.font.create.hdpi"
-TTF_PROP_FONT_CREATE_VERTICAL_DPI_NUMBER = "SDL_ttf.font.create.vdpi"
+TTF_PROP_FONT_CREATE_FILENAME_STRING = "SDL_ttf.font.create.filename".encode()
+TTF_PROP_FONT_CREATE_IOSTREAM_POINTER = "SDL_ttf.font.create.iostream".encode()
+TTF_PROP_FONT_CREATE_IOSTREAM_OFFSET_NUMBER = "SDL_ttf.font.create.iostream.offset".encode()
+TTF_PROP_FONT_CREATE_IOSTREAM_AUTOCLOSE_BOOLEAN = "SDL_ttf.font.create.iostream.autoclose".encode()
+TTF_PROP_FONT_CREATE_SIZE_FLOAT = "SDL_ttf.font.create.size".encode()
+TTF_PROP_FONT_CREATE_FACE_NUMBER = "SDL_ttf.font.create.face".encode()
+TTF_PROP_FONT_CREATE_HORIZONTAL_DPI_NUMBER = "SDL_ttf.font.create.hdpi".encode()
+TTF_PROP_FONT_CREATE_VERTICAL_DPI_NUMBER = "SDL_ttf.font.create.vdpi".encode()
 
 SDL_FUNC("TTF_GetFontProperties", SDL_PropertiesID, ctypes.POINTER(TTF_Font))
 
-TTF_PROP_FONT_OUTLINE_LINE_CAP_NUMBER = "SDL_ttf.font.outline.line_cap"
-TTF_PROP_FONT_OUTLINE_LINE_JOIN_NUMBER = "SDL_ttf.font.outline.line_join"
-TTF_PROP_FONT_OUTLINE_MITER_LIMIT_NUMBER = "SDL_ttf.font.outline.miter_limit"
+TTF_PROP_FONT_OUTLINE_LINE_CAP_NUMBER = "SDL_ttf.font.outline.line_cap".encode()
+TTF_PROP_FONT_OUTLINE_LINE_JOIN_NUMBER = "SDL_ttf.font.outline.line_join".encode()
+TTF_PROP_FONT_OUTLINE_MITER_LIMIT_NUMBER = "SDL_ttf.font.outline.miter_limit".encode()
 
 SDL_FUNC("TTF_GetFontGeneration", ctypes.c_uint32, ctypes.POINTER(TTF_Font))
 

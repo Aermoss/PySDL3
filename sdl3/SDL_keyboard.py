@@ -50,11 +50,11 @@ SDL_CAPITALIZE_LETTERS = 3
 
 SDL_FUNC("SDL_StartTextInputWithProperties", ctypes.c_bool, ctypes.POINTER(SDL_Window), SDL_PropertiesID)
 
-SDL_PROP_TEXTINPUT_TYPE_NUMBER = "SDL.textinput.type"
-SDL_PROP_TEXTINPUT_CAPITALIZATION_NUMBER = "SDL.textinput.capitalization"
-SDL_PROP_TEXTINPUT_AUTOCORRECT_BOOLEAN = "SDL.textinput.autocorrect"
-SDL_PROP_TEXTINPUT_MULTILINE_BOOLEAN = "SDL.textinput.multiline"
-SDL_PROP_TEXTINPUT_ANDROID_INPUTTYPE_NUMBER = "SDL.textinput.android.inputtype"
+SDL_PROP_TEXTINPUT_TYPE_NUMBER = "SDL.textinput.type".encode()
+SDL_PROP_TEXTINPUT_CAPITALIZATION_NUMBER = "SDL.textinput.capitalization".encode()
+SDL_PROP_TEXTINPUT_AUTOCORRECT_BOOLEAN = "SDL.textinput.autocorrect".encode()
+SDL_PROP_TEXTINPUT_MULTILINE_BOOLEAN = "SDL.textinput.multiline".encode()
+SDL_PROP_TEXTINPUT_ANDROID_INPUTTYPE_NUMBER = "SDL.textinput.android.inputtype".encode()
 
 SDL_FUNC("SDL_TextInputActive", ctypes.c_bool, ctypes.POINTER(SDL_Window))
 SDL_FUNC("SDL_StopTextInput", ctypes.c_bool, ctypes.POINTER(SDL_Window))

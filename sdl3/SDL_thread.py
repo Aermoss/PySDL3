@@ -41,10 +41,10 @@ SDL_CreateThread = lambda fn, name, data: \
 SDL_CreateThreadWithProperties = lambda props: \
     SDL_GET_BINARY(SDL_BINARY).SDL_CreateThreadWithPropertiesRuntime(props, SDL_BeginThreadFunction, SDL_EndThreadFunction)
 
-SDL_PROP_THREAD_CREATE_ENTRY_FUNCTION_POINTER = "SDL.thread.create.entry_function"
-SDL_PROP_THREAD_CREATE_NAME_STRING = "SDL.thread.create.name"
-SDL_PROP_THREAD_CREATE_USERDATA_POINTER = "SDL.thread.create.userdata"
-SDL_PROP_THREAD_CREATE_STACKSIZE_NUMBER = "SDL.thread.create.stacksize"
+SDL_PROP_THREAD_CREATE_ENTRY_FUNCTION_POINTER = "SDL.thread.create.entry_function".encode()
+SDL_PROP_THREAD_CREATE_NAME_STRING = "SDL.thread.create.name".encode()
+SDL_PROP_THREAD_CREATE_USERDATA_POINTER = "SDL.thread.create.userdata".encode()
+SDL_PROP_THREAD_CREATE_STACKSIZE_NUMBER = "SDL.thread.create.stacksize".encode()
 
 SDL_FUNC("SDL_GetThreadName", ctypes.c_char_p, ctypes.POINTER(SDL_Thread))
 SDL_FUNC("SDL_GetCurrentThreadID", SDL_ThreadID)

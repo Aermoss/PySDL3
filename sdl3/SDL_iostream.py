@@ -36,21 +36,21 @@ class SDL_IOStream(ctypes.c_void_p):
 
 SDL_FUNC("SDL_IOFromFile", ctypes.POINTER(SDL_IOStream), ctypes.c_char_p, ctypes.c_char_p)
 
-SDL_PROP_IOSTREAM_WINDOWS_HANDLE_POINTER = "SDL.iostream.windows.handle"
-SDL_PROP_IOSTREAM_STDIO_FILE_POINTER = "SDL.iostream.stdio.file"
-SDL_PROP_IOSTREAM_FILE_DESCRIPTOR_NUMBER = "SDL.iostream.file_descriptor"
-SDL_PROP_IOSTREAM_ANDROID_AASSET_POINTER = "SDL.iostream.android.aasset"
+SDL_PROP_IOSTREAM_WINDOWS_HANDLE_POINTER = "SDL.iostream.windows.handle".encode()
+SDL_PROP_IOSTREAM_STDIO_FILE_POINTER = "SDL.iostream.stdio.file".encode()
+SDL_PROP_IOSTREAM_FILE_DESCRIPTOR_NUMBER = "SDL.iostream.file_descriptor".encode()
+SDL_PROP_IOSTREAM_ANDROID_AASSET_POINTER = "SDL.iostream.android.aasset".encode()
 
 SDL_FUNC("SDL_IOFromMem", ctypes.POINTER(SDL_IOStream), ctypes.c_void_p, ctypes.c_size_t)
 
-SDL_PROP_IOSTREAM_MEMORY_POINTER = "SDL.iostream.memory.base"
-SDL_PROP_IOSTREAM_MEMORY_SIZE_NUMBER = "SDL.iostream.memory.size"
+SDL_PROP_IOSTREAM_MEMORY_POINTER = "SDL.iostream.memory.base".encode()
+SDL_PROP_IOSTREAM_MEMORY_SIZE_NUMBER = "SDL.iostream.memory.size".encode()
 
 SDL_FUNC("SDL_IOFromConstMem", ctypes.POINTER(SDL_IOStream), ctypes.c_void_p, ctypes.c_size_t)
 SDL_FUNC("SDL_IOFromDynamicMem", ctypes.POINTER(SDL_IOStream))
 
-SDL_PROP_IOSTREAM_DYNAMIC_MEMORY_POINTER = "SDL.iostream.dynamic.memory"
-SDL_PROP_IOSTREAM_DYNAMIC_CHUNKSIZE_NUMBER = "SDL.iostream.dynamic.chunksize"
+SDL_PROP_IOSTREAM_DYNAMIC_MEMORY_POINTER = "SDL.iostream.dynamic.memory".encode()
+SDL_PROP_IOSTREAM_DYNAMIC_CHUNKSIZE_NUMBER = "SDL.iostream.dynamic.chunksize".encode()
 
 SDL_FUNC("SDL_OpenIO", ctypes.POINTER(SDL_IOStream), ctypes.POINTER(SDL_IOStreamInterface), ctypes.c_void_p)
 SDL_FUNC("SDL_CloseIO", ctypes.c_bool, ctypes.POINTER(SDL_IOStream))

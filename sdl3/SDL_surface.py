@@ -47,9 +47,9 @@ SDL_FUNC("SDL_DestroySurface", None, ctypes.POINTER(SDL_Surface))
 
 SDL_FUNC("SDL_GetSurfaceProperties", SDL_PropertiesID, ctypes.POINTER(SDL_Surface))
 
-SDL_PROP_SURFACE_SDR_WHITE_POINT_FLOAT = "SDL.surface.SDR_white_point"
-SDL_PROP_SURFACE_HDR_HEADROOM_FLOAT = "SDL.surface.HDR_headroom"
-SDL_PROP_SURFACE_TONEMAP_OPERATOR_STRING = "SDL.surface.tonemap"
+SDL_PROP_SURFACE_SDR_WHITE_POINT_FLOAT = "SDL.surface.SDR_white_point".encode()
+SDL_PROP_SURFACE_HDR_HEADROOM_FLOAT = "SDL.surface.HDR_headroom".encode()
+SDL_PROP_SURFACE_TONEMAP_OPERATOR_STRING = "SDL.surface.tonemap".encode()
 
 SDL_FUNC("SDL_SetSurfaceColorspace", ctypes.c_bool, ctypes.POINTER(SDL_Surface), SDL_Colorspace)
 SDL_FUNC("SDL_GetSurfaceColorspace", SDL_Colorspace, ctypes.POINTER(SDL_Surface))

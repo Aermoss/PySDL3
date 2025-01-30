@@ -122,7 +122,7 @@ SDL_FUNC("Mix_RegisterEffect", ctypes.c_bool, ctypes.c_int, Mix_EffectFunc_t, Mi
 SDL_FUNC("Mix_UnregisterEffect", ctypes.c_bool, ctypes.c_int, Mix_EffectFunc_t)
 SDL_FUNC("Mix_UnregisterAllEffects", ctypes.c_bool, ctypes.c_int)
 
-MIX_EFFECTSMAXSPEED = "MIX_EFFECTSMAXSPEED"
+MIX_EFFECTSMAXSPEED = "MIX_EFFECTSMAXSPEED".encode()
 
 SDL_FUNC("Mix_SetPanning", ctypes.c_bool, ctypes.c_int, ctypes.c_uint8, ctypes.c_uint8)
 SDL_FUNC("Mix_SetPosition", ctypes.c_bool, ctypes.c_int, ctypes.c_int16, ctypes.c_uint8)

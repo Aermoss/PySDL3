@@ -40,12 +40,12 @@ SDL_FUNC("SDL_RunOnMainThread", ctypes.c_bool, SDL_MainThreadCallback, ctypes.c_
 SDL_FUNC("SDL_SetAppMetadata", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_SetAppMetadataProperty", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p)
 
-SDL_PROP_APP_METADATA_NAME_STRING = "SDL.app.metadata.name"
-SDL_PROP_APP_METADATA_VERSION_STRING = "SDL.app.metadata.version"
-SDL_PROP_APP_METADATA_IDENTIFIER_STRING = "SDL.app.metadata.identifier"
-SDL_PROP_APP_METADATA_CREATOR_STRING = "SDL.app.metadata.creator"
-SDL_PROP_APP_METADATA_COPYRIGHT_STRING = "SDL.app.metadata.copyright"
-SDL_PROP_APP_METADATA_URL_STRING = "SDL.app.metadata.url"
-SDL_PROP_APP_METADATA_TYPE_STRING = "SDL.app.metadata.type"
+SDL_PROP_APP_METADATA_NAME_STRING = "SDL.app.metadata.name".encode()
+SDL_PROP_APP_METADATA_VERSION_STRING = "SDL.app.metadata.version".encode()
+SDL_PROP_APP_METADATA_IDENTIFIER_STRING = "SDL.app.metadata.identifier".encode()
+SDL_PROP_APP_METADATA_CREATOR_STRING = "SDL.app.metadata.creator".encode()
+SDL_PROP_APP_METADATA_COPYRIGHT_STRING = "SDL.app.metadata.copyright".encode()
+SDL_PROP_APP_METADATA_URL_STRING = "SDL.app.metadata.url".encode()
+SDL_PROP_APP_METADATA_TYPE_STRING = "SDL.app.metadata.type".encode()
 
 SDL_FUNC("SDL_GetAppMetadataProperty", ctypes.c_char_p, ctypes.c_char_p)
