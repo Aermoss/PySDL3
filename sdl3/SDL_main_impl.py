@@ -1,4 +1,4 @@
-from .__init__ import sys, os, ctypes, atexit, typing, SDL_GET_BINARY, SDL_BINARY
+from .__init__ import sys, os, ctypes, atexit, typing, types, SDL_GET_BINARY, SDL_BINARY
 
 from .SDL_main import SDL_main_func, \
     SDL_AppEvent_func, SDL_AppInit_func, SDL_AppIterate_func, SDL_AppQuit_func
@@ -27,6 +27,7 @@ if not int(os.environ.get("SDL_MAIN_HANDLED", "0")) > 0 and not int(os.environ.g
         def SDL_ATEXIT_HANDLER() -> ...:
             if main := (getattr(__main__, "SDL_main", None) or getattr(__main__, "main", None)):
                 if not isinstance(main, SDL_main_func):
+                    if isinstance(main, types.ModuleType): return
                     if main.__name__ == "main": return
                     main = SDL_main_func(main)
 
