@@ -158,8 +158,6 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
 
 @sdl3.SDL_main_func
 def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
-    print(f"loaded {sum(len(v) for k, v in sdl3.modules.items())} functions.")
-
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS):
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
         return -1
@@ -200,7 +198,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
                     running = False
 
                 case sdl3.SDL_EVENT_KEY_DOWN:
-                    if event.key.key == sdl3.SDLK_ESCAPE:
+                    if event.key.key in [sdl3.SDLK_ESCAPE]:
                         running = False
 
         lastTime, deltaTime = \
@@ -209,13 +207,11 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
         hue = (hue + 0.5 * deltaTime) % 360.0
         gl.glClearColor(*colorsys.hsv_to_rgb(hue, 1.0, 0.1), 1.0)
         gl.glClear(gl.GL_COLOR_BUFFER_BIT)
+
         imgui.new_frame()
-
-        imgui.begin("Hello, World!")
-        imgui.text("This is some useful text.")
-        imgui.end()
-
+        imgui.show_demo_window()
         imgui.end_frame()
+
         imgui.render()
         renderer.render(imgui.get_draw_data())
         sdl3.SDL_GL_SwapWindow(window)
