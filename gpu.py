@@ -36,9 +36,8 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     tryGetDriver, tryUseVulkan = lambda order, drivers: next((i for i in order if i in drivers), None), True
     gpuDriver = tryGetDriver(["vulkan"] if tryUseVulkan else [], gpuDrivers)
     print(f"available gpu drivers: {', '.join(gpuDrivers)}. (current: {gpuDriver})")
-    device = sdl3.SDL_CreateGPUDevice(sdl3.SDL_GPU_SHADERFORMAT_SPIRV, True, gpuDriver.encode())
 
-    if not device:
+    if not (device := sdl3.SDL_CreateGPUDevice(sdl3.SDL_GPU_SHADERFORMAT_SPIRV, True, gpuDriver.encode())):
         print(f"failed to create gpu device: {sdl3.SDL_GetError().decode().lower()}.")
         return -1
 
@@ -107,7 +106,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
             time.time(), time.time() - lastTime
 
         colorTargetInfo = sdl3.SDL_GPUColorTargetInfo(swapChainTexture, load_op = sdl3.SDL_GPU_LOADOP_CLEAR,
-            clear_color = sdl3.SDL_FColor(*colorsys.hsv_to_rgb(hue := (hue + 0.25 * deltaTime), 1.0, 0.0), 1.0))
+            clear_color = sdl3.SDL_FColor(*colorsys.hsv_to_rgb(hue := (hue + 0.25 * deltaTime) % 1, 1.0, 0.0), 1.0))
         
         uniformData.color0 = sdl3.SDL_ARRAY(*colorsys.hsv_to_rgb(hue + 0.48, 1.0, 1.0), 1.0, type = ctypes.c_float)[0]
         uniformData.color1 = sdl3.SDL_ARRAY(*colorsys.hsv_to_rgb(hue + 0.32, 1.0, 1.0), 1.0, type = ctypes.c_float)[0]
