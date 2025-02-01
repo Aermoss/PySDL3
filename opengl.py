@@ -94,6 +94,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
         self.lastTime = sdl3.SDL_GetTicks() / 1000.0
         self.io.get_clipboard_text_fn = lambda: sdl3.SDL_GetClipboardText()
         self.io.set_clipboard_text_fn = lambda text: sdl3.SDL_SetClipboardText(text.encode())
+        sdl3.SDL_StartTextInput(window)
 
         self.io.key_map[imgui.KEY_TAB] = sdl3.SDL_SCANCODE_TAB
         self.io.key_map[imgui.KEY_LEFT_ARROW] = sdl3.SDL_SCANCODE_LEFT
@@ -141,20 +142,18 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
             self.io.key_alt = (sdl3.SDL_GetModState() & sdl3.SDL_KMOD_ALT) != 0
             self.io.key_super = (sdl3.SDL_GetModState() & sdl3.SDL_KMOD_GUI) != 0
 
-        if event.type == sdl3.SDL_EVENT_TEXT_INPUT:
+        if event.type in [sdl3.SDL_EVENT_TEXT_INPUT]:
             for char in event.text.text.decode("utf-8"):
                 self.io.add_input_character(ord(char))
 
     def processInputs(self) -> None:
-        """This function should be called before processing events."""
-
         width, height = ctypes.c_int(0), ctypes.c_int(0)
         sdl3.SDL_GetWindowSize(self.window, ctypes.byref(width), ctypes.byref(height))
         self.io.display_size, self.io.display_fb_scale = (width.value, height.value), (1, 1)
         self.io.mouse_wheel = 0
         
         currentTime = sdl3.SDL_GetTicks() / 1000.0; deltaTime = currentTime - self.lastTime
-        self.io.delta_time = 1.0 / 1000.0 if deltaTime <= 0.0 else deltaTime
+        self.io.delta_time = 1.0 / 10000.0 if deltaTime <= 0.0 else deltaTime
         self.lastTime = currentTime
 
 @sdl3.SDL_main_func
