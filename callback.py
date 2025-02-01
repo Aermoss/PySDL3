@@ -17,7 +17,7 @@ def SDL_AppInit(appstate: sdl3.LP_c_void_p, argc: ctypes.c_int, argv: sdl3.LP_c_
         sdl3.SDL_Log("Couldn't initialize SDL: ".encode() + sdl3.SDL_GetError())
         return sdl3.SDL_APP_FAILURE
 
-    if not sdl3.SDL_CreateWindowAndRenderer("Hello, World!".encode(), 640, 480, 0, ctypes.byref(state.window), ctypes.byref(state.renderer)):
+    if not sdl3.SDL_CreateWindowAndRenderer("Aermoss".encode(), 1600, 900, 0, ctypes.byref(state.window), ctypes.byref(state.renderer)):
         sdl3.SDL_Log("Couldn't create window/renderer: ".encode() + sdl3.SDL_GetError())
         return sdl3.SDL_APP_FAILURE
 
