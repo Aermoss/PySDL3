@@ -29,7 +29,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
         return -1
     
-    window = sdl3.SDL_CreateWindow("Aermoss".encode(), 1200, 600, sdl3.SDL_WINDOW_RESIZABLE)
+    window = sdl3.SDL_CreateWindow("Aermoss".encode(), 1600, 900, sdl3.SDL_WINDOW_RESIZABLE)
     event, running = sdl3.SDL_Event(), True
 
     gpuDrivers = [sdl3.SDL_GetGPUDriver(i).decode() for i in range(sdl3.SDL_GetNumGPUDrivers())]

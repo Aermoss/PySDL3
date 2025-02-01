@@ -9,7 +9,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
         return -1
     
-    window = sdl3.SDL_CreateWindow("Aermoss".encode(), 1200, 600, sdl3.SDL_WINDOW_RESIZABLE)
+    window = sdl3.SDL_CreateWindow("Aermoss".encode(), 1600, 900, sdl3.SDL_WINDOW_RESIZABLE)
 
     renderDrivers = [sdl3.SDL_GetRenderDriver(i).decode() for i in range(sdl3.SDL_GetNumRenderDrivers())]
     tryGetDriver, tryUseVulkan = lambda order, drivers: next((i for i in order if i in drivers), None), False
