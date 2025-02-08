@@ -25,6 +25,7 @@ class TTF_CopyOperation(ctypes.Structure):
     _fields_ = [
         ("cmd", TTF_DrawCommand),
         ("text_offset", ctypes.c_int),
+        ("glyph_font", ctypes.POINTER(TTF_Font)),
         ("glyph_index", ctypes.c_uint32),
         ("src", SDL_Rect),
         ("dst", SDL_Rect),
