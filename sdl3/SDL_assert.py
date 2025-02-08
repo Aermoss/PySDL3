@@ -1,4 +1,4 @@
-from .__init__ import os, inspect, ctypes, \
+from .__init__ import os, inspect, ctypes, re, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
@@ -33,17 +33,17 @@ SDL_TriggerBreakpoint = lambda: breakpoint()
 SDL_AssertBreakpoint = lambda: SDL_TriggerBreakpoint()
 
 def SDL_disabled_assert(condition: ctypes.c_bool) -> None:
-    ...
+    """Do not call this function directly."""
 
 def SDL_enabled_assert(condition: ctypes.c_bool) -> None:
-    while not condition:
-        current = inspect.currentframe()
-        
-        while "assert" in current.f_code.co_name or ("<lambda>" in current.f_code.co_name):
-            current = current.f_back
+    """Do not call this function directly."""
 
+    while not condition:
         data = SDL_AssertData()
-        data.condition = "<condition>".encode()
+        module = current = inspect.currentframe().f_back.f_back
+        while module.f_code.co_name != "<module>": module = module.f_back
+        match = re.search(r"\((.*?)\)", inspect.getsource(module).split("\n")[current.f_lineno - 1])
+        data.condition = (match.group(1) if match else "<condition>").encode()
         state = SDL_GET_BINARY(SDL_BINARY).SDL_ReportAssertion \
             (ctypes.byref(data), current.f_code.co_name.encode(), os.path.split(current.f_code.co_filename)[-1].encode(), current.f_lineno)
 
