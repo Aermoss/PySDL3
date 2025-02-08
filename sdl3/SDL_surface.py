@@ -110,6 +110,7 @@ SDL_FUNC("SDL_BlitSurface", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.P
 SDL_FUNC("SDL_BlitSurfaceUnchecked", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect))
 SDL_FUNC("SDL_BlitSurfaceScaled", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect), SDL_ScaleMode)
 SDL_FUNC("SDL_BlitSurfaceUncheckedScaled", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect), SDL_ScaleMode)
+SDL_FUNC("SDL_StretchSurface", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect), SDL_ScaleMode)
 SDL_FUNC("SDL_BlitSurfaceTiled", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect), ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect))
 SDL_FUNC("SDL_BlitSurfaceTiledWithScale", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect), ctypes.c_float, SDL_ScaleMode, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect))
 SDL_FUNC("SDL_BlitSurface9Grid", ctypes.c_bool, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect), ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_float, SDL_ScaleMode, ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Rect))
