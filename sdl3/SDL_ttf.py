@@ -44,6 +44,9 @@ TTF_PROP_FONT_CREATE_SIZE_FLOAT = "SDL_ttf.font.create.size".encode()
 TTF_PROP_FONT_CREATE_FACE_NUMBER = "SDL_ttf.font.create.face".encode()
 TTF_PROP_FONT_CREATE_HORIZONTAL_DPI_NUMBER = "SDL_ttf.font.create.hdpi".encode()
 TTF_PROP_FONT_CREATE_VERTICAL_DPI_NUMBER = "SDL_ttf.font.create.vdpi".encode()
+TTF_PROP_FONT_CREATE_EXISTING_FONT = "SDL_ttf.font.create.existing_font"
+
+SDL_FUNC("TTF_CopyFont", ctypes.POINTER(TTF_Font), ctypes.POINTER(TTF_Font))
 
 SDL_FUNC("TTF_GetFontProperties", SDL_PropertiesID, ctypes.POINTER(TTF_Font))
 
@@ -52,6 +55,10 @@ TTF_PROP_FONT_OUTLINE_LINE_JOIN_NUMBER = "SDL_ttf.font.outline.line_join".encode
 TTF_PROP_FONT_OUTLINE_MITER_LIMIT_NUMBER = "SDL_ttf.font.outline.miter_limit".encode()
 
 SDL_FUNC("TTF_GetFontGeneration", ctypes.c_uint32, ctypes.POINTER(TTF_Font))
+
+SDL_FUNC("TTF_AddFallbackFont", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.POINTER(TTF_Font))
+SDL_FUNC("TTF_RemoveFallbackFont", None, ctypes.POINTER(TTF_Font), ctypes.POINTER(TTF_Font))
+SDL_FUNC("TTF_ClearFallbackFonts", None, ctypes.POINTER(TTF_Font))
 
 SDL_FUNC("TTF_SetFontSize", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_float)
 SDL_FUNC("TTF_SetFontSizeDPI", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_float, ctypes.c_int, ctypes.c_int)
@@ -81,6 +88,7 @@ TTF_HINTING_NONE = 3
 TTF_HINTING_LIGHT_SUBPIXEL = 4
 
 SDL_FUNC("TTF_SetFontHinting", None, ctypes.POINTER(TTF_Font), TTF_HintingFlags)
+SDL_FUNC("TTF_GetNumFontFaces", ctypes.c_int, ctypes.POINTER(TTF_Font))
 SDL_FUNC("TTF_GetFontHinting", TTF_HintingFlags, ctypes.POINTER(TTF_Font))
 
 SDL_FUNC("TTF_SetFontSDF", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_bool)
@@ -114,35 +122,55 @@ SDL_FUNC("TTF_GetFontStyleName", ctypes.c_char_p, ctypes.POINTER(TTF_Font))
 
 TTF_Direction = ctypes.c_int
 
-TTF_DIRECTION_LTR = 0
-TTF_DIRECTION_RTL = 1
-TTF_DIRECTION_TTB = 2
-TTF_DIRECTION_BTT = 3
+TTF_DIRECTION_INVALID = 0
+TTF_DIRECTION_LTR = 4
+TTF_DIRECTION_RTL = 5
+TTF_DIRECTION_TTB = 6
+TTF_DIRECTION_BTT = 7
+
+SDL_FUNC("TTF_SetFontDirection", ctypes.c_bool, ctypes.POINTER(TTF_Font), TTF_Direction)
+SDL_FUNC("TTF_GetFontDirection", TTF_Direction, ctypes.POINTER(TTF_Font))
+
+SDL_FUNC("TTF_StringToTag", ctypes.c_uint32, ctypes.c_char_p)
+SDL_FUNC("TTF_TagToString", None, ctypes.c_uint32, ctypes.c_char_p, ctypes.c_size_t)
+
+SDL_FUNC("TTF_SetFontScript", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_uint32)
+SDL_FUNC("TTF_GetFontScript", ctypes.c_uint32, ctypes.POINTER(TTF_Font))
+
+SDL_FUNC("TTF_GetGlyphScript", ctypes.c_uint32, ctypes.c_uint32)
+
+SDL_FUNC("TTF_SetFontLanguage", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p)
+SDL_FUNC("TTF_FontHasGlyph", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_uint32)
+
+TTF_ImageType = ctypes.c_int
+
+TTF_IMAGE_INVALID = 0
+TTF_IMAGE_ALPHA = 1
+TTF_IMAGE_COLOR = 2
+TTF_IMAGE_SDF = 3
+
+SDL_FUNC("TTF_GetGlyphImage", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_uint32, ctypes.POINTER(TTF_ImageType))
+SDL_FUNC("TTF_GetGlyphImageForIndex", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_uint32, ctypes.POINTER(TTF_ImageType))
+SDL_FUNC("TTF_GetGlyphMetrics", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_uint32, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("TTF_GetGlyphKerning", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_uint32, ctypes.c_uint32, ctypes.POINTER(ctypes.c_int))
+
+SDL_FUNC("TTF_GetStringSize", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("TTF_GetStringSizeWrapped", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, ctypes.c_int, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+
+SDL_FUNC("TTF_MeasureString", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, ctypes.c_int, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_size_t))
 
 SDL_FUNC("TTF_RenderText_Solid", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, SDL_Color)
 SDL_FUNC("TTF_RenderText_Solid_Wrapped", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, SDL_Color, ctypes.c_int)
 SDL_FUNC("TTF_RenderGlyph_Solid", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_uint32, SDL_Color)
 
-SDL_FUNC("TTF_SetFontDirection", ctypes.c_bool, ctypes.POINTER(TTF_Font), TTF_Direction)
-SDL_FUNC("TTF_GetFontDirection", TTF_Direction, ctypes.POINTER(TTF_Font))
-SDL_FUNC("TTF_SetFontScript", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p)
-SDL_FUNC("TTF_GetGlyphScript", ctypes.c_uint32, ctypes.c_uint32)
-SDL_FUNC("TTF_SetFontLanguage", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p)
-SDL_FUNC("TTF_FontHasGlyph", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_uint32)
-SDL_FUNC("TTF_GetGlyphImage", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_uint32)
-SDL_FUNC("TTF_GetGlyphImageForIndex", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_uint32)
-SDL_FUNC("TTF_GetGlyphMetrics", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_uint32, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("TTF_GetGlyphKerning", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_uint32, ctypes.c_uint32, ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("TTF_GetStringSize", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("TTF_GetStringSizeWrapped", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, ctypes.c_int, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("TTF_MeasureString", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, ctypes.c_int, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_size_t))
-
 SDL_FUNC("TTF_RenderText_Shaded", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, SDL_Color, SDL_Color)
 SDL_FUNC("TTF_RenderText_Shaded_Wrapped", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, SDL_Color, SDL_Color, ctypes.c_int)
 SDL_FUNC("TTF_RenderGlyph_Shaded", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_uint32, SDL_Color, SDL_Color)
+
 SDL_FUNC("TTF_RenderText_Blended", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, SDL_Color)
 SDL_FUNC("TTF_RenderText_Blended_Wrapped", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, SDL_Color, ctypes.c_int)
 SDL_FUNC("TTF_RenderGlyph_Blended", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_uint32, SDL_Color)
+
 SDL_FUNC("TTF_RenderText_LCD", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, SDL_Color, SDL_Color)
 SDL_FUNC("TTF_RenderText_LCD_Wrapped", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t, SDL_Color, SDL_Color, ctypes.c_int)
 SDL_FUNC("TTF_RenderGlyph_LCD", ctypes.POINTER(SDL_Surface), ctypes.POINTER(TTF_Font), ctypes.c_uint32, SDL_Color, SDL_Color)
@@ -164,11 +192,21 @@ class TTF_Text(ctypes.Structure):
 SDL_FUNC("TTF_CreateSurfaceTextEngine", ctypes.POINTER(TTF_TextEngine))
 SDL_FUNC("TTF_DrawSurfaceText", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_int, ctypes.c_int, ctypes.POINTER(SDL_Surface))
 SDL_FUNC("TTF_DestroySurfaceTextEngine", None, ctypes.POINTER(TTF_TextEngine))
+
 SDL_FUNC("TTF_CreateRendererTextEngine", ctypes.POINTER(TTF_TextEngine), ctypes.POINTER(SDL_Renderer))
+SDL_FUNC("TTF_CreateRendererTextEngineWithProperties", ctypes.POINTER(TTF_TextEngine), SDL_PropertiesID)
+
+TTF_PROP_RENDERER_TEXT_ENGINE_RENDERER = "SDL_ttf.renderer_text_engine.create.renderer"
+TTF_PROP_RENDERER_TEXT_ENGINE_ATLAS_TEXTURE_SIZE = "SDL_ttf.renderer_text_engine.create.atlas_texture_size"
+
 SDL_FUNC("TTF_DrawRendererText", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_float, ctypes.c_float)
 SDL_FUNC("TTF_DestroyRendererTextEngine", None, ctypes.POINTER(TTF_TextEngine))
 
 SDL_FUNC("TTF_CreateGPUTextEngine", ctypes.POINTER(TTF_TextEngine), ctypes.POINTER(SDL_GPUDevice))
+SDL_FUNC("TTF_CreateGPUTextEngineWithProperties", ctypes.POINTER(TTF_TextEngine), SDL_PropertiesID)
+
+TTF_PROP_GPU_TEXT_ENGINE_DEVICE = "SDL_ttf.gpu_text_engine.create.device"
+TTF_PROP_GPU_TEXT_ENGINE_ATLAS_TEXTURE_SIZE = "SDL_ttf.gpu_text_engine.create.atlas_texture_size"
 
 class TTF_GPUAtlasDrawSequence(ctypes.c_void_p):
     ...
@@ -181,6 +219,7 @@ class TTF_GPUAtlasDrawSequence(ctypes.Structure):
         ("num_vertices", ctypes.c_int),
         ("indices", ctypes.POINTER(ctypes.c_int)),
         ("num_indices", ctypes.c_int),
+        ("image_type", TTF_ImageType),
         ("next", ctypes.POINTER(TTF_GPUAtlasDrawSequence))
     ]
 
@@ -203,30 +242,45 @@ if SDL_SYSTEM in ["Windows"]:
 
 SDL_FUNC("TTF_SetTextEngine", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.POINTER(TTF_TextEngine))
 SDL_FUNC("TTF_GetTextEngine", ctypes.POINTER(TTF_TextEngine), ctypes.POINTER(TTF_Text))
+
 SDL_FUNC("TTF_SetTextFont", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.POINTER(TTF_Font))
 SDL_FUNC("TTF_GetTextFont", ctypes.POINTER(TTF_Font), ctypes.POINTER(TTF_Text))
+
+SDL_FUNC("TTF_SetTextDirection", ctypes.c_bool, ctypes.POINTER(TTF_Text), TTF_Direction)
+SDL_FUNC("TTF_GetTextDirection", TTF_Direction, ctypes.POINTER(TTF_Text))
+
+SDL_FUNC("TTF_SetTextScript", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_uint32)
+SDL_FUNC("TTF_GetTextScript", ctypes.c_uint32, ctypes.POINTER(TTF_Text))
+
 SDL_FUNC("TTF_SetTextColor", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8)
 SDL_FUNC("TTF_SetTextColorFloat", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)
+
 SDL_FUNC("TTF_GetTextColor", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.POINTER(ctypes.c_uint8), ctypes.POINTER(ctypes.c_uint8), ctypes.POINTER(ctypes.c_uint8), ctypes.POINTER(ctypes.c_uint8))
 SDL_FUNC("TTF_GetTextColorFloat", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))
+
 SDL_FUNC("TTF_SetTextPosition", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_int, ctypes.c_int)
 SDL_FUNC("TTF_GetTextPosition", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+
 SDL_FUNC("TTF_SetTextWrapWidth", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_int)
 SDL_FUNC("TTF_GetTextWrapWidth", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.POINTER(ctypes.c_int))
+
 SDL_FUNC("TTF_SetTextWrapWhitespaceVisible", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_bool)
 SDL_FUNC("TTF_TextWrapWhitespaceVisible", ctypes.c_bool, ctypes.POINTER(TTF_Text))
+
 SDL_FUNC("TTF_SetTextString", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_char_p, ctypes.c_size_t)
 SDL_FUNC("TTF_InsertTextString", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_int, ctypes.c_char_p, ctypes.c_size_t)
 SDL_FUNC("TTF_AppendTextString", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_char_p, ctypes.c_size_t)
 SDL_FUNC("TTF_DeleteTextString", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.c_int, ctypes.c_int)
+
 SDL_FUNC("TTF_GetTextSize", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
 TTF_SubStringFlags = ctypes.c_uint32
 
-TTF_SUBSTRING_TEXT_STARTD = 0x00000001  
-TTF_SUBSTRING_LINE_STARTD = 0x00000002  
-TTF_SUBSTRING_LINE_ENDD = 0x00000004  
-TTF_SUBSTRING_TEXT_END = 0x00000008  
+TTF_SUBSTRING_DIRECTION_MASK = 0x000000FF
+TTF_SUBSTRING_TEXT_START = 0x00000100
+TTF_SUBSTRING_LINE_START = 0x00000200
+TTF_SUBSTRING_LINE_END = 0x00000400
+TTF_SUBSTRING_TEXT_END = 0x00000800
 
 class TTF_SubString(ctypes.Structure):
     _fields_ = [
