@@ -27,8 +27,8 @@ from .SDL_keycode import *
 from .SDL_loadso import *
 from .SDL_locale import *
 from .SDL_log import *
-from .SDL_main_impl import *
 from .SDL_main import *
+from .SDL_main_impl import *
 from .SDL_messagebox import *
 from .SDL_metal import *
 from .SDL_misc import *

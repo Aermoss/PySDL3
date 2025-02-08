@@ -324,6 +324,20 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
 
     return SDL_GENERATE_DOCS().encode("utf-8")
 
+if not __initialized__ and int(os.environ.get("SDL_CHECK_IMPORTS", "0")) > 0:
+    existingModules = [i[:-3] for i in sorted(os.listdir(os.path.dirname(__file__))) if i.startswith("SDL_") and i.endswith(".py")]
+
+    with open(os.path.join(os.path.dirname(__file__), "SDL.py"), "r") as file:
+        importedModules = [i.replace("\n", "")[6:-9] for i in file.readlines() if i.startswith("from .") and "import *" in i]
+
+    for index, module in enumerate(existingModules):
+        if len(importedModules) <= index or module != importedModules[index]:
+            print("\33[35m", f"regenerating main module.", "\33[0m", sep = "", flush = True)
+
+            with open(os.path.join(os.path.dirname(__file__), "SDL.py"), "w") as file:
+                file.write("\n".join([f"from .{i} import *" for i in existingModules]))
+                break
+
 from sdl3.SDL import *
 
 SDL_VERSIONNUM_STRING = lambda num: \
