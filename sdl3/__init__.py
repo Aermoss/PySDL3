@@ -188,10 +188,16 @@ def SDL_GET_CURRENT_BINARY() -> typing.Any:
 
 def SDL_FUNC(name: str, retType: typing.Any, *args: typing.List[typing.Any]) -> None:
     """Define an SDL3 function."""
-    func = getattr(binary := SDL_GET_CURRENT_BINARY(), name)
-    func.__binary__, func.restype, func.argtypes = binary, retType, args
-    if not __doc_generator__: setattr(__module__, name, func)
-    __module__.modules[SDL_GET_BINARY_NAME(binary)][name] = func
+
+    if not hasattr(binary := SDL_GET_CURRENT_BINARY(), name):
+        if int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0: return
+        print("\33[35m", f"function '{name}' not found in binary: '{SDL_GET_BINARY_NAME(binary)}'.", "\33[0m", sep = "", flush = True)
+
+    else:
+        func = getattr(binary, name)
+        func.__binary__, func.restype, func.argtypes = binary, retType, args
+        if not __doc_generator__: setattr(__module__, name, func)
+        __module__.modules[SDL_GET_BINARY_NAME(binary)][name] = func
 
 async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
     """Get latest releases of SDL3 modules from their official github repositories."""
