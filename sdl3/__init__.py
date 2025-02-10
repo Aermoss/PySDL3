@@ -2,8 +2,8 @@
 
 __version__ = "0.9.4b0"
 
-import sys, os, requests, ctypes, platform, keyword, inspect, types, re, \
-    asyncio, aiohttp, zipfile, typing, array, atexit, packaging.version
+import sys, os, requests, ctypes, platform, keyword, inspect, types, json, \
+    asyncio, aiohttp, zipfile, typing, array, atexit, packaging.version, re
 
 SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_TTF_BINARY, SDL_RTF_BINARY, SDL_NET_BINARY = \
     "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_ttf", "SDL3_rtf", "SDL3_net"
@@ -45,6 +45,9 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
 
     try:
         for release in requests.get("https://api.github.com/repos/Aermoss/PySDL3-Build/releases", headers = headers).json():
+            if release["draft"] or release["prerelease"]:
+                continue
+
             for asset in release["assets"]:
                 if asset["name"] != f"{system.capitalize()}-{arch.upper()}-{release['tag_name']}.zip":
                     continue
@@ -60,12 +63,24 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
 
                         print("\n", end = "", flush = True)
 
+                    data = {
+                        "arch": arch, "system": system, "target": f"v{__version__}",
+                        "version": release["tag_name"], "url": asset["browser_download_url"], 
+                        "created": asset["created_at"], "updated": asset["updated_at"],
+                        "uploader": asset["uploader"]["login"], "files": []
+                    }
+
                     with zipfile.ZipFile(os.path.join(path, asset["name"]), "r") as ref:
                         for name in ref.namelist():
+                            data["files"].append(name)
+
                             if os.path.exists(os.path.join(path, name)):
                                 os.remove(os.path.join(path, name))
 
                         ref.extractall(path)
+
+                    with open(os.path.join(path, "metadata.json"), "w") as file:
+                        json.dump(data, file, indent = 4)
 
                     os.remove(os.path.join(path, asset["name"]))
                     return
@@ -85,6 +100,7 @@ def SDL_COUNT_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_ARCH
     for i in os.listdir(path):
         if os.path.isdir(os.path.join(path, i)): continue
         if i in missing: missing.remove(i)
+        elif i in ["metadata.json"]: continue
         else: redundant.append(i)
 
     return redundant, missing
@@ -107,8 +123,25 @@ if not __initialized__:
     if redundant and not int(os.environ.get("SDL_IGNORE_REDUNDANT_FILES", "0")) > 0:
         print("\33[35m", f"redundant file(s) detected in binary folder: {', '.join(redundant)}.", "\33[0m", sep = "", flush = True)
 
-    if missing and int(os.environ.get("SDL_DOWNLOAD_BINARIES", "1")) > 0:
-        print("\33[35m", f"missing binaries detected: {', '.join(missing)}.", "\33[0m", sep = "", flush = True)
+    if "metadata.json" in os.listdir(binaryPath):
+        with open(os.path.join(binaryPath, "metadata.json"), "r") as file:
+            data = json.load(file)
+
+        if packaging.version.parse(__version__) > packaging.version.parse(data["target"]):
+            if not missing:
+                missing = False
+
+    else:
+        if not missing:
+            missing = True
+
+    if (missing or isinstance(missing, bool)) and int(os.environ.get("SDL_DOWNLOAD_BINARIES", "1")) > 0:
+        if isinstance(missing, bool):
+            print("\33[35m", "missing metadata file detected." if missing else "incompatible target version detected.", "\33[0m", sep = "", flush = True)
+
+        else:
+            print("\33[35m", f"missing binaries detected: {', '.join(missing)}.", "\33[0m", sep = "", flush = True)
+
         SDL_DOWNLOAD_BINARIES(binaryPath, SDL_SYSTEM, SDL_ARCH)
 
     for key, value in SDL_BINARY_VAR_MAP.items():
