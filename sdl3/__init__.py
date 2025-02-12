@@ -128,7 +128,7 @@ if not __initialized__:
             data = json.load(file)
 
         if packaging.version.parse(__version__) > packaging.version.parse(data["target"]):
-            print("\33[35m", f"incompatible target version detected: '{data['target']}'.", "\33[0m", sep = "", flush = True)
+            print("\33[35m", f"incompatible target version detected: '{data['target']}', current: 'v{__version__}'.", "\33[0m", sep = "", flush = True)
             missing = True
 
         if data["system"] != SDL_SYSTEM or data["arch"] != SDL_ARCH:
