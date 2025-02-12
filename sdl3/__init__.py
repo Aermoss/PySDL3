@@ -128,18 +128,24 @@ if not __initialized__:
             data = json.load(file)
 
         if packaging.version.parse(__version__) > packaging.version.parse(data["target"]):
-            if not missing:
-                missing = False
-
-    else:
-        if not missing:
+            print("\33[35m", f"incompatible target version detected: '{data['target']}'.", "\33[0m", sep = "", flush = True)
             missing = True
 
-    if (missing or isinstance(missing, bool)) and int(os.environ.get("SDL_DOWNLOAD_BINARIES", "1")) > 0:
-        if isinstance(missing, bool):
-            print("\33[35m", "missing metadata file detected." if missing else "incompatible target version detected.", "\33[0m", sep = "", flush = True)
+        if data["system"] != SDL_SYSTEM or data["arch"] != SDL_ARCH:
+            print("\33[35m", f"incompatible binary architecture and/or system detected: '{data['system']} ({data['arch']})'.", "\33[0m", sep = "", flush = True)
+            missing = True
 
-        else:
+        if missing and isinstance(missing, bool):
+            for i in data["files"]:
+                if os.path.exists(os.path.join(binaryPath, i)):
+                    os.remove(os.path.join(binaryPath, i))
+
+    else:
+        print("\33[35m", "missing metadata file detected.", "\33[0m", sep = "", flush = True)
+        missing = True
+
+    if missing and int(os.environ.get("SDL_DOWNLOAD_BINARIES", "1")) > 0:
+        if isinstance(missing, list):
             print("\33[35m", f"missing binaries detected: {', '.join(missing)}.", "\33[0m", sep = "", flush = True)
 
         SDL_DOWNLOAD_BINARIES(binaryPath, SDL_SYSTEM, SDL_ARCH)
