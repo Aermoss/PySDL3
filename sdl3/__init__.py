@@ -88,23 +88,6 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
     except requests.RequestException as exc:
         print("\33[31m", f"failed to download binaries, exception: {str(exc).lower()}", "\33[0m", sep = "", flush = True)
 
-def SDL_COUNT_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_ARCH) -> typing.Tuple[typing.List[str], typing.List[str]]:
-    """Count redundant files and missing specific SDL3 binaries in the given path."""
-    assert system.capitalize() in ["Darwin", "Linux", "Windows"], "Unknown system."
-    assert arch.upper() in ["AMD64", "ARM64"], "Unknown architecture."
-    if not os.path.exists(path): os.makedirs(path)
-
-    redundant, missing = [], \
-        [SDL_BINARY_NAME_FORMAT[system].format(i) for i in SDL_BINARY_VAR_MAP_INV.keys()]
-
-    for i in os.listdir(path):
-        if os.path.isdir(os.path.join(path, i)): continue
-        if i in missing: missing.remove(i)
-        elif i in ["metadata.json"]: continue
-        else: redundant.append(i)
-
-    return redundant, missing
-
 if not __initialized__:
     if int(os.environ.get("SDL_CHECK_VERSION", "1")) > 0:
         try:
@@ -116,43 +99,44 @@ if not __initialized__:
         except requests.RequestException:
             ...
 
-    modules, binaryMap, currentBinary = {}, {}, None
+    modules, binaryMap, binaryData, currentBinary, missing = {}, {}, None, None, True
     binaryPath = os.environ.get("SDL_BINARY_PATH", os.path.join(os.path.dirname(__file__), "bin"))
-    redundant, missing = SDL_COUNT_BINARIES(binaryPath, SDL_SYSTEM, SDL_ARCH)
+    if not os.path.exists(binaryPath): os.makedirs(binaryPath)
 
-    if redundant and not int(os.environ.get("SDL_IGNORE_REDUNDANT_FILES", "0")) > 0:
-        print("\33[35m", f"redundant file(s) detected in binary folder: {', '.join(redundant)}.", "\33[0m", sep = "", flush = True)
-
-    if "metadata.json" in os.listdir(binaryPath):
+    if "metadata.json" in (files := os.listdir(binaryPath)):
         with open(os.path.join(binaryPath, "metadata.json"), "r") as file:
-            data = json.load(file)
+            binaryData = json.load(file)
 
-        if packaging.version.parse(__version__) > packaging.version.parse(data["target"]):
-            print("\33[35m", f"incompatible target version detected: '{data['target']}', current: 'v{__version__}'.", "\33[0m", sep = "", flush = True)
-            missing = True
+        if "target" in binaryData and packaging.version.parse(__version__) > packaging.version.parse(binaryData["target"]):
+            print("\33[35m", f"incompatible target version detected: '{binaryData['target']}', current: 'v{__version__}'.", "\33[0m", sep = "", flush = True)
 
-        if data["system"] != SDL_SYSTEM or data["arch"] != SDL_ARCH:
-            print("\33[35m", f"incompatible binary architecture and/or system detected: '{data['system']} ({data['arch']})'.", "\33[0m", sep = "", flush = True)
-            missing = True
+        elif binaryData["system"] != SDL_SYSTEM or binaryData["arch"] != SDL_ARCH:
+            print("\33[35m", f"incompatible binary architecture and/or system detected: '{binaryData['system']} ({binaryData['arch']})'.", "\33[0m", sep = "", flush = True)
 
-        if missing and isinstance(missing, bool):
-            for i in data["files"]:
+            for i in binaryData["files"]:
                 if os.path.exists(os.path.join(binaryPath, i)):
                     os.remove(os.path.join(binaryPath, i))
 
+        else:
+            if missing := [i for i in binaryData["files"] if i not in files]:
+                print("\33[35m", "missing binary file(s) detected: '", "', '".join(missing), "'.", "\33[0m", sep = "", flush = True)
+
     else:
-        print("\33[35m", "missing metadata file detected.", "\33[0m", sep = "", flush = True)
-        missing = True
+        print("\33[35m", "no binaries detected.", "\33[0m", sep = "", flush = True)
 
     if missing and int(os.environ.get("SDL_DOWNLOAD_BINARIES", "1")) > 0:
-        if isinstance(missing, list):
-            print("\33[35m", f"missing binaries detected: {', '.join(missing)}.", "\33[0m", sep = "", flush = True)
-
         SDL_DOWNLOAD_BINARIES(binaryPath, SDL_SYSTEM, SDL_ARCH)
 
+        with open(os.path.join(binaryPath, "metadata.json"), "r") as file:
+            binaryData = json.load(file)
+
     for key, value in SDL_BINARY_VAR_MAP.items():
-        modules[value], binaryMap[value] = {}, (ctypes.WinDLL if SDL_SYSTEM in ["Windows"] else ctypes.CDLL) \
-            (os.path.join(binaryPath, SDL_BINARY_NAME_FORMAT[SDL_SYSTEM].format(value)))
+        if (name := SDL_BINARY_NAME_FORMAT[SDL_SYSTEM].format(value)) not in binaryData["files"]: continue
+        modules[value], binaryMap[value] = {}, (ctypes.WinDLL if SDL_SYSTEM in ["Windows"] else ctypes.CDLL)(os.path.join(binaryPath, name))
+        binaryData["files"].remove(name)
+
+    if binaryData["files"]:
+        print("\33[35m", "unused binary file(s) detected: '", "', '".join(binaryData["files"]), "'.", "\33[0m", sep = "", flush = True)
 
 def SDL_ARRAY(*args: typing.List[typing.Any], **kwargs: typing.Dict[str, typing.Any]) -> typing.Tuple[ctypes.Array[typing.Any], int]:
     """Create a ctypes array."""
@@ -178,11 +162,11 @@ def SDL_CACHE_FUNC(func: typing.Callable) -> typing.Callable:
 @SDL_CACHE_FUNC
 def SDL_GET_BINARY_NAME(binary: typing.Any) -> str:
     """Get the name of an SDL3 binary."""
-    return {v: k for k, v in __module__.binaryMap.items()}[binary]
+    return {v: k for k, v in __module__.binaryMap.items()}.get(binary, None)
 
 def SDL_GET_BINARY(name: str) -> typing.Any:
     """Get an SDL3 binary by its name."""
-    return __module__.binaryMap[name]
+    return __module__.binaryMap.get(name, None)
 
 def SDL_SET_CURRENT_BINARY(name: str) -> None:
     """Set the current SDL3 binary by its name."""
@@ -195,7 +179,10 @@ def SDL_GET_CURRENT_BINARY() -> typing.Any:
 def SDL_FUNC(name: str, retType: typing.Any, *args: typing.List[typing.Any]) -> None:
     """Define an SDL3 function."""
 
-    if not hasattr(binary := SDL_GET_CURRENT_BINARY(), name):
+    if not (binary := SDL_GET_CURRENT_BINARY()):
+        return
+
+    if not hasattr(binary, name):
         if int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0: return
         print("\33[35m", f"function '{name}' not found in binary: '{SDL_GET_BINARY_NAME(binary)}'.", "\33[0m", sep = "", flush = True)
 
@@ -389,13 +376,13 @@ SDL_VERSIONNUM_STRING = lambda num: \
     f"{SDL_VERSIONNUM_MAJOR(num)}.{SDL_VERSIONNUM_MINOR(num)}.{SDL_VERSIONNUM_MICRO(num)}"
 
 SDL_BINARY_VERSION, SDL_IMAGE_BINARY_VERSION, SDL_MIXER_BINARY_VERSION, SDL_TTF_BINARY_VERSION, SDL_RTF_BINARY_VERSION, SDL_NET_BINARY_VERSION = \
-    SDL_GET_BINARY(SDL_BINARY).SDL_GetVersion(), SDL_GET_BINARY(SDL_IMAGE_BINARY).IMG_Version(), SDL_GET_BINARY(SDL_MIXER_BINARY).Mix_Version(), \
-        SDL_GET_BINARY(SDL_TTF_BINARY).TTF_Version(), SDL_GET_BINARY(SDL_RTF_BINARY).RTF_Version(), SDL_GET_BINARY(SDL_NET_BINARY).SDLNet_Version()
+    (_ := SDL_GET_BINARY(SDL_BINARY)) and _.SDL_GetVersion(), (_ := SDL_GET_BINARY(SDL_IMAGE_BINARY)) and _.IMG_Version(), (_ := SDL_GET_BINARY(SDL_MIXER_BINARY)) and _.Mix_Version(), \
+        (_ := SDL_GET_BINARY(SDL_TTF_BINARY)) and _.TTF_Version(), (_ := SDL_GET_BINARY(SDL_RTF_BINARY)) and _.RTF_Version(), (_ := SDL_GET_BINARY(SDL_NET_BINARY)) and _.SDLNet_Version()
 
 if not __initialized__:
     if int(os.environ.get("SDL_CHECK_BINARY_VERSION", "1")) > 0:
         for i in SDL_BINARY_VAR_MAP:
-            if (binaryVersion := locals()[f"{i}_VERSION"]) != (version := locals()[f"{i.replace('_BINARY', '')}_VERSION"]):
+            if (binaryVersion := locals()[f"{i}_VERSION"]) != (version := locals()[f"{i.replace('_BINARY', '')}_VERSION"]) and binaryVersion is not None:
                 print("\33[35m", f"version mismatch with binary: '{SDL_BINARY_NAME_FORMAT[SDL_SYSTEM].format(SDL_BINARY_VAR_MAP[i])}' (expected: {SDL_VERSIONNUM_STRING(version)}, got: {SDL_VERSIONNUM_STRING(binaryVersion)}).", "\33[0m", sep = "", flush = True)
 
     if __doc_generator__:
