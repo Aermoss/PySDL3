@@ -30,8 +30,30 @@ PySDL3 will download all the necessary binaries for you on the first run, if you
 
 Custom Binaries
 ---------------
-If you want to use your own binaries, you can simply place them in the "sdl3/bin" directory (the default binary path)
-or you can use the path you’ve specified with the ``SDL_BINARY_PATH`` environment variable **before importing PySDL3**, as follows: ::
+.. highlight:: json
+
+To use your own binaries, you need to create a file named ``metadata.json`` in the binary path, as follows: ::
+
+  {
+    "system": "Darwin",
+    "arch": "ARM64",
+    "files": [
+      "libSDL3.dylib",
+      "libSDL3_image.dylib",
+      "libSDL3_mixer.dylib",
+      "libSDL3_ttf.dylib"
+    ]
+  }
+
+The ``files`` list must contain the names of the binaries **you want to use** and the ``system`` and ``arch`` fields must match your platform.
+The ``target`` field is optional and can be used to specify the target PySDL3 version for the binaries.
+
+PySDL3 will automatically start downloading new binaries if the current version is higher from the specified target version
+or if it cannot find the ``metadata.json`` file **or the binaries specified by it** in the binary path ("sdl3/bin" by default).
+
+.. highlight:: python
+
+You can set your own binary path with the ``SDL_BINARY_PATH`` environment variable **before importing PySDL3**, as follows: ::
 
   import os
 
@@ -41,12 +63,10 @@ or you can use the path you’ve specified with the ``SDL_BINARY_PATH`` environm
 
   ...
 
-PySDL3 will automatically detect the binaries in the given path and use them instead of downloading new ones.
-However, **if it detects that even a single binary is missing, it will download new binaries and overwrite the existing ones.**
-You can disable this behavior by setting the ``SDL_DOWNLOAD_BINARIES`` environment variable to "0"
-but still make sure you have all 6 binaries installed, **otherwise it will not work**.
+*Please note that PySDL3 will download all 6 binaries and overwrite any existing ones.*
 
-If there are other files you want to keep in the binary path, you can disable the warning message by setting the ``SDL_IGNORE_REDUNDANT_FILES`` environment variable to "1".
+You can disable this behavior by setting the ``SDL_DOWNLOAD_BINARIES`` environment variable to "0"
+but still make sure you have all binaries specified in the ``metadata.json`` file installed, **otherwise it will not work**.
 
 If the versions of your binaries are different from the implementation version of PySDL3, you can disable the warning messages by setting the ``SDL_CHECK_BINARY_VERSION``
 environment variable to "0" but **be aware that using an older binary version may cause unexpected behavior**.
