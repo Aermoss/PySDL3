@@ -99,7 +99,8 @@ if not __initialized__:
         except requests.RequestException:
             ...
 
-    modules, binaryMap, binaryData, currentBinary, missing = {}, {}, None, None, True
+    functions, binaryMap, currentBinary, missing = {}, {}, None, True
+    binaryData = {"system": SDL_SYSTEM, "arch": SDL_ARCH, "files": []}
     binaryPath = os.environ.get("SDL_BINARY_PATH", os.path.join(os.path.dirname(__file__), "bin"))
     if not os.path.exists(binaryPath): os.makedirs(binaryPath)
 
@@ -188,9 +189,9 @@ def SDL_FUNC(name: str, retType: typing.Any, *args: typing.List[typing.Any]) -> 
 
     else:
         func = getattr(binary, name)
-        func.__binary__, func.restype, func.argtypes = binary, retType, args
+        func.restype, func.argtypes = retType, args
         if not __doc_generator__: setattr(__module__, name, func)
-        __module__.modules[SDL_GET_BINARY_NAME(binary)][name] = func
+        __module__.functions[SDL_GET_BINARY_NAME(binary)][name] = func
 
 async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
     """Get latest releases of SDL3 modules from their official github repositories."""
@@ -279,11 +280,11 @@ def SDL_GENERATE_DOCS() -> str:
     """Generate type hints and documentation for SDL3 functions."""
 
     __index, (descriptions, arguments) = -1, \
-        asyncio.run(SDL_GET_FUNC_DESCRIPTIONS([(module, func) for module in __module__.modules for func in __module__.modules[module]]))
+        asyncio.run(SDL_GET_FUNC_DESCRIPTIONS([(module, func) for module in __module__.functions for func in __module__.functions[module]]))
 
-    for module in __module__.modules:
-        for name in __module__.modules[module]:
-            __module__.modules[module][name].__doc__ = \
+    for module in __module__.functions:
+        for func in __module__.functions[module]:
+            __module__.functions[module][func].__doc__ = \
                 (descriptions[__index := __index + 1], arguments[__index])
 
     result = "\"\"\"This file is auto-generated.\"\"\"\n\nfrom .SDL import *\n\n"
@@ -301,32 +302,32 @@ def SDL_GENERATE_DOCS() -> str:
         if i.__name__.startswith("c_"): return f"ctypes.{i.__name__}"
         return i.__name__
 
-    for index, module in enumerate(__module__.modules):
-        if len(__module__.modules[module]) == 0: continue
-        definitions += f"# {SDL_BINARY_NAME_FORMAT[platform.system()].format(module)} implementation.\n\n"
+    for index, module in enumerate(__module__.functions):
+        if len(__module__.functions[module]) == 0: continue
+        definitions += f"# {SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(module)} implementation.\n\n"
 
-        for _index, name in enumerate(__module__.modules[module]):
+        for _index, func in enumerate(__module__.functions[module]):
             retType, argtypes, (description, arguments) = \
-                __module__.modules[module][name].restype, __module__.modules[module][name].argtypes, __module__.modules[module][name].__doc__
+                __module__.functions[module][func].restype, __module__.functions[module][func].argtypes, __module__.functions[module][func].__doc__
 
-            assert arguments is None or (arguments is not None and len(arguments) == len(argtypes)), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{name}'."
+            assert arguments is None or (arguments is not None and len(arguments) == len(argtypes)), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{func}'."
             arguments = [f"{'_' if arguments is None or arguments[i] in keyword.kwlist else ''}{i if arguments is None else arguments[i]}" for i in range(len(argtypes))]
-            definitions += f"def {name}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)])}) -> {SDL_GET_NAME(retType)}:\n"
+            definitions += f"def {func}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)])}) -> {SDL_GET_NAME(retType)}:\n"
             definitions += f"{' ' * 4}\"\"\"\n"
             if description is not None: definitions += f"    {description}\n"
-            definitions += f"{' ' * 4}https://wiki.libsdl.org/{module}/{name}\n"
+            definitions += f"{' ' * 4}https://wiki.libsdl.org/{module}/{func}\n"
             definitions += f"{' ' * 4}\"\"\"\n"
-            definitions += f"{' ' * 4}return SDL_GET_BINARY({SDL_BINARY_VAR_MAP_INV[module]}).{name}({', '.join(arguments)})"
+            definitions += f"{' ' * 4}return SDL_GET_BINARY({SDL_BINARY_VAR_MAP_INV[module]}).{func}({', '.join(arguments)})"
 
-            if _index != len(__module__.modules[module]) - 1:
+            if _index != len(__module__.functions[module]) - 1:
                 definitions += "\n\n"
 
-        if index != len(__module__.modules) - 1 and len(list(__module__.modules.values())[index + 1]) != 0:
+        if index != len(__module__.functions) - 1 and len(list(__module__.functions.values())[index + 1]) != 0:
             definitions += "\n\n"
 
     for i in types:
-        count, name = i.count("LP_"), i.replace("LP_", "")
-        result += f"{i}: typing.TypeAlias = {'POINTER[' * count}{'ctypes.' if name.startswith('c_') else ''}{name}{']' * count}\n"
+        count, func = i.count("LP_"), i.replace("LP_", "")
+        result += f"{i}: typing.TypeAlias = {'POINTER[' * count}{'ctypes.' if func.startswith('c_') else ''}{func}{']' * count}\n"
 
     return f"{result}\n{definitions}"
 
