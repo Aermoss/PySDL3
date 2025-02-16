@@ -27,8 +27,9 @@ SDL_SYSTEM, SDL_ARCH = platform.system(), SDL_FORMAT_ARCH(platform.machine())
 SDL_BINARY_PATTERNS: typing.Dict[str, typing.List[str]] = \
     {"Windows": ["{}.dll"], "Darwin": ["lib{}.dylib", "{0}.framework/{0}", "{0}.framework/Versions/A/{0}"], "Linux": ["lib{}.so"]}
 
+__frozen__: bool = getattr(sys, "frozen", False)
 __doc_file__: str = os.path.join(os.path.dirname(__file__), "__doc__.py")
-__doc_generator__: int = int(os.environ.get("SDL_DOC_GENERATOR", "1")) > 0
+__doc_generator__: int = int(os.environ.get("SDL_DOC_GENERATOR", str(int(not __frozen__)))) > 0
 
 __initialized__: bool = __name__.split(".")[0] in sys.modules if "." in __name__ else False
 __module__: types.ModuleType = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
@@ -101,7 +102,7 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
         print("\33[31m", f"failed to download binaries, exception: {str(exc).lower()}", "\33[0m", sep = "", flush = True)
 
 if not __initialized__:
-    if int(os.environ.get("SDL_CHECK_VERSION", "1")) > 0:
+    if int(os.environ.get("SDL_CHECK_VERSION", str(int(not __frozen__)))) > 0:
         try:
             version = requests.get(f"https://pypi.org/pypi/PySDL3/json", timeout = 0.5).json()["info"]["version"]
 
