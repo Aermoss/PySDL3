@@ -71,9 +71,9 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
                     with open(os.path.join(path, asset["name"]), "wb") as file:
                         for chunk in response.iter_content(chunk_size = 8192):
                             if chunk: file.write(chunk); current += len(chunk)
-                            print("\33[35m", f"downloading '{asset['browser_download_url']}'... {current / size * 100:.1f}% ({current / (1024 ** 2):.2f}/{size / (1024 ** 2):.2f} MB).", "\33[0m", sep = "", end = "\r", flush = True)
+                            print("\33[32m", f"info: downloading '{asset['browser_download_url']}'... {current / size * 100:.1f}% ({current / (1024 ** 2):.2f}/{size / (1024 ** 2):.2f} MB).", "\33[0m", sep = "", end = "\r", flush = True)
 
-                        print("\n", end = "", flush = True)
+                        print(flush = True)
 
                     data = {
                         "arch": arch, "system": system, "target": f"v{__version__}",
@@ -99,7 +99,7 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
                     return
                 
     except requests.RequestException as exc:
-        print("\33[31m", f"failed to download binaries, exception: {str(exc).lower()}", "\33[0m", sep = "", flush = True)
+        print("\33[31m", f"error: failed to download binaries: {str(exc).lower()}", "\33[0m", sep = "", flush = True)
 
 if not __initialized__:
     if int(os.environ.get("SDL_CHECK_VERSION", str(int(not __frozen__)))) > 0:
@@ -107,7 +107,7 @@ if not __initialized__:
             version = requests.get(f"https://pypi.org/pypi/PySDL3/json", timeout = 0.5).json()["info"]["version"]
 
             if packaging.version.parse(__version__) < packaging.version.parse(version):
-                print("\33[35m", f"you are using an older version of pysdl3 (current: {__version__}, lastest: {version}).", "\33[0m", sep = "", flush = True)
+                print("\33[35m", f"warning: you are using an older version of pysdl3 (current: {__version__}, lastest: {version}).", "\33[0m", sep = "", flush = True)
 
         except requests.RequestException:
             ...
@@ -121,23 +121,24 @@ if not __initialized__:
     if "metadata.json" in (files := os.listdir(binaryPath)):
         with open(os.path.join(binaryPath, "metadata.json"), "r") as file:
             binaryData = json.load(file)
+            binaryData["files"] = [absPath(i) for i in binaryData["files"]]
 
-        if "target" in binaryData and packaging.version.parse(__version__) > packaging.version.parse(binaryData["target"]):
-            print("\33[35m", f"incompatible target version detected: '{binaryData['target']}', current: 'v{__version__}'.", "\33[0m", sep = "", flush = True)
+        if packaging.version.parse(__version__) > packaging.version.parse(binaryData.get("target", __version__)):
+            print("\33[35m", f"warning: incompatible target version detected: '{binaryData['target']}', current: 'v{__version__}'.", "\33[0m", sep = "", flush = True)
 
-            print("\33[35m", f"incompatible binary architecture and/or system detected: '{binaryData['system']} ({binaryData['arch']})'.", "\33[0m", sep = "", flush = True)
         elif binaryData["system"].lower() != SDL_SYSTEM.lower() or binaryData["arch"].lower() != SDL_ARCH.lower():
+            print("\33[35m", f"warning: incompatible binary architecture and/or system detected: '{binaryData['system']} ({binaryData['arch']})'.", "\33[0m", sep = "", flush = True)
             binaryData["repair"] = True
 
             for i in binaryData["files"]:
                 if os.path.exists(i): os.remove(i)
 
         else:
-                print("\33[35m", "missing binary file(s) detected: '", "', '".join(missing), "'.", "\33[0m", sep = "", flush = True)
             if missing := [i for i in binaryData["files"] if not os.path.exists(i)]:
+                print("\33[35m", "warning: missing binary file(s) detected: '", "', '".join(missing), "'.", "\33[0m", sep = "", flush = True)
 
     else:
-        print("\33[35m", "no binaries detected.", "\33[0m", sep = "", flush = True)
+        print("\33[35m", "warning: no binaries detected.", "\33[0m", sep = "", flush = True)
 
     if missing and int(os.environ.get("SDL_FIND_BINARIES", str(int(binaryData.get("find", True))))) > 0:
         binaryData["files"] += SDL_FIND_BINARIES(list(SDL_BINARY_VAR_MAP_INV.keys()))
@@ -155,8 +156,9 @@ if not __initialized__:
                 binaryMap[binary], functions[binary] = ctypes.CDLL(os.path.abspath(file)), {}
                 binaryData["files"].remove(file)
 
-    if binaryData["files"]:
-        print("\33[35m", "unused binary file(s) detected: '", "', '".join(binaryData["files"]), "'.", "\33[0m", sep = "", flush = True)
+    if not int(os.environ.get("SDL_IGNORE_MISSING_BINARIES", "0")) > 0:
+        if missing := [SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(binary) for binary in SDL_BINARY_VAR_MAP_INV if binary not in binaryMap]:
+            print("\33[35m", "warning: missing binary file(s) detected: '", "', '".join(missing), "' (not repairable).", "\33[0m", sep = "", flush = True)
 
 def SDL_ARRAY(*args: typing.List[typing.Any], **kwargs: typing.Dict[str, typing.Any]) -> typing.Tuple[ctypes.Array[typing.Any], int]:
     """Create a ctypes array."""
@@ -204,7 +206,7 @@ def SDL_FUNC(name: str, retType: typing.Any, *args: typing.List[typing.Any]) -> 
 
     if not hasattr(binary, name):
         if int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0: return
-        print("\33[35m", f"function '{name}' not found in binary: '{SDL_GET_BINARY_NAME(binary)}'.", "\33[0m", sep = "", flush = True)
+        print("\33[35m", f"warning: function '{name}' not found in binary: '{SDL_GET_BINARY_NAME(binary)}'.", "\33[0m", sep = "", flush = True)
 
     else:
         func = getattr(binary, name)
@@ -222,17 +224,17 @@ async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
 
     for repo in SDL_REPOSITORIES:
         url = f"https://api.github.com/repos/libsdl-org/{repo}/releases"
-        print(f"sending a request to \"{url}\".", flush = True)
+        print("\33[32m", f"info: sending a request to '{url}'.", "\33[0m", sep = "", flush = True)
         tasks.append(asyncio.create_task(session.get(url, headers = headers, ssl = False)))
 
     responses = await asyncio.gather(*tasks)
-    print(f"response gathering completed ({len(responses)} response(s)).", flush = True)
+    print("\33[32m", f"info: response gathering completed ({len(responses)} response(s)).", "\33[0m", sep = "", flush = True)
 
     for response, repo in zip(responses, SDL_REPOSITORIES):
         if response.status != 200:
-            print((await response.json())["message"].lower(), flush = True)
+            print("\33[35m", "warning: ", (await response.json())["message"].lower(), "\33[0m", sep = "", flush = True)
             if response.status == 403: await session.close(); return releases
-            print(f"failed to get latest releases of \"{response.url}\", skipping (status: {response.status}).", flush = True)
+            print("\33[35m", f"warning: failed to get latest releases of '{response.url}', skipping (status: {response.status}).", "\33[0m", sep = "", flush = True)
             releases[repo] = None
 
         else:
@@ -255,16 +257,16 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: typing.List[typing.Tuple[str, str]]) 
 
     for module, func in funcs:
         url = f"https://wiki.libsdl.org/{module}/{func}"
-        print(f"sending a request to \"{url}\".\n", end = "", flush = True)
+        print("\33[32m", f"info: sending a request to '{url}'.", "\33[0m", sep = "", flush = True)
         tasks.append(asyncio.create_task(session.get(url, ssl = False)))
     
     responses = await asyncio.gather(*tasks)
-    print(f"response gathering completed ({len(responses)} response(s)).\n", end = "", flush = True)
+    print("\33[32m", f"info: response gathering completed ({len(responses)} response(s)).", "\33[0m", sep = "", flush = True)
     descriptions, arguments = [], []
 
     for response in responses:
         if response.status != 200:
-            print(f"failed to get description of \"{response.url}\", skipping (status: {response.status}).\n", end = "", flush = True)
+            print("\33[35m", f"warning: failed to get description of '{response.url}', skipping (status: {response.status}).", "\33[0m", sep = "", flush = True)
             descriptions.append(None)
             arguments.append(None)
 
@@ -272,7 +274,7 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: typing.List[typing.Tuple[str, str]]) 
             content = (await response.content.read()).decode()
 
             if "no such page" in content.lower():
-                print(f"no such page found for \"{response.url}\", skipping.\n", end = "", flush = True)
+                print("\33[35m", f"warning: no such page found for '{response.url}', skipping.", "\33[0m", sep = "", flush = True)
                 descriptions.append(None)
                 arguments.append(None)
                 continue
@@ -372,7 +374,7 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
                     return bytearray().join([chunk for chunk in response.iter_content(chunk_size = 8192) if chunk])
             
     except requests.RequestException as exc:
-        print(f"failed to get docs from github, exception: {str(exc).lower()}.", flush = True)
+        print("\33[31m", f"error: failed to get docs from github: {str(exc).lower()}.", "\33[0m", sep = "", flush = True)
 
     return SDL_GENERATE_DOCS().encode("utf-8")
 
@@ -384,7 +386,7 @@ if not __initialized__ and int(os.environ.get("SDL_CHECK_IMPORTS", "0")) > 0:
 
     for index, module in enumerate(existingModules):
         if len(importedModules) <= index or module != importedModules[index]:
-            print("\33[35m", f"regenerating main module.", "\33[0m", sep = "", flush = True)
+            print("\33[35m", f"warning: regenerating main module.", "\33[0m", sep = "", flush = True)
 
             with open(os.path.join(os.path.dirname(__file__), "SDL.py"), "w") as file:
                 file.write("\n".join([f"from .{i} import *" for i in existingModules]))
@@ -403,7 +405,7 @@ if not __initialized__:
     if int(os.environ.get("SDL_CHECK_BINARY_VERSION", "1")) > 0:
         for i in SDL_BINARY_VAR_MAP:
             if (binaryVersion := locals()[f"{i}_VERSION"]) != (version := locals()[f"{i.replace('_BINARY', '')}_VERSION"]) and binaryVersion is not None:
-                print("\33[35m", f"version mismatch with binary: '{SDL_BINARY_NAME_FORMAT[SDL_SYSTEM].format(SDL_BINARY_VAR_MAP[i])}' (expected: {SDL_VERSIONNUM_STRING(version)}, got: {SDL_VERSIONNUM_STRING(binaryVersion)}).", "\33[0m", sep = "", flush = True)
+                print("\33[35m", f"warning: version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(SDL_BINARY_VAR_MAP[i])}' (expected: {SDL_VERSIONNUM_STRING(version)}, got: {SDL_VERSIONNUM_STRING(binaryVersion)}).", "\33[0m", sep = "", flush = True)
 
     if __doc_generator__:
         if not os.path.exists(__doc_file__):
