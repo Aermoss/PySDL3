@@ -30,14 +30,19 @@ PySDL3 will download all the necessary binaries for you on the first run, if you
 
 Custom Binaries
 ---------------
+There are two methods to use your own binaries with PySDL3, the metadata method and the environment variables method.
+
 .. highlight:: json
 
-To use your own binaries, you need to create a file named ``metadata.json`` in the binary path, as follows: ::
+The Metadata Method
+~~~~~~~~~~~~~~~~~~~
+The metadata method was developed to allow PySDL3 to automatically download and manage its own binaries.
+To use this method, you need to create a file named ``metadata.json`` in the binary path, as follows: ::
 
   {
     "system": "Darwin",
     "arch": "ARM64",
-    "target": "v0.9.4b4",
+    "target": "v0.9.4b5",
     "files": [
       "./libSDL3.dylib",
       "./libSDL3_image.dylib",
@@ -53,31 +58,37 @@ The ``repair`` field allows files to be downloaded if they are missing (with ``S
 missing files to be searched in the system libraries (with ``SDL_FIND_BINARIES``, enabled by default), ``files`` list can be empty while using ``find`` feature.
 The ``target`` field is optional and can be used to specify the target PySDL3 version for the binaries.
 
-PySDL3 will automatically start downloading new binaries if the current version is higher from the specified target version
-or if it cannot find the ``metadata.json`` file **or the binaries specified by it** (when repair enabled) in the binary path ("sdl3/bin" by default).
+PySDL3 will automatically start downloading new binaries if the current version is higher from the specified target version or
+if it cannot find the ``metadata.json`` file **or the binaries specified by it** (when repair enabled) in the binary path ("sdl3/bin" by default).
+
+*Please note that PySDL3 will download all 6 binaries (when repair mode enabled) and overwrite any existing ones.*
+
+You can disable this behavior also by setting the ``SDL_DOWNLOAD_BINARIES`` environment variable to "0"
+but still make sure you have all binaries specified in the ``metadata.json`` file installed, otherwise some modules will be disabled.
 
 .. highlight:: python
 
-You can set your own binary path with the ``SDL_BINARY_PATH`` environment variable **before importing PySDL3**, as follows: ::
+The Environment Variable Method
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The environment variable method is the easiest and recommended way to use your own binaries with PySDL3.
+In order to use this method, you just need to set ``SDL_DISABLE_METADATA`` to "1" as follows: ::
 
   import os
 
-  os.environ["SDL_BINARY_PATH"] = "/path/to/your/binaries"
+  os.environ["SDL_DISABLE_METADATA"] = "1" # Disable metadata method, enabled by default.
+  os.environ["SDL_BINARY_PATH"] = "/path/to/your/binaries" # Set the path to your binaries, "sdl3/bin" by default.
+  os.environ["SDL_CHECK_BINARY_VERSION"] = "0" # Disable binary version checking, enabled by default.
+  os.environ["SDL_IGNORE_MISSING_FUNCTIONS"] = "1" # Disable missing function warnings, disabled by default.
+  os.environ["SDL_FIND_BINARIES"] = "1" # Search for binaries in the system libraries, enabled by default.
 
   import sdl3
 
   ...
 
-*Please note that PySDL3 will download all 6 binaries (when repair mode enabled) and overwrite any existing ones.*
+PySDL3 will search for the binaries in the binary path and (if ``SDL_FIND_BINARIES`` is set to "1") in the system libraries.
+If a binary is missing, the corresponding module will be automatically disabled (binaries will not be downloaded automatically in this method).
 
-You can also disable this behavior by setting the ``SDL_DOWNLOAD_BINARIES`` environment variable to "0"
-but still make sure you have all binaries specified in the ``metadata.json`` file installed.
-
-If the versions of your binaries are different from the implementation version of PySDL3, you can disable the warning messages by setting the ``SDL_CHECK_BINARY_VERSION``
-environment variable to "0" but **be aware that using an older binary version may cause unexpected behavior**.
-
-If you want to disable warning messages for missing binaries and/or functions,
-you can set the ``SDL_IGNORE_MISSING_BINARIES`` and/or ``SDL_IGNORE_MISSING_FUNCTIONS`` environment variable(s) to "1".
+*Please note that using an older binary version may cause unexpected behavior.*
 
 .. _PyPI: https://pypi.org/project/PySDL3
 .. _GitHub: https://github.com/Aermoss/PySDL3
