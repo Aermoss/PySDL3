@@ -27,6 +27,11 @@ SDL_SYSTEM, SDL_ARCH = platform.system(), SDL_FORMAT_ARCH(platform.machine())
 SDL_BINARY_PATTERNS: typing.Dict[str, typing.List[str]] = \
     {"Windows": ["{}.dll"], "Darwin": ["lib{}.dylib", "{0}.framework/{0}", "{0}.framework/Versions/A/{0}"], "Linux": ["lib{}.so"]}
 
+def SDL_PLATFORM_SPECIFIC(system: typing.List[str] = None, arch: typing.List[str] = None) -> bool:
+    """Check if the current platform is inside the given platforms."""
+    if int(os.environ.get("SDL_PLATFORM_AGNOSTIC", "0")) > 0: return True
+    return (not system or SDL_SYSTEM in system) and (not arch or SDL_ARCH in arch)
+
 __frozen__: bool = getattr(sys, "frozen", False)
 __doc_file__: str = os.path.join(os.path.dirname(__file__), "__doc__.py")
 __doc_generator__: int = int(os.environ.get("SDL_DOC_GENERATOR", str(int(not __frozen__)))) > 0
@@ -112,8 +117,8 @@ if not __initialized__:
         except requests.RequestException:
             ...
 
-    functions, binaryMap, currentBinary, missing = {}, {}, None, None
-    binaryData = {"system": SDL_SYSTEM, "arch": SDL_ARCH, "files": []}
+    binaryData, missing = {"system": SDL_SYSTEM, "arch": SDL_ARCH, "files": []}, None
+    functions, binaryMap, currentBinary = {i: {} for i in SDL_BINARY_VAR_MAP_INV}, {}, None
     binaryPath = os.environ.get("SDL_BINARY_PATH", os.path.join(os.path.dirname(__file__), "bin"))
     absPath = lambda path: path if os.path.isabs(path) else os.path.abspath(os.path.join(binaryPath, path))
     if not os.path.exists(binaryPath): os.makedirs(binaryPath)
@@ -207,8 +212,6 @@ def SDL_GET_CURRENT_BINARY() -> typing.Any:
     """Get the current SDL3 binary."""
     return __module__.currentBinary
 
-def SDL_FUNC(name: str, retType: typing.Any, *args: typing.List[typing.Any]) -> None:
-    """Define an SDL3 function."""
 def SDL_NOT_IMPLEMENTED(name: str) -> typing.Callable:
     return lambda *args, **kwargs: print("\33[31m", f"error: invoked an unimplemented function: '{name}'.", "\33[0m", sep = "", flush = True)
 

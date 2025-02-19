@@ -1,4 +1,4 @@
-from .__init__ import ctypes, SDL_SYSTEM, \
+from .__init__ import ctypes, SDL_PLATFORM_SPECIFIC, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_TTF_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_Color, SDL_FColor
@@ -237,7 +237,7 @@ SDL_FUNC("TTF_GetGPUTextEngineWinding", TTF_GPUTextEngineWinding, ctypes.POINTER
 
 SDL_FUNC("TTF_CreateText", ctypes.POINTER(TTF_Text), ctypes.POINTER(TTF_TextEngine), ctypes.POINTER(TTF_Font), ctypes.c_char_p, ctypes.c_size_t)
 
-if SDL_SYSTEM in ["Windows"]:
+if SDL_PLATFORM_SPECIFIC(system = ["Windows"]):
     SDL_FUNC("TTF_GetTextProperties", SDL_PropertiesID, ctypes.POINTER(TTF_Text))
 
 SDL_FUNC("TTF_SetTextEngine", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.POINTER(TTF_TextEngine))
