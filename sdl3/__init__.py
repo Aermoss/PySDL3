@@ -352,7 +352,7 @@ def SDL_GENERATE_DOCS(modules: typing.List[str] = list(SDL_BINARY_VAR_MAP_INV.ke
 
     for index, module in enumerate(modules):
         if len(__module__.functions[module]) == 0: continue
-        definitions += f"# {SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(module)} implementation.\n\n"
+        if not rst: definitions += f"# {SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(module)} implementation.\n\n"
 
         for _index, func in enumerate(__module__.functions[module]):
             retType, argtypes, (description, arguments) = \
