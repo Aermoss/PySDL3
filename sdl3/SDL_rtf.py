@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, SDL_NOT_IMPLEMENTED, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_RTF_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_Color
@@ -66,5 +66,5 @@ SDL_FUNC("RTF_GetHeight", ctypes.c_int, ctypes.POINTER(RTF_Context), ctypes.c_in
 SDL_FUNC("RTF_Render", None, ctypes.POINTER(RTF_Context), ctypes.POINTER(SDL_Rect), ctypes.c_int)
 SDL_FUNC("RTF_FreeContext", None, ctypes.POINTER(RTF_Context))
 
-RTF_SetError = SDL_GET_BINARY(SDL_BINARY).SDL_SetError
-RTF_GetError = SDL_GET_BINARY(SDL_BINARY).SDL_GetError
+RTF_SetError = getattr(SDL_GET_BINARY(SDL_BINARY), "SDL_SetError", SDL_NOT_IMPLEMENTED("RTF_SetError"))
+RTF_GetError = getattr(SDL_GET_BINARY(SDL_BINARY), "SDL_GetError", SDL_NOT_IMPLEMENTED("RTF_GetError"))

@@ -201,7 +201,7 @@ def SDL_GET_BINARY(name: str) -> typing.Any:
 
 def SDL_SET_CURRENT_BINARY(name: str) -> None:
     """Set the current SDL3 binary by its name."""
-    __module__.currentBinary = SDL_GET_BINARY(name)
+    __module__.currentBinary = (SDL_GET_BINARY(name), name)
 
 def SDL_GET_CURRENT_BINARY() -> typing.Any:
     """Get the current SDL3 binary."""
@@ -209,19 +209,24 @@ def SDL_GET_CURRENT_BINARY() -> typing.Any:
 
 def SDL_FUNC(name: str, retType: typing.Any, *args: typing.List[typing.Any]) -> None:
     """Define an SDL3 function."""
+def SDL_NOT_IMPLEMENTED(name: str) -> typing.Callable:
+    return lambda *args, **kwargs: print("\33[31m", f"error: invoked an unimplemented function: '{name}'.", "\33[0m", sep = "", flush = True)
 
-    if not (binary := SDL_GET_CURRENT_BINARY()):
-        return
+def SDL_FUNC(name: str, retType: typing.Any, *argTypes: typing.List[typing.Any]) -> None:
+    """Define an SDL3 function."""
 
-    if not hasattr(binary, name):
-        if int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0: return
-        print("\33[35m", f"warning: function '{name}' not found in binary: '{SDL_GET_BINARY_NAME(binary)}'.", "\33[0m", sep = "", flush = True)
+    if (binary := SDL_GET_CURRENT_BINARY())[0] and hasattr(binary[0], name):
+        func = getattr(binary[0], name)
 
     else:
-        func = getattr(binary, name)
-        func.restype, func.argtypes = retType, args
-        if not __doc_generator__: setattr(__module__, name, func)
-        __module__.functions[SDL_GET_BINARY_NAME(binary)][name] = func
+        if binary[0] and int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0:
+            print("\33[35m", f"warning: function '{name}' not found in binary: '{binary[1]}'.", "\33[0m", sep = "", flush = True)
+
+        func = SDL_NOT_IMPLEMENTED(name)
+
+    func.restype, func.argtypes, func.binary = retType, argTypes, binary[0]
+    __module__.functions[binary[1]][name] = func
+    if not __doc_generator__: setattr(__module__, name, func)
 
 async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
     """Get latest releases of SDL3 modules from their official github repositories."""
