@@ -30,7 +30,7 @@ PySDL3 will download all the necessary binaries for you on the first run, if you
 
 Custom Binaries
 ---------------
-There are two methods to use your own binaries with PySDL3, the metadata method and the environment variables method.
+There are two methods to use your own binaries with PySDL3, the metadata method and the environment variable method.
 
 .. highlight:: json
 
