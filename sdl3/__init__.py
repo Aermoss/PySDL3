@@ -112,15 +112,23 @@ if not __initialized__:
         except requests.RequestException:
             ...
 
-    functions, binaryMap, currentBinary, missing = {}, {}, None, True
+    functions, binaryMap, currentBinary, missing = {}, {}, None, None
     binaryData = {"system": SDL_SYSTEM, "arch": SDL_ARCH, "files": []}
     binaryPath = os.environ.get("SDL_BINARY_PATH", os.path.join(os.path.dirname(__file__), "bin"))
     absPath = lambda path: path if os.path.isabs(path) else os.path.abspath(os.path.join(binaryPath, path))
     if not os.path.exists(binaryPath): os.makedirs(binaryPath)
 
-    if "metadata.json" in (files := os.listdir(binaryPath)):
+    if int(os.environ.get("SDL_DISABLE_METADATA", "0")) > 0:
+        for root, _, files in os.walk(binaryPath):
+            for file in files:
+                if (file.endswith(".dll") and SDL_SYSTEM in ["Windows"]) \
+                or ((file.endswith(".dylib") or ".framework" in file) and SDL_SYSTEM in ["Darwin"]) \
+                or (".so" in file and SDL_SYSTEM in ["Linux"]):
+                    binaryData["files"].append(os.path.join(root, file))
+
+    elif "metadata.json" in (files := os.listdir(binaryPath)):
         with open(os.path.join(binaryPath, "metadata.json"), "r") as file:
-            binaryData = json.load(file)
+            missing, binaryData = True, json.load(file)
             binaryData["files"] = [absPath(i) for i in binaryData["files"]]
 
         if packaging.version.parse(__version__) > packaging.version.parse(binaryData.get("target", __version__)):
@@ -138,27 +146,28 @@ if not __initialized__:
                 print("\33[35m", "warning: missing binary file(s) detected: '", "', '".join(missing), "'.", "\33[0m", sep = "", flush = True)
 
     else:
-        print("\33[35m", "warning: no binaries detected.", "\33[0m", sep = "", flush = True)
+        print("\33[35m", "warning: no metadata detected.", "\33[0m", sep = "", flush = True)
+        missing = True
 
-    if missing and int(os.environ.get("SDL_FIND_BINARIES", str(int(binaryData.get("find", True))))) > 0:
-        binaryData["files"] += SDL_FIND_BINARIES(list(SDL_BINARY_VAR_MAP_INV.keys()))
-
-    if missing and int(os.environ.get("SDL_DOWNLOAD_BINARIES", str(int(binaryData.get("repair", True))))) > 0:
+    if int(os.environ.get("SDL_DOWNLOAD_BINARIES", str(int(binaryData.get("repair", True))))) > 0 and missing:
         SDL_DOWNLOAD_BINARIES(binaryPath, SDL_SYSTEM, SDL_ARCH)
 
         with open(os.path.join(binaryPath, "metadata.json"), "r") as file:
-            binaryData = json.load(file)
+            binaryData, missing = json.load(file), None
             binaryData["files"] = [absPath(i) for i in binaryData["files"]]
 
-    for binary in SDL_BINARY_VAR_MAP_INV:
-        for file in binaryData["files"].copy():
-            if os.path.split(file)[1].split(".")[0].endswith(binary) and os.path.exists(file):
-                binaryMap[binary], functions[binary] = ctypes.CDLL(os.path.abspath(file)), {}
-                binaryData["files"].remove(file)
+    if int(os.environ.get("SDL_FIND_BINARIES", str(int(binaryData.get("find", missing is None))))) > 0:
+        binaryData["files"] += SDL_FIND_BINARIES(list(SDL_BINARY_VAR_MAP_INV.keys()))
 
-    if not int(os.environ.get("SDL_IGNORE_MISSING_BINARIES", "0")) > 0:
-        if missing := [SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(binary) for binary in SDL_BINARY_VAR_MAP_INV if binary not in binaryMap]:
-            print("\33[35m", "warning: missing binary file(s) detected: '", "', '".join(missing), "' (not repairable).", "\33[0m", sep = "", flush = True)
+    for binary in SDL_BINARY_VAR_MAP_INV:
+        for path in binaryData["files"].copy():
+            if (file := os.path.split(path)[1]).split(".")[0].endswith(binary) and os.path.exists(path):
+                if (file.endswith(".dll") and SDL_SYSTEM in ["Windows"]) \
+                or ((file.endswith(".dylib") or ".framework" in file) and SDL_SYSTEM in ["Darwin"]) \
+                or (".so" in file and SDL_SYSTEM in ["Linux"]):
+                    binaryMap[binary], functions[binary] = ctypes.CDLL(os.path.abspath(path)), {}
+                    binaryData["files"].remove(path)
+                    break
 
 def SDL_ARRAY(*args: typing.List[typing.Any], **kwargs: typing.Dict[str, typing.Any]) -> typing.Tuple[ctypes.Array[typing.Any], int]:
     """Create a ctypes array."""
