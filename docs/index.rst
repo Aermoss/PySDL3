@@ -10,6 +10,14 @@ Getting Started
 ===============
 
 .. toctree::
-  :maxdepth: 2
+  :maxdepth: 3
 
   install.rst
+
+API Reference
+=============
+
+.. toctree::
+  :maxdepth: 2
+
+  modules/index.rst
