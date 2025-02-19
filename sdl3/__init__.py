@@ -268,7 +268,7 @@ async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
     await session.close()
     return releases
 
-async def SDL_GET_FUNC_DESCRIPTIONS(funcs: typing.List[typing.Tuple[str, str]]) -> typing.Tuple[typing.List[str], typing.List[typing.List[str]]]:
+async def SDL_GET_FUNC_DESCRIPTIONS(funcs: typing.List[typing.Tuple[str, str]], rst: bool = False) -> typing.Tuple[typing.List[str], typing.List[typing.List[str]]]:
     """Get descriptions and arguments of SDL3 functions from the official SDL3 wiki."""
     session, tasks = aiohttp.ClientSession(), []
 
@@ -297,9 +297,18 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: typing.List[typing.Tuple[str, str]]) 
                 continue
 
             for a, b in zip(list(re.finditer(r"<p>", content)), list(re.finditer(r"</p>", content))):
-                if content[a.end()] == "<": continue
-                description = re.sub(r"<a href=\"([a-zA-Z0-9_]+)\">([a-zA-Z0-9_]+)</a>", rf"[\2]({'/'.join(str(response.url).split('/')[:-1])}/\1)", content[a.end():b.start()])
-                descriptions.append(description.replace("<em>", "").replace("</em>", "").replace("<code>", "`").replace("</code>", "`").replace("<strong>", "").replace("</strong>", ""))
+                if content[a.end()] == "<":
+                    continue
+
+                if rst:
+                    description = re.sub(r"<a href=\"([a-zA-Z0-9_]+)\">([a-zA-Z0-9_]+)</a>", r"\1", content[a.end():b.start()]) \
+                        .replace("<em>", "*").replace("</em>", "*").replace("<code>", "``").replace("</code>", "``").replace("<strong>", "**").replace("</strong>", "**")
+
+                else:
+                    description = re.sub(r"<a href=\"([a-zA-Z0-9_]+)\">([a-zA-Z0-9_]+)</a>", rf"[\2]({'/'.join(str(response.url).split('/')[:-1])}/\1)", content[a.end():b.start()]) \
+                        .replace("<em>", "").replace("</em>", "").replace("<code>", "`").replace("</code>", "`").replace("<strong>", "").replace("</strong>", "")
+                
+                descriptions.append(description)
                 break
 
             for a, b in zip(list(re.finditer(r"<code([a-zA-Z0-9_=#\s\"\-]*)>", content)), list(re.finditer(r"</code>", content))):
@@ -314,21 +323,22 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: typing.List[typing.Tuple[str, str]]) 
     await session.close()
     return descriptions, arguments
 
-def SDL_GENERATE_DOCS() -> str:
+def SDL_GENERATE_DOCS(modules: typing.List[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), rst: bool = False) -> str:
     """Generate type hints and documentation for SDL3 functions."""
 
     __index, (descriptions, arguments) = -1, \
-        asyncio.run(SDL_GET_FUNC_DESCRIPTIONS([(module, func) for module in __module__.functions for func in __module__.functions[module]]))
+        asyncio.run(SDL_GET_FUNC_DESCRIPTIONS([(module, func) for module in modules for func in __module__.functions[module]], rst))
 
-    for module in __module__.functions:
+    for module in modules:
         for func in __module__.functions[module]:
             __module__.functions[module][func].__doc__ = \
                 (descriptions[__index := __index + 1], arguments[__index])
 
-    result = "\"\"\"This file is auto-generated.\"\"\"\n\nfrom .SDL import *\n\n"
-    result += "from .__init__ import ctypes, typing, SDL_GET_BINARY, \\\n"
+    result = "" if rst else f"\"\"\"This file is auto-generated.\"\"\"\n\n"
+    result += f"from {'sdl3' if rst else ''}.SDL import *\n\n"
+    result += f"from {'sdl3' if rst else ''}.__init__ import ctypes, typing, SDL_GET_BINARY, \\\n"
     result += f"{' ' * 4}{', '.join(list(SDL_BINARY_VAR_MAP.keys()))}\n\n"
-    result += f"class POINTER:\n{' ' * 4}\"\"\"Simple pointer type.\"\"\"\n"
+    result += f"class POINTER:\n" + ("" if rst else f"{' ' * 4}\"\"\"Simple pointer type.\"\"\"\n")
     result += f"{' ' * 4}@classmethod\n{' ' * 4}def __class_getitem__(cls, item):\n"
     result += f"{' ' * 8}return ctypes.POINTER(item)\n\n"
     types, definitions = set(), ""
@@ -340,7 +350,7 @@ def SDL_GENERATE_DOCS() -> str:
         if i.__name__.startswith("c_"): return f"ctypes.{i.__name__}"
         return i.__name__
 
-    for index, module in enumerate(__module__.functions):
+    for index, module in enumerate(modules):
         if len(__module__.functions[module]) == 0: continue
         definitions += f"# {SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(module)} implementation.\n\n"
 
@@ -351,16 +361,16 @@ def SDL_GENERATE_DOCS() -> str:
             assert arguments is None or (arguments is not None and len(arguments) == len(argtypes)), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{func}'."
             arguments = [f"{'_' if arguments is None or arguments[i] in keyword.kwlist else ''}{i if arguments is None else arguments[i]}" for i in range(len(argtypes))]
             definitions += f"def {func}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)])}) -> {SDL_GET_NAME(retType)}:\n"
-            definitions += f"{' ' * 4}\"\"\"\n"
+            if not rst or description is not None: definitions += f"{' ' * 4}\"\"\"\n"
             if description is not None: definitions += f"    {description}\n"
-            definitions += f"{' ' * 4}https://wiki.libsdl.org/{module}/{func}\n"
-            definitions += f"{' ' * 4}\"\"\"\n"
+            if not rst: definitions += f"\n{' ' * 4}https://wiki.libsdl.org/{module}/{func}\n"
+            if not rst or description is not None: definitions += f"{' ' * 4}\"\"\"\n"
             definitions += f"{' ' * 4}return SDL_GET_BINARY({SDL_BINARY_VAR_MAP_INV[module]}).{func}({', '.join(arguments)})"
 
             if _index != len(__module__.functions[module]) - 1:
                 definitions += "\n\n"
 
-        if index != len(__module__.functions) - 1 and len(list(__module__.functions.values())[index + 1]) != 0:
+        if index != len(modules) - 1 and len(__module__.functions[modules[index + 1]]) != 0:
             definitions += "\n\n"
 
     for i in types:
