@@ -50,6 +50,8 @@ SDL_FUNC("SDL_GetSurfaceProperties", SDL_PropertiesID, ctypes.POINTER(SDL_Surfac
 SDL_PROP_SURFACE_SDR_WHITE_POINT_FLOAT = "SDL.surface.SDR_white_point".encode()
 SDL_PROP_SURFACE_HDR_HEADROOM_FLOAT = "SDL.surface.HDR_headroom".encode()
 SDL_PROP_SURFACE_TONEMAP_OPERATOR_STRING = "SDL.surface.tonemap".encode()
+SDL_PROP_SURFACE_HOTSPOT_X_NUMBER = "SDL.surface.hotspot.x".encode()
+SDL_PROP_SURFACE_HOTSPOT_Y_NUMBER = "SDL.surface.hotspot.y".encode()
 
 SDL_FUNC("SDL_SetSurfaceColorspace", ctypes.c_bool, ctypes.POINTER(SDL_Surface), SDL_Colorspace)
 SDL_FUNC("SDL_GetSurfaceColorspace", SDL_Colorspace, ctypes.POINTER(SDL_Surface))
