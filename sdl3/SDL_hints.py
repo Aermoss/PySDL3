@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
@@ -243,7 +243,7 @@ SDL_HINT_ASSERT = "SDL_ASSERT".encode()
 SDL_HINT_PEN_MOUSE_EVENTS = "SDL_PEN_MOUSE_EVENTS".encode()
 SDL_HINT_PEN_TOUCH_EVENTS = "SDL_PEN_TOUCH_EVENTS".encode()
 
-SDL_HintPriority: typing.TypeAlias = ctypes.c_int
+SDL_HintPriority: typing.TypeAlias = SDL_TYPE["SDL_HintPriority", ctypes.c_int]
 
 SDL_HINT_DEFAULT = 0
 SDL_HINT_NORMAL = 1

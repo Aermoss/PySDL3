@@ -1,8 +1,8 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_events import SDL_Event
-from .SDL_rect import SDL_Point, SDL_FPoint, SDL_Rect, SDL_FRect
+from .SDL_rect import SDL_FPoint, SDL_Rect, SDL_FRect
 from .SDL_pixels import SDL_Color, SDL_FColor, SDL_PixelFormat
 from .SDL_surface import SDL_Surface, SDL_ScaleMode, SDL_FlipMode
 from .SDL_video import SDL_Window, SDL_WindowFlags
@@ -20,13 +20,13 @@ class SDL_Vertex(ctypes.Structure):
         ("tex_coord", SDL_FPoint)
     ]
 
-SDL_TextureAccess: typing.TypeAlias = ctypes.c_int
+SDL_TextureAccess: typing.TypeAlias = SDL_TYPE["SDL_TextureAccess", ctypes.c_int]
 
 SDL_TEXTUREACCESS_STATIC = 0
 SDL_TEXTUREACCESS_STREAMING = 1
 SDL_TEXTUREACCESS_TARGET = 2
 
-SDL_RendererLogicalPresentation: typing.TypeAlias = ctypes.c_int
+SDL_RendererLogicalPresentation: typing.TypeAlias = SDL_TYPE["SDL_RendererLogicalPresentation", ctypes.c_int]
 
 SDL_LOGICAL_PRESENTATION_DISABLED = 0
 SDL_LOGICAL_PRESENTATION_STRETCH = 1

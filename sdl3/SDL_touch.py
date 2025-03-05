@@ -1,14 +1,14 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_mouse import SDL_MouseID
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_TouchID: typing.TypeAlias = ctypes.c_uint64
-SDL_FingerID: typing.TypeAlias = ctypes.c_uint64
+SDL_TouchID: typing.TypeAlias = SDL_TYPE["SDL_TouchID", ctypes.c_uint64]
+SDL_FingerID: typing.TypeAlias = SDL_TYPE["SDL_FingerID", ctypes.c_uint64]
 
-SDL_TouchDeviceType: typing.TypeAlias = ctypes.c_int
+SDL_TouchDeviceType: typing.TypeAlias = SDL_TYPE["SDL_TouchDeviceType", ctypes.c_int]
 
 SDL_TOUCH_DEVICE_INVALID = -1
 SDL_TOUCH_DEVICE_DIRECT = 0

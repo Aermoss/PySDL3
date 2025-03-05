@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
 
@@ -8,11 +8,11 @@ SDL_SET_CURRENT_BINARY(SDL_BINARY)
 class SDL_Sensor(ctypes.c_void_p):
     ...
 
-SDL_SensorID: typing.TypeAlias = ctypes.c_uint32
+SDL_SensorID: typing.TypeAlias = SDL_TYPE["SDL_SensorID", ctypes.c_uint32]
 
 SDL_STANDARD_GRAVITY = 9.80665
 
-SDL_SensorType: typing.TypeAlias = ctypes.c_int
+SDL_SensorType: typing.TypeAlias = SDL_TYPE["SDL_SensorType", ctypes.c_int]
 
 SDL_SENSOR_INVALID = -1
 SDL_SENSOR_UNKNOWN = 0

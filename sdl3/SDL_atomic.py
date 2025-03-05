@@ -1,9 +1,9 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_SpinLock: typing.TypeAlias = ctypes.c_int
+SDL_SpinLock: typing.TypeAlias = SDL_TYPE["SDL_SpinLock", ctypes.c_int]
 
 SDL_FUNC("SDL_TryLockSpinlock", ctypes.c_bool, ctypes.POINTER(SDL_SpinLock))
 SDL_FUNC("SDL_LockSpinlock", None, ctypes.POINTER(SDL_SpinLock))

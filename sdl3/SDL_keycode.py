@@ -1,9 +1,6 @@
-from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+from .__init__ import ctypes, typing, SDL_TYPE
 
-SDL_SET_CURRENT_BINARY(SDL_BINARY)
-
-SDL_Keycode: typing.TypeAlias = ctypes.c_uint32
+SDL_Keycode: typing.TypeAlias = SDL_TYPE["SDL_Keycode", ctypes.c_uint32]
 
 SDLK_EXTENDED_MASK = 1 << 29
 SDLK_SCANCODE_MASK = 1 << 30
@@ -265,7 +262,7 @@ SDLK_RMETA = 0x20000005
 SDLK_LHYPER = 0x20000006
 SDLK_RHYPER = 0x20000007
 
-SDL_Keymod: typing.TypeAlias = ctypes.c_uint16
+SDL_Keymod: typing.TypeAlias = SDL_TYPE["SDL_Keymod", ctypes.c_uint16]
 
 SDL_KMOD_NONE = 0x0000
 SDL_KMOD_LSHIFT = 0x0001

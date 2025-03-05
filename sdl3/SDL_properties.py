@@ -1,10 +1,10 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_PropertiesID: typing.TypeAlias = ctypes.c_uint32
-SDL_PropertyType: typing.TypeAlias = ctypes.c_int
+SDL_PropertiesID: typing.TypeAlias = SDL_TYPE["SDL_PropertiesID", ctypes.c_uint32]
+SDL_PropertyType: typing.TypeAlias = SDL_TYPE["SDL_PropertyType", ctypes.c_int]
 
 SDL_PROPERTY_TYPE_INVALID = 0
 SDL_PROPERTY_TYPE_POINTER = 1

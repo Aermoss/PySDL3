@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_stdinc import SDL_Time
 
@@ -8,7 +8,7 @@ SDL_SET_CURRENT_BINARY(SDL_BINARY)
 SDL_FUNC("SDL_GetBasePath", ctypes.c_char_p)
 SDL_FUNC("SDL_GetPrefPath", ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)
 
-SDL_Folder: typing.TypeAlias = ctypes.c_int
+SDL_Folder: typing.TypeAlias = SDL_TYPE["SDL_Folder", ctypes.c_int]
 
 SDL_FOLDER_HOME = 0
 SDL_FOLDER_DESKTOP = 1
@@ -25,7 +25,7 @@ SDL_FOLDER_COUNT = 11
 
 SDL_FUNC("SDL_GetUserFolder", ctypes.c_char_p, SDL_Folder)
 
-SDL_PathType: typing.TypeAlias = ctypes.c_int
+SDL_PathType: typing.TypeAlias = SDL_TYPE["SDL_PathType", ctypes.c_int]
 
 SDL_PATHTYPE_NONE = 0
 SDL_PATHTYPE_FILE = 1
@@ -41,13 +41,13 @@ class SDL_PathInfo(ctypes.Structure):
         ("access_time", SDL_Time)
     ]
 
-SDL_GlobFlags: typing.TypeAlias = ctypes.c_uint32
+SDL_GlobFlags: typing.TypeAlias = SDL_TYPE["SDL_GlobFlags", ctypes.c_uint32]
 
 SDL_GLOB_CASEINSENSITIVE = 1 << 0
 
 SDL_FUNC("SDL_CreateDirectory", ctypes.c_bool, ctypes.c_char_p)
 
-SDL_EnumerationResult: typing.TypeAlias = ctypes.c_int
+SDL_EnumerationResult: typing.TypeAlias = SDL_TYPE["SDL_EnumerationResult", ctypes.c_int]
 
 SDL_ENUM_CONTINUE = 0
 SDL_ENUM_SUCCESS = 1

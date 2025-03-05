@@ -1,9 +1,9 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_BlendMode: typing.TypeAlias = ctypes.c_uint32
+SDL_BlendMode: typing.TypeAlias = SDL_TYPE["SDL_BlendMode", ctypes.c_uint32]
 
 SDL_BLENDMODE_NONE = 0x00000000
 SDL_BLENDMODE_BLEND = 0x00000001
@@ -14,7 +14,7 @@ SDL_BLENDMODE_MOD = 0x00000004
 SDL_BLENDMODE_MUL = 0x00000008
 SDL_BLENDMODE_INVALID = 0x7FFFFFFF
 
-SDL_BlendOperation: typing.TypeAlias = ctypes.c_int
+SDL_BlendOperation: typing.TypeAlias = SDL_TYPE["SDL_BlendOperation", ctypes.c_int]
 
 SDL_BLENDOPERATION_ADD = 0x1
 SDL_BLENDOPERATION_SUBTRACT = 0x2
@@ -22,7 +22,7 @@ SDL_BLENDOPERATION_REV_SUBTRACT = 0x3
 SDL_BLENDOPERATION_MINIMUM = 0x4
 SDL_BLENDOPERATION_MAXIMUM = 0x5
 
-SDL_BlendFactor: typing.TypeAlias = ctypes.c_int
+SDL_BlendFactor: typing.TypeAlias = SDL_TYPE["SDL_BlendFactor", ctypes.c_int]
 
 SDL_BLENDFACTOR_ZERO = 0x1
 SDL_BLENDFACTOR_ONE = 0x2

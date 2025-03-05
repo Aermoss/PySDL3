@@ -1,12 +1,12 @@
 from .__init__ import os, inspect, ctypes, typing, re, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_ASSERT_LEVEL = 2
 SDL_NULL_WHILE_LOOP_CONDITION = 0
 
-SDL_AssertState: typing.TypeAlias = ctypes.c_int
+SDL_AssertState: typing.TypeAlias = SDL_TYPE["SDL_AssertState", ctypes.c_int]
 
 SDL_ASSERTION_RETRY = 0
 SDL_ASSERTION_BREAK = 1
@@ -14,7 +14,7 @@ SDL_ASSERTION_ABORT = 2
 SDL_ASSERTION_IGNORE = 3
 SDL_ASSERTION_ALWAYS_IGNORE = 4
 
-SDL_AssertData: typing.TypeAlias = ctypes.c_void_p
+SDL_AssertData: typing.TypeAlias = SDL_TYPE["SDL_AssertData", ctypes.c_void_p]
 
 class SDL_AssertData(ctypes.Structure):
     _fields_ = [

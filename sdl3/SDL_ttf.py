@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, SDL_PLATFORM_SPECIFIC, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_TTF_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_TTF_BINARY
 
 from .SDL_pixels import SDL_Color
 from .SDL_gpu import SDL_GPUDevice, SDL_GPUTexture
@@ -66,7 +66,7 @@ SDL_FUNC("TTF_SetFontSizeDPI", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c
 SDL_FUNC("TTF_GetFontSize", ctypes.c_float, ctypes.POINTER(TTF_Font))
 SDL_FUNC("TTF_GetFontDPI", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
-TTF_FontStyleFlags: typing.TypeAlias = ctypes.c_uint32
+TTF_FontStyleFlags: typing.TypeAlias = SDL_TYPE["TTF_FontStyleFlags", ctypes.c_uint32]
 
 TTF_STYLE_NORMAL = 0x00
 TTF_STYLE_BOLD = 0x01
@@ -79,7 +79,7 @@ SDL_FUNC("TTF_GetFontStyle", TTF_FontStyleFlags, ctypes.POINTER(TTF_Font))
 SDL_FUNC("TTF_SetFontOutline", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_int)
 SDL_FUNC("TTF_GetFontOutline", ctypes.c_int, ctypes.POINTER(TTF_Font))
 
-TTF_HintingFlags: typing.TypeAlias = ctypes.c_int
+TTF_HintingFlags: typing.TypeAlias = SDL_TYPE["TTF_HintingFlags", ctypes.c_int]
 
 TTF_HINTING_NORMAL = 0
 TTF_HINTING_LIGHT = 1
@@ -94,7 +94,7 @@ SDL_FUNC("TTF_GetFontHinting", TTF_HintingFlags, ctypes.POINTER(TTF_Font))
 SDL_FUNC("TTF_SetFontSDF", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_bool)
 SDL_FUNC("TTF_GetFontSDF", ctypes.c_bool, ctypes.POINTER(TTF_Font))
 
-TTF_HorizontalAlignment: typing.TypeAlias = ctypes.c_int
+TTF_HorizontalAlignment: typing.TypeAlias = SDL_TYPE["TTF_HorizontalAlignment", ctypes.c_int]
 
 TTF_HORIZONTAL_ALIGN_INVALID = -1
 TTF_HORIZONTAL_ALIGN_LEFT = 0
@@ -120,7 +120,7 @@ SDL_FUNC("TTF_FontIsScalable", ctypes.c_bool, ctypes.POINTER(TTF_Font))
 SDL_FUNC("TTF_GetFontFamilyName", ctypes.c_char_p, ctypes.POINTER(TTF_Font))
 SDL_FUNC("TTF_GetFontStyleName", ctypes.c_char_p, ctypes.POINTER(TTF_Font))
 
-TTF_Direction: typing.TypeAlias = ctypes.c_int
+TTF_Direction: typing.TypeAlias = SDL_TYPE["TTF_Direction", ctypes.c_int]
 
 TTF_DIRECTION_INVALID = 0
 TTF_DIRECTION_LTR = 4
@@ -142,7 +142,7 @@ SDL_FUNC("TTF_GetGlyphScript", ctypes.c_uint32, ctypes.c_uint32)
 SDL_FUNC("TTF_SetFontLanguage", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_char_p)
 SDL_FUNC("TTF_FontHasGlyph", ctypes.c_bool, ctypes.POINTER(TTF_Font), ctypes.c_uint32)
 
-TTF_ImageType: typing.TypeAlias = ctypes.c_int
+TTF_ImageType: typing.TypeAlias = SDL_TYPE["TTF_ImageType", ctypes.c_int]
 
 TTF_IMAGE_INVALID = 0
 TTF_IMAGE_ALPHA = 1
@@ -226,7 +226,7 @@ class TTF_GPUAtlasDrawSequence(ctypes.Structure):
 SDL_FUNC("TTF_GetGPUTextDrawData", ctypes.POINTER(TTF_GPUAtlasDrawSequence), ctypes.POINTER(TTF_Text))
 SDL_FUNC("TTF_DestroyGPUTextEngine", None, ctypes.POINTER(TTF_TextEngine))
 
-TTF_GPUTextEngineWinding: typing.TypeAlias = ctypes.c_int
+TTF_GPUTextEngineWinding: typing.TypeAlias = SDL_TYPE["TTF_GPUTextEngineWinding", ctypes.c_int]
 
 TTF_GPU_TEXTENGINE_WINDING_INVALID = -1,
 TTF_GPU_TEXTENGINE_WINDING_CLOCKWISE = 0
@@ -274,7 +274,7 @@ SDL_FUNC("TTF_DeleteTextString", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes
 
 SDL_FUNC("TTF_GetTextSize", ctypes.c_bool, ctypes.POINTER(TTF_Text), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
-TTF_SubStringFlags: typing.TypeAlias = ctypes.c_uint32
+TTF_SubStringFlags: typing.TypeAlias = SDL_TYPE["TTF_SubStringFlags", ctypes.c_uint32]
 
 TTF_SUBSTRING_DIRECTION_MASK = 0x000000FF
 TTF_SUBSTRING_TEXT_START = 0x00000100

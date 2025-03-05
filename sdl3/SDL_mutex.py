@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from.SDL_atomic import SDL_AtomicInt
 from .SDL_thread import SDL_ThreadID
@@ -51,7 +51,7 @@ SDL_FUNC("SDL_BroadcastCondition", None, ctypes.POINTER(SDL_Condition))
 SDL_FUNC("SDL_WaitCondition", None, ctypes.POINTER(SDL_Condition), ctypes.POINTER(SDL_Mutex))
 SDL_FUNC("SDL_WaitConditionTimeout", ctypes.c_bool, ctypes.POINTER(SDL_Condition), ctypes.POINTER(SDL_Mutex), ctypes.c_int32)
 
-SDL_InitStatus: typing.TypeAlias = ctypes.c_int
+SDL_InitStatus: typing.TypeAlias = SDL_TYPE["SDL_InitStatus", ctypes.c_int]
 
 SDL_INIT_STATUS_UNINITIALIZED = 0
 SDL_INIT_STATUS_INITIALIZING = 1

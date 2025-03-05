@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_endian import SDL_BYTEORDER, SDL_BIG_ENDIAN
 
@@ -11,7 +11,7 @@ SDL_ALPHA_OPAQUE_FLOAT = 1.0
 SDL_ALPHA_TRANSPARENT = 0
 SDL_ALPHA_TRANSPARENT_FLOAT = 0.0
 
-SDL_PixelType: typing.TypeAlias = ctypes.c_int
+SDL_PixelType: typing.TypeAlias = SDL_TYPE["SDL_PixelType", ctypes.c_int]
 
 SDL_PIXELTYPE_UNKNOWN = 0
 SDL_PIXELTYPE_INDEX1 = 1
@@ -27,13 +27,13 @@ SDL_PIXELTYPE_ARRAYF16 = 10
 SDL_PIXELTYPE_ARRAYF32 = 11
 SDL_PIXELTYPE_INDEX2 = 12
 
-SDL_BitmapOrder: typing.TypeAlias = ctypes.c_int
+SDL_BitmapOrder: typing.TypeAlias = SDL_TYPE["SDL_BitmapOrder", ctypes.c_int]
 
 SDL_BITMAPORDER_NONE = 0
 SDL_BITMAPORDER_4321 = 1
 SDL_BITMAPORDER_1234 = 2
 
-SDL_PackedOrder: typing.TypeAlias = ctypes.c_int
+SDL_PackedOrder: typing.TypeAlias = SDL_TYPE["SDL_PackedOrder", ctypes.c_int]
 
 SDL_PACKEDORDER_NONE = 0
 SDL_PACKEDORDER_XRGB = 1
@@ -45,7 +45,7 @@ SDL_PACKEDORDER_BGRX = 6
 SDL_PACKEDORDER_ABGR = 7
 SDL_PACKEDORDER_BGRA = 8
 
-SDL_ArrayOrder: typing.TypeAlias = ctypes.c_int
+SDL_ArrayOrder: typing.TypeAlias = SDL_TYPE["SDL_ArrayOrder", ctypes.c_int]
 
 SDL_ARRAYORDER_NONE = 0
 SDL_ARRAYORDER_RGB = 1
@@ -55,7 +55,7 @@ SDL_ARRAYORDER_BGR = 4
 SDL_ARRAYORDER_BGRA = 5
 SDL_ARRAYORDER_ABGR = 6
 
-SDL_PackedLayout: typing.TypeAlias = ctypes.c_int
+SDL_PackedLayout: typing.TypeAlias = SDL_TYPE["SDL_PackedLayout", ctypes.c_int]
 
 SDL_PACKEDLAYOUT_NONE = 0
 SDL_PACKEDLAYOUT_332 = 1
@@ -111,7 +111,7 @@ def SDL_ISPIXELFORMAT_ALPHA(format):
     return SDL_ISPIXELFORMAT_PACKED(format) and (SDL_PIXELORDER(format) in [SDL_PACKEDORDER_ARGB, SDL_PACKEDORDER_RGBA, SDL_PACKEDORDER_ABGR, SDL_PACKEDORDER_BGRA]) \
         or SDL_ISPIXELFORMAT_ARRAY(format) and (SDL_PIXELORDER(format) in [SDL_ARRAYORDER_ARGB, SDL_ARRAYORDER_RGBA, SDL_ARRAYORDER_ABGR, SDL_ARRAYORDER_BGRA])
 
-SDL_PixelFormat: typing.TypeAlias = ctypes.c_int
+SDL_PixelFormat: typing.TypeAlias = SDL_TYPE["SDL_PixelFormat", ctypes.c_int]
 
 SDL_PIXELFORMAT_UNKNOWN = 0x00000000
 SDL_PIXELFORMAT_INDEX1LSB = 0x11100100
@@ -199,19 +199,19 @@ else:
     SDL_PIXELFORMAT_BGRX32 = SDL_PIXELFORMAT_XRGB8888
     SDL_PIXELFORMAT_XBGR32 = SDL_PIXELFORMAT_RGBX8888
 
-SDL_ColorType: typing.TypeAlias = ctypes.c_int
+SDL_ColorType: typing.TypeAlias = SDL_TYPE["SDL_ColorType", ctypes.c_int]
 
 SDL_COLOR_TYPE_UNKNOWN = 0
 SDL_COLOR_TYPE_RGB = 1
 SDL_COLOR_TYPE_YCBCR = 2
 
-SDL_ColorRange: typing.TypeAlias = ctypes.c_int
+SDL_ColorRange: typing.TypeAlias = SDL_TYPE["SDL_ColorRange", ctypes.c_int]
 
 SDL_COLOR_RANGE_UNKOWN = 0
 SDL_COLOR_RANGE_LIMITED = 1
 SDL_COLOR_RANGE_FULL = 2
 
-SDL_ColorPrimaries: typing.TypeAlias = ctypes.c_int
+SDL_ColorPrimaries: typing.TypeAlias = SDL_TYPE["SDL_ColorPrimaries", ctypes.c_int]
 
 SDL_COLOR_PRIMARIES_UNKNOWN = 0
 SDL_COLOR_PRIMARIES_BT709 = 1
@@ -228,7 +228,7 @@ SDL_COLOR_PRIMARIES_SMPTE432 = 12
 SDL_COLOR_PRIMARIES_EBU3213 = 22
 SDL_COLOR_PRIMARIES_CUSTOM = 31
 
-SDL_TransferCharacteristics: typing.TypeAlias = ctypes.c_int
+SDL_TransferCharacteristics: typing.TypeAlias = SDL_TYPE["SDL_TransferCharacteristics", ctypes.c_int]
 
 SDL_TRANSFER_CHARACTERISTICS_UNKNOWN = 0
 SDL_TRANSFER_CHARACTERISTICS_BT709 = 1
@@ -250,7 +250,7 @@ SDL_TRANSFER_CHARACTERISTICS_SMPTE428 = 17
 SDL_TRANSFER_CHARACTERISTICS_HLG = 18
 SDL_TRANSFER_CHARACTERISTICS_CUSTOM = 31
 
-SDL_MatrixCoefficients: typing.TypeAlias = ctypes.c_int
+SDL_MatrixCoefficients: typing.TypeAlias = SDL_TYPE["SDL_MatrixCoefficients", ctypes.c_int]
 
 SDL_MATRIX_COEFFICIENTS_IDENTITY = 0
 SDL_MATRIX_COEFFICIENTS_BT709 = 1
@@ -268,14 +268,14 @@ SDL_MATRIX_COEFFICIENTS_CHROMA_DERIVED_CL = 13
 SDL_MATRIX_COEFFICIENTS_ICTCP = 14
 SDL_MATRIX_COEFFICIENTS_CUSTOM = 31
 
-SDL_ChromaLocation: typing.TypeAlias = ctypes.c_int
+SDL_ChromaLocation: typing.TypeAlias = SDL_TYPE["SDL_ChromaLocation", ctypes.c_int]
 
 SDL_CHROMA_LOCATION_NONE = 0
 SDL_CHROMA_LOCATION_LEFT = 1
 SDL_CHROMA_LOCATION_CENTER = 2
 SDL_CHROMA_LOCATION_TOPLEFT = 3
 
-SDL_Colorspace: typing.TypeAlias = ctypes.c_int
+SDL_Colorspace: typing.TypeAlias = SDL_TYPE["SDL_Colorspace", ctypes.c_int]
 
 SDL_COLORSPACE_UNKNOWN = 0x00000000
 SDL_COLORSPACE_SRGB = 0x120005a0

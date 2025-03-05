@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_surface import SDL_Surface
 
@@ -14,7 +14,7 @@ class SDL_TrayMenu(ctypes.c_void_p):
 class SDL_TrayEntry(ctypes.c_void_p):
     ...
 
-SDL_TrayEntryFlags: typing.TypeAlias = ctypes.c_uint32
+SDL_TrayEntryFlags: typing.TypeAlias = SDL_TYPE["SDL_TrayEntryFlags", ctypes.c_uint32]
 
 SDL_TRAYENTRY_BUTTON = 0x00000001
 SDL_TRAYENTRY_CHECKBOX = 0x00000002

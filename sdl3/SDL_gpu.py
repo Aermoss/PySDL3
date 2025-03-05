@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
 from .SDL_surface import SDL_FlipMode
@@ -48,7 +48,7 @@ class SDL_GPUCopyPass(ctypes.c_void_p):
 class SDL_GPUFence(ctypes.c_void_p):
     ...
 
-SDL_GPUPrimitiveType: typing.TypeAlias = ctypes.c_int
+SDL_GPUPrimitiveType: typing.TypeAlias = SDL_TYPE["SDL_GPUPrimitiveType", ctypes.c_int]
 
 SDL_GPU_PRIMITIVETYPE_TRIANGLELIST = 0
 SDL_GPU_PRIMITIVETYPE_TRIANGLESTRIP = 1
@@ -56,25 +56,25 @@ SDL_GPU_PRIMITIVETYPE_LINELIST = 2
 SDL_GPU_PRIMITIVETYPE_LINESTRIP = 3
 SDL_GPU_PRIMITIVETYPE_POINTLIST = 4
 
-SDL_GPULoadOp: typing.TypeAlias = ctypes.c_int
+SDL_GPULoadOp: typing.TypeAlias = SDL_TYPE["SDL_GPULoadOp", ctypes.c_int]
 
 SDL_GPU_LOADOP_LOAD = 0
 SDL_GPU_LOADOP_CLEAR = 1
 SDL_GPU_LOADOP_DONT_CARE = 2
 
-SDL_GPUStoreOp: typing.TypeAlias = ctypes.c_int
+SDL_GPUStoreOp: typing.TypeAlias = SDL_TYPE["SDL_GPUStoreOp", ctypes.c_int]
 
 SDL_GPU_STOREOP_STORE = 0
 SDL_GPU_STOREOP_DONT_CARE = 1
 SDL_GPU_STOREOP_RESOLVE = 2
 SDL_GPU_STOREOP_RESOLVE_AND_STORE = 3
 
-SDL_GPUIndexElementSize: typing.TypeAlias = ctypes.c_int
+SDL_GPUIndexElementSize: typing.TypeAlias = SDL_TYPE["SDL_GPUIndexElementSize", ctypes.c_int]
 
 SDL_GPU_INDEXELEMENTSIZE_16BIT = 0
 SDL_GPU_INDEXELEMENTSIZE_32BIT = 1
 
-SDL_GPUTextureFormat: typing.TypeAlias = ctypes.c_int
+SDL_GPUTextureFormat: typing.TypeAlias = SDL_TYPE["SDL_GPUTextureFormat", ctypes.c_int]
 
 SDL_GPU_TEXTUREFORMAT_INVALID = 0
 
@@ -195,7 +195,7 @@ SDL_GPU_TEXTUREFORMAT_ASTC_10x10_FLOAT = 102
 SDL_GPU_TEXTUREFORMAT_ASTC_12x10_FLOAT = 103
 SDL_GPU_TEXTUREFORMAT_ASTC_12x12_FLOAT = 104
 
-SDL_GPUTextureUsageFlags: typing.TypeAlias = ctypes.c_uint32
+SDL_GPUTextureUsageFlags: typing.TypeAlias = SDL_TYPE["SDL_GPUTextureUsageFlags", ctypes.c_uint32]
 
 SDL_GPU_TEXTUREUSAGE_SAMPLER = 1 << 0
 SDL_GPU_TEXTUREUSAGE_COLOR_TARGET = 1 << 1
@@ -205,7 +205,7 @@ SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_READ = 1 << 4
 SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_WRITE = 1 << 5
 SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_SIMULTANEOUS_READ_WRITE = 1 << 6
 
-SDL_GPUTextureType: typing.TypeAlias = ctypes.c_int
+SDL_GPUTextureType: typing.TypeAlias = SDL_TYPE["SDL_GPUTextureType", ctypes.c_int]
 
 SDL_GPU_TEXTURETYPE_2D = 0
 SDL_GPU_TEXTURETYPE_2D_ARRAY = 1
@@ -213,14 +213,14 @@ SDL_GPU_TEXTURETYPE_3D = 2
 SDL_GPU_TEXTURETYPE_CUBE = 3
 SDL_GPU_TEXTURETYPE_CUBE_ARRAY = 4
 
-SDL_GPUSampleCount: typing.TypeAlias = ctypes.c_int
+SDL_GPUSampleCount: typing.TypeAlias = SDL_TYPE["SDL_GPUSampleCount", ctypes.c_int]
 
 SDL_GPU_SAMPLECOUNT_1 = 0
 SDL_GPU_SAMPLECOUNT_2 = 1
 SDL_GPU_SAMPLECOUNT_4 = 2
 SDL_GPU_SAMPLECOUNT_8 = 3
 
-SDL_GPUCubeMapFace: typing.TypeAlias = ctypes.c_int
+SDL_GPUCubeMapFace: typing.TypeAlias = SDL_TYPE["SDL_GPUCubeMapFace", ctypes.c_int]
 
 SDL_GPU_CUBEMAPFACE_POSITIVEX = 0
 SDL_GPU_CUBEMAPFACE_NEGATIVEX = 1
@@ -229,7 +229,7 @@ SDL_GPU_CUBEMAPFACE_NEGATIVEY = 3
 SDL_GPU_CUBEMAPFACE_POSITIVEZ = 4
 SDL_GPU_CUBEMAPFACE_NEGATIVEZ = 5
 
-SDL_GPUBufferUsageFlags: typing.TypeAlias = ctypes.c_uint32
+SDL_GPUBufferUsageFlags: typing.TypeAlias = SDL_TYPE["SDL_GPUBufferUsageFlags", ctypes.c_uint32]
 
 SDL_GPU_BUFFERUSAGE_VERTEX = 1 << 0
 SDL_GPU_BUFFERUSAGE_INDEX = 1 << 1
@@ -238,17 +238,17 @@ SDL_GPU_BUFFERUSAGE_GRAPHICS_STORAGE_READ = 1 << 3
 SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_READ = 1 << 4
 SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_WRITE = 1 << 5
 
-SDL_GPUTransferBufferUsage: typing.TypeAlias = ctypes.c_int
+SDL_GPUTransferBufferUsage: typing.TypeAlias = SDL_TYPE["SDL_GPUTransferBufferUsage", ctypes.c_int]
 
 SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD = 0
 SDL_GPU_TRANSFERBUFFERUSAGE_DOWNLOAD = 1
 
-SDL_GPUShaderStage: typing.TypeAlias = ctypes.c_int
+SDL_GPUShaderStage: typing.TypeAlias = SDL_TYPE["SDL_GPUShaderStage", ctypes.c_int]
 
 SDL_GPU_SHADERSTAGE_VERTEX = 0
 SDL_GPU_SHADERSTAGE_FRAGMENT = 1
 
-SDL_GPUShaderFormat: typing.TypeAlias = ctypes.c_uint32
+SDL_GPUShaderFormat: typing.TypeAlias = SDL_TYPE["SDL_GPUShaderFormat", ctypes.c_uint32]
 
 SDL_GPU_SHADERFORMAT_INVALID = 0
 SDL_GPU_SHADERFORMAT_PRIVATE = 1 << 0
@@ -258,7 +258,7 @@ SDL_GPU_SHADERFORMAT_DXIL = 1 << 3
 SDL_GPU_SHADERFORMAT_MSL = 1 << 4
 SDL_GPU_SHADERFORMAT_METALLIB = 1 << 5
 
-SDL_GPUVertexElementFormat: typing.TypeAlias = ctypes.c_int
+SDL_GPUVertexElementFormat: typing.TypeAlias = SDL_TYPE["SDL_GPUVertexElementFormat", ctypes.c_int]
 
 SDL_GPU_VERTEXELEMENTFORMAT_INVALID = 0
 
@@ -304,28 +304,28 @@ SDL_GPU_VERTEXELEMENTFORMAT_USHORT4_NORM = 28
 SDL_GPU_VERTEXELEMENTFORMAT_HALF2 = 29
 SDL_GPU_VERTEXELEMENTFORMAT_HALF4 = 30
 
-SDL_GPUVertexInputRate: typing.TypeAlias = ctypes.c_int
+SDL_GPUVertexInputRate: typing.TypeAlias = SDL_TYPE["SDL_GPUVertexInputRate", ctypes.c_int]
 
 SDL_GPU_VERTEXINPUTRATE_VERTEX = 0
 SDL_GPU_VERTEXINPUTRATE_INSTANCE = 1
 
-SDL_GPUFillMode: typing.TypeAlias = ctypes.c_int
+SDL_GPUFillMode: typing.TypeAlias = SDL_TYPE["SDL_GPUFillMode", ctypes.c_int]
 
 SDL_GPU_FILLMODE_FILL = 0
 SDL_GPU_FILLMODE_LINE = 1
 
-SDL_GPUCullMode: typing.TypeAlias = ctypes.c_int
+SDL_GPUCullMode: typing.TypeAlias = SDL_TYPE["SDL_GPUCullMode", ctypes.c_int]
 
 SDL_GPU_CULLMODE_NONE = 0
 SDL_GPU_CULLMODE_FRONT = 1
 SDL_GPU_CULLMODE_BACK = 2
 
-SDL_GPUFrontFace: typing.TypeAlias = ctypes.c_int
+SDL_GPUFrontFace: typing.TypeAlias = SDL_TYPE["SDL_GPUFrontFace", ctypes.c_int]
 
 SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE = 0
 SDL_GPU_FRONTFACE_CLOCKWISE = 1
 
-SDL_GPUCompareOp: typing.TypeAlias = ctypes.c_int
+SDL_GPUCompareOp: typing.TypeAlias = SDL_TYPE["SDL_GPUCompareOp", ctypes.c_int]
 
 SDL_GPU_COMPAREOP_INVALID = 0
 SDL_GPU_COMPAREOP_NEVER = 1
@@ -337,7 +337,7 @@ SDL_GPU_COMPAREOP_NOT_EQUAL = 6
 SDL_GPU_COMPAREOP_GREATER_OR_EQUAL = 7
 SDL_GPU_COMPAREOP_ALWAYS = 8
 
-SDL_GPUStencilOp: typing.TypeAlias = ctypes.c_int
+SDL_GPUStencilOp: typing.TypeAlias = SDL_TYPE["SDL_GPUStencilOp", ctypes.c_int]
 
 SDL_GPU_STENCILOP_INVALID = 0
 SDL_GPU_STENCILOP_KEEP = 1
@@ -349,7 +349,7 @@ SDL_GPU_STENCILOP_INVERT = 6
 SDL_GPU_STENCILOP_INCREMENT_AND_WRAP = 7
 SDL_GPU_STENCILOP_DECREMENT_AND_WRAP = 8
 
-SDL_GPUBlendOp: typing.TypeAlias = ctypes.c_int
+SDL_GPUBlendOp: typing.TypeAlias = SDL_TYPE["SDL_GPUBlendOp", ctypes.c_int]
 
 SDL_GPU_BLENDOP_INVALID = 0
 SDL_GPU_BLENDOP_ADD = 1
@@ -358,7 +358,7 @@ SDL_GPU_BLENDOP_REVERSE_SUBTRACT = 3
 SDL_GPU_BLENDOP_MIN = 4
 SDL_GPU_BLENDOP_MAX = 5
 
-SDL_GPUBlendFactor: typing.TypeAlias = ctypes.c_int
+SDL_GPUBlendFactor: typing.TypeAlias = SDL_TYPE["SDL_GPUBlendFactor", ctypes.c_int]
 
 SDL_GPU_BLENDFACTOR_INVALID = 0
 SDL_GPU_BLENDFACTOR_ZERO = 1
@@ -375,36 +375,36 @@ SDL_GPU_BLENDFACTOR_CONSTANT_COLOR = 11
 SDL_GPU_BLENDFACTOR_ONE_MINUS_CONSTANT_COLOR = 12
 SDL_GPU_BLENDFACTOR_SRC_ALPHA_SATURATE = 13
 
-SDL_GPUColorComponentFlags: typing.TypeAlias = ctypes.c_uint8
+SDL_GPUColorComponentFlags: typing.TypeAlias = SDL_TYPE["SDL_GPUColorComponentFlags", ctypes.c_uint8]
 
 SDL_GPU_COLORCOMPONENT_R = 1 << 0
 SDL_GPU_COLORCOMPONENT_G = 1 << 1
 SDL_GPU_COLORCOMPONENT_B = 1 << 2
 SDL_GPU_COLORCOMPONENT_A = 1 << 3
 
-SDL_GPUFilter: typing.TypeAlias = ctypes.c_int
+SDL_GPUFilter: typing.TypeAlias = SDL_TYPE["SDL_GPUFilter", ctypes.c_int]
 
 SDL_GPU_FILTER_NEAREST = 0
 SDL_GPU_FILTER_LINEAR = 1
 
-SDL_GPUSamplerMipmapMode: typing.TypeAlias = ctypes.c_int
+SDL_GPUSamplerMipmapMode: typing.TypeAlias = SDL_TYPE["SDL_GPUSamplerMipmapMode", ctypes.c_int]
 
 SDL_GPU_SAMPLERMIPMAPMODE_NEAREST = 0
 SDL_GPU_SAMPLERMIPMAPMODE_LINEAR = 1
 
-SDL_GPUSamplerAddressMode: typing.TypeAlias = ctypes.c_int
+SDL_GPUSamplerAddressMode: typing.TypeAlias = SDL_TYPE["SDL_GPUSamplerAddressMode", ctypes.c_int]
 
 SDL_GPU_SAMPLERADDRESSMODE_REPEAT = 0
 SDL_GPU_SAMPLERADDRESSMODE_MIRRORED_REPEAT = 1
 SDL_GPU_SAMPLERADDRESSMODE_CLAMP_TO_EDGE = 2
 
-SDL_GPUPresentMode: typing.TypeAlias = ctypes.c_int
+SDL_GPUPresentMode: typing.TypeAlias = SDL_TYPE["SDL_GPUPresentMode", ctypes.c_int]
 
 SDL_GPU_PRESENTMODE_VSYNC = 0
 SDL_GPU_PRESENTMODE_IMMEDIATE = 1
 SDL_GPU_PRESENTMODE_MAILBOX = 2
 
-SDL_GPUSwapchainComposition: typing.TypeAlias = ctypes.c_int
+SDL_GPUSwapchainComposition: typing.TypeAlias = SDL_TYPE["SDL_GPUSwapchainComposition", ctypes.c_int]
 
 SDL_GPU_SWAPCHAINCOMPOSITION_SDR = 0
 SDL_GPU_SWAPCHAINCOMPOSITION_SDR_LINEAR = 1

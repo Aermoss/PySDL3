@@ -1,9 +1,9 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_PowerState: typing.TypeAlias = ctypes.c_int
+SDL_PowerState: typing.TypeAlias = SDL_TYPE["SDL_PowerState", ctypes.c_int]
 
 SDL_POWERSTATE_ERROR = -1
 SDL_POWERSTATE_UNKNOWN = 0

@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_sensor import SDL_SensorType
 from .SDL_properties import SDL_PropertiesID
@@ -11,9 +11,8 @@ SDL_SET_CURRENT_BINARY(SDL_BINARY)
 class SDL_Joystick(ctypes.c_void_p):
     ...
 
-SDL_JoystickID: typing.TypeAlias = ctypes.c_uint32
-
-SDL_JoystickType: typing.TypeAlias = ctypes.c_int
+SDL_JoystickID: typing.TypeAlias = SDL_TYPE["SDL_JoystickID", ctypes.c_uint32]
+SDL_JoystickType: typing.TypeAlias = SDL_TYPE["SDL_JoystickType", ctypes.c_int]
 
 SDL_JOYSTICK_TYPE_UNKNOWN = 0
 SDL_JOYSTICK_TYPE_GAMEPAD = 1
@@ -27,7 +26,7 @@ SDL_JOYSTICK_TYPE_ARCADE_PAD = 8
 SDL_JOYSTICK_TYPE_THROTTLE = 9
 SDL_JOYSTICK_TYPE_COUNT = 10
 
-SDL_JoystickConnectionState: typing.TypeAlias = ctypes.c_int
+SDL_JoystickConnectionState: typing.TypeAlias = SDL_TYPE["SDL_JoystickConnectionState", ctypes.c_int]
 
 SDL_JOYSTICK_CONNECTION_INVALID = -1
 SDL_JOYSTICK_CONNECTION_UNKNOWN = 0

@@ -1,7 +1,4 @@
-from .__init__ import sys, ctypes, array, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
-
-SDL_SET_CURRENT_BINARY(SDL_BINARY)
+from .__init__ import sys, array
 
 SDL_LIL_ENDIAN, SDL_BIG_ENDIAN = 1234, 4321
 SDL_BYTEORDER = SDL_LIL_ENDIAN \

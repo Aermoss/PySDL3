@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_PixelFormat, SDL_Colorspace, SDL_Palette
 from .SDL_properties import SDL_PropertiesID
@@ -9,7 +9,7 @@ from .SDL_rect import SDL_Rect
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_SurfaceFlags: typing.TypeAlias = ctypes.c_uint32
+SDL_SurfaceFlags: typing.TypeAlias = SDL_TYPE["SDL_SurfaceFlags", ctypes.c_uint32]
 
 SDL_SURFACE_PREALLOCATED = 0x00000001
 SDL_SURFACE_LOCK_NEEDED = 0x00000002
@@ -18,12 +18,12 @@ SDL_SURFACE_SIMD_ALIGNED = 0x00000008
 
 SDL_MUSTLOCK = lambda s: (s.flags & SDL_SURFACE_LOCK_NEEDED) == SDL_SURFACE_LOCK_NEEDED
 
-SDL_ScaleMode: typing.TypeAlias = ctypes.c_uint32
+SDL_ScaleMode: typing.TypeAlias = SDL_TYPE["SDL_ScaleMode", ctypes.c_uint32]
 
 SDL_SCALEMODE_NEAREST = 0
 SDL_SCALEMODE_LINEAR = 1
 
-SDL_FlipMode: typing.TypeAlias = ctypes.c_uint32
+SDL_FlipMode: typing.TypeAlias = SDL_TYPE["SDL_FlipMode", ctypes.c_uint32]
 
 SDL_FLIP_NONE = 0
 SDL_FLIP_HORIZONTAL = 1

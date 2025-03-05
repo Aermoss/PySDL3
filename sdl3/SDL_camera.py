@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_PixelFormat, SDL_Colorspace
 from .SDL_properties import SDL_PropertiesID
@@ -7,7 +7,7 @@ from .SDL_surface import SDL_Surface
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_CameraID: typing.TypeAlias = ctypes.c_uint32
+SDL_CameraID: typing.TypeAlias = SDL_TYPE["SDL_CameraID", ctypes.c_uint32]
 
 class SDL_Camera(ctypes.c_void_p):
     ...
@@ -22,7 +22,7 @@ class SDL_CameraSpec(ctypes.Structure):
         ("framerate_denominator", ctypes.c_int)
     ]
 
-SDL_CameraPosition: typing.TypeAlias = ctypes.c_int
+SDL_CameraPosition: typing.TypeAlias = SDL_TYPE["SDL_CameraPosition", ctypes.c_int]
 
 SDL_CAMERA_POSITION_UNKNOWN = 0
 SDL_CAMERA_POSITION_FRONT_FACING = 1

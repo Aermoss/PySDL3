@@ -1,11 +1,11 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_IOStatus: typing.TypeAlias = ctypes.c_uint32
+SDL_IOStatus: typing.TypeAlias = SDL_TYPE["SDL_IOStatus", ctypes.c_uint32]
 
 SDL_IO_STATUS_READY = 0
 SDL_IO_STATUS_ERROR = 1
@@ -14,7 +14,7 @@ SDL_IO_STATUS_NOT_READY = 3
 SDL_IO_STATUS_READONLY = 4
 SDL_IO_STATUS_WRITEONLY = 5
 
-SDL_IOWhence: typing.TypeAlias = ctypes.c_uint32
+SDL_IOWhence: typing.TypeAlias = SDL_TYPE["SDL_IOWhence", ctypes.c_uint32]
 
 SDL_IO_SEEK_SET = 0
 SDL_IO_SEEK_CUR = 1

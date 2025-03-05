@@ -231,6 +231,12 @@ def SDL_FUNC(name: str, retType: typing.Any, *argTypes: list[typing.Any]) -> Non
     __module__.functions[binary[1]][name] = func
     if not __doc_generator__: setattr(__module__, name, func)
 
+class SDL_TYPE:
+    @classmethod
+    def __class_getitem__(cls, key) -> typing.Any:
+        """Create a new type from a ctypes type."""
+        return type(key[0], (ctypes._SimpleCData, ), {"_type_": key[1]._type_})
+    
 class SDL_POINTER:
     @classmethod
     def __class_getitem__(cls, key) -> typing.Any:

@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
@@ -24,7 +24,7 @@ SDL_FUNC("SDL_Delay", None, ctypes.c_uint32)
 SDL_FUNC("SDL_DelayNS", None, ctypes.c_uint64)
 SDL_FUNC("SDL_DelayPrecise", None, ctypes.c_uint64)
 
-SDL_TimerID: typing.TypeAlias = ctypes.c_uint32
+SDL_TimerID: typing.TypeAlias = SDL_TYPE["SDL_TimerID", ctypes.c_uint32]
 SDL_TimerCallback = ctypes.CFUNCTYPE(ctypes.c_uint32, ctypes.c_void_p, SDL_TimerID, ctypes.c_uint32)
 
 SDL_FUNC("SDL_AddTimer", SDL_TimerID, ctypes.c_uint32, SDL_TimerCallback, ctypes.c_void_p)

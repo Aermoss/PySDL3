@@ -1,16 +1,15 @@
-from .__init__ import sys, os, ctypes, atexit, typing, types, SDL_GET_BINARY, SDL_BINARY
+from .__init__ import sys, os, ctypes, atexit, types, \
+    SDL_POINTER, SDL_GET_BINARY, SDL_BINARY
 
 from .SDL_main import SDL_main_func, \
     SDL_AppEvent_func, SDL_AppInit_func, SDL_AppIterate_func, SDL_AppQuit_func
-
-LP_c_char_p: typing.TypeAlias = ctypes.POINTER(ctypes.c_char_p) # type: ignore
 
 if not int(os.environ.get("SDL_MAIN_HANDLED", "0")) > 0 and not int(os.environ.get("SDL_MAIN_NOIMPL", "0")) > 0:
     import __main__
 
     if int(os.environ.get("SDL_MAIN_USE_CALLBACKS", "0")) > 0:
         @SDL_main_func
-        def SDL_main(argc: ctypes.c_int, argv: LP_c_char_p) -> ctypes.c_int:
+        def SDL_main(argc: ctypes.c_int, argv: SDL_POINTER[ctypes.c_char_p]) -> ctypes.c_int:
             callbacks = [getattr(__main__, i, None) for i in ["SDL_AppInit", "SDL_AppIterate", "SDL_AppEvent", "SDL_AppQuit"]]
 
             for index, i in enumerate(callbacks):

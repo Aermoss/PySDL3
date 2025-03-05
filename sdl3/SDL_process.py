@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
 from .SDL_iostream import SDL_IOStream
@@ -11,7 +11,7 @@ class SDL_Process(ctypes.c_void_p):
 
 SDL_FUNC("SDL_CreateProcess", ctypes.POINTER(SDL_Process), ctypes.POINTER(ctypes.c_char_p), ctypes.c_bool)
 
-SDL_ProcessIO: typing.TypeAlias = ctypes.c_int
+SDL_ProcessIO: typing.TypeAlias = SDL_TYPE["SDL_ProcessIO", ctypes.c_int]
 
 SDL_PROCESS_STDIO_INHERITED = 0
 SDL_PROCESS_STDIO_NULL = 1

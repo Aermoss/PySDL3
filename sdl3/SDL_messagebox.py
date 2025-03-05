@@ -1,11 +1,11 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_MessageBoxFlags: typing.TypeAlias = ctypes.c_uint32
+SDL_MessageBoxFlags: typing.TypeAlias = SDL_TYPE["SDL_MessageBoxFlags", ctypes.c_uint32]
 
 SDL_MESSAGEBOX_ERROR = 0x00000010
 SDL_MESSAGEBOX_WARNING = 0x00000020
@@ -13,7 +13,7 @@ SDL_MESSAGEBOX_INFORMATION = 0x00000040
 SDL_MESSAGEBOX_BUTTONS_LEFT_TO_RIGHT = 0x00000080
 SDL_MESSAGEBOX_BUTTONS_RIGHT_TO_LEFT = 0x00000100
 
-SDL_MessageBoxButtonFlags: typing.TypeAlias = ctypes.c_uint32
+SDL_MessageBoxButtonFlags: typing.TypeAlias = SDL_TYPE["SDL_MessageBoxButtonFlags", ctypes.c_uint32]
 
 SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT = 0x00000001
 SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT = 0x00000002
@@ -32,7 +32,7 @@ class SDL_MessageBoxColor(ctypes.Structure):
         ("b", ctypes.c_uint8)
     ]
 
-SDL_MessageBoxColorType: typing.TypeAlias = ctypes.c_int
+SDL_MessageBoxColorType: typing.TypeAlias = SDL_TYPE["SDL_MessageBoxColorType", ctypes.c_int]
 
 SDL_MESSAGEBOX_COLOR_BACKGROUND = 0
 SDL_MESSAGEBOX_COLOR_TEXT = 1

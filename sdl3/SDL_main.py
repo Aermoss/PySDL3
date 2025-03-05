@@ -1,8 +1,8 @@
 from .__init__ import ctypes, SDL_PLATFORM_SPECIFIC, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
-from .SDL_init import SDL_AppResult, \
-    SDL_AppInit_func, SDL_AppIterate_func, SDL_AppEvent_func, SDL_AppQuit_func
+from .SDL_init import SDL_AppInit_func, \
+    SDL_AppIterate_func, SDL_AppEvent_func, SDL_AppQuit_func
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 

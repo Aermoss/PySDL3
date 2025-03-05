@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, SDL_NOT_IMPLEMENTED, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_RTF_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_RTF_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_Color
 from .SDL_render import SDL_Renderer, SDL_Texture
@@ -26,7 +26,7 @@ SDL_FUNC("RTF_Version", ctypes.c_int)
 class RTF_Context(ctypes.c_void_p):
     ...
 
-RTF_FontFamily: typing.TypeAlias = ctypes.c_int
+RTF_FontFamily: typing.TypeAlias = SDL_TYPE["RTF_FontFamily", ctypes.c_int]
 
 RTF_FontDefault = 0
 RTF_FontRoman = 1
@@ -37,7 +37,7 @@ RTF_FontDecor = 5
 RTF_FontTech = 6
 RTF_FontBidi = 7
 
-RTF_FontStyle: typing.TypeAlias = ctypes.c_int
+RTF_FontStyle: typing.TypeAlias = SDL_TYPE["RTF_FontStyle", ctypes.c_int]
 
 RTF_FontNormal = 0x00
 RTF_FontBold = 0x01

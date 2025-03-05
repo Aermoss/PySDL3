@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_joystick import SDL_Joystick
 
@@ -144,7 +144,7 @@ class SDL_HapticEffect(ctypes.Union):
         ("custom", SDL_HapticCustom)
     ]
 
-SDL_HapticID: typing.TypeAlias = ctypes.c_uint32
+SDL_HapticID: typing.TypeAlias = SDL_TYPE["SDL_HapticID", ctypes.c_uint32]
 
 SDL_FUNC("SDL_GetHaptics", ctypes.POINTER(SDL_HapticID), ctypes.POINTER(ctypes.c_int))
 SDL_FUNC("SDL_GetHapticNameForID", ctypes.c_char_p, SDL_HapticID)

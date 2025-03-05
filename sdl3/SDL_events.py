@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window, SDL_WindowID, SDL_DisplayID
 from .SDL_sensor import SDL_SensorID
@@ -16,7 +16,7 @@ from .SDL_touch import SDL_TouchID, SDL_FingerID
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_EventType: typing.TypeAlias = ctypes.c_int
+SDL_EventType: typing.TypeAlias = SDL_TYPE["SDL_EventType", ctypes.c_int]
 
 SDL_EVENT_FIRST = 0x0
 SDL_EVENT_QUIT = 0x100
@@ -620,7 +620,7 @@ class SDL_Event(ctypes.Union):
 
 SDL_FUNC("SDL_PumpEvents", None)
 
-SDL_EventAction: typing.TypeAlias = ctypes.c_int
+SDL_EventAction: typing.TypeAlias = SDL_TYPE["SDL_EventAction", ctypes.c_int]
 
 SDL_ADDEVENT = 0
 SDL_PEEKEVENT = 1

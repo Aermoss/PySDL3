@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, SDL_PLATFORM_SPECIFIC, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_DisplayID
 
@@ -28,7 +28,7 @@ if SDL_PLATFORM_SPECIFIC(system = ["Linux"]):
 SDL_FUNC("SDL_IsTablet", ctypes.c_bool)
 SDL_FUNC("SDL_IsTV", ctypes.c_bool)
 
-SDL_Sandbox: typing.TypeAlias = ctypes.c_int
+SDL_Sandbox: typing.TypeAlias = SDL_TYPE["SDL_Sandbox", ctypes.c_int]
 
 SDL_SANDBOX_NONE = 0
 SDL_SANDBOX_UNKNOWN_CONTAINER = 1

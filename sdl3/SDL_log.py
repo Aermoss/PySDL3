@@ -1,9 +1,9 @@
 from .__init__ import ctypes, typing, \
-    SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_LogCategory: typing.TypeAlias = ctypes.c_int
+SDL_LogCategory: typing.TypeAlias = SDL_TYPE["SDL_LogCategory", ctypes.c_int]
 
 SDL_LOG_CATEGORY_APPLICATION = 0
 SDL_LOG_CATEGORY_ERROR = 1
@@ -27,7 +27,7 @@ SDL_LOG_CATEGORY_RESERVED9 = 18
 SDL_LOG_CATEGORY_RESERVED10 = 19
 SDL_LOG_CATEGORY_CUSTOM = 20
 
-SDL_LogPriority: typing.TypeAlias = ctypes.c_int
+SDL_LogPriority: typing.TypeAlias = SDL_TYPE["SDL_LogPriority", ctypes.c_int]
 
 SDL_LOG_PRIORITY_INVALID = 0
 SDL_LOG_PRIORITY_TRACE = 1
