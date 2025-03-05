@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
@@ -9,7 +9,7 @@ from .SDL_rect import SDL_Rect
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_KeyboardID = ctypes.c_uint32
+SDL_KeyboardID: typing.TypeAlias = ctypes.c_uint32
 
 SDL_FUNC("SDL_HasKeyboard", ctypes.c_bool)
 SDL_FUNC("SDL_GetKeyboards", ctypes.POINTER(SDL_KeyboardID), ctypes.POINTER(ctypes.c_int))
@@ -29,7 +29,7 @@ SDL_FUNC("SDL_GetKeyFromName", SDL_Keycode, ctypes.c_char_p)
 
 SDL_FUNC("SDL_StartTextInput", ctypes.c_bool, ctypes.POINTER(SDL_Window))
 
-SDL_TextInputType = ctypes.c_int
+SDL_TextInputType: typing.TypeAlias = ctypes.c_int
 
 SDL_TEXTINPUT_TYPE_TEXT = 0
 SDL_TEXTINPUT_TYPE_TEXT_NAME = 1
@@ -41,7 +41,7 @@ SDL_TEXTINPUT_TYPE_NUMBER = 6
 SDL_TEXTINPUT_TYPE_NUMBER_PASSWORD_HIDDEN = 7
 SDL_TEXTINPUT_TYPE_NUMBER_PASSWORD_VISIBLE = 8
 
-SDL_Capitalization = ctypes.c_int
+SDL_Capitalization: typing.TypeAlias = ctypes.c_int
 
 SDL_CAPITALIZE_NONE = 0
 SDL_CAPITALIZE_SENTENCES = 1

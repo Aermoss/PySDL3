@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_MIXER_BINARY
 
 from .SDL_iostream import SDL_IOStream
@@ -21,7 +21,7 @@ SDL_MIXER_VERSION_ATLEAST = lambda x, y, z: \
 
 SDL_FUNC("Mix_Version", ctypes.c_int)
 
-MIX_InitFlags = ctypes.c_uint32
+MIX_InitFlags: typing.TypeAlias = ctypes.c_uint32
 
 MIX_INIT_FLAC = 0x00000001
 MIX_INIT_MOD = 0x00000002
@@ -49,13 +49,13 @@ class Mix_Chunk(ctypes.Structure):
         ("volume", ctypes.c_uint8)
     ]
 
-Mix_Fading = ctypes.c_int
+Mix_Fading: typing.TypeAlias = ctypes.c_int
 
 MIX_NO_FADING = 0
 MIX_FADING_OUT = 1
 MIX_FADING_IN = 2
 
-Mix_MusicType = ctypes.c_int
+Mix_MusicType: typing.TypeAlias = ctypes.c_int
 
 MUS_NONE = 0
 MUS_WAV = 1

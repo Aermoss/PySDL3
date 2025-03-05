@@ -1,14 +1,14 @@
-import os, sys, atexit, typing
+import os, sys, typing, collections.abc as abc
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 os.environ["SDL_DOC_GENERATOR"] = "0"
 
-import sdl3, ctypes
+import sdl3, atexit
 
 functions = {}
 
-def TEST_RegisterFunction(systems: typing.List[str]) -> typing.Callable:
+def TEST_RegisterFunction(systems: list[str]) -> abc.Callable[[abc.Callable[..., typing.Any]], None]:
     return lambda func: functions.update({func: systems})
 
 class TEST_PassFunction(Exception):

@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
 
 from .SDL_atomic import SDL_AtomicInt
@@ -10,17 +10,17 @@ SDL_SET_CURRENT_BINARY(SDL_BINARY)
 class SDL_Thread(ctypes.c_void_p):
     ...
 
-SDL_ThreadID = ctypes.c_uint64
+SDL_ThreadID: typing.TypeAlias = ctypes.c_uint64
 SDL_TLSID = SDL_AtomicInt
 
-SDL_ThreadPriority = ctypes.c_int
+SDL_ThreadPriority: typing.TypeAlias = ctypes.c_int
 
 SDL_THREAD_PRIORITY_LOW = 0
 SDL_THREAD_PRIORITY_NORMAL = 1
 SDL_THREAD_PRIORITY_HIGH = 2
 SDL_THREAD_PRIORITY_TIME_CRITICAL = 3
 
-SDL_ThreadState = ctypes.c_int
+SDL_ThreadState: typing.TypeAlias = ctypes.c_int
 
 SDL_THREAD_UNKNOWN = 0
 SDL_THREAD_ALIVE = 1

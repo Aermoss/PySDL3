@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
@@ -9,12 +9,12 @@ from .SDL_stdinc import SDL_FunctionPointer
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_DisplayID = ctypes.c_uint32
-SDL_WindowID = ctypes.c_uint32
+SDL_DisplayID: typing.TypeAlias = ctypes.c_uint32
+SDL_WindowID: typing.TypeAlias = ctypes.c_uint32
 
 SDL_PROP_GLOBAL_VIDEO_WAYLAND_WL_DISPLAY_POINTER = "SDL.video.wayland.wl_display".encode()
 
-SDL_SystemTheme = ctypes.c_int
+SDL_SystemTheme: typing.TypeAlias = ctypes.c_int
 
 SDL_SYSTEM_THEME_UNKNOWN = 0
 SDL_SYSTEM_THEME_LIGHT = 1
@@ -36,7 +36,7 @@ class SDL_DisplayMode(ctypes.Structure):
         ("internal", ctypes.POINTER(SDL_DisplayModeData))
     ]
 
-SDL_DisplayOrientation = ctypes.c_int
+SDL_DisplayOrientation: typing.TypeAlias = ctypes.c_int
 
 SDL_ORIENTATION_UNKNOWN = 0
 SDL_ORIENTATION_LANDSCAPE = 1
@@ -47,7 +47,7 @@ SDL_ORIENTATION_PORTRAIT_FLIPPED = 4
 class SDL_Window(ctypes.c_void_p):
     ...
 
-SDL_WindowFlags = ctypes.c_uint64
+SDL_WindowFlags: typing.TypeAlias = ctypes.c_uint64
 
 SDL_WINDOW_FULLSCREEN = 0x0000000000000001
 SDL_WINDOW_OPENGL = 0x0000000000000002
@@ -85,7 +85,7 @@ SDL_WINDOWPOS_CENTERED_DISPLAY = lambda x: SDL_WINDOWPOS_CENTERED_MASK | x
 SDL_WINDOWPOS_CENTERED = SDL_WINDOWPOS_CENTERED_DISPLAY(0)
 SDL_WINDOWPOS_ISCENTERED = lambda x: (x & 0xFFFF0000) == SDL_WINDOWPOS_CENTERED_MASK
 
-SDL_FlashOperation = ctypes.c_int
+SDL_FlashOperation: typing.TypeAlias = ctypes.c_int
 
 SDL_FLASH_CANCEL = 0
 SDL_FLASH_BRIEFLY = 1
@@ -96,16 +96,16 @@ class SDL_GLContextState(ctypes.c_void_p):
 
 SDL_GLContext = ctypes.POINTER(SDL_GLContextState)
 
-SDL_EGLDisplay = ctypes.c_void_p
-SDL_EGLConfig = ctypes.c_void_p
-SDL_EGLSurface = ctypes.c_void_p
-SDL_EGLAttrib = ctypes.c_longlong
-SDL_EGLint = ctypes.c_int
+SDL_EGLDisplay: typing.TypeAlias = ctypes.c_void_p
+SDL_EGLConfig: typing.TypeAlias = ctypes.c_void_p
+SDL_EGLSurface: typing.TypeAlias = ctypes.c_void_p
+SDL_EGLAttrib: typing.TypeAlias = ctypes.c_longlong
+SDL_EGLint: typing.TypeAlias = ctypes.c_int
 
 SDL_EGLAttribArrayCallback = ctypes.CFUNCTYPE(ctypes.POINTER(SDL_EGLAttrib), ctypes.c_void_p)
 SDL_EGLIntArrayCallback = ctypes.CFUNCTYPE(ctypes.POINTER(SDL_EGLint), ctypes.c_void_p, SDL_EGLDisplay, SDL_EGLConfig)
 
-SDL_GLAttr = ctypes.c_int
+SDL_GLAttr: typing.TypeAlias = ctypes.c_int
 
 SDL_GL_RED_SIZE = 0
 SDL_GL_GREEN_SIZE = 1
@@ -136,25 +136,25 @@ SDL_GL_CONTEXT_NO_ERROR = 25
 SDL_GL_FLOATBUFFERS = 26
 SDL_GL_EGL_PLATFORM = 27
 
-SDL_GLProfile = ctypes.c_uint32
+SDL_GLProfile: typing.TypeAlias = ctypes.c_uint32
 
 SDL_GL_CONTEXT_PROFILE_CORE = 0x0001
 SDL_GL_CONTEXT_PROFILE_COMPATIBILITY = 0x0002
 SDL_GL_CONTEXT_PROFILE_ES = 0x0004
 
-SDL_GLContextFlag = ctypes.c_uint32
+SDL_GLContextFlag: typing.TypeAlias = ctypes.c_uint32
 
 SDL_GL_CONTEXT_DEBUG_FLAG = 0x0001
 SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG = 0x0002
 SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG = 0x0004
 SDL_GL_CONTEXT_RESET_ISOLATION_FLAG = 0x0008
 
-SDL_GLContextReleaseFlag = ctypes.c_uint32
+SDL_GLContextReleaseFlag: typing.TypeAlias = ctypes.c_uint32
 
 SDL_GL_CONTEXT_RELEASE_BEHAVIOR_NONE = 0x0000
 SDL_GL_CONTEXT_RELEASE_BEHAVIOR_FLUSH = 0x0001
 
-SDL_GLContextResetNotification = ctypes.c_uint32
+SDL_GLContextResetNotification: typing.TypeAlias = ctypes.c_uint32
 
 SDL_GL_CONTEXT_RESET_NO_NOTIFICATION = 0x0000
 SDL_GL_CONTEXT_RESET_LOSE_CONTEXT = 0x0001
@@ -355,7 +355,7 @@ SDL_FUNC("SDL_SetWindowFocusable", ctypes.c_bool, ctypes.POINTER(SDL_Window), ct
 
 SDL_FUNC("SDL_ShowWindowSystemMenu", ctypes.c_bool, ctypes.POINTER(SDL_Window), ctypes.c_int, ctypes.c_int)
 
-SDL_HitTestResult = ctypes.c_int
+SDL_HitTestResult: typing.TypeAlias = ctypes.c_int
 
 SDL_HITTEST_NORMAL = 0
 SDL_HITTEST_DRAGGABLE = 1

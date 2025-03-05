@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_guid import SDL_GUID
@@ -16,7 +16,7 @@ SDL_SET_CURRENT_BINARY(SDL_BINARY)
 class SDL_Gamepad(ctypes.c_void_p):
     ...
 
-SDL_GamepadType = ctypes.c_int
+SDL_GamepadType: typing.TypeAlias = ctypes.c_int
 
 SDL_GAMEPAD_TYPE_UNKNOWN = 0
 SDL_GAMEPAD_TYPE_STANDARD = 1
@@ -31,7 +31,7 @@ SDL_GAMEPAD_TYPE_NINTENDO_SWITCH_JOYCON_RIGHT = 9
 SDL_GAMEPAD_TYPE_NINTENDO_SWITCH_JOYCON_PAIR = 10
 SDL_GAMEPAD_TYPE_COUNT = 11
 
-SDL_GamepadButton = ctypes.c_int
+SDL_GamepadButton: typing.TypeAlias = ctypes.c_int
 
 SDL_GAMEPAD_BUTTON_INVALID = -1
 SDL_GAMEPAD_BUTTON_SOUTH = 0
@@ -62,7 +62,7 @@ SDL_GAMEPAD_BUTTON_MISC5 = 24
 SDL_GAMEPAD_BUTTON_MISC6 = 25
 SDL_GAMEPAD_BUTTON_COUNT = 26
 
-SDL_GamepadButtonLabel = ctypes.c_int
+SDL_GamepadButtonLabel: typing.TypeAlias = ctypes.c_int
 
 SDL_GAMEPAD_BUTTON_LABEL_UNKNOWN = 0
 SDL_GAMEPAD_BUTTON_LABEL_A = 1
@@ -74,7 +74,7 @@ SDL_GAMEPAD_BUTTON_LABEL_CIRCLE = 6
 SDL_GAMEPAD_BUTTON_LABEL_SQUARE = 7
 SDL_GAMEPAD_BUTTON_LABEL_TRIANGLE = 8
 
-SDL_GamepadAxis = ctypes.c_int
+SDL_GamepadAxis: typing.TypeAlias = ctypes.c_int
 
 SDL_GAMEPAD_AXIS_INVALID = -1
 SDL_GAMEPAD_AXIS_LEFTX = 0
@@ -85,7 +85,7 @@ SDL_GAMEPAD_AXIS_LEFT_TRIGGER = 4
 SDL_GAMEPAD_AXIS_RIGHT_TRIGGER = 5
 SDL_GAMEPAD_AXIS_COUNT = 6
 
-SDL_GamepadBindingType = ctypes.c_int
+SDL_GamepadBindingType: typing.TypeAlias = ctypes.c_int
 
 SDL_GAMEPAD_BINDTYPE_NONE = 0
 SDL_GAMEPAD_BINDTYPE_BUTTON = 1

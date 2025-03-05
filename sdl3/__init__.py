@@ -2,20 +2,20 @@
 
 __version__ = "0.9.5b0"
 
-import sys, os, requests, ctypes, ctypes.util, platform, keyword, inspect, types, \
-    asyncio, aiohttp, zipfile, typing, array, atexit, packaging.version, json, re
+import sys, os, requests, ctypes, ctypes.util, platform, keyword, inspect, collections.abc as abc, \
+    asyncio, aiohttp, zipfile, typing, types, array, atexit, packaging.version, json, re
 
 SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_TTF_BINARY, SDL_RTF_BINARY, SDL_NET_BINARY = \
     "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_ttf", "SDL3_rtf", "SDL3_net"
 
-SDL_BINARY_VAR_MAP: typing.Dict[str, str] = {}
+SDL_BINARY_VAR_MAP: dict[str, str] = {}
 
 for i in locals().copy():
     if i.startswith("SDL_") and i.endswith("_BINARY"):
         SDL_BINARY_VAR_MAP[i] = locals()[i]
 
-SDL_BINARY_VAR_MAP_INV: typing.Dict[str, str] = {value: key for key, value in SDL_BINARY_VAR_MAP.items()}
-SDL_REPOSITORIES: typing.List[str] = [key.replace("3", "") for key, _ in SDL_BINARY_VAR_MAP_INV.items()]
+SDL_BINARY_VAR_MAP_INV: dict[str, str] = {value: key for key, value in SDL_BINARY_VAR_MAP.items()}
+SDL_REPOSITORIES: list[str] = [key.replace("3", "") for key, _ in SDL_BINARY_VAR_MAP_INV.items()]
 
 def SDL_FORMAT_ARCH(arch: str) -> str:
     """Format the architecture string."""
@@ -24,10 +24,10 @@ def SDL_FORMAT_ARCH(arch: str) -> str:
     assert False, "Unknown architecture."
 
 SDL_SYSTEM, SDL_ARCH = platform.system(), SDL_FORMAT_ARCH(platform.machine())
-SDL_BINARY_PATTERNS: typing.Dict[str, typing.List[str]] = \
+SDL_BINARY_PATTERNS: dict[str, list[str]] = \
     {"Windows": ["{}.dll"], "Darwin": ["lib{}.dylib", "{0}.framework/{0}", "{0}.framework/Versions/A/{0}"], "Linux": ["lib{}.so"]}
 
-def SDL_PLATFORM_SPECIFIC(system: typing.List[str] = None, arch: typing.List[str] = None) -> bool:
+def SDL_PLATFORM_SPECIFIC(system: list[str] = None, arch: list[str] = None) -> bool:
     """Check if the current platform is inside the given platforms."""
     if int(os.environ.get("SDL_PLATFORM_AGNOSTIC", "0")) > 0: return True
     return (not system or SDL_SYSTEM in system) and (not arch or SDL_ARCH in arch)
@@ -39,7 +39,7 @@ __doc_generator__: int = int(os.environ.get("SDL_DOC_GENERATOR", str(int(not __f
 __initialized__: bool = __name__.split(".")[0] in sys.modules if "." in __name__ else False
 __module__: types.ModuleType = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
 
-def SDL_FIND_BINARIES(libraries: typing.List[str]) -> typing.List[str]:
+def SDL_FIND_BINARIES(libraries: list[str]) -> list[str]:
     """Find binaries of system libraries."""
     libraries = libraries + [f"{library}d" for library in libraries]
     binaries = [f"./{file}" if SDL_SYSTEM in ["Windows"] and not ("/" in file or "\\" in file) else file for library in libraries if (file := ctypes.util.find_library(library))]
@@ -174,7 +174,7 @@ if not __initialized__:
                     binaryData["files"].remove(path)
                     break
 
-def SDL_ARRAY(*args: typing.List[typing.Any], **kwargs: typing.Dict[str, typing.Any]) -> typing.Tuple[ctypes.Array[typing.Any], int]:
+def SDL_ARRAY(*args: list[typing.Any], **kwargs: dict[str, typing.Any]) -> tuple[ctypes.Array[typing.Any], int]:
     """Create a ctypes array."""
     return ((kwargs.get("type") or args[0].__class__) * len(args))(*args), len(args)
 
@@ -184,11 +184,11 @@ def SDL_DEREFERENCE(value: typing.Any) -> typing.Any:
     elif hasattr(value, "_obj"): return value._obj
     else: return value
 
-def SDL_CACHE_FUNC(func: typing.Callable) -> typing.Callable:
+def SDL_CACHE_FUNC(func: abc.Callable[..., typing.Any]) -> abc.Callable[..., typing.Any]:
     """Simple function cache decorator."""
     cache = {}
 
-    def __inner__(*args: typing.List[typing.Any], **kwargs: typing.Dict[str, typing.Any]) -> typing.Any:
+    def __inner__(*args: list[typing.Any], **kwargs: dict[str, typing.Any]) -> typing.Any:
         _hash = hash((args, tuple(frozenset(sorted(kwargs.items())))))
         if _hash not in cache: cache.update({_hash: func(*args, **kwargs)})
         return cache.get(_hash, None)
@@ -196,11 +196,11 @@ def SDL_CACHE_FUNC(func: typing.Callable) -> typing.Callable:
     return __inner__
 
 @SDL_CACHE_FUNC
-def SDL_GET_BINARY_NAME(binary: typing.Any) -> str:
+def SDL_GET_BINARY_NAME(binary: ctypes.CDLL) -> str | None:
     """Get the name of an SDL3 binary."""
     return {v: k for k, v in __module__.binaryMap.items()}.get(binary, None)
 
-def SDL_GET_BINARY(name: str) -> typing.Any:
+def SDL_GET_BINARY(name: str) -> ctypes.CDLL | None:
     """Get an SDL3 binary by its name."""
     return __module__.binaryMap.get(name, None)
 
@@ -212,10 +212,10 @@ def SDL_GET_CURRENT_BINARY() -> typing.Any:
     """Get the current SDL3 binary."""
     return __module__.currentBinary
 
-def SDL_NOT_IMPLEMENTED(name: str) -> typing.Callable:
+def SDL_NOT_IMPLEMENTED(name: str) -> abc.Callable[..., None]:
     return lambda *args, **kwargs: print("\33[31m", f"error: invoked an unimplemented function: '{name}'.", "\33[0m", sep = "", flush = True)
 
-def SDL_FUNC(name: str, retType: typing.Any, *argTypes: typing.List[typing.Any]) -> None:
+def SDL_FUNC(name: str, retType: typing.Any, *argTypes: list[typing.Any]) -> None:
     """Define an SDL3 function."""
 
     if (binary := SDL_GET_CURRENT_BINARY())[0] and hasattr(binary[0], name):
@@ -231,7 +231,7 @@ def SDL_FUNC(name: str, retType: typing.Any, *argTypes: typing.List[typing.Any])
     __module__.functions[binary[1]][name] = func
     if not __doc_generator__: setattr(__module__, name, func)
 
-async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
+async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
     """Get latest releases of SDL3 modules from their official github repositories."""
     session, releases, tasks = aiohttp.ClientSession(), {}, []
     headers = {"Accept": "application/vnd.github+json"}
@@ -268,7 +268,7 @@ async def SDL_GET_LATEST_RELEASES() -> typing.Dict[str, str]:
     await session.close()
     return releases
 
-async def SDL_GET_FUNC_DESCRIPTIONS(funcs: typing.List[typing.Tuple[str, str]], rst: bool = False) -> typing.Tuple[typing.List[str], typing.List[typing.List[str]]]:
+async def SDL_GET_FUNC_DESCRIPTIONS(funcs: list[tuple[str, str]], rst: bool = False) -> tuple[list[str], list[list[str]]]:
     """Get descriptions and arguments of SDL3 functions from the official SDL3 wiki."""
     session, tasks = aiohttp.ClientSession(), []
 
@@ -323,7 +323,7 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: typing.List[typing.Tuple[str, str]], 
     await session.close()
     return descriptions, arguments
 
-def SDL_GENERATE_DOCS(modules: typing.List[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), rst: bool = False) -> str:
+def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), rst: bool = False) -> str:
     """Generate type hints and documentation for SDL3 functions."""
 
     __index, (descriptions, arguments) = -1, \
@@ -347,8 +347,8 @@ def SDL_GENERATE_DOCS(modules: typing.List[str] = list(SDL_BINARY_VAR_MAP_INV.ke
         if i is None: return "None"
         if "CFunctionType" in i.__name__: return "ctypes._Pointer"
         if i.__name__.startswith("LP_"): types.add(i.__name__)
-        if i.__name__.startswith("c_"): return f"ctypes.{i.__name__}"
-        return i.__name__
+        if i.__name__.startswith("c_"): return f"ctypes.{getattr(i, '__real_name__', i.__name__)}"
+        else: return i.__name__
 
     for index, module in enumerate(modules):
         if len(__module__.functions[module]) == 0: continue

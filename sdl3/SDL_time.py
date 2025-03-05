@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_stdinc import SDL_Time
@@ -18,13 +18,13 @@ class SDL_DateTime(ctypes.Structure):
         ("utc_offset", ctypes.c_int)
     ]
 
-SDL_DateFormat = ctypes.c_int
+SDL_DateFormat: typing.TypeAlias = ctypes.c_int
 
 SDL_DATE_FORMAT_YYYYMMDD = 0
 SDL_DATE_FORMAT_DDMMYYYY = 1
 SDL_DATE_FORMAT_MMDDYYYY = 2 
 
-SDL_TimeFormat = ctypes.c_int
+SDL_TimeFormat: typing.TypeAlias = ctypes.c_int
 
 SDL_TIME_FORMAT_24HR = 0
 SDL_TIME_FORMAT_12HR = 1

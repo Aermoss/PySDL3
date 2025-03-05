@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window
@@ -15,7 +15,7 @@ class VkPhysicalDevice(ctypes.c_void_p):
 class VkAllocationCallbacks(ctypes.c_void_p):
     ...
     
-VkSurfaceKHR = ctypes.c_uint64
+VkSurfaceKHR: typing.TypeAlias = ctypes.c_uint64
 
 SDL_FUNC("SDL_Vulkan_LoadLibrary", ctypes.c_bool, ctypes.c_char_p)
 SDL_FUNC("SDL_Vulkan_GetVkGetInstanceProcAddr", SDL_FunctionPointer)

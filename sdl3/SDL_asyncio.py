@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
@@ -6,13 +6,13 @@ SDL_SET_CURRENT_BINARY(SDL_BINARY)
 class SDL_AsyncIO(ctypes.c_void_p):
     ...
 
-SDL_AsyncIOTaskType = ctypes.c_int
+SDL_AsyncIOTaskType: typing.TypeAlias = ctypes.c_int
 
 SDL_ASYNCIO_TASK_READ = 0
 SDL_ASYNCIO_TASK_WRITE = 1
 SDL_ASYNCIO_TASK_CLOSE = 2
 
-SDL_AsyncIOResult = ctypes.c_int
+SDL_AsyncIOResult: typing.TypeAlias = ctypes.c_int
 
 SDL_ASYNCIO_COMPLETE = 0
 SDL_ASYNCIO_FAILURE = 1

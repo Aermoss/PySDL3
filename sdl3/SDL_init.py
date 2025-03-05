@@ -1,11 +1,11 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_events import SDL_Event
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_InitFlags = ctypes.c_uint32
+SDL_InitFlags: typing.TypeAlias = ctypes.c_uint32
 
 SDL_INIT_AUDIO = 0x00000010
 SDL_INIT_VIDEO = 0x00000020
@@ -16,7 +16,7 @@ SDL_INIT_EVENTS = 0x00004000
 SDL_INIT_SENSOR = 0x00008000
 SDL_INIT_CAMERA = 0x00010000
 
-SDL_AppResult = ctypes.c_int
+SDL_AppResult: typing.TypeAlias = ctypes.c_int
 
 SDL_APP_CONTINUE = 0
 SDL_APP_SUCCESS = 1

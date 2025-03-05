@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window
@@ -6,12 +6,12 @@ from .SDL_surface import SDL_Surface
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_MouseID = ctypes.c_uint32
+SDL_MouseID: typing.TypeAlias = ctypes.c_uint32
 
 class SDL_Cursor(ctypes.c_void_p):
     ...
 
-SDL_SystemCursor = ctypes.c_int
+SDL_SystemCursor: typing.TypeAlias = ctypes.c_int
 
 SDL_SYSTEM_CURSOR_DEFAULT = 0
 SDL_SYSTEM_CURSOR_TEXT = 1
@@ -35,12 +35,12 @@ SDL_SYSTEM_CURSOR_SW_RESIZE = 18
 SDL_SYSTEM_CURSOR_W_RESIZE = 19
 SDL_SYSTEM_CURSOR_COUNT = 20
 
-SDL_MouseWheelDirection = ctypes.c_int
+SDL_MouseWheelDirection: typing.TypeAlias = ctypes.c_int
 
 SDL_MOUSEWHEEL_NORMAL = 0
 SDL_MOUSEWHEEL_FLIPPED = 1
 
-SDL_MouseButtonFlags = ctypes.c_uint32
+SDL_MouseButtonFlags: typing.TypeAlias = ctypes.c_uint32
 
 SDL_BUTTON_LEFT = 1
 SDL_BUTTON_MIDDLE = 2

@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_events import SDL_Event
@@ -20,13 +20,13 @@ class SDL_Vertex(ctypes.Structure):
         ("tex_coord", SDL_FPoint)
     ]
 
-SDL_TextureAccess = ctypes.c_int
+SDL_TextureAccess: typing.TypeAlias = ctypes.c_int
 
 SDL_TEXTUREACCESS_STATIC = 0
 SDL_TEXTUREACCESS_STREAMING = 1
 SDL_TEXTUREACCESS_TARGET = 2
 
-SDL_RendererLogicalPresentation = ctypes.c_int
+SDL_RendererLogicalPresentation: typing.TypeAlias = ctypes.c_int
 
 SDL_LOGICAL_PRESENTATION_DISABLED = 0
 SDL_LOGICAL_PRESENTATION_STRETCH = 1

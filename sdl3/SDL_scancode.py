@@ -1,9 +1,9 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_Scancode = ctypes.c_uint32
+SDL_Scancode: typing.TypeAlias = ctypes.c_uint32
 
 SDL_SCANCODE_UNKNOWN = 0
 

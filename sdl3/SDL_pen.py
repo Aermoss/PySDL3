@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_touch import SDL_TouchID
@@ -6,12 +6,12 @@ from .SDL_mouse import SDL_MouseID
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_PenID = ctypes.c_uint32
+SDL_PenID: typing.TypeAlias = ctypes.c_uint32
 
 SDL_PEN_MOUSEID = SDL_MouseID(-2)
 SDL_PEN_TOUCHID = SDL_TouchID(-2)
 
-SDL_PenInputFlags = ctypes.c_uint32
+SDL_PenInputFlags: typing.TypeAlias = ctypes.c_uint32
 
 SDL_PEN_INPUT_DOWN = 1 << 0
 SDL_PEN_INPUT_BUTTON_1 = 1 << 1
@@ -21,7 +21,7 @@ SDL_PEN_INPUT_BUTTON_4 = 1 << 4
 SDL_PEN_INPUT_BUTTON_5 = 1 << 5
 SDL_PEN_INPUT_ERASER_TIP = 1 << 30
 
-SDL_PenAxis = ctypes.c_int
+SDL_PenAxis: typing.TypeAlias = ctypes.c_int
 
 SDL_PEN_AXIS_PRESSURE = 0
 SDL_PEN_AXIS_XTILT = 1

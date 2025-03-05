@@ -1,4 +1,4 @@
-from .__init__ import ctypes, \
+from .__init__ import ctypes, typing, \
     SDL_FUNC, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_endian import SDL_BYTEORDER, SDL_LIL_ENDIAN
@@ -15,7 +15,7 @@ SDL_AUDIO_MASK_SIGNED = 1 << 15
 SDL_DEFINE_AUDIO_FORMAT = lambda signed, bigendian, _float, size: \
     (signed << 15) | (bigendian << 12) | (_float << 8) | (size & SDL_AUDIO_MASK_BITSIZE)
 
-SDL_AudioFormat = ctypes.c_int
+SDL_AudioFormat: typing.TypeAlias = ctypes.c_int
 
 SDL_AUDIO_UNKNOWN = 0x0000
 SDL_AUDIO_U8 = 0x0008
@@ -47,7 +47,7 @@ SDL_AUDIO_ISSIGNED = lambda x: x & SDL_AUDIO_MASK_SIGNED
 SDL_AUDIO_ISINT = lambda x: not SDL_AUDIO_ISFLOAT(x)
 SDL_AUDIO_ISUNSIGNED = lambda x: not SDL_AUDIO_ISSIGNED(x)
 
-SDL_AudioDeviceID = ctypes.c_uint32
+SDL_AudioDeviceID: typing.TypeAlias = ctypes.c_uint32
 
 SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK = 0xFFFFFFFF
 SDL_AUDIO_DEVICE_DEFAULT_RECORDING = 0xFFFFFFFE
