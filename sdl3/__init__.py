@@ -456,7 +456,7 @@ if not __initialized__:
 
         from .__doc__ import *
         try: exec(getattr(__doc__, "__doc__"), data := {})
-        except: data = {}
+        except SyntaxError: data = None
 
         if not data or data["meta"]["target"] != f"v{__version__}" or data["meta"]["system"] != SDL_SYSTEM:
             with open(__doc_file__, "wb") as file:
