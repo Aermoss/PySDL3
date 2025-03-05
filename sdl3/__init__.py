@@ -419,6 +419,11 @@ if not __initialized__ and int(os.environ.get("SDL_CHECK_IMPORTS", "0")) > 0:
                 file.write("\n".join([f"from .{i} import *" for i in existingModules]))
                 break
 
+if __doc_generator__ and int(os.environ.get("SDL_CTYPES_ALIAS_FIX", "0")) > 0:
+    for i in dir(ctypes):
+        if i.startswith("c_") and getattr(ctypes, i).__name__ != i and hasattr(getattr(ctypes, i), "_type_"):
+            setattr(ctypes, i, SDL_TYPE[i, getattr(ctypes, i)])
+
 from sdl3.SDL import *
 
 SDL_VERSIONNUM_STRING = lambda num: \
