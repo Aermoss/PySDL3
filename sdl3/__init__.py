@@ -3,7 +3,7 @@
 __version__ = "0.9.5b2"
 
 import sys, os, requests, ctypes, ctypes.util, platform, keyword, inspect, collections.abc as abc, \
-    asyncio, aiohttp, zipfile, typing, types, array, atexit, packaging.version, json, re
+    asyncio, aiohttp, zipfile, typing, types, array, importlib, atexit, packaging.version, json, re
 
 SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_TTF_BINARY, SDL_RTF_BINARY, SDL_NET_BINARY = \
     "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_ttf", "SDL3_rtf", "SDL3_net"
@@ -346,7 +346,8 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
             __module__.functions[module][func].__doc__ = \
                 (descriptions[__index := __index + 1], arguments[__index])
 
-    result = "" if rst else f"\"\"\"This file is auto-generated.\"\"\"\n\n"
+    result = "" if rst else f"\"\"\"\n# This file is auto-generated, do not modify it.\nmeta = "
+    if not rst: result += f"{{\"target\": \"v{__version__}\", \"system\": \"{SDL_SYSTEM}\"}}\n\"\"\"\n\n"
     result += f"from {'sdl3' if rst else ''}.SDL import *\n\n"
     result += f"from {'sdl3' if rst else ''}.__init__ import ctypes, typing, SDL_POINTER, SDL_GET_BINARY, \\\n"
     result += f"{' ' * 4}{', '.join(list(SDL_BINARY_VAR_MAP.keys()))}\n\n"
@@ -454,6 +455,16 @@ if not __initialized__:
                 file.write(SDL_GET_OR_GENERATE_DOCS())
 
         from .__doc__ import *
+        try: exec(getattr(__doc__, "__doc__"), data := {})
+        except: data = {}
+
+        if not data or data["meta"]["target"] != f"v{__version__}" or data["meta"]["system"] != SDL_SYSTEM:
+            with open(__doc_file__, "wb") as file:
+                file.write(SDL_GET_OR_GENERATE_DOCS())
+
+            del sys.modules["sdl3.__doc__"]
+            print("\33[35m", f"warning: reloading module: 'sdl3.__doc__'.", "\33[0m", sep = "", flush = True)
+            from .__doc__ import *
 
     else:
         if os.path.exists(__doc_file__):
