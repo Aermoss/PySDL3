@@ -231,6 +231,12 @@ def SDL_FUNC(name: str, retType: typing.Any, *argTypes: list[typing.Any]) -> Non
     __module__.functions[binary[1]][name] = func
     if not __doc_generator__: setattr(__module__, name, func)
 
+class SDL_POINTER:
+    @classmethod
+    def __class_getitem__(cls, key) -> typing.Any:
+        """Create a pointer type from a ctypes type."""
+        return ctypes.POINTER(key)
+
 async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
     """Get latest releases of SDL3 modules from their official github repositories."""
     session, releases, tasks = aiohttp.ClientSession(), {}, []
@@ -336,18 +342,15 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
 
     result = "" if rst else f"\"\"\"This file is auto-generated.\"\"\"\n\n"
     result += f"from {'sdl3' if rst else ''}.SDL import *\n\n"
-    result += f"from {'sdl3' if rst else ''}.__init__ import ctypes, typing, SDL_GET_BINARY, \\\n"
+    result += f"from {'sdl3' if rst else ''}.__init__ import ctypes, typing, SDL_POINTER, SDL_GET_BINARY, \\\n"
     result += f"{' ' * 4}{', '.join(list(SDL_BINARY_VAR_MAP.keys()))}\n\n"
-    result += f"class POINTER:\n" + ("" if rst else f"{' ' * 4}\"\"\"Simple pointer type.\"\"\"\n")
-    result += f"{' ' * 4}@classmethod\n{' ' * 4}def __class_getitem__(cls, item):\n"
-    result += f"{' ' * 8}return ctypes.POINTER(item)\n\n"
     types, definitions = set(), ""
 
     def SDL_GET_NAME(i):
         if i is None: return "None"
-        if "CFunctionType" in i.__name__: return "ctypes._Pointer"
+        if "CFunctionType" in i.__name__: return "ctypes.c_void_p"
         if i.__name__.startswith("LP_"): types.add(i.__name__)
-        if i.__name__.startswith("c_"): return f"ctypes.{getattr(i, '__real_name__', i.__name__)}"
+        if i.__name__.startswith("c_"): return f"ctypes.{i.__name__}"
         else: return i.__name__
 
     for index, module in enumerate(modules):
@@ -375,7 +378,7 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
 
     for i in types:
         count, func = i.count("LP_"), i.replace("LP_", "")
-        result += f"{i}: typing.TypeAlias = {'POINTER[' * count}{'ctypes.' if func.startswith('c_') else ''}{func}{']' * count}\n"
+        result += f"{i}: typing.TypeAlias = {'SDL_POINTER[' * count}{'ctypes.' if func.startswith('c_') else ''}{func}{']' * count}\n"
 
     return f"{result}\n{definitions}"
 
