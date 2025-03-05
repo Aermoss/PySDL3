@@ -93,7 +93,7 @@ if USE_IMGUI_BUNDLE := True:
 
             self.window = window
             self.lastTime = sdl3.SDL_GetTicks() / 1000.0
-            imgui.get_platform_io().platform_get_clipboard_text_fn = lambda: sdl3.SDL_GetClipboardText()
+            imgui.get_platform_io().platform_get_clipboard_text_fn = lambda: sdl3.SDL_GetClipboardText().decode()
             imgui.get_platform_io().platform_set_clipboard_text_fn = lambda text: sdl3.SDL_SetClipboardText(text.encode())
             sdl3.SDL_StartTextInput(window)
 
@@ -257,7 +257,7 @@ else:
             
             self.window = window
             self.lastTime = sdl3.SDL_GetTicks() / 1000.0
-            self.io.get_clipboard_text_fn = lambda: sdl3.SDL_GetClipboardText()
+            self.io.get_clipboard_text_fn = lambda: sdl3.SDL_GetClipboardText().decode()
             self.io.set_clipboard_text_fn = lambda text: sdl3.SDL_SetClipboardText(text.encode())
             sdl3.SDL_StartTextInput(window)
 
