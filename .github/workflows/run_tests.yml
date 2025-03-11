@@ -1,10 +1,14 @@
 name: Tests
 
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: ["Generate Docs"]
+    types: [completed]
 
   pull_request:
+    branches: [main]
+
+  push:
     branches: [main]
 
 permissions:
@@ -39,4 +43,5 @@ jobs:
         run: |
           python -c "import tests"
         env:
+          SDL_DOC_GENERATOR: ${{github.event_name == 'workflow_run' && '1' || '0'}}
           SDL_GITHUB_TOKEN: ${{secrets.PERSONAL_ACCESS_TOKEN}}

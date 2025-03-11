@@ -2,8 +2,6 @@ import os, sys, collections.abc as abc
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-os.environ["SDL_DOC_GENERATOR"] = "0"
-
 import sdl3, ctypes, atexit
 
 functions: dict[abc.Callable[..., None], list[str]] = {}
