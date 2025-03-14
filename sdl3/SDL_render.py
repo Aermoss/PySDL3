@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_events import SDL_Event
@@ -48,9 +48,9 @@ class SDL_Texture(ctypes.Structure):
 SDL_FUNC("SDL_GetNumRenderDrivers", ctypes.c_int)
 SDL_FUNC("SDL_GetRenderDriver", ctypes.c_char_p, ctypes.c_int)
 
-SDL_FUNC("SDL_CreateWindowAndRenderer", ctypes.c_bool, ctypes.c_char_p, ctypes.c_int, ctypes.c_int, SDL_WindowFlags, ctypes.POINTER(ctypes.POINTER(SDL_Window)), ctypes.POINTER(ctypes.POINTER(SDL_Renderer)))
-SDL_FUNC("SDL_CreateRenderer", ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Window), ctypes.c_char_p)
-SDL_FUNC("SDL_CreateRendererWithProperties", ctypes.POINTER(SDL_Renderer), SDL_PropertiesID)
+SDL_FUNC("SDL_CreateWindowAndRenderer", ctypes.c_bool, ctypes.c_char_p, ctypes.c_int, ctypes.c_int, SDL_WindowFlags, SDL_POINTER[SDL_POINTER[SDL_Window]], SDL_POINTER[SDL_POINTER[SDL_Renderer]])
+SDL_FUNC("SDL_CreateRenderer", SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Window], ctypes.c_char_p)
+SDL_FUNC("SDL_CreateRendererWithProperties", SDL_POINTER[SDL_Renderer], SDL_PropertiesID)
 
 SDL_PROP_RENDERER_CREATE_NAME_STRING = "SDL.renderer.create.name".encode()
 SDL_PROP_RENDERER_CREATE_WINDOW_POINTER = "SDL.renderer.create.window".encode()
@@ -64,12 +64,12 @@ SDL_PROP_RENDERER_CREATE_VULKAN_DEVICE_POINTER = "SDL.renderer.create.vulkan.dev
 SDL_PROP_RENDERER_CREATE_VULKAN_GRAPHICS_QUEUE_FAMILY_INDEX_NUMBER = "SDL.renderer.create.vulkan.graphics_queue_family_index".encode()
 SDL_PROP_RENDERER_CREATE_VULKAN_PRESENT_QUEUE_FAMILY_INDEX_NUMBER = "SDL.renderer.create.vulkan.present_queue_family_index".encode()
 
-SDL_FUNC("SDL_CreateSoftwareRenderer", ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Surface))
-SDL_FUNC("SDL_GetRenderer", ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_GetRenderWindow", ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Renderer))
-SDL_FUNC("SDL_GetRendererName", ctypes.c_char_p, ctypes.POINTER(SDL_Renderer))
+SDL_FUNC("SDL_CreateSoftwareRenderer", SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Surface])
+SDL_FUNC("SDL_GetRenderer", SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Window])
+SDL_FUNC("SDL_GetRenderWindow", SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Renderer])
+SDL_FUNC("SDL_GetRendererName", ctypes.c_char_p, SDL_POINTER[SDL_Renderer])
 
-SDL_FUNC("SDL_GetRendererProperties", SDL_PropertiesID, ctypes.POINTER(SDL_Renderer))
+SDL_FUNC("SDL_GetRendererProperties", SDL_PropertiesID, SDL_POINTER[SDL_Renderer])
 
 SDL_PROP_RENDERER_NAME_STRING = "SDL.renderer.name".encode()
 SDL_PROP_RENDERER_WINDOW_POINTER = "SDL.renderer.window".encode()
@@ -96,12 +96,12 @@ SDL_PROP_RENDERER_VULKAN_PRESENT_QUEUE_FAMILY_INDEX_NUMBER = "SDL.renderer.vulka
 SDL_PROP_RENDERER_VULKAN_SWAPCHAIN_IMAGE_COUNT_NUMBER = "SDL.renderer.vulkan.swapchain_image_count".encode()
 SDL_PROP_RENDERER_GPU_DEVICE_POINTER = "SDL.renderer.gpu.device".encode()
 
-SDL_FUNC("SDL_GetRenderOutputSize", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("SDL_GetCurrentRenderOutputSize", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GetRenderOutputSize", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int])
+SDL_FUNC("SDL_GetCurrentRenderOutputSize", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int])
 
-SDL_FUNC("SDL_CreateTexture", ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Renderer), SDL_PixelFormat, SDL_TextureAccess, ctypes.c_int, ctypes.c_int)
-SDL_FUNC("SDL_CreateTextureFromSurface", ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Surface))
-SDL_FUNC("SDL_CreateTextureWithProperties", ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Renderer), SDL_PropertiesID)
+SDL_FUNC("SDL_CreateTexture", SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Renderer], SDL_PixelFormat, SDL_TextureAccess, ctypes.c_int, ctypes.c_int)
+SDL_FUNC("SDL_CreateTextureFromSurface", SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Surface])
+SDL_FUNC("SDL_CreateTextureWithProperties", SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Renderer], SDL_PropertiesID)
 
 SDL_PROP_TEXTURE_CREATE_COLORSPACE_NUMBER = "SDL.texture.create.colorspace".encode()
 SDL_PROP_TEXTURE_CREATE_FORMAT_NUMBER = "SDL.texture.create.format".encode()
@@ -127,7 +127,7 @@ SDL_PROP_TEXTURE_CREATE_OPENGLES2_TEXTURE_U_NUMBER = "SDL.texture.create.opengle
 SDL_PROP_TEXTURE_CREATE_OPENGLES2_TEXTURE_V_NUMBER = "SDL.texture.create.opengles2.texture_v".encode()
 SDL_PROP_TEXTURE_CREATE_VULKAN_TEXTURE_NUMBER = "SDL.texture.create.vulkan.texture".encode()
 
-SDL_FUNC("SDL_GetTextureProperties", SDL_PropertiesID, ctypes.POINTER(SDL_Texture))
+SDL_FUNC("SDL_GetTextureProperties", SDL_PropertiesID, SDL_POINTER[SDL_Texture])
 
 SDL_PROP_TEXTURE_COLORSPACE_NUMBER = "SDL.texture.colorspace".encode()
 SDL_PROP_TEXTURE_FORMAT_NUMBER = "SDL.texture.format".encode()
@@ -156,116 +156,116 @@ SDL_PROP_TEXTURE_OPENGLES2_TEXTURE_V_NUMBER = "SDL.texture.opengles2.texture_v".
 SDL_PROP_TEXTURE_OPENGLES2_TEXTURE_TARGET_NUMBER = "SDL.texture.opengles2.target".encode()
 SDL_PROP_TEXTURE_VULKAN_TEXTURE_NUMBER = "SDL.texture.vulkan.texture".encode()
 
-SDL_FUNC("SDL_GetRendererFromTexture", ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture))
-SDL_FUNC("SDL_GetTextureSize", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))
+SDL_FUNC("SDL_GetRendererFromTexture", SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture])
+SDL_FUNC("SDL_GetTextureSize", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float])
 
-SDL_FUNC("SDL_SetTextureColorMod", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8)
-SDL_FUNC("SDL_SetTextureColorModFloat", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.c_float, ctypes.c_float, ctypes.c_float)
+SDL_FUNC("SDL_SetTextureColorMod", ctypes.c_bool, SDL_POINTER[SDL_Texture], ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8)
+SDL_FUNC("SDL_SetTextureColorModFloat", ctypes.c_bool, SDL_POINTER[SDL_Texture], ctypes.c_float, ctypes.c_float, ctypes.c_float)
 
-SDL_FUNC("SDL_GetTextureColorMod", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(ctypes.c_uint8), ctypes.POINTER(ctypes.c_uint8), ctypes.POINTER(ctypes.c_uint8))
-SDL_FUNC("SDL_GetTextureColorModFloat", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))
+SDL_FUNC("SDL_GetTextureColorMod", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8])
+SDL_FUNC("SDL_GetTextureColorModFloat", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float])
 
-SDL_FUNC("SDL_SetTextureAlphaMod", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.c_uint8)
-SDL_FUNC("SDL_SetTextureAlphaModFloat", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.c_float)
+SDL_FUNC("SDL_SetTextureAlphaMod", ctypes.c_bool, SDL_POINTER[SDL_Texture], ctypes.c_uint8)
+SDL_FUNC("SDL_SetTextureAlphaModFloat", ctypes.c_bool, SDL_POINTER[SDL_Texture], ctypes.c_float)
 
-SDL_FUNC("SDL_GetTextureAlphaMod", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(ctypes.c_uint8))
-SDL_FUNC("SDL_GetTextureAlphaModFloat", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(ctypes.c_float))
+SDL_FUNC("SDL_GetTextureAlphaMod", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[ctypes.c_uint8])
+SDL_FUNC("SDL_GetTextureAlphaModFloat", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[ctypes.c_float])
 
-SDL_FUNC("SDL_SetTextureBlendMode", ctypes.c_bool, ctypes.POINTER(SDL_Texture), SDL_BlendMode)
-SDL_FUNC("SDL_GetTextureBlendMode", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_BlendMode))
+SDL_FUNC("SDL_SetTextureBlendMode", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_BlendMode)
+SDL_FUNC("SDL_GetTextureBlendMode", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_BlendMode])
 
-SDL_FUNC("SDL_SetTextureScaleMode", ctypes.c_bool, ctypes.POINTER(SDL_Texture), SDL_ScaleMode)
-SDL_FUNC("SDL_GetTextureScaleMode", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_ScaleMode))
+SDL_FUNC("SDL_SetTextureScaleMode", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_ScaleMode)
+SDL_FUNC("SDL_GetTextureScaleMode", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_ScaleMode])
 
-SDL_FUNC("SDL_UpdateTexture", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Rect), ctypes.c_void_p, ctypes.c_int)
-SDL_FUNC("SDL_UpdateYUVTexture", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Rect), ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)
-SDL_FUNC("SDL_UpdateNVTexture", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Rect), ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)
+SDL_FUNC("SDL_UpdateTexture", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], ctypes.c_void_p, ctypes.c_int)
+SDL_FUNC("SDL_UpdateYUVTexture", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)
+SDL_FUNC("SDL_UpdateNVTexture", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)
 
-SDL_FUNC("SDL_LockTexture", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Rect), ctypes.POINTER(ctypes.c_void_p), ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("SDL_LockTextureToSurface", ctypes.c_bool, ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Rect), ctypes.POINTER(ctypes.POINTER(SDL_Surface)))
-SDL_FUNC("SDL_UnlockTexture", None, ctypes.POINTER(SDL_Texture))
+SDL_FUNC("SDL_LockTexture", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], SDL_POINTER[ctypes.c_void_p], SDL_POINTER[ctypes.c_int])
+SDL_FUNC("SDL_LockTextureToSurface", ctypes.c_bool, SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_POINTER[SDL_Surface]])
+SDL_FUNC("SDL_UnlockTexture", None, SDL_POINTER[SDL_Texture])
 
-SDL_FUNC("SDL_SetRenderTarget", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture))
-SDL_FUNC("SDL_GetRenderTarget", ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Renderer))
+SDL_FUNC("SDL_SetRenderTarget", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture])
+SDL_FUNC("SDL_GetRenderTarget", SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Renderer])
 
-SDL_FUNC("SDL_SetRenderLogicalPresentation", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_int, ctypes.c_int, SDL_RendererLogicalPresentation)
-SDL_FUNC("SDL_GetRenderLogicalPresentation", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(SDL_RendererLogicalPresentation))
-SDL_FUNC("SDL_GetRenderLogicalPresentationRect", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Rect))
+SDL_FUNC("SDL_SetRenderLogicalPresentation", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_int, ctypes.c_int, SDL_RendererLogicalPresentation)
+SDL_FUNC("SDL_GetRenderLogicalPresentation", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[SDL_RendererLogicalPresentation])
+SDL_FUNC("SDL_GetRenderLogicalPresentationRect", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Rect])
 
-SDL_FUNC("SDL_RenderCoordinatesFromWindow", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float, ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))
-SDL_FUNC("SDL_RenderCoordinatesToWindow", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float, ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))
+SDL_FUNC("SDL_RenderCoordinatesFromWindow", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float])
+SDL_FUNC("SDL_RenderCoordinatesToWindow", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float])
 
-SDL_FUNC("SDL_ConvertEventToRenderCoordinates", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Event))
+SDL_FUNC("SDL_ConvertEventToRenderCoordinates", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Event])
 
-SDL_FUNC("SDL_SetRenderViewport", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Rect))
-SDL_FUNC("SDL_GetRenderViewport", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Rect))
+SDL_FUNC("SDL_SetRenderViewport", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Rect])
+SDL_FUNC("SDL_GetRenderViewport", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Rect])
 
-SDL_FUNC("SDL_RenderViewportSet", ctypes.c_bool, ctypes.POINTER(SDL_Renderer))
-SDL_FUNC("SDL_GetRenderSafeArea", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Rect))
+SDL_FUNC("SDL_RenderViewportSet", ctypes.c_bool, SDL_POINTER[SDL_Renderer])
+SDL_FUNC("SDL_GetRenderSafeArea", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Rect])
 
-SDL_FUNC("SDL_SetRenderClipRect", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Rect))
-SDL_FUNC("SDL_GetRenderClipRect", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Rect))
+SDL_FUNC("SDL_SetRenderClipRect", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Rect])
+SDL_FUNC("SDL_GetRenderClipRect", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Rect])
 
-SDL_FUNC("SDL_RenderClipEnabled", ctypes.c_bool, ctypes.POINTER(SDL_Renderer))
+SDL_FUNC("SDL_RenderClipEnabled", ctypes.c_bool, SDL_POINTER[SDL_Renderer])
 
-SDL_FUNC("SDL_SetRenderScale", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float)
-SDL_FUNC("SDL_GetRenderScale", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))
+SDL_FUNC("SDL_SetRenderScale", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float)
+SDL_FUNC("SDL_GetRenderScale", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float])
 
-SDL_FUNC("SDL_SetRenderDrawColor", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8)
-SDL_FUNC("SDL_SetRenderDrawColorFloat", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)
+SDL_FUNC("SDL_SetRenderDrawColor", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8)
+SDL_FUNC("SDL_SetRenderDrawColorFloat", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)
 
-SDL_FUNC("SDL_GetRenderDrawColor", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_uint8), ctypes.POINTER(ctypes.c_uint8), ctypes.POINTER(ctypes.c_uint8), ctypes.POINTER(ctypes.c_uint8))
-SDL_FUNC("SDL_GetRenderDrawColorFloat", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))
+SDL_FUNC("SDL_GetRenderDrawColor", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8])
+SDL_FUNC("SDL_GetRenderDrawColorFloat", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float])
 
-SDL_FUNC("SDL_SetRenderColorScale", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float)
-SDL_FUNC("SDL_GetRenderColorScale", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_float))
+SDL_FUNC("SDL_SetRenderColorScale", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_float)
+SDL_FUNC("SDL_GetRenderColorScale", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[ctypes.c_float])
 
-SDL_FUNC("SDL_SetRenderDrawBlendMode", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), SDL_BlendMode)
-SDL_FUNC("SDL_GetRenderDrawBlendMode", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_BlendMode))
+SDL_FUNC("SDL_SetRenderDrawBlendMode", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_BlendMode)
+SDL_FUNC("SDL_GetRenderDrawBlendMode", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_BlendMode])
 
-SDL_FUNC("SDL_RenderClear", ctypes.c_bool, ctypes.POINTER(SDL_Renderer))
+SDL_FUNC("SDL_RenderClear", ctypes.c_bool, SDL_POINTER[SDL_Renderer])
 
-SDL_FUNC("SDL_RenderPoint", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float)
-SDL_FUNC("SDL_RenderPoints", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_FPoint), ctypes.c_int)
+SDL_FUNC("SDL_RenderPoint", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float)
+SDL_FUNC("SDL_RenderPoints", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_FPoint], ctypes.c_int)
 
-SDL_FUNC("SDL_RenderLine", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)
-SDL_FUNC("SDL_RenderLines", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_FPoint), ctypes.c_int)
+SDL_FUNC("SDL_RenderLine", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)
+SDL_FUNC("SDL_RenderLines", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_FPoint], ctypes.c_int)
 
-SDL_FUNC("SDL_RenderRect", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_FRect))
-SDL_FUNC("SDL_RenderRects", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_FRect), ctypes.c_int)
+SDL_FUNC("SDL_RenderRect", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_FRect])
+SDL_FUNC("SDL_RenderRects", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_FRect], ctypes.c_int)
 
-SDL_FUNC("SDL_RenderFillRect", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_FRect))
-SDL_FUNC("SDL_RenderFillRects", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_FRect), ctypes.c_int)
+SDL_FUNC("SDL_RenderFillRect", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_FRect])
+SDL_FUNC("SDL_RenderFillRects", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_FRect], ctypes.c_int)
 
-SDL_FUNC("SDL_RenderTexture", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect))
-SDL_FUNC("SDL_RenderTextureRotated", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FRect), ctypes.c_double, ctypes.POINTER(SDL_FPoint), SDL_FlipMode)
-SDL_FUNC("SDL_RenderTextureAffine", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_FRect), ctypes.POINTER(SDL_FPoint), ctypes.POINTER(SDL_FPoint), ctypes.POINTER(SDL_FPoint))
-SDL_FUNC("SDL_RenderTextureTiled", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_FRect), ctypes.c_float, ctypes.POINTER(SDL_FRect))
-SDL_FUNC("SDL_RenderTexture9Grid", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_FRect), ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.POINTER(SDL_FRect))
+SDL_FUNC("SDL_RenderTexture", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect])
+SDL_FUNC("SDL_RenderTextureRotated", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect], ctypes.c_double, SDL_POINTER[SDL_FPoint], SDL_FlipMode)
+SDL_FUNC("SDL_RenderTextureAffine", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FPoint], SDL_POINTER[SDL_FPoint], SDL_POINTER[SDL_FPoint])
+SDL_FUNC("SDL_RenderTextureTiled", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_FRect], ctypes.c_float, SDL_POINTER[SDL_FRect])
+SDL_FUNC("SDL_RenderTexture9Grid", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_FRect], ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, SDL_POINTER[SDL_FRect])
 
-SDL_FUNC("SDL_RenderGeometry", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(SDL_Vertex), ctypes.c_int, ctypes.POINTER(ctypes.c_int), ctypes.c_int)
-SDL_FUNC("SDL_RenderGeometryRaw", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Texture), ctypes.POINTER(ctypes.c_float), ctypes.c_int, ctypes.POINTER(SDL_FColor), ctypes.c_int, ctypes.POINTER(ctypes.c_float), ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)
+SDL_FUNC("SDL_RenderGeometry", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Vertex], ctypes.c_int, SDL_POINTER[ctypes.c_int], ctypes.c_int)
+SDL_FUNC("SDL_RenderGeometryRaw", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[ctypes.c_float], ctypes.c_int, SDL_POINTER[SDL_FColor], ctypes.c_int, SDL_POINTER[ctypes.c_float], ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)
 
-SDL_FUNC("SDL_RenderReadPixels", ctypes.POINTER(SDL_Surface), ctypes.POINTER(SDL_Renderer), ctypes.POINTER(SDL_Rect))
-SDL_FUNC("SDL_RenderPresent", ctypes.c_bool, ctypes.POINTER(SDL_Renderer))
+SDL_FUNC("SDL_RenderReadPixels", SDL_POINTER[SDL_Surface], SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Rect])
+SDL_FUNC("SDL_RenderPresent", ctypes.c_bool, SDL_POINTER[SDL_Renderer])
 
-SDL_FUNC("SDL_DestroyTexture", None, ctypes.POINTER(SDL_Texture))
-SDL_FUNC("SDL_DestroyRenderer", None, ctypes.POINTER(SDL_Renderer))
-SDL_FUNC("SDL_FlushRenderer", ctypes.c_bool, ctypes.POINTER(SDL_Renderer))
+SDL_FUNC("SDL_DestroyTexture", None, SDL_POINTER[SDL_Texture])
+SDL_FUNC("SDL_DestroyRenderer", None, SDL_POINTER[SDL_Renderer])
+SDL_FUNC("SDL_FlushRenderer", ctypes.c_bool, SDL_POINTER[SDL_Renderer])
 
-SDL_FUNC("SDL_GetRenderMetalLayer", ctypes.c_void_p, ctypes.POINTER(SDL_Renderer))
-SDL_FUNC("SDL_GetRenderMetalCommandEncoder", ctypes.c_void_p, ctypes.POINTER(SDL_Renderer))
+SDL_FUNC("SDL_GetRenderMetalLayer", ctypes.c_void_p, SDL_POINTER[SDL_Renderer])
+SDL_FUNC("SDL_GetRenderMetalCommandEncoder", ctypes.c_void_p, SDL_POINTER[SDL_Renderer])
 
-SDL_FUNC("SDL_AddVulkanRenderSemaphores", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_uint32, ctypes.c_int64, ctypes.c_int64)
+SDL_FUNC("SDL_AddVulkanRenderSemaphores", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_uint32, ctypes.c_int64, ctypes.c_int64)
 
-SDL_FUNC("SDL_SetRenderVSync", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_int)
+SDL_FUNC("SDL_SetRenderVSync", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_int)
 
 SDL_RENDERER_VSYNC_DISABLED = 0
 SDL_RENDERER_VSYNC_ADAPTIVE = -1
 
-SDL_FUNC("SDL_GetRenderVSync", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GetRenderVSync", ctypes.c_bool, SDL_POINTER[SDL_Renderer], SDL_POINTER[ctypes.c_int])
 
 SDL_DEBUG_TEXT_FONT_CHARACTER_SIZE = 8
 
-SDL_FUNC("SDL_RenderDebugText", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float, ctypes.c_char_p)
-SDL_FUNC("SDL_RenderDebugTextFormat", ctypes.c_bool, ctypes.POINTER(SDL_Renderer), ctypes.c_float, ctypes.c_float, ctypes.c_char_p)
+SDL_FUNC("SDL_RenderDebugText", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, ctypes.c_char_p)
+SDL_FUNC("SDL_RenderDebugTextFormat", ctypes.c_bool, SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, ctypes.c_char_p)

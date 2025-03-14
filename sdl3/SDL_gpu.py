@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
@@ -423,7 +423,7 @@ class SDL_GPUViewport(ctypes.Structure):
 
 class SDL_GPUTextureTransferInfo(ctypes.Structure):
     _fields_ = [
-        ("transfer_buffer", ctypes.POINTER(SDL_GPUTransferBuffer)),
+        ("transfer_buffer", SDL_POINTER[SDL_GPUTransferBuffer]),
         ("offset", ctypes.c_uint32),
         ("pixels_per_row", ctypes.c_uint32),
         ("rows_per_layer", ctypes.c_uint32)
@@ -431,13 +431,13 @@ class SDL_GPUTextureTransferInfo(ctypes.Structure):
 
 class SDL_GPUTransferBufferLocation(ctypes.Structure):
     _fields_ = [
-        ("transfer_buffer", ctypes.POINTER(SDL_GPUTransferBuffer)),
+        ("transfer_buffer", SDL_POINTER[SDL_GPUTransferBuffer]),
         ("offset", ctypes.c_uint32)
     ]
 
 class SDL_GPUTextureLocation(ctypes.Structure):
     _fields_ = [
-        ("texture", ctypes.POINTER(SDL_GPUTexture)),
+        ("texture", SDL_POINTER[SDL_GPUTexture]),
         ("mip_level", ctypes.c_uint32),
         ("layer", ctypes.c_uint32),
         ("x", ctypes.c_uint32),
@@ -447,7 +447,7 @@ class SDL_GPUTextureLocation(ctypes.Structure):
 
 class SDL_GPUTextureRegion(ctypes.Structure):
     _fields_ = [
-        ("texture", ctypes.POINTER(SDL_GPUTexture)),
+        ("texture", SDL_POINTER[SDL_GPUTexture]),
         ("mip_level", ctypes.c_uint32),
         ("layer", ctypes.c_uint32),
         ("x", ctypes.c_uint32),
@@ -460,7 +460,7 @@ class SDL_GPUTextureRegion(ctypes.Structure):
 
 class SDL_GPUBlitRegion(ctypes.Structure):
     _fields_ = [
-        ("texture", ctypes.POINTER(SDL_GPUTexture)),
+        ("texture", SDL_POINTER[SDL_GPUTexture]),
         ("mip_level", ctypes.c_uint32),
         ("layer_or_depth_plane", ctypes.c_uint32),
         ("x", ctypes.c_uint32),
@@ -471,13 +471,13 @@ class SDL_GPUBlitRegion(ctypes.Structure):
 
 class SDL_GPUBufferLocation(ctypes.Structure):
     _fields_ = [
-        ("buffer", ctypes.POINTER(SDL_GPUBuffer)),
+        ("buffer", SDL_POINTER[SDL_GPUBuffer]),
         ("offset", ctypes.c_uint32)
     ]
 
 class SDL_GPUBufferRegion(ctypes.Structure):
     _fields_ = [
-        ("buffer", ctypes.POINTER(SDL_GPUBuffer)),
+        ("buffer", SDL_POINTER[SDL_GPUBuffer]),
         ("offset", ctypes.c_uint32),
         ("size", ctypes.c_uint32)
     ]
@@ -544,9 +544,9 @@ class SDL_GPUVertexAttribute(ctypes.Structure):
 
 class SDL_GPUVertexInputState(ctypes.Structure):
     _fields_ = [
-        ("vertex_buffer_descriptions", ctypes.POINTER(SDL_GPUVertexBufferDescription)),
+        ("vertex_buffer_descriptions", SDL_POINTER[SDL_GPUVertexBufferDescription]),
         ("num_vertex_buffers", ctypes.c_uint32),
-        ("vertex_attributes", ctypes.POINTER(SDL_GPUVertexAttribute)),
+        ("vertex_attributes", SDL_POINTER[SDL_GPUVertexAttribute]),
         ("num_vertex_attributes", ctypes.c_uint32)
     ]
 
@@ -576,7 +576,7 @@ class SDL_GPUColorTargetBlendState(ctypes.Structure):
 class SDL_GPUShaderCreateInfo(ctypes.Structure):
     _fields_ = [
         ("code_size", ctypes.c_size_t),
-        ("code", ctypes.POINTER(ctypes.c_uint8)),
+        ("code", SDL_POINTER[ctypes.c_uint8]),
         ("entrypoint", ctypes.c_char_p),
         ("format", SDL_GPUShaderFormat),
         ("stage", SDL_GPUShaderStage),
@@ -661,7 +661,7 @@ class SDL_GPUColorTargetDescription(ctypes.Structure):
 
 class SDL_GPUGraphicsPipelineTargetInfo(ctypes.Structure):
     _fields_ = [
-        ("color_target_descriptions", ctypes.POINTER(SDL_GPUColorTargetDescription)),
+        ("color_target_descriptions", SDL_POINTER[SDL_GPUColorTargetDescription]),
         ("num_color_targets", ctypes.c_uint32),
         ("depth_stencil_format", SDL_GPUTextureFormat),
         ("has_depth_stencil_target", ctypes.c_bool),
@@ -672,8 +672,8 @@ class SDL_GPUGraphicsPipelineTargetInfo(ctypes.Structure):
 
 class SDL_GPUGraphicsPipelineCreateInfo(ctypes.Structure):
     _fields_ = [
-        ("vertex_shader", ctypes.POINTER(SDL_GPUShader)),
-        ("fragment_shader", ctypes.POINTER(SDL_GPUShader)),
+        ("vertex_shader", SDL_POINTER[SDL_GPUShader]),
+        ("fragment_shader", SDL_POINTER[SDL_GPUShader]),
         ("vertex_input_state", SDL_GPUVertexInputState),
         ("primitive_type", SDL_GPUPrimitiveType),
         ("rasterizer_state", SDL_GPURasterizerState),
@@ -686,7 +686,7 @@ class SDL_GPUGraphicsPipelineCreateInfo(ctypes.Structure):
 class SDL_GPUComputePipelineCreateInfo(ctypes.Structure):
     _fields_ = [
         ("code_size", ctypes.c_size_t),
-        ("code", ctypes.POINTER(ctypes.c_uint8)),
+        ("code", SDL_POINTER[ctypes.c_uint8]),
         ("entrypoint", ctypes.c_char_p),
         ("format", SDL_GPUShaderFormat),
         ("num_samplers", ctypes.c_uint32),
@@ -703,13 +703,13 @@ class SDL_GPUComputePipelineCreateInfo(ctypes.Structure):
 
 class SDL_GPUColorTargetInfo(ctypes.Structure):
     _fields_ = [
-        ("texture", ctypes.POINTER(SDL_GPUTexture)),
+        ("texture", SDL_POINTER[SDL_GPUTexture]),
         ("mip_level", ctypes.c_uint32),
         ("layer_or_depth_plane", ctypes.c_uint32),
         ("clear_color", SDL_FColor),
         ("load_op", SDL_GPULoadOp),
         ("store_op", SDL_GPUStoreOp),
-        ("resolve_texture", ctypes.POINTER(SDL_GPUTexture)),
+        ("resolve_texture", SDL_POINTER[SDL_GPUTexture]),
         ("resolve_mip_level", ctypes.c_uint32),
         ("resolve_layer", ctypes.c_uint32),
         ("cycle", ctypes.c_bool),
@@ -720,7 +720,7 @@ class SDL_GPUColorTargetInfo(ctypes.Structure):
 
 class SDL_GPUDepthStencilTargetInfo(ctypes.Structure):
     _fields_ = [
-        ("texture", ctypes.POINTER(SDL_GPUTexture)),
+        ("texture", SDL_POINTER[SDL_GPUTexture]),
         ("clear_depth", ctypes.c_float),
         ("load_op", SDL_GPULoadOp),
         ("store_op", SDL_GPUStoreOp),
@@ -748,19 +748,19 @@ class SDL_GPUBlitInfo(ctypes.Structure):
 
 class SDL_GPUBufferBinding(ctypes.Structure):
     _fields_ = [
-        ("buffer", ctypes.POINTER(SDL_GPUBuffer)),
+        ("buffer", SDL_POINTER[SDL_GPUBuffer]),
         ("offset", ctypes.c_uint32)
     ]
 
 class SDL_GPUTextureSamplerBinding(ctypes.Structure):
     _fields_ = [
-        ("texture", ctypes.POINTER(SDL_GPUTexture)),
-        ("sampler", ctypes.POINTER(SDL_GPUSampler))
+        ("texture", SDL_POINTER[SDL_GPUTexture]),
+        ("sampler", SDL_POINTER[SDL_GPUSampler])
     ]
 
 class SDL_GPUStorageBufferReadWriteBinding(ctypes.Structure):
     _fields_ = [
-        ("buffer", ctypes.POINTER(SDL_GPUBuffer)),
+        ("buffer", SDL_POINTER[SDL_GPUBuffer]),
         ("cycle", ctypes.c_bool),
         ("padding1", ctypes.c_uint8),
         ("padding2", ctypes.c_uint8),
@@ -769,7 +769,7 @@ class SDL_GPUStorageBufferReadWriteBinding(ctypes.Structure):
 
 class SDL_GPUStorageTextureReadWriteBinding(ctypes.Structure):
     _fields_ = [
-        ("texture", ctypes.POINTER(SDL_GPUTexture)),
+        ("texture", SDL_POINTER[SDL_GPUTexture]),
         ("mip_level", ctypes.c_uint32),
         ("layer", ctypes.c_uint32),
         ("cycle", ctypes.c_bool),
@@ -781,8 +781,8 @@ class SDL_GPUStorageTextureReadWriteBinding(ctypes.Structure):
 SDL_FUNC("SDL_GPUSupportsShaderFormats", ctypes.c_bool, SDL_GPUShaderFormat, ctypes.c_char_p)
 SDL_FUNC("SDL_GPUSupportsProperties", ctypes.c_bool, SDL_PropertiesID)
 
-SDL_FUNC("SDL_CreateGPUDevice", ctypes.POINTER(SDL_GPUDevice), SDL_GPUShaderFormat, ctypes.c_bool, ctypes.c_char_p)
-SDL_FUNC("SDL_CreateGPUDeviceWithProperties", ctypes.POINTER(SDL_GPUDevice), SDL_PropertiesID)
+SDL_FUNC("SDL_CreateGPUDevice", SDL_POINTER[SDL_GPUDevice], SDL_GPUShaderFormat, ctypes.c_bool, ctypes.c_char_p)
+SDL_FUNC("SDL_CreateGPUDeviceWithProperties", SDL_POINTER[SDL_GPUDevice], SDL_PropertiesID)
 
 SDL_PROP_GPU_DEVICE_CREATE_DEBUGMODE_BOOLEAN = "SDL.gpu.device.create.debugmode".encode()
 SDL_PROP_GPU_DEVICE_CREATE_PREFERLOWPOWER_BOOLEAN = "SDL.gpu.device.create.preferlowpower".encode()
@@ -795,30 +795,30 @@ SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN = "SDL.gpu.device.create.shaders.
 SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN = "SDL.gpu.device.create.shaders.metallib".encode()
 SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING = "SDL.gpu.device.create.d3d12.semantic".encode()
 
-SDL_FUNC("SDL_DestroyGPUDevice", None, ctypes.POINTER(SDL_GPUDevice))
+SDL_FUNC("SDL_DestroyGPUDevice", None, SDL_POINTER[SDL_GPUDevice])
 
 SDL_FUNC("SDL_GetNumGPUDrivers", ctypes.c_int)
 SDL_FUNC("SDL_GetGPUDriver", ctypes.c_char_p, ctypes.c_int)
-SDL_FUNC("SDL_GetGPUDeviceDriver", ctypes.c_char_p, ctypes.POINTER(SDL_GPUDevice))
-SDL_FUNC("SDL_GetGPUShaderFormats", SDL_GPUShaderFormat, ctypes.POINTER(SDL_GPUDevice))
+SDL_FUNC("SDL_GetGPUDeviceDriver", ctypes.c_char_p, SDL_POINTER[SDL_GPUDevice])
+SDL_FUNC("SDL_GetGPUShaderFormats", SDL_GPUShaderFormat, SDL_POINTER[SDL_GPUDevice])
 
-SDL_FUNC("SDL_CreateGPUComputePipeline", ctypes.POINTER(SDL_GPUComputePipeline), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUComputePipelineCreateInfo))
+SDL_FUNC("SDL_CreateGPUComputePipeline", SDL_POINTER[SDL_GPUComputePipeline], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUComputePipelineCreateInfo])
 
 SDL_PROP_GPU_COMPUTEPIPELINE_CREATE_NAME_STRING = "SDL.gpu.computepipeline.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUGraphicsPipeline", ctypes.POINTER(SDL_GPUGraphicsPipeline), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUGraphicsPipelineCreateInfo))
+SDL_FUNC("SDL_CreateGPUGraphicsPipeline", SDL_POINTER[SDL_GPUGraphicsPipeline], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUGraphicsPipelineCreateInfo])
 
 SDL_PROP_GPU_GRAPHICSPIPELINE_CREATE_NAME_STRING = "SDL.gpu.graphicspipeline.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUSampler", ctypes.POINTER(SDL_GPUSampler), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUSamplerCreateInfo))
+SDL_FUNC("SDL_CreateGPUSampler", SDL_POINTER[SDL_GPUSampler], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUSamplerCreateInfo])
 
 SDL_PROP_GPU_SAMPLER_CREATE_NAME_STRING = "SDL.gpu.sampler.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUShader", ctypes.POINTER(SDL_GPUShader), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUShaderCreateInfo))
+SDL_FUNC("SDL_CreateGPUShader", SDL_POINTER[SDL_GPUShader], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUShaderCreateInfo])
 
 SDL_PROP_GPU_SHADER_CREATE_NAME_STRING = "SDL.gpu.shader.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUTexture", ctypes.POINTER(SDL_GPUTexture), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUTextureCreateInfo))
+SDL_FUNC("SDL_CreateGPUTexture", SDL_POINTER[SDL_GPUTexture], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTextureCreateInfo])
 
 SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_R_FLOAT = "SDL.gpu.texture.create.d3d12.clear.r".encode()
 SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_G_FLOAT = "SDL.gpu.texture.create.d3d12.clear.g".encode()
@@ -828,101 +828,101 @@ SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_DEPTH_FLOAT = "SDL.gpu.texture.create.d3
 SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_STENCIL_UINT8 = "SDL.gpu.texture.create.d3d12.clear.stencil".encode()
 SDL_PROP_GPU_TEXTURE_CREATE_NAME_STRING = "SDL.gpu.texture.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUBuffer", ctypes.POINTER(SDL_GPUBuffer), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUBufferCreateInfo))
+SDL_FUNC("SDL_CreateGPUBuffer", SDL_POINTER[SDL_GPUBuffer], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBufferCreateInfo])
 
 SDL_PROP_GPU_BUFFER_CREATE_NAME_STRING = "SDL.gpu.buffer.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUTransferBuffer", ctypes.POINTER(SDL_GPUTransferBuffer), ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUTransferBufferCreateInfo))
+SDL_FUNC("SDL_CreateGPUTransferBuffer", SDL_POINTER[SDL_GPUTransferBuffer], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBufferCreateInfo])
 
 SDL_PROP_GPU_TRANSFERBUFFER_CREATE_NAME_STRING = "SDL.gpu.transferbuffer.create.name".encode()
 
-SDL_FUNC("SDL_SetGPUBufferName", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUBuffer), ctypes.c_char_p)
-SDL_FUNC("SDL_SetGPUTextureName", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUTexture), ctypes.c_char_p)
+SDL_FUNC("SDL_SetGPUBufferName", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBuffer], ctypes.c_char_p)
+SDL_FUNC("SDL_SetGPUTextureName", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTexture], ctypes.c_char_p)
 
-SDL_FUNC("SDL_InsertGPUDebugLabel", None, ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.c_char_p)
-SDL_FUNC("SDL_PushGPUDebugGroup", None, ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.c_char_p)
-SDL_FUNC("SDL_PopGPUDebugGroup", None, ctypes.POINTER(SDL_GPUCommandBuffer))
+SDL_FUNC("SDL_InsertGPUDebugLabel", None, SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_char_p)
+SDL_FUNC("SDL_PushGPUDebugGroup", None, SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_char_p)
+SDL_FUNC("SDL_PopGPUDebugGroup", None, SDL_POINTER[SDL_GPUCommandBuffer])
 
-SDL_FUNC("SDL_ReleaseGPUTexture", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUTexture))
-SDL_FUNC("SDL_ReleaseGPUSampler", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUSampler))
-SDL_FUNC("SDL_ReleaseGPUBuffer", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUBuffer))
-SDL_FUNC("SDL_ReleaseGPUTransferBuffer", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUTransferBuffer))
-SDL_FUNC("SDL_ReleaseGPUComputePipeline", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUComputePipeline))
-SDL_FUNC("SDL_ReleaseGPUShader", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUShader))
-SDL_FUNC("SDL_ReleaseGPUGraphicsPipeline", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUGraphicsPipeline))
+SDL_FUNC("SDL_ReleaseGPUTexture", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTexture])
+SDL_FUNC("SDL_ReleaseGPUSampler", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUSampler])
+SDL_FUNC("SDL_ReleaseGPUBuffer", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBuffer])
+SDL_FUNC("SDL_ReleaseGPUTransferBuffer", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBuffer])
+SDL_FUNC("SDL_ReleaseGPUComputePipeline", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUComputePipeline])
+SDL_FUNC("SDL_ReleaseGPUShader", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUShader])
+SDL_FUNC("SDL_ReleaseGPUGraphicsPipeline", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUGraphicsPipeline])
 
-SDL_FUNC("SDL_AcquireGPUCommandBuffer", ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.POINTER(SDL_GPUDevice))
+SDL_FUNC("SDL_AcquireGPUCommandBuffer", SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUDevice])
 
-SDL_FUNC("SDL_PushGPUVertexUniformData", None, ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32)
-SDL_FUNC("SDL_PushGPUFragmentUniformData", None, ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32)
-SDL_FUNC("SDL_PushGPUComputeUniformData", None, ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32)
+SDL_FUNC("SDL_PushGPUVertexUniformData", None, SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32)
+SDL_FUNC("SDL_PushGPUFragmentUniformData", None, SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32)
+SDL_FUNC("SDL_PushGPUComputeUniformData", None, SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32)
 
-SDL_FUNC("SDL_BeginGPURenderPass", ctypes.POINTER(SDL_GPURenderPass), ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.POINTER(SDL_GPUColorTargetInfo), ctypes.c_uint32, ctypes.POINTER(SDL_GPUDepthStencilTargetInfo))
-SDL_FUNC("SDL_BindGPUGraphicsPipeline", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.POINTER(SDL_GPUGraphicsPipeline))
-SDL_FUNC("SDL_SetGPUViewport", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.POINTER(SDL_GPUViewport))
-SDL_FUNC("SDL_SetGPUScissor", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.POINTER(SDL_Rect))
-SDL_FUNC("SDL_SetGPUBlendConstants", None, ctypes.POINTER(SDL_GPURenderPass), SDL_FColor)
-SDL_FUNC("SDL_SetGPUStencilReference", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.c_uint8)
-SDL_FUNC("SDL_BindGPUVertexBuffers", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.c_uint32, ctypes.POINTER(SDL_GPUBufferBinding), ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUIndexBuffer", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.POINTER(SDL_GPUBufferBinding), SDL_GPUIndexElementSize)
-SDL_FUNC("SDL_BindGPUVertexSamplers", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.c_uint32, ctypes.POINTER(SDL_GPUTextureSamplerBinding), ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUVertexStorageTextures", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.c_uint32, ctypes.POINTER(ctypes.POINTER(SDL_GPUTexture)), ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUVertexStorageBuffers", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.c_uint32, ctypes.POINTER(SDL_GPUBufferBinding), ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUFragmentSamplers", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.c_uint32, ctypes.POINTER(SDL_GPUTextureSamplerBinding), ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUFragmentStorageTextures", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.c_uint32, ctypes.POINTER(ctypes.POINTER(SDL_GPUTexture)), ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUFragmentStorageBuffers", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.c_uint32, ctypes.POINTER(SDL_GPUBufferBinding), ctypes.c_uint32)
-SDL_FUNC("SDL_DrawGPUIndexedPrimitives", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_int32, ctypes.c_uint32)
-SDL_FUNC("SDL_DrawGPUPrimitives", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32)
-SDL_FUNC("SDL_DrawGPUPrimitivesIndirect", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.POINTER(SDL_GPUBuffer), ctypes.c_uint32, ctypes.c_uint32)
-SDL_FUNC("SDL_DrawGPUIndexedPrimitivesIndirect", None, ctypes.POINTER(SDL_GPURenderPass), ctypes.POINTER(SDL_GPUBuffer), ctypes.c_uint32, ctypes.c_uint32)
-SDL_FUNC("SDL_EndGPURenderPass", None, ctypes.POINTER(SDL_GPURenderPass))
+SDL_FUNC("SDL_BeginGPURenderPass", SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUColorTargetInfo], ctypes.c_uint32, SDL_POINTER[SDL_GPUDepthStencilTargetInfo])
+SDL_FUNC("SDL_BindGPUGraphicsPipeline", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUGraphicsPipeline])
+SDL_FUNC("SDL_SetGPUViewport", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUViewport])
+SDL_FUNC("SDL_SetGPUScissor", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_Rect])
+SDL_FUNC("SDL_SetGPUBlendConstants", None, SDL_POINTER[SDL_GPURenderPass], SDL_FColor)
+SDL_FUNC("SDL_SetGPUStencilReference", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint8)
+SDL_FUNC("SDL_BindGPUVertexBuffers", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32)
+SDL_FUNC("SDL_BindGPUIndexBuffer", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUBufferBinding], SDL_GPUIndexElementSize)
+SDL_FUNC("SDL_BindGPUVertexSamplers", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUTextureSamplerBinding], ctypes.c_uint32)
+SDL_FUNC("SDL_BindGPUVertexStorageTextures", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], ctypes.c_uint32)
+SDL_FUNC("SDL_BindGPUVertexStorageBuffers", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32)
+SDL_FUNC("SDL_BindGPUFragmentSamplers", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUTextureSamplerBinding], ctypes.c_uint32)
+SDL_FUNC("SDL_BindGPUFragmentStorageTextures", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], ctypes.c_uint32)
+SDL_FUNC("SDL_BindGPUFragmentStorageBuffers", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32)
+SDL_FUNC("SDL_DrawGPUIndexedPrimitives", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_int32, ctypes.c_uint32)
+SDL_FUNC("SDL_DrawGPUPrimitives", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32)
+SDL_FUNC("SDL_DrawGPUPrimitivesIndirect", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUBuffer], ctypes.c_uint32, ctypes.c_uint32)
+SDL_FUNC("SDL_DrawGPUIndexedPrimitivesIndirect", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUBuffer], ctypes.c_uint32, ctypes.c_uint32)
+SDL_FUNC("SDL_EndGPURenderPass", None, SDL_POINTER[SDL_GPURenderPass])
 
-SDL_FUNC("SDL_BeginGPUComputePass", ctypes.POINTER(SDL_GPUComputePass), ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.POINTER(SDL_GPUStorageTextureReadWriteBinding), ctypes.c_uint32, ctypes.POINTER(SDL_GPUStorageBufferReadWriteBinding), ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUComputePipeline", None, ctypes.POINTER(SDL_GPUComputePass), ctypes.POINTER(SDL_GPUComputePipeline))
-SDL_FUNC("SDL_BindGPUComputeSamplers", None, ctypes.POINTER(SDL_GPUComputePass), ctypes.c_uint32, ctypes.POINTER(SDL_GPUTextureSamplerBinding), ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUComputeStorageTextures", None, ctypes.POINTER(SDL_GPUComputePass), ctypes.c_uint32, ctypes.POINTER(ctypes.POINTER(SDL_GPUTexture)), ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUComputeStorageBuffers", None, ctypes.POINTER(SDL_GPUComputePass), ctypes.c_uint32, ctypes.POINTER(SDL_GPUBufferBinding), ctypes.c_uint32)
-SDL_FUNC("SDL_DispatchGPUCompute", None, ctypes.POINTER(SDL_GPUComputePass), ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32)
-SDL_FUNC("SDL_DispatchGPUComputeIndirect", None, ctypes.POINTER(SDL_GPUComputePass), ctypes.POINTER(SDL_GPUBuffer), ctypes.c_uint32)
-SDL_FUNC("SDL_EndGPUComputePass", None, ctypes.POINTER(SDL_GPUComputePass))
+SDL_FUNC("SDL_BeginGPUComputePass", SDL_POINTER[SDL_GPUComputePass], SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUStorageTextureReadWriteBinding], ctypes.c_uint32, SDL_POINTER[SDL_GPUStorageBufferReadWriteBinding], ctypes.c_uint32)
+SDL_FUNC("SDL_BindGPUComputePipeline", None, SDL_POINTER[SDL_GPUComputePass], SDL_POINTER[SDL_GPUComputePipeline])
+SDL_FUNC("SDL_BindGPUComputeSamplers", None, SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, SDL_POINTER[SDL_GPUTextureSamplerBinding], ctypes.c_uint32)
+SDL_FUNC("SDL_BindGPUComputeStorageTextures", None, SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], ctypes.c_uint32)
+SDL_FUNC("SDL_BindGPUComputeStorageBuffers", None, SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32)
+SDL_FUNC("SDL_DispatchGPUCompute", None, SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32)
+SDL_FUNC("SDL_DispatchGPUComputeIndirect", None, SDL_POINTER[SDL_GPUComputePass], SDL_POINTER[SDL_GPUBuffer], ctypes.c_uint32)
+SDL_FUNC("SDL_EndGPUComputePass", None, SDL_POINTER[SDL_GPUComputePass])
 
-SDL_FUNC("SDL_MapGPUTransferBuffer", ctypes.c_void_p, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUTransferBuffer), ctypes.c_bool)
-SDL_FUNC("SDL_UnmapGPUTransferBuffer", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUTransferBuffer))
+SDL_FUNC("SDL_MapGPUTransferBuffer", ctypes.c_void_p, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBuffer], ctypes.c_bool)
+SDL_FUNC("SDL_UnmapGPUTransferBuffer", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBuffer])
 
-SDL_FUNC("SDL_BeginGPUCopyPass", ctypes.POINTER(SDL_GPUCopyPass), ctypes.POINTER(SDL_GPUCommandBuffer))
-SDL_FUNC("SDL_UploadToGPUTexture", None, ctypes.POINTER(SDL_GPUCopyPass), ctypes.POINTER(SDL_GPUTextureTransferInfo), ctypes.POINTER(SDL_GPUTextureRegion), ctypes.c_bool)
-SDL_FUNC("SDL_UploadToGPUBuffer", None, ctypes.POINTER(SDL_GPUCopyPass), ctypes.POINTER(SDL_GPUTransferBufferLocation), ctypes.POINTER(SDL_GPUBufferRegion), ctypes.c_bool)
-SDL_FUNC("SDL_CopyGPUTextureToTexture", None, ctypes.POINTER(SDL_GPUCopyPass), ctypes.POINTER(SDL_GPUTextureLocation), ctypes.POINTER(SDL_GPUTextureLocation), ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_bool)
-SDL_FUNC("SDL_CopyGPUBufferToBuffer", None, ctypes.POINTER(SDL_GPUCopyPass), ctypes.POINTER(SDL_GPUBufferLocation), ctypes.POINTER(SDL_GPUBufferLocation), ctypes.c_uint32, ctypes.c_bool)
-SDL_FUNC("SDL_DownloadFromGPUTexture", None, ctypes.POINTER(SDL_GPUCopyPass), ctypes.POINTER(SDL_GPUTextureRegion), ctypes.POINTER(SDL_GPUTextureTransferInfo))
-SDL_FUNC("SDL_DownloadFromGPUBuffer", None, ctypes.POINTER(SDL_GPUCopyPass), ctypes.POINTER(SDL_GPUBufferRegion), ctypes.POINTER(SDL_GPUTransferBufferLocation))
-SDL_FUNC("SDL_EndGPUCopyPass", None, ctypes.POINTER(SDL_GPUCopyPass))
+SDL_FUNC("SDL_BeginGPUCopyPass", SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUCommandBuffer])
+SDL_FUNC("SDL_UploadToGPUTexture", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTextureTransferInfo], SDL_POINTER[SDL_GPUTextureRegion], ctypes.c_bool)
+SDL_FUNC("SDL_UploadToGPUBuffer", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTransferBufferLocation], SDL_POINTER[SDL_GPUBufferRegion], ctypes.c_bool)
+SDL_FUNC("SDL_CopyGPUTextureToTexture", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTextureLocation], SDL_POINTER[SDL_GPUTextureLocation], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_bool)
+SDL_FUNC("SDL_CopyGPUBufferToBuffer", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUBufferLocation], SDL_POINTER[SDL_GPUBufferLocation], ctypes.c_uint32, ctypes.c_bool)
+SDL_FUNC("SDL_DownloadFromGPUTexture", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTextureRegion], SDL_POINTER[SDL_GPUTextureTransferInfo])
+SDL_FUNC("SDL_DownloadFromGPUBuffer", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUBufferRegion], SDL_POINTER[SDL_GPUTransferBufferLocation])
+SDL_FUNC("SDL_EndGPUCopyPass", None, SDL_POINTER[SDL_GPUCopyPass])
 
-SDL_FUNC("SDL_GenerateMipmapsForGPUTexture", None, ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.POINTER(SDL_GPUTexture))
-SDL_FUNC("SDL_BlitGPUTexture", None, ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.POINTER(SDL_GPUBlitInfo))
+SDL_FUNC("SDL_GenerateMipmapsForGPUTexture", None, SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUTexture])
+SDL_FUNC("SDL_BlitGPUTexture", None, SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUBlitInfo])
 
-SDL_FUNC("SDL_WindowSupportsGPUSwapchainComposition", ctypes.c_bool, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_Window), SDL_GPUSwapchainComposition)
-SDL_FUNC("SDL_WindowSupportsGPUPresentMode", ctypes.c_bool, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_Window), SDL_GPUPresentMode)
-SDL_FUNC("SDL_ClaimWindowForGPUDevice", ctypes.c_bool, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_ReleaseWindowFromGPUDevice", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_SetGPUSwapchainParameters", ctypes.c_bool, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_Window), SDL_GPUSwapchainComposition, SDL_GPUPresentMode)
-SDL_FUNC("SDL_SetGPUAllowedFramesInFlight", ctypes.c_bool, ctypes.POINTER(SDL_GPUDevice), ctypes.c_uint32)
-SDL_FUNC("SDL_GetGPUSwapchainTextureFormat", SDL_GPUTextureFormat, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_AcquireGPUSwapchainTexture", ctypes.c_bool, ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.POINTER(SDL_GPUTexture)), ctypes.POINTER(ctypes.c_uint32), ctypes.POINTER(ctypes.c_uint32))
-SDL_FUNC("SDL_WaitForGPUSwapchain", ctypes.c_bool, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_Window))
-SDL_FUNC("SDL_WaitAndAcquireGPUSwapchainTexture", ctypes.c_bool, ctypes.POINTER(SDL_GPUCommandBuffer), ctypes.POINTER(SDL_Window), ctypes.POINTER(ctypes.POINTER(SDL_GPUTexture)), ctypes.POINTER(ctypes.c_uint32), ctypes.POINTER(ctypes.c_uint32))
+SDL_FUNC("SDL_WindowSupportsGPUSwapchainComposition", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window], SDL_GPUSwapchainComposition)
+SDL_FUNC("SDL_WindowSupportsGPUPresentMode", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window], SDL_GPUPresentMode)
+SDL_FUNC("SDL_ClaimWindowForGPUDevice", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window])
+SDL_FUNC("SDL_ReleaseWindowFromGPUDevice", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window])
+SDL_FUNC("SDL_SetGPUSwapchainParameters", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window], SDL_GPUSwapchainComposition, SDL_GPUPresentMode)
+SDL_FUNC("SDL_SetGPUAllowedFramesInFlight", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], ctypes.c_uint32)
+SDL_FUNC("SDL_GetGPUSwapchainTextureFormat", SDL_GPUTextureFormat, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window])
+SDL_FUNC("SDL_AcquireGPUSwapchainTexture", ctypes.c_bool, SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_Window], SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32])
+SDL_FUNC("SDL_WaitForGPUSwapchain", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window])
+SDL_FUNC("SDL_WaitAndAcquireGPUSwapchainTexture", ctypes.c_bool, SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_Window], SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32])
 
-SDL_FUNC("SDL_SubmitGPUCommandBuffer", ctypes.c_bool, ctypes.POINTER(SDL_GPUCommandBuffer))
-SDL_FUNC("SDL_SubmitGPUCommandBufferAndAcquireFence", ctypes.POINTER(SDL_GPUFence), ctypes.POINTER(SDL_GPUCommandBuffer))
-SDL_FUNC("SDL_CancelGPUCommandBuffer", ctypes.c_bool, ctypes.POINTER(SDL_GPUCommandBuffer))
+SDL_FUNC("SDL_SubmitGPUCommandBuffer", ctypes.c_bool, SDL_POINTER[SDL_GPUCommandBuffer])
+SDL_FUNC("SDL_SubmitGPUCommandBufferAndAcquireFence", SDL_POINTER[SDL_GPUFence], SDL_POINTER[SDL_GPUCommandBuffer])
+SDL_FUNC("SDL_CancelGPUCommandBuffer", ctypes.c_bool, SDL_POINTER[SDL_GPUCommandBuffer])
 
-SDL_FUNC("SDL_WaitForGPUIdle", ctypes.c_bool, ctypes.POINTER(SDL_GPUDevice))
-SDL_FUNC("SDL_WaitForGPUFences", ctypes.c_bool, ctypes.POINTER(SDL_GPUDevice), ctypes.c_bool, ctypes.POINTER(ctypes.POINTER(SDL_GPUFence)), ctypes.c_uint32)
+SDL_FUNC("SDL_WaitForGPUIdle", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice])
+SDL_FUNC("SDL_WaitForGPUFences", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], ctypes.c_bool, SDL_POINTER[SDL_POINTER[SDL_GPUFence]], ctypes.c_uint32)
 
-SDL_FUNC("SDL_QueryGPUFence", ctypes.c_bool, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUFence))
-SDL_FUNC("SDL_ReleaseGPUFence", None, ctypes.POINTER(SDL_GPUDevice), ctypes.POINTER(SDL_GPUFence))
+SDL_FUNC("SDL_QueryGPUFence", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUFence])
+SDL_FUNC("SDL_ReleaseGPUFence", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUFence])
 
 SDL_FUNC("SDL_GPUTextureFormatTexelBlockSize", ctypes.c_uint32, SDL_GPUTextureFormat)
-SDL_FUNC("SDL_GPUTextureSupportsFormat", ctypes.c_bool, ctypes.POINTER(SDL_GPUDevice), SDL_GPUTextureFormat, SDL_GPUTextureType, SDL_GPUTextureUsageFlags)
-SDL_FUNC("SDL_GPUTextureSupportsSampleCount", ctypes.c_bool, ctypes.POINTER(SDL_GPUDevice), SDL_GPUTextureFormat, SDL_GPUSampleCount)
+SDL_FUNC("SDL_GPUTextureSupportsFormat", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_GPUTextureFormat, SDL_GPUTextureType, SDL_GPUTextureUsageFlags)
+SDL_FUNC("SDL_GPUTextureSupportsSampleCount", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_GPUTextureFormat, SDL_GPUSampleCount)
 SDL_FUNC("SDL_CalculateGPUTextureFormatSize", ctypes.c_uint32, SDL_GPUTextureFormat, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32)

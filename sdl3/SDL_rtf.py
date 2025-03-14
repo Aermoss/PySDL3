@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, SDL_NOT_IMPLEMENTED, \
+from .__init__ import ctypes, typing, SDL_NOT_IMPLEMENTED, SDL_POINTER, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_RTF_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_Color
@@ -49,22 +49,22 @@ RTF_FONT_ENGINE_VERSION = 1
 class RTF_FontEngine(ctypes.Structure):
     _fields_ = [
         ("version", ctypes.c_int),
-        ("CreateFont", ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_char_p, RTF_FontFamily, ctypes.c_int, ctypes.c_int, ctypes.c_int)),
-        ("GetLineSpacing", ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p)),
-        ("GetCharacterOffsets", ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.c_int)),
-        ("RenderText", ctypes.CFUNCTYPE(ctypes.POINTER(SDL_Texture), ctypes.c_void_p, ctypes.POINTER(SDL_Renderer), ctypes.c_char_p, SDL_Color)),
-        ("FreeFont", ctypes.CFUNCTYPE(None, ctypes.c_void_p))
+        ("CreateFont", SDL_FUNC_TYPE["RTF_FontEngine.CreateFont", ctypes.c_void_p, ctypes.c_char_p, RTF_FontFamily, ctypes.c_int, ctypes.c_int, ctypes.c_int]),
+        ("GetLineSpacing", SDL_FUNC_TYPE["RTF_FontEngine.GetLineSpacing", ctypes.c_int, ctypes.c_void_p]),
+        ("GetCharacterOffsets", SDL_FUNC_TYPE["RTF_FontEngine.GetCharacterOffsets", ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p, SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], ctypes.c_int]),
+        ("RenderText", SDL_FUNC_TYPE["RTF_FontEngine.RenderText", SDL_POINTER[SDL_Texture], ctypes.c_void_p, SDL_POINTER[SDL_Renderer], ctypes.c_char_p, SDL_Color]),
+        ("FreeFont", SDL_FUNC_TYPE["RTF_FontEngine.FreeFont", None, ctypes.c_void_p])
     ]
 
-SDL_FUNC("RTF_CreateContext", ctypes.POINTER(RTF_Context), ctypes.POINTER(SDL_Renderer), ctypes.POINTER(RTF_FontEngine))
-SDL_FUNC("RTF_Load", ctypes.c_int, ctypes.POINTER(RTF_Context), ctypes.c_char_p)
-SDL_FUNC("RTF_Load_IO", ctypes.c_int, ctypes.POINTER(RTF_Context), ctypes.POINTER(SDL_IOStream), ctypes.c_int)
-SDL_FUNC("RTF_GetTitle", ctypes.c_char_p, ctypes.POINTER(RTF_Context))
-SDL_FUNC("RTF_GetSubject", ctypes.c_char_p, ctypes.POINTER(RTF_Context))
-SDL_FUNC("RTF_GetAuthor", ctypes.c_char_p, ctypes.POINTER(RTF_Context))
-SDL_FUNC("RTF_GetHeight", ctypes.c_int, ctypes.POINTER(RTF_Context), ctypes.c_int)
-SDL_FUNC("RTF_Render", None, ctypes.POINTER(RTF_Context), ctypes.POINTER(SDL_Rect), ctypes.c_int)
-SDL_FUNC("RTF_FreeContext", None, ctypes.POINTER(RTF_Context))
+SDL_FUNC("RTF_CreateContext", SDL_POINTER[RTF_Context], SDL_POINTER[SDL_Renderer], SDL_POINTER[RTF_FontEngine])
+SDL_FUNC("RTF_Load", ctypes.c_int, SDL_POINTER[RTF_Context], ctypes.c_char_p)
+SDL_FUNC("RTF_Load_IO", ctypes.c_int, SDL_POINTER[RTF_Context], SDL_POINTER[SDL_IOStream], ctypes.c_int)
+SDL_FUNC("RTF_GetTitle", ctypes.c_char_p, SDL_POINTER[RTF_Context])
+SDL_FUNC("RTF_GetSubject", ctypes.c_char_p, SDL_POINTER[RTF_Context])
+SDL_FUNC("RTF_GetAuthor", ctypes.c_char_p, SDL_POINTER[RTF_Context])
+SDL_FUNC("RTF_GetHeight", ctypes.c_int, SDL_POINTER[RTF_Context], ctypes.c_int)
+SDL_FUNC("RTF_Render", None, SDL_POINTER[RTF_Context], SDL_POINTER[SDL_Rect], ctypes.c_int)
+SDL_FUNC("RTF_FreeContext", None, SDL_POINTER[RTF_Context])
 
 RTF_SetError = getattr(SDL_GET_BINARY(SDL_BINARY), "SDL_SetError", SDL_NOT_IMPLEMENTED("RTF_SetError"))
 RTF_GetError = getattr(SDL_GET_BINARY(SDL_BINARY), "SDL_GetError", SDL_NOT_IMPLEMENTED("RTF_GetError"))

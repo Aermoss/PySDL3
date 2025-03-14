@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window
@@ -49,13 +49,13 @@ class SDL_MessageBoxColorScheme(ctypes.Structure):
 class SDL_MessageBoxData(ctypes.Structure):
     _fields_ = [
         ("flags", SDL_MessageBoxFlags),
-        ("window", ctypes.POINTER(SDL_Window)),
+        ("window", SDL_POINTER[SDL_Window]),
         ("title", ctypes.c_char_p),
         ("message", ctypes.c_char_p),
         ("numbuttons", ctypes.c_int),
-        ("buttons", ctypes.POINTER(SDL_MessageBoxButtonData)),
-        ("colorScheme", ctypes.POINTER(SDL_MessageBoxColorScheme))
+        ("buttons", SDL_POINTER[SDL_MessageBoxButtonData]),
+        ("colorScheme", SDL_POINTER[SDL_MessageBoxColorScheme])
     ]
 
-SDL_FUNC("SDL_ShowMessageBox", ctypes.c_bool, ctypes.POINTER(SDL_MessageBoxData), ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("SDL_ShowSimpleMessageBox", ctypes.c_bool, SDL_MessageBoxFlags, ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER(SDL_Window))
+SDL_FUNC("SDL_ShowMessageBox", ctypes.c_bool, SDL_POINTER[SDL_MessageBoxData], SDL_POINTER[ctypes.c_int])
+SDL_FUNC("SDL_ShowSimpleMessageBox", ctypes.c_bool, SDL_MessageBoxFlags, ctypes.c_char_p, ctypes.c_char_p, SDL_POINTER[SDL_Window])

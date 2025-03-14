@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
 
 from .SDL_atomic import SDL_AtomicInt
@@ -27,13 +27,13 @@ SDL_THREAD_ALIVE = 1
 SDL_THREAD_DETACHED = 2
 SDL_THREAD_COMPLETE = 3
 
-SDL_ThreadFunction = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p)
+SDL_ThreadFunction: typing.TypeAlias = SDL_FUNC_TYPE["SDL_ThreadFunction", ctypes.c_int, ctypes.c_void_p]
 
 SDL_BeginThreadFunction = SDL_FunctionPointer(0)
 SDL_EndThreadFunction = SDL_FunctionPointer(0)
 
-SDL_FUNC("SDL_CreateThreadRuntime", ctypes.POINTER(SDL_Thread), SDL_ThreadFunction, ctypes.c_char_p, ctypes.c_void_p, SDL_FunctionPointer, SDL_FunctionPointer)
-SDL_FUNC("SDL_CreateThreadWithPropertiesRuntime", ctypes.POINTER(SDL_Thread), SDL_PropertiesID, SDL_FunctionPointer, SDL_FunctionPointer)
+SDL_FUNC("SDL_CreateThreadRuntime", SDL_POINTER[SDL_Thread], SDL_ThreadFunction, ctypes.c_char_p, ctypes.c_void_p, SDL_FunctionPointer, SDL_FunctionPointer)
+SDL_FUNC("SDL_CreateThreadWithPropertiesRuntime", SDL_POINTER[SDL_Thread], SDL_PropertiesID, SDL_FunctionPointer, SDL_FunctionPointer)
 
 SDL_CreateThread = lambda fn, name, data: \
     SDL_GET_BINARY(SDL_BINARY).SDL_CreateThreadRuntime(fn, name, data, SDL_BeginThreadFunction, SDL_EndThreadFunction)
@@ -46,16 +46,16 @@ SDL_PROP_THREAD_CREATE_NAME_STRING = "SDL.thread.create.name".encode()
 SDL_PROP_THREAD_CREATE_USERDATA_POINTER = "SDL.thread.create.userdata".encode()
 SDL_PROP_THREAD_CREATE_STACKSIZE_NUMBER = "SDL.thread.create.stacksize".encode()
 
-SDL_FUNC("SDL_GetThreadName", ctypes.c_char_p, ctypes.POINTER(SDL_Thread))
+SDL_FUNC("SDL_GetThreadName", ctypes.c_char_p, SDL_POINTER[SDL_Thread])
 SDL_FUNC("SDL_GetCurrentThreadID", SDL_ThreadID)
-SDL_FUNC("SDL_GetThreadID", SDL_ThreadID, ctypes.POINTER(SDL_Thread))
+SDL_FUNC("SDL_GetThreadID", SDL_ThreadID, SDL_POINTER[SDL_Thread])
 SDL_FUNC("SDL_SetCurrentThreadPriority", ctypes.c_bool, SDL_ThreadPriority)
-SDL_FUNC("SDL_WaitThread", None, ctypes.POINTER(SDL_Thread), ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("SDL_GetThreadState", SDL_ThreadState, ctypes.POINTER(SDL_Thread))
-SDL_FUNC("SDL_DetachThread", None, ctypes.POINTER(SDL_Thread))
-SDL_FUNC("SDL_GetTLS", ctypes.c_void_p, ctypes.POINTER(SDL_TLSID))
+SDL_FUNC("SDL_WaitThread", None, SDL_POINTER[SDL_Thread], SDL_POINTER[ctypes.c_int])
+SDL_FUNC("SDL_GetThreadState", SDL_ThreadState, SDL_POINTER[SDL_Thread])
+SDL_FUNC("SDL_DetachThread", None, SDL_POINTER[SDL_Thread])
+SDL_FUNC("SDL_GetTLS", ctypes.c_void_p, SDL_POINTER[SDL_TLSID])
 
-SDL_TLSDestructorCallback = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
+SDL_TLSDestructorCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_TLSDestructorCallback", None, ctypes.c_void_p]
 
-SDL_FUNC("SDL_SetTLS", ctypes.c_bool, ctypes.POINTER(SDL_TLSID), ctypes.c_void_p, SDL_TLSDestructorCallback)
+SDL_FUNC("SDL_SetTLS", ctypes.c_bool, SDL_POINTER[SDL_TLSID], ctypes.c_void_p, SDL_TLSDestructorCallback)
 SDL_FUNC("SDL_CleanupTLS", None)

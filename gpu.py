@@ -8,7 +8,7 @@ import sdl3, shader, ctypes, time, colorsys
 def compileShader(name, size = ctypes.c_size_t()):
     subprocess.run(["glslc", f"{name}.glsl", "-o", f"{name}.spv"])
     data = sdl3.SDL_LoadFile(f"{name}.spv".encode(), ctypes.byref(size))
-    return size.value, ctypes.cast(data, ctypes.POINTER(ctypes.c_uint8))
+    return size.value, ctypes.cast(data, sdl3.SDL_POINTER[ctypes.c_uint8])
 
 class Vertex(ctypes.Structure):
     _fields_ = [
@@ -64,7 +64,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     vertexBuffer = sdl3.SDL_CreateGPUBuffer(device, sdl3.SDL_GPUBufferCreateInfo(sdl3.SDL_GPU_BUFFERUSAGE_VERTEX, ctypes.sizeof(Vertex) * 3))
     transferBuffer = sdl3.SDL_CreateGPUTransferBuffer(device, sdl3.SDL_GPUTransferBufferCreateInfo(sdl3.SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD, ctypes.sizeof(Vertex) * 3))
 
-    transferData = ctypes.cast(sdl3.SDL_MapGPUTransferBuffer(device, transferBuffer, False), ctypes.POINTER(Vertex))
+    transferData = ctypes.cast(sdl3.SDL_MapGPUTransferBuffer(device, transferBuffer, False), sdl3.SDL_POINTER[Vertex])
     transferData[0] = Vertex(sdl3.SDL_ARRAY(-0.5, -0.5, 0.0, type = ctypes.c_float)[0])
     transferData[1] = Vertex(sdl3.SDL_ARRAY( 0.5, -0.5, 0.0, type = ctypes.c_float)[0])
     transferData[2] = Vertex(sdl3.SDL_ARRAY( 0.0,  0.5, 0.0, type = ctypes.c_float)[0])
@@ -95,7 +95,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
             print(f"failed to acquire gpu command buffer: {sdl3.SDL_GetError().decode().lower()}")
             return -1
 
-        swapChainTexture = ctypes.POINTER(sdl3.SDL_GPUTexture)()
+        swapChainTexture = sdl3.LP_SDL_GPUTexture()
         sdl3.SDL_WaitAndAcquireGPUSwapchainTexture(commandBuffer, window, ctypes.byref(swapChainTexture), None, None)
 
         if not swapChainTexture:

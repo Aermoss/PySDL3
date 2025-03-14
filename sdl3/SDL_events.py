@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window, SDL_WindowID, SDL_DisplayID
@@ -222,7 +222,7 @@ class SDL_TextEditingCandidatesEvent(ctypes.Structure):
         ("reserved", ctypes.c_uint32),
         ("timestamp", ctypes.c_uint64),
         ("windowID", SDL_WindowID),
-        ("candidates", ctypes.POINTER(ctypes.c_char_p)),
+        ("candidates", SDL_POINTER[ctypes.c_char_p]),
         ("num_candidates", ctypes.c_int32),
         ("selected_candidate", ctypes.c_int32),
         ("horizontal", ctypes.c_bool),
@@ -544,7 +544,7 @@ class SDL_ClipboardEvent(ctypes.Structure):
         ("timestamp", ctypes.c_uint64),
         ("owner", ctypes.c_bool),
         ("num_mime_types", ctypes.c_int32),
-        ("mime_types", ctypes.POINTER(ctypes.c_char_p))
+        ("mime_types", SDL_POINTER[ctypes.c_char_p])
     ]
 
 class SDL_SensorEvent(ctypes.Structure):
@@ -626,24 +626,24 @@ SDL_ADDEVENT = 0
 SDL_PEEKEVENT = 1
 SDL_GETEVENT = 2
 
-SDL_FUNC("SDL_PeepEvents", ctypes.c_int, ctypes.POINTER(SDL_Event), ctypes.c_int, SDL_EventAction, ctypes.c_uint32, ctypes.c_uint32)
+SDL_FUNC("SDL_PeepEvents", ctypes.c_int, SDL_POINTER[SDL_Event], ctypes.c_int, SDL_EventAction, ctypes.c_uint32, ctypes.c_uint32)
 SDL_FUNC("SDL_HasEvent", ctypes.c_bool, ctypes.c_uint32)
 SDL_FUNC("SDL_HasEvents", ctypes.c_bool, ctypes.c_uint32, ctypes.c_uint32)
 SDL_FUNC("SDL_FlushEvent", None, ctypes.c_uint32)
 SDL_FUNC("SDL_FlushEvents", None, ctypes.c_uint32, ctypes.c_uint32)
-SDL_FUNC("SDL_PollEvent", ctypes.c_bool, ctypes.POINTER(SDL_Event))
-SDL_FUNC("SDL_WaitEvent", ctypes.c_bool, ctypes.POINTER(SDL_Event))
-SDL_FUNC("SDL_WaitEventTimeout", ctypes.c_bool, ctypes.POINTER(SDL_Event), ctypes.c_int32)
-SDL_FUNC("SDL_PushEvent", ctypes.c_bool, ctypes.POINTER(SDL_Event))
+SDL_FUNC("SDL_PollEvent", ctypes.c_bool, SDL_POINTER[SDL_Event])
+SDL_FUNC("SDL_WaitEvent", ctypes.c_bool, SDL_POINTER[SDL_Event])
+SDL_FUNC("SDL_WaitEventTimeout", ctypes.c_bool, SDL_POINTER[SDL_Event], ctypes.c_int32)
+SDL_FUNC("SDL_PushEvent", ctypes.c_bool, SDL_POINTER[SDL_Event])
 
-SDL_EventFilter = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.POINTER(SDL_Event))
+SDL_EventFilter: typing.TypeAlias = SDL_FUNC_TYPE["SDL_EventFilter", ctypes.c_bool, ctypes.c_void_p, SDL_POINTER[SDL_Event]]
 
 SDL_FUNC("SDL_SetEventFilter", None, SDL_EventFilter, ctypes.c_void_p)
-SDL_FUNC("SDL_GetEventFilter", ctypes.c_bool, ctypes.POINTER(SDL_EventFilter), ctypes.POINTER(ctypes.c_void_p))
+SDL_FUNC("SDL_GetEventFilter", ctypes.c_bool, SDL_POINTER[SDL_EventFilter], SDL_POINTER[ctypes.c_void_p])
 SDL_FUNC("SDL_AddEventWatch", ctypes.c_bool, SDL_EventFilter, ctypes.c_void_p)
 SDL_FUNC("SDL_RemoveEventWatch", None, SDL_EventFilter, ctypes.c_void_p)
 SDL_FUNC("SDL_FilterEvents", None, SDL_EventFilter, ctypes.c_void_p)
 SDL_FUNC("SDL_SetEventEnabled", None, ctypes.c_uint32, ctypes.c_bool)
 SDL_FUNC("SDL_EventEnabled", ctypes.c_bool, ctypes.c_uint32)
 SDL_FUNC("SDL_RegisterEvents", ctypes.c_uint32, ctypes.c_int)
-SDL_FUNC("SDL_GetWindowFromEvent", ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_Event))
+SDL_FUNC("SDL_GetWindowFromEvent", SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Event])

@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
@@ -19,7 +19,7 @@ SDL_FUNC("SDL_CopyProperties", ctypes.c_bool, SDL_PropertiesID, SDL_PropertiesID
 SDL_FUNC("SDL_LockProperties", ctypes.c_bool, SDL_PropertiesID)
 SDL_FUNC("SDL_UnlockProperties", None, SDL_PropertiesID)
 
-SDL_CleanupPropertyCallback = ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_void_p)
+SDL_CleanupPropertyCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_CleanupPropertyCallback", None, ctypes.c_void_p, ctypes.c_void_p]
 
 SDL_FUNC("SDL_SetPointerPropertyWithCleanup", ctypes.c_bool, SDL_PropertiesID, ctypes.c_char_p, ctypes.c_void_p, SDL_CleanupPropertyCallback, ctypes.c_void_p)
 SDL_FUNC("SDL_SetPointerProperty", ctypes.c_bool, SDL_PropertiesID, ctypes.c_char_p, ctypes.c_void_p)
@@ -36,7 +36,7 @@ SDL_FUNC("SDL_GetFloatProperty", ctypes.c_float, SDL_PropertiesID, ctypes.c_char
 SDL_FUNC("SDL_GetBooleanProperty", ctypes.c_bool, SDL_PropertiesID, ctypes.c_char_p, ctypes.c_bool)
 SDL_FUNC("SDL_ClearProperty", ctypes.c_bool, SDL_PropertiesID, ctypes.c_char_p)
 
-SDL_EnumeratePropertiesCallback = ctypes.CFUNCTYPE(None, ctypes.c_void_p, SDL_PropertiesID, ctypes.c_char_p)
+SDL_EnumeratePropertiesCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_EnumeratePropertiesCallback", None, ctypes.c_void_p, SDL_PropertiesID, ctypes.c_char_p]
 
 SDL_FUNC("SDL_EnumerateProperties", ctypes.c_bool, SDL_PropertiesID, SDL_EnumeratePropertiesCallback, ctypes.c_void_p)
 SDL_FUNC("SDL_DestroyProperties", None, SDL_PropertiesID)

@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
@@ -56,8 +56,8 @@ SDL_FUNC("SDL_LogCritical", None, ctypes.c_int, ctypes.c_char_p)
 SDL_FUNC("SDL_LogMessage", None, ctypes.c_int, SDL_LogPriority, ctypes.c_char_p)
 SDL_FUNC("SDL_LogMessageV", None, ctypes.c_int, SDL_LogPriority, ctypes.c_char_p, ctypes.c_char_p)
 
-SDL_LogOutputFunction = ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_int, SDL_LogPriority, ctypes.c_char_p)
+SDL_LogOutputFunction: typing.TypeAlias = SDL_FUNC_TYPE["SDL_LogOutputFunction", None, ctypes.c_void_p, ctypes.c_int, SDL_LogPriority, ctypes.c_char_p]
 
 SDL_FUNC("SDL_GetDefaultLogOutputFunction", SDL_LogOutputFunction)
-SDL_FUNC("SDL_GetLogOutputFunction", None, ctypes.POINTER(SDL_LogOutputFunction), ctypes.POINTER(ctypes.c_void_p))
+SDL_FUNC("SDL_GetLogOutputFunction", None, SDL_POINTER[SDL_LogOutputFunction], SDL_POINTER[ctypes.c_void_p])
 SDL_FUNC("SDL_SetLogOutputFunction", None, SDL_LogOutputFunction, ctypes.c_void_p)

@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_stdinc import SDL_Time
@@ -53,12 +53,12 @@ SDL_ENUM_CONTINUE = 0
 SDL_ENUM_SUCCESS = 1
 SDL_ENUM_FAILURE = 2
 
-SDL_EnumerateDirectoryCallback = ctypes.CFUNCTYPE(SDL_EnumerationResult, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p)
+SDL_EnumerateDirectoryCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_EnumerateDirectoryCallback", SDL_EnumerationResult, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p]
 
 SDL_FUNC("SDL_EnumerateDirectory", ctypes.c_bool, ctypes.c_char_p, SDL_EnumerateDirectoryCallback, ctypes.c_void_p)
 SDL_FUNC("SDL_RemovePath", ctypes.c_bool, ctypes.c_char_p)
 SDL_FUNC("SDL_RenamePath", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_CopyFile", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_GetPathInfo", ctypes.c_bool, ctypes.c_char_p, ctypes.POINTER(SDL_PathInfo))
-SDL_FUNC("SDL_GlobDirectory", ctypes.POINTER(ctypes.c_char_p), ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER(SDL_GlobFlags), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GetPathInfo", ctypes.c_bool, ctypes.c_char_p, SDL_POINTER[SDL_PathInfo])
+SDL_FUNC("SDL_GlobDirectory", SDL_POINTER[ctypes.c_char_p], ctypes.c_char_p, ctypes.c_char_p, SDL_POINTER[SDL_GlobFlags], SDL_POINTER[ctypes.c_int])
 SDL_FUNC("SDL_GetCurrentDirectory", ctypes.c_char_p)

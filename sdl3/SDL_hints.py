@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
@@ -256,7 +256,7 @@ SDL_FUNC("SDL_ResetHints", None)
 SDL_FUNC("SDL_GetHint", ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_GetHintBoolean", ctypes.c_bool, ctypes.c_char_p, ctypes.c_bool)
 
-SDL_HintCallback = ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)
+SDL_HintCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_HintCallback", None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
 
 SDL_FUNC("SDL_AddHintCallback", ctypes.c_bool, ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p)
 SDL_FUNC("SDL_RemoveHintCallback", None, ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p)

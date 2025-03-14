@@ -30,7 +30,7 @@ def SDL_AppEvent(appstate: ctypes.c_void_p, event: sdl3.LP_SDL_Event) -> sdl3.SD
     return sdl3.SDL_APP_CONTINUE
 
 def SDL_AppIterate(appstate: ctypes.c_void_p) -> sdl3.SDL_AppResult:
-    state: AppState = sdl3.SDL_DEREFERENCE(ctypes.cast(appstate, ctypes.POINTER(AppState)))
+    state: AppState = sdl3.SDL_DEREFERENCE(ctypes.cast(appstate, sdl3.SDL_POINTER[AppState]))
     sdl3.SDL_SetRenderDrawColorFloat(state.renderer, *colorsys.hsv_to_rgb(time.time() / 3.0 % 1.0, 1.0, 0.1), sdl3.SDL_ALPHA_OPAQUE_FLOAT)
     sdl3.SDL_RenderClear(state.renderer)
     sdl3.SDL_RenderPresent(state.renderer)

@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
@@ -20,7 +20,7 @@ SDL_ASYNCIO_CANCELED = 2
 
 class SDL_AsyncIOOutcome(ctypes.Structure):
     _fields_ = [
-        ("asyncio", ctypes.POINTER(SDL_AsyncIO)),
+        ("asyncio", SDL_POINTER[SDL_AsyncIO]),
         ("type", SDL_AsyncIOTaskType),
         ("result", SDL_AsyncIOResult),
         ("buffer", ctypes.c_void_p),
@@ -33,17 +33,17 @@ class SDL_AsyncIOOutcome(ctypes.Structure):
 class SDL_AsyncIOQueue(ctypes.c_void_p):
     ...
 
-SDL_FUNC("SDL_AsyncIOFromFile", ctypes.POINTER(SDL_AsyncIO), ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_GetAsyncIOSize", ctypes.c_int64, ctypes.POINTER(SDL_AsyncIO))
+SDL_FUNC("SDL_AsyncIOFromFile", SDL_POINTER[SDL_AsyncIO], ctypes.c_char_p, ctypes.c_char_p)
+SDL_FUNC("SDL_GetAsyncIOSize", ctypes.c_int64, SDL_POINTER[SDL_AsyncIO])
 
-SDL_FUNC("SDL_ReadAsyncIO", ctypes.c_bool, ctypes.POINTER(SDL_AsyncIO), ctypes.c_void_p, ctypes.c_uint64, ctypes.c_uint64, ctypes.POINTER(SDL_AsyncIOQueue), ctypes.c_void_p)
-SDL_FUNC("SDL_WriteAsyncIO", ctypes.c_bool, ctypes.POINTER(SDL_AsyncIO), ctypes.c_void_p, ctypes.c_uint64, ctypes.c_uint64, ctypes.POINTER(SDL_AsyncIOQueue), ctypes.c_void_p)
-SDL_FUNC("SDL_CloseAsyncIO", ctypes.c_bool, ctypes.POINTER(SDL_AsyncIO), ctypes.c_bool, ctypes.POINTER(SDL_AsyncIOQueue), ctypes.c_void_p)
+SDL_FUNC("SDL_ReadAsyncIO", ctypes.c_bool, SDL_POINTER[SDL_AsyncIO], ctypes.c_void_p, ctypes.c_uint64, ctypes.c_uint64, SDL_POINTER[SDL_AsyncIOQueue], ctypes.c_void_p)
+SDL_FUNC("SDL_WriteAsyncIO", ctypes.c_bool, SDL_POINTER[SDL_AsyncIO], ctypes.c_void_p, ctypes.c_uint64, ctypes.c_uint64, SDL_POINTER[SDL_AsyncIOQueue], ctypes.c_void_p)
+SDL_FUNC("SDL_CloseAsyncIO", ctypes.c_bool, SDL_POINTER[SDL_AsyncIO], ctypes.c_bool, SDL_POINTER[SDL_AsyncIOQueue], ctypes.c_void_p)
 
-SDL_FUNC("SDL_CreateAsyncIOQueue", ctypes.POINTER(SDL_AsyncIOQueue))
-SDL_FUNC("SDL_DestroyAsyncIOQueue", None, ctypes.POINTER(SDL_AsyncIOQueue))
-SDL_FUNC("SDL_GetAsyncIOResult", ctypes.c_bool, ctypes.POINTER(SDL_AsyncIOQueue), ctypes.POINTER(SDL_AsyncIOOutcome))
-SDL_FUNC("SDL_WaitAsyncIOResult", ctypes.c_bool, ctypes.POINTER(SDL_AsyncIOQueue), ctypes.POINTER(SDL_AsyncIOOutcome), ctypes.c_int32)
-SDL_FUNC("SDL_SignalAsyncIOQueue", None, ctypes.POINTER(SDL_AsyncIOQueue))
+SDL_FUNC("SDL_CreateAsyncIOQueue", SDL_POINTER[SDL_AsyncIOQueue])
+SDL_FUNC("SDL_DestroyAsyncIOQueue", None, SDL_POINTER[SDL_AsyncIOQueue])
+SDL_FUNC("SDL_GetAsyncIOResult", ctypes.c_bool, SDL_POINTER[SDL_AsyncIOQueue], SDL_POINTER[SDL_AsyncIOOutcome])
+SDL_FUNC("SDL_WaitAsyncIOResult", ctypes.c_bool, SDL_POINTER[SDL_AsyncIOQueue], SDL_POINTER[SDL_AsyncIOOutcome], ctypes.c_int32)
+SDL_FUNC("SDL_SignalAsyncIOQueue", None, SDL_POINTER[SDL_AsyncIOQueue])
 
-SDL_FUNC("SDL_LoadFileAsync", ctypes.c_bool, ctypes.c_char_p, ctypes.POINTER(SDL_AsyncIOQueue), ctypes.c_void_p)
+SDL_FUNC("SDL_LoadFileAsync", ctypes.c_bool, ctypes.c_char_p, SDL_POINTER[SDL_AsyncIOQueue], ctypes.c_void_p)

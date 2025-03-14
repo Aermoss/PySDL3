@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window
@@ -12,11 +12,11 @@ class SDL_DialogFileFilter(ctypes.Structure):
         ("pattern", ctypes.c_char_p)
     ]
 
-SDL_DialogFileCallback = ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.POINTER(ctypes.c_char_p), ctypes.c_int)
+SDL_DialogFileCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_DialogFileCallback", None, ctypes.c_void_p, SDL_POINTER[ctypes.c_char_p], ctypes.c_int]
 
-SDL_FUNC("SDL_ShowOpenFileDialog", None, SDL_DialogFileCallback, ctypes.c_void_p, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_DialogFileFilter), ctypes.c_int, ctypes.c_char_p, ctypes.c_bool)
-SDL_FUNC("SDL_ShowSaveFileDialog", None, SDL_DialogFileCallback, ctypes.c_void_p, ctypes.POINTER(SDL_Window), ctypes.POINTER(SDL_DialogFileFilter), ctypes.c_int, ctypes.c_char_p)
-SDL_FUNC("SDL_ShowOpenFolderDialog", None, SDL_DialogFileCallback, ctypes.c_void_p, ctypes.POINTER(SDL_Window), ctypes.c_char_p, ctypes.c_bool)
+SDL_FUNC("SDL_ShowOpenFileDialog", None, SDL_DialogFileCallback, ctypes.c_void_p, SDL_POINTER[SDL_Window], SDL_POINTER[SDL_DialogFileFilter], ctypes.c_int, ctypes.c_char_p, ctypes.c_bool)
+SDL_FUNC("SDL_ShowSaveFileDialog", None, SDL_DialogFileCallback, ctypes.c_void_p, SDL_POINTER[SDL_Window], SDL_POINTER[SDL_DialogFileFilter], ctypes.c_int, ctypes.c_char_p)
+SDL_FUNC("SDL_ShowOpenFolderDialog", None, SDL_DialogFileCallback, ctypes.c_void_p, SDL_POINTER[SDL_Window], ctypes.c_char_p, ctypes.c_bool)
 
 SDL_FileDialogType: typing.TypeAlias = SDL_TYPE["SDL_FileDialogType", ctypes.c_int]
 

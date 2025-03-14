@@ -22,7 +22,7 @@ def TEST_SDL_IsMainThread() -> None:
 
 @sdl3.SDL_MainThreadCallback
 def callback(data: ctypes.c_void_p) -> None:
-    ctypes.cast(data, ctypes.POINTER(ctypes.c_bool))[0] = True
+    ctypes.cast(data, sdl3.SDL_POINTER[ctypes.c_bool])[0] = True
 
 @TEST_RegisterFunction(["Linux", "Darwin", "Windows"])
 def TEST_SDL_RunOnMainThread() -> None:

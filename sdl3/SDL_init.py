@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_events import SDL_Event
@@ -22,10 +22,10 @@ SDL_APP_CONTINUE = 0
 SDL_APP_SUCCESS = 1
 SDL_APP_FAILURE = 2
 
-SDL_AppInit_func = ctypes.CFUNCTYPE(SDL_AppResult, ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.POINTER(ctypes.c_char_p))
-SDL_AppIterate_func = ctypes.CFUNCTYPE(SDL_AppResult, ctypes.c_void_p)
-SDL_AppEvent_func = ctypes.CFUNCTYPE(SDL_AppResult, ctypes.c_void_p, ctypes.POINTER(SDL_Event))
-SDL_AppQuit_func = ctypes.CFUNCTYPE(None, ctypes.c_void_p, SDL_AppResult)
+SDL_AppInit_func: typing.TypeAlias = SDL_FUNC_TYPE["SDL_AppInit_func", SDL_AppResult, SDL_POINTER[ctypes.c_void_p], ctypes.c_int, SDL_POINTER[ctypes.c_char_p]]
+SDL_AppIterate_func: typing.TypeAlias = SDL_FUNC_TYPE["SDL_AppIterate_func", SDL_AppResult, ctypes.c_void_p]
+SDL_AppEvent_func: typing.TypeAlias = SDL_FUNC_TYPE["SDL_AppEvent_func", SDL_AppResult, ctypes.c_void_p, SDL_POINTER[SDL_Event]]
+SDL_AppQuit_func: typing.TypeAlias = SDL_FUNC_TYPE["SDL_AppQuit_func", None, ctypes.c_void_p, SDL_AppResult]
 
 SDL_FUNC("SDL_Init", ctypes.c_bool, SDL_InitFlags)
 SDL_FUNC("SDL_InitSubSystem", ctypes.c_bool, SDL_InitFlags)
@@ -34,7 +34,7 @@ SDL_FUNC("SDL_WasInit", SDL_InitFlags, SDL_InitFlags)
 SDL_FUNC("SDL_Quit", None)
 
 SDL_FUNC("SDL_IsMainThread", ctypes.c_bool)
-SDL_MainThreadCallback = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
+SDL_MainThreadCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_MainThreadCallback", None, ctypes.c_void_p]
 SDL_FUNC("SDL_RunOnMainThread", ctypes.c_bool, SDL_MainThreadCallback, ctypes.c_void_p, ctypes.c_bool)
 
 SDL_FUNC("SDL_SetAppMetadata", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)

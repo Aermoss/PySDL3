@@ -1,4 +1,4 @@
-from .__init__ import os, inspect, ctypes, typing, re, \
+from .__init__ import os, inspect, ctypes, typing, re, SDL_FUNC_TYPE, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
@@ -24,10 +24,10 @@ class SDL_AssertData(ctypes.Structure):
         ("filename", ctypes.c_char_p),
         ("linenum", ctypes.c_int),
         ("function", ctypes.c_char_p),
-        ("next", ctypes.POINTER(SDL_AssertData))
+        ("next", SDL_POINTER[SDL_AssertData])
     ]
 
-SDL_FUNC("SDL_ReportAssertion", SDL_AssertState, ctypes.POINTER(SDL_AssertData), ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int)
+SDL_FUNC("SDL_ReportAssertion", SDL_AssertState, SDL_POINTER[SDL_AssertData], ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int)
 
 SDL_TriggerBreakpoint = lambda: breakpoint()
 SDL_AssertBreakpoint = lambda: SDL_TriggerBreakpoint()
@@ -78,10 +78,10 @@ match SDL_ASSERT_LEVEL:
         SDL_enabled_assert(False)
 
 SDL_assert_always = lambda condition: SDL_enabled_assert(condition)
-SDL_AssertionHandler = ctypes.CFUNCTYPE(SDL_AssertState, ctypes.POINTER(SDL_AssertData), ctypes.c_void_p)
+SDL_AssertionHandler: typing.TypeAlias = SDL_FUNC_TYPE["SDL_AssertionHandler", SDL_AssertState, SDL_POINTER[SDL_AssertData], ctypes.c_void_p]
 
 SDL_FUNC("SDL_SetAssertionHandler", None, SDL_AssertionHandler, ctypes.c_void_p)
 SDL_FUNC("SDL_GetDefaultAssertionHandler", SDL_AssertionHandler)
-SDL_FUNC("SDL_GetAssertionHandler", SDL_AssertionHandler, ctypes.POINTER(ctypes.c_void_p))
-SDL_FUNC("SDL_GetAssertionReport", ctypes.POINTER(SDL_AssertData))
+SDL_FUNC("SDL_GetAssertionHandler", SDL_AssertionHandler, SDL_POINTER[ctypes.c_void_p])
+SDL_FUNC("SDL_GetAssertionReport", SDL_POINTER[SDL_AssertData])
 SDL_FUNC("SDL_ResetAssertionReport", None)

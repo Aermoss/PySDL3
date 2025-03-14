@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
@@ -62,13 +62,13 @@ SDL_FUNC("SDL_calloc", ctypes.c_void_p, ctypes.c_size_t, ctypes.c_size_t)
 SDL_FUNC("SDL_realloc", ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t)
 SDL_FUNC("SDL_free", None, ctypes.c_void_p)
 
-SDL_malloc_func = ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_size_t)
-SDL_calloc_func = ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_size_t, ctypes.c_size_t)
-SDL_realloc_func = ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t)
-SDL_free_func = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
+SDL_malloc_func: typing.TypeAlias = SDL_FUNC_TYPE["SDL_malloc_func", ctypes.c_void_p, ctypes.c_size_t]
+SDL_calloc_func: typing.TypeAlias = SDL_FUNC_TYPE["SDL_calloc_func", ctypes.c_void_p, ctypes.c_size_t, ctypes.c_size_t]
+SDL_realloc_func: typing.TypeAlias = SDL_FUNC_TYPE["SDL_realloc_func", ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t]
+SDL_free_func: typing.TypeAlias = SDL_FUNC_TYPE["SDL_free_func", None, ctypes.c_void_p]
 
-SDL_FUNC("SDL_GetOriginalMemoryFunctions", None, ctypes.POINTER(SDL_malloc_func), ctypes.POINTER(SDL_calloc_func), ctypes.POINTER(SDL_realloc_func), ctypes.POINTER(SDL_free_func))
-SDL_FUNC("SDL_GetMemoryFunctions", None, ctypes.POINTER(SDL_malloc_func), ctypes.POINTER(SDL_calloc_func), ctypes.POINTER(SDL_realloc_func), ctypes.POINTER(SDL_free_func))
+SDL_FUNC("SDL_GetOriginalMemoryFunctions", None, SDL_POINTER[SDL_malloc_func], SDL_POINTER[SDL_calloc_func], SDL_POINTER[SDL_realloc_func], SDL_POINTER[SDL_free_func])
+SDL_FUNC("SDL_GetMemoryFunctions", None, SDL_POINTER[SDL_malloc_func], SDL_POINTER[SDL_calloc_func], SDL_POINTER[SDL_realloc_func], SDL_POINTER[SDL_free_func])
 SDL_FUNC("SDL_SetMemoryFunctions", ctypes.c_bool, SDL_malloc_func, SDL_calloc_func, SDL_realloc_func, SDL_free_func)
 
 SDL_FUNC("SDL_aligned_alloc", ctypes.c_void_p, ctypes.c_size_t, ctypes.c_size_t)
@@ -79,25 +79,25 @@ SDL_FUNC("SDL_GetNumAllocations", ctypes.c_int)
 class SDL_Environment(ctypes.c_void_p):
     ...
 
-SDL_FUNC("SDL_GetEnvironment", ctypes.POINTER(SDL_Environment))
-SDL_FUNC("SDL_CreateEnvironment", ctypes.POINTER(SDL_Environment), ctypes.c_bool)
-SDL_FUNC("SDL_GetEnvironmentVariable", ctypes.c_char_p, ctypes.POINTER(SDL_Environment), ctypes.c_char_p)
-SDL_FUNC("SDL_GetEnvironmentVariables", ctypes.POINTER(ctypes.c_char_p), ctypes.POINTER(SDL_Environment))
-SDL_FUNC("SDL_SetEnvironmentVariable", ctypes.c_bool, ctypes.POINTER(SDL_Environment), ctypes.c_char_p, ctypes.c_char_p, ctypes.c_bool)
-SDL_FUNC("SDL_UnsetEnvironmentVariable", ctypes.c_bool, ctypes.POINTER(SDL_Environment), ctypes.c_char_p)
-SDL_FUNC("SDL_DestroyEnvironment", None, ctypes.POINTER(SDL_Environment))
+SDL_FUNC("SDL_GetEnvironment", SDL_POINTER[SDL_Environment])
+SDL_FUNC("SDL_CreateEnvironment", SDL_POINTER[SDL_Environment], ctypes.c_bool)
+SDL_FUNC("SDL_GetEnvironmentVariable", ctypes.c_char_p, SDL_POINTER[SDL_Environment], ctypes.c_char_p)
+SDL_FUNC("SDL_GetEnvironmentVariables", SDL_POINTER[ctypes.c_char_p], SDL_POINTER[SDL_Environment])
+SDL_FUNC("SDL_SetEnvironmentVariable", ctypes.c_bool, SDL_POINTER[SDL_Environment], ctypes.c_char_p, ctypes.c_char_p, ctypes.c_bool)
+SDL_FUNC("SDL_UnsetEnvironmentVariable", ctypes.c_bool, SDL_POINTER[SDL_Environment], ctypes.c_char_p)
+SDL_FUNC("SDL_DestroyEnvironment", None, SDL_POINTER[SDL_Environment])
 
 SDL_FUNC("SDL_getenv", ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_getenv_unsafe", ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_setenv_unsafe", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int)
 SDL_FUNC("SDL_unsetenv_unsafe", ctypes.c_int, ctypes.c_char_p)
 
-SDL_CompareCallback = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)
+SDL_CompareCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_CompareCallback", ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p]
 
 SDL_FUNC("SDL_qsort", None, ctypes.c_void_p, ctypes.c_size_t, ctypes.c_size_t, SDL_CompareCallback)
 SDL_FUNC("SDL_bsearch", ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t, ctypes.c_size_t, SDL_CompareCallback)
 
-SDL_CompareCallback_r = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)
+SDL_CompareCallback_r: typing.TypeAlias = SDL_FUNC_TYPE["SDL_CompareCallback_r", ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p]
 
 SDL_FUNC("SDL_qsort_r", None, ctypes.c_void_p, ctypes.c_size_t, ctypes.c_size_t, SDL_CompareCallback_r, ctypes.c_void_p)
 SDL_FUNC("SDL_bsearch_r", ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t, ctypes.c_size_t, SDL_CompareCallback_r, ctypes.c_void_p)
@@ -149,7 +149,7 @@ SDL_FUNC("SDL_wcscmp", ctypes.c_int, ctypes.c_wchar_p, ctypes.c_wchar_p)
 SDL_FUNC("SDL_wcsncmp", ctypes.c_int, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_size_t)
 SDL_FUNC("SDL_wcscasecmp", ctypes.c_int, ctypes.c_wchar_p, ctypes.c_wchar_p)
 SDL_FUNC("SDL_wcsncasecmp", ctypes.c_int, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_size_t)
-SDL_FUNC("SDL_wcstol", ctypes.c_long, ctypes.c_wchar_p, ctypes.POINTER(ctypes.c_wchar_p), ctypes.c_int)
+SDL_FUNC("SDL_wcstol", ctypes.c_long, ctypes.c_wchar_p, SDL_POINTER[ctypes.c_wchar_p], ctypes.c_int)
 
 SDL_FUNC("SDL_strlen", ctypes.c_size_t, ctypes.c_char_p)
 SDL_FUNC("SDL_strnlen", ctypes.c_size_t, ctypes.c_char_p, ctypes.c_size_t)
@@ -166,7 +166,7 @@ SDL_FUNC("SDL_strrchr", ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int)
 SDL_FUNC("SDL_strstr", ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_strnstr", ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_size_t)
 SDL_FUNC("SDL_strcasestr", ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_strtok_r", ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p))
+SDL_FUNC("SDL_strtok_r", ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p])
 SDL_FUNC("SDL_utf8strlen", ctypes.c_size_t, ctypes.c_char_p)
 SDL_FUNC("SDL_utf8strnlen", ctypes.c_size_t, ctypes.c_char_p, ctypes.c_size_t)
 
@@ -179,11 +179,11 @@ SDL_FUNC("SDL_ulltoa", ctypes.c_char_p, ctypes.c_uint64, ctypes.c_char_p, ctypes
 
 SDL_FUNC("SDL_atoi", ctypes.c_int, ctypes.c_char_p)
 SDL_FUNC("SDL_atof", ctypes.c_double, ctypes.c_char_p)
-SDL_FUNC("SDL_strtol", ctypes.c_long, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p), ctypes.c_int)
-SDL_FUNC("SDL_strtoul", ctypes.c_ulong, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p), ctypes.c_int)
-SDL_FUNC("SDL_strtoll", ctypes.c_int64, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p), ctypes.c_int)
-SDL_FUNC("SDL_strtoull", ctypes.c_uint64, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p), ctypes.c_int)
-SDL_FUNC("SDL_strtod", ctypes.c_double, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p))
+SDL_FUNC("SDL_strtol", ctypes.c_long, ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p], ctypes.c_int)
+SDL_FUNC("SDL_strtoul", ctypes.c_ulong, ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p], ctypes.c_int)
+SDL_FUNC("SDL_strtoll", ctypes.c_int64, ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p], ctypes.c_int)
+SDL_FUNC("SDL_strtoull", ctypes.c_uint64, ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p], ctypes.c_int)
+SDL_FUNC("SDL_strtod", ctypes.c_double, ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p])
 
 SDL_FUNC("SDL_strcmp", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_strncmp", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_size_t)
@@ -192,8 +192,8 @@ SDL_FUNC("SDL_strncasecmp", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctyp
 
 SDL_INVALID_UNICODE_CODEPOINT = 0xFFFD
 
-SDL_FUNC("SDL_StepUTF8", ctypes.c_uint32, ctypes.POINTER(ctypes.c_char_p), ctypes.POINTER(ctypes.c_size_t))
-SDL_FUNC("SDL_StepBackUTF8", ctypes.c_uint32, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p))
+SDL_FUNC("SDL_StepUTF8", ctypes.c_uint32, SDL_POINTER[ctypes.c_char_p], SDL_POINTER[ctypes.c_size_t])
+SDL_FUNC("SDL_StepBackUTF8", ctypes.c_uint32, ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p])
 SDL_FUNC("SDL_UCS4ToUTF8", ctypes.c_char_p, ctypes.c_uint32, ctypes.c_char_p)
 
 SDL_FUNC("SDL_sscanf", ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p)
@@ -202,16 +202,16 @@ SDL_FUNC("SDL_snprintf", ctypes.c_int, ctypes.c_char_p, ctypes.c_size_t, ctypes.
 SDL_FUNC("SDL_swprintf", ctypes.c_int, ctypes.c_wchar_p, ctypes.c_size_t, ctypes.c_wchar_p)
 SDL_FUNC("SDL_vsnprintf", ctypes.c_int, ctypes.c_char_p, ctypes.c_size_t, ctypes.c_char_p, ctypes.c_void_p)
 SDL_FUNC("SDL_vswprintf", ctypes.c_int, ctypes.c_wchar_p, ctypes.c_size_t, ctypes.c_wchar_p, ctypes.c_void_p)
-SDL_FUNC("SDL_asprintf", ctypes.c_int, ctypes.POINTER(ctypes.c_char_p), ctypes.c_char_p)
-SDL_FUNC("SDL_vasprintf", ctypes.c_int, ctypes.POINTER(ctypes.c_char_p), ctypes.c_char_p, ctypes.c_void_p)
+SDL_FUNC("SDL_asprintf", ctypes.c_int, SDL_POINTER[ctypes.c_char_p], ctypes.c_char_p)
+SDL_FUNC("SDL_vasprintf", ctypes.c_int, SDL_POINTER[ctypes.c_char_p], ctypes.c_char_p, ctypes.c_void_p)
 
 SDL_FUNC("SDL_srand", None, ctypes.c_uint64)
 SDL_FUNC("SDL_rand", ctypes.c_int32, ctypes.c_int64)
 SDL_FUNC("SDL_randf", ctypes.c_float)
 SDL_FUNC("SDL_rand_bits", ctypes.c_uint32)
-SDL_FUNC("SDL_rand_r", ctypes.c_int32, ctypes.POINTER(ctypes.c_uint64), ctypes.c_int32)
-SDL_FUNC("SDL_randf_r", ctypes.c_float, ctypes.POINTER(ctypes.c_uint64))
-SDL_FUNC("SDL_rand_bits_r", ctypes.c_uint32, ctypes.POINTER(ctypes.c_uint64))
+SDL_FUNC("SDL_rand_r", ctypes.c_int32, SDL_POINTER[ctypes.c_uint64], ctypes.c_int32)
+SDL_FUNC("SDL_randf_r", ctypes.c_float, SDL_POINTER[ctypes.c_uint64])
+SDL_FUNC("SDL_rand_bits_r", ctypes.c_uint32, SDL_POINTER[ctypes.c_uint64])
 
 SDL_PI_D = SDL_PI_F = 3.141592653589793238462643383279502884
 
@@ -247,8 +247,8 @@ SDL_FUNC("SDL_log", ctypes.c_double, ctypes.c_double)
 SDL_FUNC("SDL_logf", ctypes.c_float, ctypes.c_float)
 SDL_FUNC("SDL_log10", ctypes.c_double, ctypes.c_double)
 SDL_FUNC("SDL_log10f", ctypes.c_float, ctypes.c_float)
-SDL_FUNC("SDL_modf", ctypes.c_double, ctypes.c_double, ctypes.POINTER(ctypes.c_double))
-SDL_FUNC("SDL_modff", ctypes.c_float, ctypes.c_float, ctypes.POINTER(ctypes.c_float))
+SDL_FUNC("SDL_modf", ctypes.c_double, ctypes.c_double, SDL_POINTER[ctypes.c_double])
+SDL_FUNC("SDL_modff", ctypes.c_float, ctypes.c_float, SDL_POINTER[ctypes.c_float])
 SDL_FUNC("SDL_pow", ctypes.c_double, ctypes.c_double, ctypes.c_double)
 SDL_FUNC("SDL_powf", ctypes.c_float, ctypes.c_float, ctypes.c_float)
 SDL_FUNC("SDL_round", ctypes.c_double, ctypes.c_double)
@@ -269,7 +269,7 @@ class SDL_iconv_t(ctypes.c_void_p):
 
 SDL_FUNC("SDL_iconv_open", SDL_iconv_t, ctypes.c_char_p, ctypes.c_char_p)
 SDL_FUNC("SDL_iconv_close", ctypes.c_int, SDL_iconv_t)
-SDL_FUNC("SDL_iconv", ctypes.c_size_t, SDL_iconv_t, ctypes.POINTER(ctypes.c_char_p), ctypes.POINTER(ctypes.c_size_t), ctypes.POINTER(ctypes.c_char_p), ctypes.POINTER(ctypes.c_size_t))
+SDL_FUNC("SDL_iconv", ctypes.c_size_t, SDL_iconv_t, SDL_POINTER[ctypes.c_char_p], SDL_POINTER[ctypes.c_size_t], SDL_POINTER[ctypes.c_char_p], SDL_POINTER[ctypes.c_size_t])
 
 SDL_ICONV_ERROR = -1
 SDL_ICONV_E2BIG = -2
@@ -290,4 +290,4 @@ SDL_iconv_utf8_ucs4 = lambda s: \
 SDL_iconv_wchar_utf8 = lambda s: \
     SDL_GET_BINARY(SDL_BINARY).SDL_iconv_string("UTF-8".encode(), "WCHAR_T".encode(), s.encode(), (SDL_GET_BINARY(SDL_BINARY).SDL_wcslen(s.encode()) + 1) * ctypes.sizeof(ctypes.c_wchar))
 
-SDL_FunctionPointer = ctypes.CFUNCTYPE(None)
+SDL_FunctionPointer: typing.TypeAlias = SDL_FUNC_TYPE["SDL_FunctionPointer", None]

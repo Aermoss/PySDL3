@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window
@@ -20,8 +20,8 @@ VkSurfaceKHR: typing.TypeAlias = SDL_TYPE["VkSurfaceKHR", ctypes.c_uint64]
 SDL_FUNC("SDL_Vulkan_LoadLibrary", ctypes.c_bool, ctypes.c_char_p)
 SDL_FUNC("SDL_Vulkan_GetVkGetInstanceProcAddr", SDL_FunctionPointer)
 SDL_FUNC("SDL_Vulkan_UnloadLibrary", None)
-SDL_FUNC("SDL_Vulkan_GetInstanceExtensions", ctypes.POINTER(ctypes.c_char_p), ctypes.POINTER(ctypes.c_uint32))
+SDL_FUNC("SDL_Vulkan_GetInstanceExtensions", SDL_POINTER[ctypes.c_char_p], SDL_POINTER[ctypes.c_uint32])
 
-SDL_FUNC("SDL_Vulkan_CreateSurface", ctypes.c_bool, ctypes.POINTER(SDL_Window), VkInstance, ctypes.POINTER(VkAllocationCallbacks), ctypes.POINTER(VkSurfaceKHR))
-SDL_FUNC("SDL_Vulkan_DestroySurface", None, VkInstance, VkSurfaceKHR, ctypes.POINTER(VkAllocationCallbacks))
+SDL_FUNC("SDL_Vulkan_CreateSurface", ctypes.c_bool, SDL_POINTER[SDL_Window], VkInstance, SDL_POINTER[VkAllocationCallbacks], SDL_POINTER[VkSurfaceKHR])
+SDL_FUNC("SDL_Vulkan_DestroySurface", None, VkInstance, VkSurfaceKHR, SDL_POINTER[VkAllocationCallbacks])
 SDL_FUNC("SDL_Vulkan_GetPresentationSupport", ctypes.c_bool, VkInstance, VkPhysicalDevice, ctypes.c_uint32)

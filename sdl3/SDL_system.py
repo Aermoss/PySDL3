@@ -1,5 +1,5 @@
-from .__init__ import ctypes, typing, SDL_PLATFORM_SPECIFIC, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
+from .__init__ import ctypes, typing, SDL_PLATFORM_SPECIFIC, SDL_POINTER, \
+    SDL_FUNC, SDL_FUNC_TYPE, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_DisplayID
 
@@ -9,16 +9,16 @@ if SDL_PLATFORM_SPECIFIC(system = ["Windows"]):
     import ctypes.wintypes as wintypes
 
     MSG = wintypes.tagMSG
-    SDL_WindowsMessageHook = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.POINTER(MSG))
+    SDL_WindowsMessageHook: typing.TypeAlias = SDL_FUNC_TYPE["SDL_WindowsMessageHook", ctypes.c_bool, ctypes.c_void_p, SDL_POINTER[MSG]]
     SDL_FUNC("SDL_SetWindowsMessageHook", None, SDL_WindowsMessageHook, ctypes.c_void_p)
 
     SDL_FUNC("SDL_GetDirect3D9AdapterIndex", ctypes.c_int, SDL_DisplayID)
-    SDL_FUNC("SDL_GetDXGIOutputInfo", ctypes.c_bool, SDL_DisplayID, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+    SDL_FUNC("SDL_GetDXGIOutputInfo", ctypes.c_bool, SDL_DisplayID, SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int])
 
     class XEvent(ctypes.Union):
         ...
 
-    SDL_X11EventHook = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.POINTER(XEvent))
+    SDL_X11EventHook: typing.TypeAlias = SDL_FUNC_TYPE["SDL_X11EventHook", ctypes.c_bool, ctypes.c_void_p, SDL_POINTER[XEvent]]
     SDL_FUNC("SDL_SetX11EventHook", None, SDL_X11EventHook, ctypes.c_void_p) 
 
 if SDL_PLATFORM_SPECIFIC(system = ["Linux"]):

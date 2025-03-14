@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
@@ -23,17 +23,17 @@ SDL_SENSOR_GYRO_L = 4
 SDL_SENSOR_ACCEL_R = 5
 SDL_SENSOR_GYRO_R = 6
 
-SDL_FUNC("SDL_GetSensors", ctypes.POINTER(SDL_SensorID), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GetSensors", SDL_POINTER[SDL_SensorID], SDL_POINTER[ctypes.c_int])
 SDL_FUNC("SDL_GetSensorNameForID", ctypes.c_char_p, SDL_SensorID)
 SDL_FUNC("SDL_GetSensorTypeForID", SDL_SensorType, SDL_SensorID)
 SDL_FUNC("SDL_GetSensorNonPortableTypeForID", ctypes.c_int, SDL_SensorID)
-SDL_FUNC("SDL_OpenSensor", ctypes.POINTER(SDL_Sensor), SDL_SensorID)
-SDL_FUNC("SDL_GetSensorFromID", ctypes.POINTER(SDL_Sensor), SDL_SensorID)
-SDL_FUNC("SDL_GetSensorProperties", SDL_PropertiesID, ctypes.POINTER(SDL_Sensor))
-SDL_FUNC("SDL_GetSensorName", ctypes.c_char_p, ctypes.POINTER(SDL_Sensor))
-SDL_FUNC("SDL_GetSensorType", SDL_SensorType, ctypes.POINTER(SDL_Sensor))
-SDL_FUNC("SDL_GetSensorNonPortableType", ctypes.c_int, ctypes.POINTER(SDL_Sensor))
-SDL_FUNC("SDL_GetSensorID", SDL_SensorID, ctypes.POINTER(SDL_Sensor))
-SDL_FUNC("SDL_GetSensorData", ctypes.c_bool, ctypes.POINTER(SDL_Sensor), ctypes.POINTER(ctypes.c_float), ctypes.c_int)
-SDL_FUNC("SDL_CloseSensor", None, ctypes.POINTER(SDL_Sensor))
+SDL_FUNC("SDL_OpenSensor", SDL_POINTER[SDL_Sensor], SDL_SensorID)
+SDL_FUNC("SDL_GetSensorFromID", SDL_POINTER[SDL_Sensor], SDL_SensorID)
+SDL_FUNC("SDL_GetSensorProperties", SDL_PropertiesID, SDL_POINTER[SDL_Sensor])
+SDL_FUNC("SDL_GetSensorName", ctypes.c_char_p, SDL_POINTER[SDL_Sensor])
+SDL_FUNC("SDL_GetSensorType", SDL_SensorType, SDL_POINTER[SDL_Sensor])
+SDL_FUNC("SDL_GetSensorNonPortableType", ctypes.c_int, SDL_POINTER[SDL_Sensor])
+SDL_FUNC("SDL_GetSensorID", SDL_SensorID, SDL_POINTER[SDL_Sensor])
+SDL_FUNC("SDL_GetSensorData", ctypes.c_bool, SDL_POINTER[SDL_Sensor], SDL_POINTER[ctypes.c_float], ctypes.c_int)
+SDL_FUNC("SDL_CloseSensor", None, SDL_POINTER[SDL_Sensor])
 SDL_FUNC("SDL_UpdateSensors", None)

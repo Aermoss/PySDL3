@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from .__init__ import ctypes, typing, SDL_POINTER, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_sensor import SDL_SensorType
@@ -39,7 +39,7 @@ SDL_JOYSTICK_AXIS_MIN = -32768
 SDL_FUNC("SDL_LockJoysticks", None)
 SDL_FUNC("SDL_UnlockJoysticks", None)
 SDL_FUNC("SDL_HasJoystick", ctypes.c_bool)
-SDL_FUNC("SDL_GetJoysticks", ctypes.POINTER(SDL_JoystickID), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GetJoysticks", SDL_POINTER[SDL_JoystickID], SDL_POINTER[ctypes.c_int])
 SDL_FUNC("SDL_GetJoystickNameForID", ctypes.c_char_p, SDL_JoystickID)
 SDL_FUNC("SDL_GetJoystickPathForID", ctypes.c_char_p, SDL_JoystickID)
 SDL_FUNC("SDL_GetJoystickPlayerIndexForID", ctypes.c_int, SDL_JoystickID)
@@ -48,9 +48,9 @@ SDL_FUNC("SDL_GetJoystickVendorForID", ctypes.c_uint16, SDL_JoystickID)
 SDL_FUNC("SDL_GetJoystickProductForID", ctypes.c_uint16, SDL_JoystickID)
 SDL_FUNC("SDL_GetJoystickProductVersionForID", ctypes.c_uint16, SDL_JoystickID)
 SDL_FUNC("SDL_GetJoystickTypeForID", SDL_JoystickType, SDL_JoystickID)
-SDL_FUNC("SDL_OpenJoystick", ctypes.POINTER(SDL_Joystick), SDL_JoystickID)
-SDL_FUNC("SDL_GetJoystickFromID", ctypes.POINTER(SDL_Joystick), SDL_JoystickID)
-SDL_FUNC("SDL_GetJoystickFromPlayerIndex", ctypes.POINTER(SDL_Joystick), ctypes.c_int)
+SDL_FUNC("SDL_OpenJoystick", SDL_POINTER[SDL_Joystick], SDL_JoystickID)
+SDL_FUNC("SDL_GetJoystickFromID", SDL_POINTER[SDL_Joystick], SDL_JoystickID)
+SDL_FUNC("SDL_GetJoystickFromPlayerIndex", SDL_POINTER[SDL_Joystick], ctypes.c_int)
 
 class SDL_VirtualJoystickTouchpadDesc(ctypes.Structure):
     _fields_ = [
@@ -81,29 +81,29 @@ class SDL_VirtualJoystickDesc(ctypes.Structure):
         ("button_mask", ctypes.c_uint32),
         ("axis_mask", ctypes.c_uint32),
         ("name", ctypes.c_char_p),
-        ("touchpads", ctypes.POINTER(SDL_VirtualJoystickTouchpadDesc)),
-        ("sensors", ctypes.POINTER(SDL_VirtualJoystickSensorDesc)),
+        ("touchpads", SDL_POINTER[SDL_VirtualJoystickTouchpadDesc]),
+        ("sensors", SDL_POINTER[SDL_VirtualJoystickSensorDesc]),
         ("userdata", ctypes.c_void_p),
-        ("Update", ctypes.CFUNCTYPE(None, ctypes.c_void_p)),
-        ("SetPlayerIndex", ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_int)),
-        ("Rumble", ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint16, ctypes.c_uint16)),
-        ("RumbleTriggers", ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint16, ctypes.c_uint16)),
-        ("SetLED", ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8)),
-        ("SendEffect", ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)),
-        ("SetSensorsEnabled", ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.c_bool)),
-        ("Cleanup", ctypes.CFUNCTYPE(None, ctypes.c_void_p))
+        ("Update", SDL_FUNC_TYPE["SDL_VirtualJoystickDesc.Update", None, ctypes.c_void_p]),
+        ("SetPlayerIndex", SDL_FUNC_TYPE["SDL_VirtualJoystickDesc.SetPlayerIndex", None, ctypes.c_void_p, ctypes.c_int]),
+        ("Rumble", SDL_FUNC_TYPE["SDL_VirtualJoystickDesc.Rumble", ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint16, ctypes.c_uint16]),
+        ("RumbleTriggers", SDL_FUNC_TYPE["SDL_VirtualJoystickDesc.RumbleTriggers", ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint16, ctypes.c_uint16]),
+        ("SetLED", SDL_FUNC_TYPE["SDL_VirtualJoystickDesc.SetLED", ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8]),
+        ("SendEffect", SDL_FUNC_TYPE["SDL_VirtualJoystickDesc.SendEffect", ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int]),
+        ("SetSensorsEnabled", SDL_FUNC_TYPE["SDL_VirtualJoystickDesc.SetSensorsEnabled", ctypes.c_bool, ctypes.c_void_p, ctypes.c_bool]),
+        ("Cleanup", SDL_FUNC_TYPE["SDL_VirtualJoystickDesc.Cleanup", None, ctypes.c_void_p])
     ]
 
-SDL_FUNC("SDL_AttachVirtualJoystick", SDL_JoystickID, ctypes.POINTER(SDL_VirtualJoystickDesc))
+SDL_FUNC("SDL_AttachVirtualJoystick", SDL_JoystickID, SDL_POINTER[SDL_VirtualJoystickDesc])
 SDL_FUNC("SDL_DetachVirtualJoystick", ctypes.c_bool, SDL_JoystickID)
 SDL_FUNC("SDL_IsJoystickVirtual", ctypes.c_bool, SDL_JoystickID)
-SDL_FUNC("SDL_SetJoystickVirtualAxis", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_int, ctypes.c_int16)
-SDL_FUNC("SDL_SetJoystickVirtualBall", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_int, ctypes.c_int16, ctypes.c_int16)
-SDL_FUNC("SDL_SetJoystickVirtualButton", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_int, ctypes.c_uint8)
-SDL_FUNC("SDL_SetJoystickVirtualHat", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_int, ctypes.c_uint8)
-SDL_FUNC("SDL_SetJoystickVirtualTouchpad", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_int, ctypes.c_int, ctypes.c_uint8, ctypes.c_float, ctypes.c_float, ctypes.c_float)
-SDL_FUNC("SDL_SendJoystickVirtualSensorData", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), SDL_SensorType, ctypes.c_uint64, ctypes.POINTER(ctypes.c_float), ctypes.c_int)
-SDL_FUNC("SDL_GetJoystickProperties", SDL_PropertiesID, ctypes.POINTER(SDL_Joystick))
+SDL_FUNC("SDL_SetJoystickVirtualAxis", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_int16)
+SDL_FUNC("SDL_SetJoystickVirtualBall", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_int16, ctypes.c_int16)
+SDL_FUNC("SDL_SetJoystickVirtualButton", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_uint8)
+SDL_FUNC("SDL_SetJoystickVirtualHat", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_uint8)
+SDL_FUNC("SDL_SetJoystickVirtualTouchpad", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_int, ctypes.c_uint8, ctypes.c_float, ctypes.c_float, ctypes.c_float)
+SDL_FUNC("SDL_SendJoystickVirtualSensorData", ctypes.c_bool, SDL_POINTER[SDL_Joystick], SDL_SensorType, ctypes.c_uint64, SDL_POINTER[ctypes.c_float], ctypes.c_int)
+SDL_FUNC("SDL_GetJoystickProperties", SDL_PropertiesID, SDL_POINTER[SDL_Joystick])
 
 SDL_PROP_JOYSTICK_CAP_MONO_LED_BOOLEAN = "SDL.joystick.cap.mono_led".encode()
 SDL_PROP_JOYSTICK_CAP_RGB_LED_BOOLEAN = "SDL.joystick.cap.rgb_led".encode()
@@ -111,31 +111,31 @@ SDL_PROP_JOYSTICK_CAP_PLAYER_LED_BOOLEAN = "SDL.joystick.cap.player_led".encode(
 SDL_PROP_JOYSTICK_CAP_RUMBLE_BOOLEAN = "SDL.joystick.cap.rumble".encode()
 SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN = "SDL.joystick.cap.trigger_rumble".encode()
 
-SDL_FUNC("SDL_GetJoystickName", ctypes.c_char_p, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickPath", ctypes.c_char_p, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickPlayerIndex", ctypes.c_int, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_SetJoystickPlayerIndex", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_int)
-SDL_FUNC("SDL_GetJoystickGUID", SDL_GUID, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickVendor", ctypes.c_uint16, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickProduct", ctypes.c_uint16, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickProductVersion", ctypes.c_uint16, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickFirmwareVersion", ctypes.c_uint16, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickSerial", ctypes.c_char_p, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickType", SDL_JoystickType, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickGUIDInfo", None, SDL_GUID, ctypes.POINTER(ctypes.c_uint16), ctypes.POINTER(ctypes.c_uint16), ctypes.POINTER(ctypes.c_uint16), ctypes.POINTER(ctypes.c_uint16))
-SDL_FUNC("SDL_JoystickConnected", ctypes.c_bool, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickID", SDL_JoystickID, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetNumJoystickAxes", ctypes.c_int, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetNumJoystickBalls", ctypes.c_int, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetNumJoystickHats", ctypes.c_int, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetNumJoystickButtons", ctypes.c_int, ctypes.POINTER(SDL_Joystick))
+SDL_FUNC("SDL_GetJoystickName", ctypes.c_char_p, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickPath", ctypes.c_char_p, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickPlayerIndex", ctypes.c_int, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_SetJoystickPlayerIndex", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_int)
+SDL_FUNC("SDL_GetJoystickGUID", SDL_GUID, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickVendor", ctypes.c_uint16, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickProduct", ctypes.c_uint16, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickProductVersion", ctypes.c_uint16, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickFirmwareVersion", ctypes.c_uint16, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickSerial", ctypes.c_char_p, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickType", SDL_JoystickType, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickGUIDInfo", None, SDL_GUID, SDL_POINTER[ctypes.c_uint16], SDL_POINTER[ctypes.c_uint16], SDL_POINTER[ctypes.c_uint16], SDL_POINTER[ctypes.c_uint16])
+SDL_FUNC("SDL_JoystickConnected", ctypes.c_bool, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickID", SDL_JoystickID, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetNumJoystickAxes", ctypes.c_int, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetNumJoystickBalls", ctypes.c_int, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetNumJoystickHats", ctypes.c_int, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetNumJoystickButtons", ctypes.c_int, SDL_POINTER[SDL_Joystick])
 SDL_FUNC("SDL_SetJoystickEventsEnabled", None, ctypes.c_bool)
 SDL_FUNC("SDL_JoystickEventsEnabled", ctypes.c_bool)
 SDL_FUNC("SDL_UpdateJoysticks", None)
-SDL_FUNC("SDL_GetJoystickAxis", ctypes.c_int16, ctypes.POINTER(SDL_Joystick), ctypes.c_int)
-SDL_FUNC("SDL_GetJoystickAxisInitialState", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_int, ctypes.POINTER(ctypes.c_int16))
-SDL_FUNC("SDL_GetJoystickBall", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_int, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
-SDL_FUNC("SDL_GetJoystickHat", ctypes.c_uint8, ctypes.POINTER(SDL_Joystick), ctypes.c_int)
+SDL_FUNC("SDL_GetJoystickAxis", ctypes.c_int16, SDL_POINTER[SDL_Joystick], ctypes.c_int)
+SDL_FUNC("SDL_GetJoystickAxisInitialState", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_int, SDL_POINTER[ctypes.c_int16])
+SDL_FUNC("SDL_GetJoystickBall", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_int, SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int])
+SDL_FUNC("SDL_GetJoystickHat", ctypes.c_uint8, SDL_POINTER[SDL_Joystick], ctypes.c_int)
 
 SDL_HAT_CENTERED = 0x00
 SDL_HAT_UP = 0x01
@@ -147,11 +147,11 @@ SDL_HAT_RIGHTDOWN = SDL_HAT_RIGHT | SDL_HAT_DOWN
 SDL_HAT_LEFTUP = SDL_HAT_LEFT | SDL_HAT_UP
 SDL_HAT_LEFTDOWN = SDL_HAT_LEFT | SDL_HAT_DOWN
 
-SDL_FUNC("SDL_GetJoystickButton", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_int)
-SDL_FUNC("SDL_RumbleJoystick", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_uint16, ctypes.c_uint16, ctypes.c_uint32)
-SDL_FUNC("SDL_RumbleJoystickTriggers", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_uint16, ctypes.c_uint16, ctypes.c_uint32)
-SDL_FUNC("SDL_SetJoystickLED", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8)
-SDL_FUNC("SDL_SendJoystickEffect", ctypes.c_bool, ctypes.POINTER(SDL_Joystick), ctypes.c_void_p, ctypes.c_int)
-SDL_FUNC("SDL_CloseJoystick", None, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickConnectionState", SDL_JoystickConnectionState, ctypes.POINTER(SDL_Joystick))
-SDL_FUNC("SDL_GetJoystickPowerInfo", SDL_PowerState, ctypes.POINTER(SDL_Joystick), ctypes.POINTER(ctypes.c_int))
+SDL_FUNC("SDL_GetJoystickButton", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_int)
+SDL_FUNC("SDL_RumbleJoystick", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_uint16, ctypes.c_uint16, ctypes.c_uint32)
+SDL_FUNC("SDL_RumbleJoystickTriggers", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_uint16, ctypes.c_uint16, ctypes.c_uint32)
+SDL_FUNC("SDL_SetJoystickLED", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8)
+SDL_FUNC("SDL_SendJoystickEffect", ctypes.c_bool, SDL_POINTER[SDL_Joystick], ctypes.c_void_p, ctypes.c_int)
+SDL_FUNC("SDL_CloseJoystick", None, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickConnectionState", SDL_JoystickConnectionState, SDL_POINTER[SDL_Joystick])
+SDL_FUNC("SDL_GetJoystickPowerInfo", SDL_PowerState, SDL_POINTER[SDL_Joystick], SDL_POINTER[ctypes.c_int])
