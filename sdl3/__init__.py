@@ -362,7 +362,6 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
 
     def SDL_GET_NAME(i):
         if i is None: return "None"
-        if "CFunctionType" in i.__name__: return "ctypes.c_void_p"
         if i.__name__.startswith("LP_"): types.add(i.__name__)
         if i.__name__.startswith("c_"): return f"ctypes.{i.__name__}"
         else: return i.__name__
