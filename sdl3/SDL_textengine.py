@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, SDL_POINTER, SDL_TYPE, SDL_FUNC_TYPE
+from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_TYPE, SDL_FUNC_TYPE
 
 from .SDL_rect import SDL_Rect
 from .SDL_properties import SDL_PropertiesID
@@ -42,8 +42,8 @@ class TTF_TextEngine(ctypes.Structure):
     _fields_ = [
         ("version", ctypes.c_uint32),
         ("userdata", ctypes.c_void_p),
-        ("CreateText", SDL_FUNC_TYPE["TTF_TextEngine.CreateText", ctypes.c_bool, ctypes.c_void_p, SDL_POINTER[TTF_Text]]),
-        ("DestroyText", SDL_FUNC_TYPE["TTF_TextEngine.DestroyText", None, ctypes.c_void_p, SDL_POINTER[TTF_Text]])
+        ("CreateText", SDL_FUNC_TYPE["TTF_TextEngine.CreateText", ctypes.c_bool, [ctypes.c_void_p, SDL_POINTER[TTF_Text]]]),
+        ("DestroyText", SDL_FUNC_TYPE["TTF_TextEngine.DestroyText", None, [ctypes.c_void_p, SDL_POINTER[TTF_Text]]])
     ]
 
 class TTF_TextData(ctypes.Structure):

@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_joystick import SDL_Joystick
@@ -146,34 +146,34 @@ class SDL_HapticEffect(ctypes.Union):
 
 SDL_HapticID: typing.TypeAlias = SDL_TYPE["SDL_HapticID", ctypes.c_uint32]
 
-SDL_FUNC("SDL_GetHaptics", SDL_POINTER[SDL_HapticID], SDL_POINTER[ctypes.c_int])
-SDL_FUNC("SDL_GetHapticNameForID", ctypes.c_char_p, SDL_HapticID)
-SDL_FUNC("SDL_OpenHaptic", SDL_POINTER[SDL_Haptic], SDL_HapticID)
-SDL_FUNC("SDL_GetHapticFromID", SDL_POINTER[SDL_Haptic], SDL_HapticID)
-SDL_FUNC("SDL_GetHapticID", SDL_HapticID, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_GetHapticName", ctypes.c_char_p, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_IsMouseHaptic", ctypes.c_bool)
-SDL_FUNC("SDL_OpenHapticFromMouse", SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_IsJoystickHaptic", ctypes.c_bool, SDL_POINTER[SDL_Joystick])
-SDL_FUNC("SDL_OpenHapticFromJoystick", SDL_POINTER[SDL_Haptic], SDL_POINTER[SDL_Joystick])
-SDL_FUNC("SDL_CloseHaptic", None, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_GetMaxHapticEffects", ctypes.c_int, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_GetMaxHapticEffectsPlaying", ctypes.c_int, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_GetHapticFeatures", ctypes.c_uint32, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_GetNumHapticAxes", ctypes.c_int, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_HapticEffectSupported", ctypes.c_bool, SDL_POINTER[SDL_Haptic], SDL_POINTER[SDL_HapticEffect])
-SDL_FUNC("SDL_CreateHapticEffect", ctypes.c_int, SDL_POINTER[SDL_Haptic], SDL_POINTER[SDL_HapticEffect])
-SDL_FUNC("SDL_UpdateHapticEffect", ctypes.c_bool, SDL_POINTER[SDL_Haptic], ctypes.c_int, SDL_POINTER[SDL_HapticEffect])
-SDL_FUNC("SDL_RunHapticEffect", ctypes.c_bool, SDL_POINTER[SDL_Haptic], ctypes.c_int, ctypes.c_uint32)
-SDL_FUNC("SDL_StopHapticEffect", ctypes.c_bool, SDL_POINTER[SDL_Haptic], ctypes.c_int)
-SDL_FUNC("SDL_DestroyHapticEffect", None, SDL_POINTER[SDL_Haptic], ctypes.c_int)
-SDL_FUNC("SDL_GetHapticEffectStatus", ctypes.c_bool, SDL_POINTER[SDL_Haptic], ctypes.c_int)
-SDL_FUNC("SDL_SetHapticGain", ctypes.c_bool, SDL_POINTER[SDL_Haptic], ctypes.c_int)
-SDL_FUNC("SDL_SetHapticAutocenter", ctypes.c_bool, SDL_POINTER[SDL_Haptic], ctypes.c_int)
-SDL_FUNC("SDL_PauseHaptic", ctypes.c_bool, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_ResumeHaptic", ctypes.c_bool, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_StopHapticEffects", ctypes.c_bool, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_HapticRumbleSupported", ctypes.c_bool, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_InitHapticRumble", ctypes.c_bool, SDL_POINTER[SDL_Haptic])
-SDL_FUNC("SDL_PlayHapticRumble", ctypes.c_bool, SDL_POINTER[SDL_Haptic], ctypes.c_float, ctypes.c_uint32)
-SDL_FUNC("SDL_StopHapticRumble", ctypes.c_bool, SDL_POINTER[SDL_Haptic])
+SDL_GetHaptics: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHaptics", SDL_POINTER[SDL_HapticID], [SDL_POINTER[ctypes.c_int]]]
+SDL_GetHapticNameForID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHapticNameForID", ctypes.c_char_p, [SDL_HapticID]]
+SDL_OpenHaptic: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_OpenHaptic", SDL_POINTER[SDL_Haptic], [SDL_HapticID]]
+SDL_GetHapticFromID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHapticFromID", SDL_POINTER[SDL_Haptic], [SDL_HapticID]]
+SDL_GetHapticID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHapticID", SDL_HapticID, [SDL_POINTER[SDL_Haptic]]]
+SDL_GetHapticName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHapticName", ctypes.c_char_p, [SDL_POINTER[SDL_Haptic]]]
+SDL_IsMouseHaptic: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IsMouseHaptic", ctypes.c_bool, []]
+SDL_OpenHapticFromMouse: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_OpenHapticFromMouse", SDL_POINTER[SDL_Haptic], []]
+SDL_IsJoystickHaptic: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IsJoystickHaptic", ctypes.c_bool, [SDL_POINTER[SDL_Joystick]]]
+SDL_OpenHapticFromJoystick: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_OpenHapticFromJoystick", SDL_POINTER[SDL_Haptic], [SDL_POINTER[SDL_Joystick]]]
+SDL_CloseHaptic: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CloseHaptic", None, [SDL_POINTER[SDL_Haptic]]]
+SDL_GetMaxHapticEffects: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetMaxHapticEffects", ctypes.c_int, [SDL_POINTER[SDL_Haptic]]]
+SDL_GetMaxHapticEffectsPlaying: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetMaxHapticEffectsPlaying", ctypes.c_int, [SDL_POINTER[SDL_Haptic]]]
+SDL_GetHapticFeatures: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHapticFeatures", ctypes.c_uint32, [SDL_POINTER[SDL_Haptic]]]
+SDL_GetNumHapticAxes: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNumHapticAxes", ctypes.c_int, [SDL_POINTER[SDL_Haptic]]]
+SDL_HapticEffectSupported: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HapticEffectSupported", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], SDL_POINTER[SDL_HapticEffect]]]
+SDL_CreateHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateHapticEffect", ctypes.c_int, [SDL_POINTER[SDL_Haptic], SDL_POINTER[SDL_HapticEffect]]]
+SDL_UpdateHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateHapticEffect", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int, SDL_POINTER[SDL_HapticEffect]]]
+SDL_RunHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RunHapticEffect", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int, ctypes.c_uint32]]
+SDL_StopHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_StopHapticEffect", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int]]
+SDL_DestroyHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyHapticEffect", None, [SDL_POINTER[SDL_Haptic], ctypes.c_int]]
+SDL_GetHapticEffectStatus: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHapticEffectStatus", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int]]
+SDL_SetHapticGain: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHapticGain", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int]]
+SDL_SetHapticAutocenter: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHapticAutocenter", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int]]
+SDL_PauseHaptic: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PauseHaptic", ctypes.c_bool, [SDL_POINTER[SDL_Haptic]]]
+SDL_ResumeHaptic: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ResumeHaptic", ctypes.c_bool, [SDL_POINTER[SDL_Haptic]]]
+SDL_StopHapticEffects: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_StopHapticEffects", ctypes.c_bool, [SDL_POINTER[SDL_Haptic]]]
+SDL_HapticRumbleSupported: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HapticRumbleSupported", ctypes.c_bool, [SDL_POINTER[SDL_Haptic]]]
+SDL_InitHapticRumble: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_InitHapticRumble", ctypes.c_bool, [SDL_POINTER[SDL_Haptic]]]
+SDL_PlayHapticRumble: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PlayHapticRumble", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_float, ctypes.c_uint32]]
+SDL_StopHapticRumble: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_StopHapticRumble", ctypes.c_bool, [SDL_POINTER[SDL_Haptic]]]

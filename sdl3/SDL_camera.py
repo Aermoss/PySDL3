@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_PixelFormat, SDL_Colorspace
@@ -28,18 +28,18 @@ SDL_CAMERA_POSITION_UNKNOWN = 0
 SDL_CAMERA_POSITION_FRONT_FACING = 1
 SDL_CAMERA_POSITION_BACK_FACING = 2
 
-SDL_FUNC("SDL_GetNumCameraDrivers", ctypes.c_int)
-SDL_FUNC("SDL_GetCameraDriver", ctypes.c_char_p, ctypes.c_int)
-SDL_FUNC("SDL_GetCurrentCameraDriver", ctypes.c_char_p)
-SDL_FUNC("SDL_GetCameras", SDL_POINTER[SDL_CameraID], SDL_POINTER[ctypes.c_int])
-SDL_FUNC("SDL_GetCameraSupportedFormats", SDL_POINTER[SDL_POINTER[SDL_CameraSpec]], SDL_CameraID, SDL_POINTER[ctypes.c_int])
-SDL_FUNC("SDL_GetCameraName", ctypes.c_char_p, SDL_CameraID)
-SDL_FUNC("SDL_GetCameraPosition", SDL_CameraPosition, SDL_CameraID)
-SDL_FUNC("SDL_OpenCamera", SDL_POINTER[SDL_Camera], SDL_CameraID, SDL_POINTER[SDL_CameraSpec])
-SDL_FUNC("SDL_GetCameraPermissionState", ctypes.c_int, SDL_POINTER[SDL_Camera])
-SDL_FUNC("SDL_GetCameraID", SDL_CameraID, SDL_POINTER[SDL_Camera])
-SDL_FUNC("SDL_GetCameraProperties", SDL_PropertiesID, SDL_POINTER[SDL_Camera])
-SDL_FUNC("SDL_GetCameraFormat", ctypes.c_bool, SDL_POINTER[SDL_Camera], SDL_POINTER[SDL_CameraSpec])
-SDL_FUNC("SDL_AcquireCameraFrame", SDL_POINTER[SDL_Surface], SDL_POINTER[SDL_Camera], SDL_POINTER[ctypes.c_int64])
-SDL_FUNC("SDL_ReleaseCameraFrame", None, SDL_POINTER[SDL_Camera], SDL_POINTER[SDL_Surface])
-SDL_FUNC("SDL_CloseCamera", None, SDL_POINTER[SDL_Camera])
+SDL_GetNumCameraDrivers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNumCameraDrivers", ctypes.c_int, []]
+SDL_GetCameraDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraDriver", ctypes.c_char_p, [ctypes.c_int]]
+SDL_GetCurrentCameraDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentCameraDriver", ctypes.c_char_p, []]
+SDL_GetCameras: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameras", SDL_POINTER[SDL_CameraID], [SDL_POINTER[ctypes.c_int]]]
+SDL_GetCameraSupportedFormats: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraSupportedFormats", SDL_POINTER[SDL_POINTER[SDL_CameraSpec]], [SDL_CameraID, SDL_POINTER[ctypes.c_int]]]
+SDL_GetCameraName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraName", ctypes.c_char_p, [SDL_CameraID]]
+SDL_GetCameraPosition: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraPosition", SDL_CameraPosition, [SDL_CameraID]]
+SDL_OpenCamera: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_OpenCamera", SDL_POINTER[SDL_Camera], [SDL_CameraID, SDL_POINTER[SDL_CameraSpec]]]
+SDL_GetCameraPermissionState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraPermissionState", ctypes.c_int, [SDL_POINTER[SDL_Camera]]]
+SDL_GetCameraID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraID", SDL_CameraID, [SDL_POINTER[SDL_Camera]]]
+SDL_GetCameraProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraProperties", SDL_PropertiesID, [SDL_POINTER[SDL_Camera]]]
+SDL_GetCameraFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraFormat", ctypes.c_bool, [SDL_POINTER[SDL_Camera], SDL_POINTER[SDL_CameraSpec]]]
+SDL_AcquireCameraFrame: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AcquireCameraFrame", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_Camera], SDL_POINTER[ctypes.c_int64]]]
+SDL_ReleaseCameraFrame: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReleaseCameraFrame", None, [SDL_POINTER[SDL_Camera], SDL_POINTER[SDL_Surface]]]
+SDL_CloseCamera: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CloseCamera", None, [SDL_POINTER[SDL_Camera]]]

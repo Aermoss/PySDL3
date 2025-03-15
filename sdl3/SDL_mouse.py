@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window
@@ -55,26 +55,26 @@ SDL_BUTTON_RMASK = SDL_BUTTON_MASK(SDL_BUTTON_RIGHT)
 SDL_BUTTON_X1MASK = SDL_BUTTON_MASK(SDL_BUTTON_X1)
 SDL_BUTTON_X2MASK = SDL_BUTTON_MASK(SDL_BUTTON_X2)
 
-SDL_FUNC("SDL_HasMouse", ctypes.c_bool)
-SDL_FUNC("SDL_GetMice", SDL_POINTER[SDL_MouseID], SDL_POINTER[ctypes.c_int])
-SDL_FUNC("SDL_GetMouseNameForID", ctypes.c_char_p, SDL_MouseID)
-SDL_FUNC("SDL_GetMouseFocus", SDL_POINTER[SDL_Window])
-SDL_FUNC("SDL_GetMouseState", SDL_MouseButtonFlags, SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float])
-SDL_FUNC("SDL_GetGlobalMouseState", SDL_MouseButtonFlags, SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float])
-SDL_FUNC("SDL_GetRelativeMouseState", SDL_MouseButtonFlags, SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float])
-SDL_FUNC("SDL_WarpMouseInWindow", None, SDL_POINTER[SDL_Window], ctypes.c_float, ctypes.c_float)
-SDL_FUNC("SDL_WarpMouseGlobal", ctypes.c_bool, ctypes.c_float, ctypes.c_float)
-SDL_FUNC("SDL_SetWindowRelativeMouseMode", ctypes.c_bool, SDL_POINTER[SDL_Window], ctypes.c_bool)
-SDL_FUNC("SDL_GetWindowRelativeMouseMode", ctypes.c_bool, SDL_POINTER[SDL_Window])
-SDL_FUNC("SDL_CaptureMouse", ctypes.c_bool, ctypes.c_bool)
+SDL_HasMouse: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HasMouse", ctypes.c_bool, []]
+SDL_GetMice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetMice", SDL_POINTER[SDL_MouseID], [SDL_POINTER[ctypes.c_int]]]
+SDL_GetMouseNameForID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetMouseNameForID", ctypes.c_char_p, [SDL_MouseID]]
+SDL_GetMouseFocus: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetMouseFocus", SDL_POINTER[SDL_Window], []]
+SDL_GetMouseState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetMouseState", SDL_MouseButtonFlags, [SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float]]]
+SDL_GetGlobalMouseState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGlobalMouseState", SDL_MouseButtonFlags, [SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float]]]
+SDL_GetRelativeMouseState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRelativeMouseState", SDL_MouseButtonFlags, [SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float]]]
+SDL_WarpMouseInWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WarpMouseInWindow", None, [SDL_POINTER[SDL_Window], ctypes.c_float, ctypes.c_float]]
+SDL_WarpMouseGlobal: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WarpMouseGlobal", ctypes.c_bool, [ctypes.c_float, ctypes.c_float]]
+SDL_SetWindowRelativeMouseMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowRelativeMouseMode", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool]]
+SDL_GetWindowRelativeMouseMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowRelativeMouseMode", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
+SDL_CaptureMouse: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CaptureMouse", ctypes.c_bool, [ctypes.c_bool]]
 
-SDL_FUNC("SDL_CreateCursor", SDL_POINTER[SDL_Cursor], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)
-SDL_FUNC("SDL_CreateColorCursor", SDL_POINTER[SDL_Cursor], SDL_POINTER[SDL_Surface], ctypes.c_int, ctypes.c_int)
-SDL_FUNC("SDL_CreateSystemCursor", SDL_POINTER[SDL_Cursor], SDL_SystemCursor)
-SDL_FUNC("SDL_SetCursor", ctypes.c_bool, SDL_POINTER[SDL_Cursor])
-SDL_FUNC("SDL_GetCursor", SDL_POINTER[SDL_Cursor])
-SDL_FUNC("SDL_GetDefaultCursor", SDL_POINTER[SDL_Cursor])
-SDL_FUNC("SDL_DestroyCursor", None, SDL_POINTER[SDL_Cursor])
-SDL_FUNC("SDL_ShowCursor", ctypes.c_bool)
-SDL_FUNC("SDL_HideCursor", ctypes.c_bool)
-SDL_FUNC("SDL_CursorVisible", ctypes.c_bool)
+SDL_CreateCursor: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateCursor", SDL_POINTER[SDL_Cursor], [SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int]]
+SDL_CreateColorCursor: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateColorCursor", SDL_POINTER[SDL_Cursor], [SDL_POINTER[SDL_Surface], ctypes.c_int, ctypes.c_int]]
+SDL_CreateSystemCursor: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateSystemCursor", SDL_POINTER[SDL_Cursor], [SDL_SystemCursor]]
+SDL_SetCursor: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetCursor", ctypes.c_bool, [SDL_POINTER[SDL_Cursor]]]
+SDL_GetCursor: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCursor", SDL_POINTER[SDL_Cursor], []]
+SDL_GetDefaultCursor: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDefaultCursor", SDL_POINTER[SDL_Cursor], []]
+SDL_DestroyCursor: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyCursor", None, [SDL_POINTER[SDL_Cursor]]]
+SDL_ShowCursor: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShowCursor", ctypes.c_bool, []]
+SDL_HideCursor: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HideCursor", ctypes.c_bool, []]
+SDL_CursorVisible: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CursorVisible", ctypes.c_bool, []]

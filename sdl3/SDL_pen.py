@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, SDL_TYPE
+from .__init__ import ctypes, typing, abc, SDL_TYPE
 
 from .SDL_touch import SDL_TouchID
 from .SDL_mouse import SDL_MouseID

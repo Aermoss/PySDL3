@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
@@ -778,11 +778,11 @@ class SDL_GPUStorageTextureReadWriteBinding(ctypes.Structure):
         ("padding3", ctypes.c_uint8)
     ]
 
-SDL_FUNC("SDL_GPUSupportsShaderFormats", ctypes.c_bool, SDL_GPUShaderFormat, ctypes.c_char_p)
-SDL_FUNC("SDL_GPUSupportsProperties", ctypes.c_bool, SDL_PropertiesID)
+SDL_GPUSupportsShaderFormats: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GPUSupportsShaderFormats", ctypes.c_bool, [SDL_GPUShaderFormat, ctypes.c_char_p]]
+SDL_GPUSupportsProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GPUSupportsProperties", ctypes.c_bool, [SDL_PropertiesID]]
 
-SDL_FUNC("SDL_CreateGPUDevice", SDL_POINTER[SDL_GPUDevice], SDL_GPUShaderFormat, ctypes.c_bool, ctypes.c_char_p)
-SDL_FUNC("SDL_CreateGPUDeviceWithProperties", SDL_POINTER[SDL_GPUDevice], SDL_PropertiesID)
+SDL_CreateGPUDevice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUDevice", SDL_POINTER[SDL_GPUDevice], [SDL_GPUShaderFormat, ctypes.c_bool, ctypes.c_char_p]]
+SDL_CreateGPUDeviceWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUDeviceWithProperties", SDL_POINTER[SDL_GPUDevice], [SDL_PropertiesID]]
 
 SDL_PROP_GPU_DEVICE_CREATE_DEBUGMODE_BOOLEAN = "SDL.gpu.device.create.debugmode".encode()
 SDL_PROP_GPU_DEVICE_CREATE_PREFERLOWPOWER_BOOLEAN = "SDL.gpu.device.create.preferlowpower".encode()
@@ -795,30 +795,30 @@ SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN = "SDL.gpu.device.create.shaders.
 SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN = "SDL.gpu.device.create.shaders.metallib".encode()
 SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING = "SDL.gpu.device.create.d3d12.semantic".encode()
 
-SDL_FUNC("SDL_DestroyGPUDevice", None, SDL_POINTER[SDL_GPUDevice])
+SDL_DestroyGPUDevice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyGPUDevice", None, [SDL_POINTER[SDL_GPUDevice]]]
 
-SDL_FUNC("SDL_GetNumGPUDrivers", ctypes.c_int)
-SDL_FUNC("SDL_GetGPUDriver", ctypes.c_char_p, ctypes.c_int)
-SDL_FUNC("SDL_GetGPUDeviceDriver", ctypes.c_char_p, SDL_POINTER[SDL_GPUDevice])
-SDL_FUNC("SDL_GetGPUShaderFormats", SDL_GPUShaderFormat, SDL_POINTER[SDL_GPUDevice])
+SDL_GetNumGPUDrivers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNumGPUDrivers", ctypes.c_int, []]
+SDL_GetGPUDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGPUDriver", ctypes.c_char_p, [ctypes.c_int]]
+SDL_GetGPUDeviceDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGPUDeviceDriver", ctypes.c_char_p, [SDL_POINTER[SDL_GPUDevice]]]
+SDL_GetGPUShaderFormats: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGPUShaderFormats", SDL_GPUShaderFormat, [SDL_POINTER[SDL_GPUDevice]]]
 
-SDL_FUNC("SDL_CreateGPUComputePipeline", SDL_POINTER[SDL_GPUComputePipeline], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUComputePipelineCreateInfo])
+SDL_CreateGPUComputePipeline: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUComputePipeline", SDL_POINTER[SDL_GPUComputePipeline], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUComputePipelineCreateInfo]]]
 
 SDL_PROP_GPU_COMPUTEPIPELINE_CREATE_NAME_STRING = "SDL.gpu.computepipeline.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUGraphicsPipeline", SDL_POINTER[SDL_GPUGraphicsPipeline], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUGraphicsPipelineCreateInfo])
+SDL_CreateGPUGraphicsPipeline: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUGraphicsPipeline", SDL_POINTER[SDL_GPUGraphicsPipeline], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUGraphicsPipelineCreateInfo]]]
 
 SDL_PROP_GPU_GRAPHICSPIPELINE_CREATE_NAME_STRING = "SDL.gpu.graphicspipeline.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUSampler", SDL_POINTER[SDL_GPUSampler], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUSamplerCreateInfo])
+SDL_CreateGPUSampler: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUSampler", SDL_POINTER[SDL_GPUSampler], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUSamplerCreateInfo]]]
 
 SDL_PROP_GPU_SAMPLER_CREATE_NAME_STRING = "SDL.gpu.sampler.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUShader", SDL_POINTER[SDL_GPUShader], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUShaderCreateInfo])
+SDL_CreateGPUShader: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUShader", SDL_POINTER[SDL_GPUShader], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUShaderCreateInfo]]]
 
 SDL_PROP_GPU_SHADER_CREATE_NAME_STRING = "SDL.gpu.shader.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUTexture", SDL_POINTER[SDL_GPUTexture], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTextureCreateInfo])
+SDL_CreateGPUTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUTexture", SDL_POINTER[SDL_GPUTexture], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTextureCreateInfo]]]
 
 SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_R_FLOAT = "SDL.gpu.texture.create.d3d12.clear.r".encode()
 SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_G_FLOAT = "SDL.gpu.texture.create.d3d12.clear.g".encode()
@@ -828,101 +828,101 @@ SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_DEPTH_FLOAT = "SDL.gpu.texture.create.d3
 SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_STENCIL_UINT8 = "SDL.gpu.texture.create.d3d12.clear.stencil".encode()
 SDL_PROP_GPU_TEXTURE_CREATE_NAME_STRING = "SDL.gpu.texture.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUBuffer", SDL_POINTER[SDL_GPUBuffer], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBufferCreateInfo])
+SDL_CreateGPUBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUBuffer", SDL_POINTER[SDL_GPUBuffer], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBufferCreateInfo]]]
 
 SDL_PROP_GPU_BUFFER_CREATE_NAME_STRING = "SDL.gpu.buffer.create.name".encode()
 
-SDL_FUNC("SDL_CreateGPUTransferBuffer", SDL_POINTER[SDL_GPUTransferBuffer], SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBufferCreateInfo])
+SDL_CreateGPUTransferBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUTransferBuffer", SDL_POINTER[SDL_GPUTransferBuffer], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBufferCreateInfo]]]
 
 SDL_PROP_GPU_TRANSFERBUFFER_CREATE_NAME_STRING = "SDL.gpu.transferbuffer.create.name".encode()
 
-SDL_FUNC("SDL_SetGPUBufferName", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBuffer], ctypes.c_char_p)
-SDL_FUNC("SDL_SetGPUTextureName", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTexture], ctypes.c_char_p)
+SDL_SetGPUBufferName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPUBufferName", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBuffer], ctypes.c_char_p]]
+SDL_SetGPUTextureName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPUTextureName", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTexture], ctypes.c_char_p]]
 
-SDL_FUNC("SDL_InsertGPUDebugLabel", None, SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_char_p)
-SDL_FUNC("SDL_PushGPUDebugGroup", None, SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_char_p)
-SDL_FUNC("SDL_PopGPUDebugGroup", None, SDL_POINTER[SDL_GPUCommandBuffer])
+SDL_InsertGPUDebugLabel: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_InsertGPUDebugLabel", None, [SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_char_p]]
+SDL_PushGPUDebugGroup: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PushGPUDebugGroup", None, [SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_char_p]]
+SDL_PopGPUDebugGroup: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PopGPUDebugGroup", None, [SDL_POINTER[SDL_GPUCommandBuffer]]]
 
-SDL_FUNC("SDL_ReleaseGPUTexture", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTexture])
-SDL_FUNC("SDL_ReleaseGPUSampler", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUSampler])
-SDL_FUNC("SDL_ReleaseGPUBuffer", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBuffer])
-SDL_FUNC("SDL_ReleaseGPUTransferBuffer", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBuffer])
-SDL_FUNC("SDL_ReleaseGPUComputePipeline", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUComputePipeline])
-SDL_FUNC("SDL_ReleaseGPUShader", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUShader])
-SDL_FUNC("SDL_ReleaseGPUGraphicsPipeline", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUGraphicsPipeline])
+SDL_ReleaseGPUTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReleaseGPUTexture", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTexture]]]
+SDL_ReleaseGPUSampler: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReleaseGPUSampler", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUSampler]]]
+SDL_ReleaseGPUBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReleaseGPUBuffer", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBuffer]]]
+SDL_ReleaseGPUTransferBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReleaseGPUTransferBuffer", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBuffer]]]
+SDL_ReleaseGPUComputePipeline: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReleaseGPUComputePipeline", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUComputePipeline]]]
+SDL_ReleaseGPUShader: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReleaseGPUShader", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUShader]]]
+SDL_ReleaseGPUGraphicsPipeline: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReleaseGPUGraphicsPipeline", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUGraphicsPipeline]]]
 
-SDL_FUNC("SDL_AcquireGPUCommandBuffer", SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUDevice])
+SDL_AcquireGPUCommandBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AcquireGPUCommandBuffer", SDL_POINTER[SDL_GPUCommandBuffer], [SDL_POINTER[SDL_GPUDevice]]]
 
-SDL_FUNC("SDL_PushGPUVertexUniformData", None, SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32)
-SDL_FUNC("SDL_PushGPUFragmentUniformData", None, SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32)
-SDL_FUNC("SDL_PushGPUComputeUniformData", None, SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32)
+SDL_PushGPUVertexUniformData: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PushGPUVertexUniformData", None, [SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32]]
+SDL_PushGPUFragmentUniformData: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PushGPUFragmentUniformData", None, [SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32]]
+SDL_PushGPUComputeUniformData: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PushGPUComputeUniformData", None, [SDL_POINTER[SDL_GPUCommandBuffer], ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32]]
 
-SDL_FUNC("SDL_BeginGPURenderPass", SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUColorTargetInfo], ctypes.c_uint32, SDL_POINTER[SDL_GPUDepthStencilTargetInfo])
-SDL_FUNC("SDL_BindGPUGraphicsPipeline", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUGraphicsPipeline])
-SDL_FUNC("SDL_SetGPUViewport", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUViewport])
-SDL_FUNC("SDL_SetGPUScissor", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_Rect])
-SDL_FUNC("SDL_SetGPUBlendConstants", None, SDL_POINTER[SDL_GPURenderPass], SDL_FColor)
-SDL_FUNC("SDL_SetGPUStencilReference", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint8)
-SDL_FUNC("SDL_BindGPUVertexBuffers", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUIndexBuffer", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUBufferBinding], SDL_GPUIndexElementSize)
-SDL_FUNC("SDL_BindGPUVertexSamplers", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUTextureSamplerBinding], ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUVertexStorageTextures", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUVertexStorageBuffers", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUFragmentSamplers", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUTextureSamplerBinding], ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUFragmentStorageTextures", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUFragmentStorageBuffers", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32)
-SDL_FUNC("SDL_DrawGPUIndexedPrimitives", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_int32, ctypes.c_uint32)
-SDL_FUNC("SDL_DrawGPUPrimitives", None, SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32)
-SDL_FUNC("SDL_DrawGPUPrimitivesIndirect", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUBuffer], ctypes.c_uint32, ctypes.c_uint32)
-SDL_FUNC("SDL_DrawGPUIndexedPrimitivesIndirect", None, SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUBuffer], ctypes.c_uint32, ctypes.c_uint32)
-SDL_FUNC("SDL_EndGPURenderPass", None, SDL_POINTER[SDL_GPURenderPass])
+SDL_BeginGPURenderPass: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BeginGPURenderPass", SDL_POINTER[SDL_GPURenderPass], [SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUColorTargetInfo], ctypes.c_uint32, SDL_POINTER[SDL_GPUDepthStencilTargetInfo]]]
+SDL_BindGPUGraphicsPipeline: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUGraphicsPipeline", None, [SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUGraphicsPipeline]]]
+SDL_SetGPUViewport: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPUViewport", None, [SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUViewport]]]
+SDL_SetGPUScissor: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPUScissor", None, [SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_Rect]]]
+SDL_SetGPUBlendConstants: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPUBlendConstants", None, [SDL_POINTER[SDL_GPURenderPass], SDL_FColor]]
+SDL_SetGPUStencilReference: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPUStencilReference", None, [SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint8]]
+SDL_BindGPUVertexBuffers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUVertexBuffers", None, [SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32]]
+SDL_BindGPUIndexBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUIndexBuffer", None, [SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUBufferBinding], SDL_GPUIndexElementSize]]
+SDL_BindGPUVertexSamplers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUVertexSamplers", None, [SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUTextureSamplerBinding], ctypes.c_uint32]]
+SDL_BindGPUVertexStorageTextures: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUVertexStorageTextures", None, [SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], ctypes.c_uint32]]
+SDL_BindGPUVertexStorageBuffers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUVertexStorageBuffers", None, [SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32]]
+SDL_BindGPUFragmentSamplers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUFragmentSamplers", None, [SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUTextureSamplerBinding], ctypes.c_uint32]]
+SDL_BindGPUFragmentStorageTextures: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUFragmentStorageTextures", None, [SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], ctypes.c_uint32]]
+SDL_BindGPUFragmentStorageBuffers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUFragmentStorageBuffers", None, [SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32]]
+SDL_DrawGPUIndexedPrimitives: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DrawGPUIndexedPrimitives", None, [SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_int32, ctypes.c_uint32]]
+SDL_DrawGPUPrimitives: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DrawGPUPrimitives", None, [SDL_POINTER[SDL_GPURenderPass], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32]]
+SDL_DrawGPUPrimitivesIndirect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DrawGPUPrimitivesIndirect", None, [SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUBuffer], ctypes.c_uint32, ctypes.c_uint32]]
+SDL_DrawGPUIndexedPrimitivesIndirect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DrawGPUIndexedPrimitivesIndirect", None, [SDL_POINTER[SDL_GPURenderPass], SDL_POINTER[SDL_GPUBuffer], ctypes.c_uint32, ctypes.c_uint32]]
+SDL_EndGPURenderPass: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EndGPURenderPass", None, [SDL_POINTER[SDL_GPURenderPass]]]
 
-SDL_FUNC("SDL_BeginGPUComputePass", SDL_POINTER[SDL_GPUComputePass], SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUStorageTextureReadWriteBinding], ctypes.c_uint32, SDL_POINTER[SDL_GPUStorageBufferReadWriteBinding], ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUComputePipeline", None, SDL_POINTER[SDL_GPUComputePass], SDL_POINTER[SDL_GPUComputePipeline])
-SDL_FUNC("SDL_BindGPUComputeSamplers", None, SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, SDL_POINTER[SDL_GPUTextureSamplerBinding], ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUComputeStorageTextures", None, SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], ctypes.c_uint32)
-SDL_FUNC("SDL_BindGPUComputeStorageBuffers", None, SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32)
-SDL_FUNC("SDL_DispatchGPUCompute", None, SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32)
-SDL_FUNC("SDL_DispatchGPUComputeIndirect", None, SDL_POINTER[SDL_GPUComputePass], SDL_POINTER[SDL_GPUBuffer], ctypes.c_uint32)
-SDL_FUNC("SDL_EndGPUComputePass", None, SDL_POINTER[SDL_GPUComputePass])
+SDL_BeginGPUComputePass: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BeginGPUComputePass", SDL_POINTER[SDL_GPUComputePass], [SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUStorageTextureReadWriteBinding], ctypes.c_uint32, SDL_POINTER[SDL_GPUStorageBufferReadWriteBinding], ctypes.c_uint32]]
+SDL_BindGPUComputePipeline: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUComputePipeline", None, [SDL_POINTER[SDL_GPUComputePass], SDL_POINTER[SDL_GPUComputePipeline]]]
+SDL_BindGPUComputeSamplers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUComputeSamplers", None, [SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, SDL_POINTER[SDL_GPUTextureSamplerBinding], ctypes.c_uint32]]
+SDL_BindGPUComputeStorageTextures: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUComputeStorageTextures", None, [SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], ctypes.c_uint32]]
+SDL_BindGPUComputeStorageBuffers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BindGPUComputeStorageBuffers", None, [SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, SDL_POINTER[SDL_GPUBufferBinding], ctypes.c_uint32]]
+SDL_DispatchGPUCompute: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DispatchGPUCompute", None, [SDL_POINTER[SDL_GPUComputePass], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32]]
+SDL_DispatchGPUComputeIndirect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DispatchGPUComputeIndirect", None, [SDL_POINTER[SDL_GPUComputePass], SDL_POINTER[SDL_GPUBuffer], ctypes.c_uint32]]
+SDL_EndGPUComputePass: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EndGPUComputePass", None, [SDL_POINTER[SDL_GPUComputePass]]]
 
-SDL_FUNC("SDL_MapGPUTransferBuffer", ctypes.c_void_p, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBuffer], ctypes.c_bool)
-SDL_FUNC("SDL_UnmapGPUTransferBuffer", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBuffer])
+SDL_MapGPUTransferBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_MapGPUTransferBuffer", ctypes.c_void_p, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBuffer], ctypes.c_bool]]
+SDL_UnmapGPUTransferBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UnmapGPUTransferBuffer", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBuffer]]]
 
-SDL_FUNC("SDL_BeginGPUCopyPass", SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUCommandBuffer])
-SDL_FUNC("SDL_UploadToGPUTexture", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTextureTransferInfo], SDL_POINTER[SDL_GPUTextureRegion], ctypes.c_bool)
-SDL_FUNC("SDL_UploadToGPUBuffer", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTransferBufferLocation], SDL_POINTER[SDL_GPUBufferRegion], ctypes.c_bool)
-SDL_FUNC("SDL_CopyGPUTextureToTexture", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTextureLocation], SDL_POINTER[SDL_GPUTextureLocation], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_bool)
-SDL_FUNC("SDL_CopyGPUBufferToBuffer", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUBufferLocation], SDL_POINTER[SDL_GPUBufferLocation], ctypes.c_uint32, ctypes.c_bool)
-SDL_FUNC("SDL_DownloadFromGPUTexture", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTextureRegion], SDL_POINTER[SDL_GPUTextureTransferInfo])
-SDL_FUNC("SDL_DownloadFromGPUBuffer", None, SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUBufferRegion], SDL_POINTER[SDL_GPUTransferBufferLocation])
-SDL_FUNC("SDL_EndGPUCopyPass", None, SDL_POINTER[SDL_GPUCopyPass])
+SDL_BeginGPUCopyPass: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BeginGPUCopyPass", SDL_POINTER[SDL_GPUCopyPass], [SDL_POINTER[SDL_GPUCommandBuffer]]]
+SDL_UploadToGPUTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UploadToGPUTexture", None, [SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTextureTransferInfo], SDL_POINTER[SDL_GPUTextureRegion], ctypes.c_bool]]
+SDL_UploadToGPUBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UploadToGPUBuffer", None, [SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTransferBufferLocation], SDL_POINTER[SDL_GPUBufferRegion], ctypes.c_bool]]
+SDL_CopyGPUTextureToTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CopyGPUTextureToTexture", None, [SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTextureLocation], SDL_POINTER[SDL_GPUTextureLocation], ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_bool]]
+SDL_CopyGPUBufferToBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CopyGPUBufferToBuffer", None, [SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUBufferLocation], SDL_POINTER[SDL_GPUBufferLocation], ctypes.c_uint32, ctypes.c_bool]]
+SDL_DownloadFromGPUTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DownloadFromGPUTexture", None, [SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUTextureRegion], SDL_POINTER[SDL_GPUTextureTransferInfo]]]
+SDL_DownloadFromGPUBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DownloadFromGPUBuffer", None, [SDL_POINTER[SDL_GPUCopyPass], SDL_POINTER[SDL_GPUBufferRegion], SDL_POINTER[SDL_GPUTransferBufferLocation]]]
+SDL_EndGPUCopyPass: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EndGPUCopyPass", None, [SDL_POINTER[SDL_GPUCopyPass]]]
 
-SDL_FUNC("SDL_GenerateMipmapsForGPUTexture", None, SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUTexture])
-SDL_FUNC("SDL_BlitGPUTexture", None, SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUBlitInfo])
+SDL_GenerateMipmapsForGPUTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GenerateMipmapsForGPUTexture", None, [SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUTexture]]]
+SDL_BlitGPUTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BlitGPUTexture", None, [SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_GPUBlitInfo]]]
 
-SDL_FUNC("SDL_WindowSupportsGPUSwapchainComposition", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window], SDL_GPUSwapchainComposition)
-SDL_FUNC("SDL_WindowSupportsGPUPresentMode", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window], SDL_GPUPresentMode)
-SDL_FUNC("SDL_ClaimWindowForGPUDevice", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window])
-SDL_FUNC("SDL_ReleaseWindowFromGPUDevice", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window])
-SDL_FUNC("SDL_SetGPUSwapchainParameters", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window], SDL_GPUSwapchainComposition, SDL_GPUPresentMode)
-SDL_FUNC("SDL_SetGPUAllowedFramesInFlight", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], ctypes.c_uint32)
-SDL_FUNC("SDL_GetGPUSwapchainTextureFormat", SDL_GPUTextureFormat, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window])
-SDL_FUNC("SDL_AcquireGPUSwapchainTexture", ctypes.c_bool, SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_Window], SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32])
-SDL_FUNC("SDL_WaitForGPUSwapchain", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window])
-SDL_FUNC("SDL_WaitAndAcquireGPUSwapchainTexture", ctypes.c_bool, SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_Window], SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32])
+SDL_WindowSupportsGPUSwapchainComposition: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WindowSupportsGPUSwapchainComposition", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window], SDL_GPUSwapchainComposition]]
+SDL_WindowSupportsGPUPresentMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WindowSupportsGPUPresentMode", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window], SDL_GPUPresentMode]]
+SDL_ClaimWindowForGPUDevice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ClaimWindowForGPUDevice", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window]]]
+SDL_ReleaseWindowFromGPUDevice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReleaseWindowFromGPUDevice", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window]]]
+SDL_SetGPUSwapchainParameters: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPUSwapchainParameters", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window], SDL_GPUSwapchainComposition, SDL_GPUPresentMode]]
+SDL_SetGPUAllowedFramesInFlight: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPUAllowedFramesInFlight", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], ctypes.c_uint32]]
+SDL_GetGPUSwapchainTextureFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGPUSwapchainTextureFormat", SDL_GPUTextureFormat, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window]]]
+SDL_AcquireGPUSwapchainTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AcquireGPUSwapchainTexture", ctypes.c_bool, [SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_Window], SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32]]]
+SDL_WaitForGPUSwapchain: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WaitForGPUSwapchain", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window]]]
+SDL_WaitAndAcquireGPUSwapchainTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WaitAndAcquireGPUSwapchainTexture", ctypes.c_bool, [SDL_POINTER[SDL_GPUCommandBuffer], SDL_POINTER[SDL_Window], SDL_POINTER[SDL_POINTER[SDL_GPUTexture]], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32]]]
 
-SDL_FUNC("SDL_SubmitGPUCommandBuffer", ctypes.c_bool, SDL_POINTER[SDL_GPUCommandBuffer])
-SDL_FUNC("SDL_SubmitGPUCommandBufferAndAcquireFence", SDL_POINTER[SDL_GPUFence], SDL_POINTER[SDL_GPUCommandBuffer])
-SDL_FUNC("SDL_CancelGPUCommandBuffer", ctypes.c_bool, SDL_POINTER[SDL_GPUCommandBuffer])
+SDL_SubmitGPUCommandBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SubmitGPUCommandBuffer", ctypes.c_bool, [SDL_POINTER[SDL_GPUCommandBuffer]]]
+SDL_SubmitGPUCommandBufferAndAcquireFence: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SubmitGPUCommandBufferAndAcquireFence", SDL_POINTER[SDL_GPUFence], [SDL_POINTER[SDL_GPUCommandBuffer]]]
+SDL_CancelGPUCommandBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CancelGPUCommandBuffer", ctypes.c_bool, [SDL_POINTER[SDL_GPUCommandBuffer]]]
 
-SDL_FUNC("SDL_WaitForGPUIdle", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice])
-SDL_FUNC("SDL_WaitForGPUFences", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], ctypes.c_bool, SDL_POINTER[SDL_POINTER[SDL_GPUFence]], ctypes.c_uint32)
+SDL_WaitForGPUIdle: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WaitForGPUIdle", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice]]]
+SDL_WaitForGPUFences: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WaitForGPUFences", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], ctypes.c_bool, SDL_POINTER[SDL_POINTER[SDL_GPUFence]], ctypes.c_uint32]]
 
-SDL_FUNC("SDL_QueryGPUFence", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUFence])
-SDL_FUNC("SDL_ReleaseGPUFence", None, SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUFence])
+SDL_QueryGPUFence: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_QueryGPUFence", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUFence]]]
+SDL_ReleaseGPUFence: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReleaseGPUFence", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUFence]]]
 
-SDL_FUNC("SDL_GPUTextureFormatTexelBlockSize", ctypes.c_uint32, SDL_GPUTextureFormat)
-SDL_FUNC("SDL_GPUTextureSupportsFormat", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_GPUTextureFormat, SDL_GPUTextureType, SDL_GPUTextureUsageFlags)
-SDL_FUNC("SDL_GPUTextureSupportsSampleCount", ctypes.c_bool, SDL_POINTER[SDL_GPUDevice], SDL_GPUTextureFormat, SDL_GPUSampleCount)
-SDL_FUNC("SDL_CalculateGPUTextureFormatSize", ctypes.c_uint32, SDL_GPUTextureFormat, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32)
+SDL_GPUTextureFormatTexelBlockSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GPUTextureFormatTexelBlockSize", ctypes.c_uint32, [SDL_GPUTextureFormat]]
+SDL_GPUTextureSupportsFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GPUTextureSupportsFormat", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], SDL_GPUTextureFormat, SDL_GPUTextureType, SDL_GPUTextureUsageFlags]]
+SDL_GPUTextureSupportsSampleCount: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GPUTextureSupportsSampleCount", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], SDL_GPUTextureFormat, SDL_GPUSampleCount]]
+SDL_CalculateGPUTextureFormatSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CalculateGPUTextureFormatSize", ctypes.c_uint32, [SDL_GPUTextureFormat, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32]]

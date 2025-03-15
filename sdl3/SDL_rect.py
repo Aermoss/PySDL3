@@ -1,4 +1,4 @@
-from .__init__ import ctypes, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, \
     SDL_FUNC, SDL_DEREFERENCE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_stdinc import SDL_FLT_EPSILON
@@ -62,11 +62,11 @@ def SDL_RectEquals(a: LP_SDL_Rect, b: LP_SDL_Rect) -> bool:
     a, b = SDL_DEREFERENCE(a), SDL_DEREFERENCE(b)
     return a.x == b.x and a.y == b.y and a.w == b.w and a.h == b.h
 
-SDL_FUNC("SDL_HasRectIntersection", ctypes.c_bool, SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect])
-SDL_FUNC("SDL_GetRectIntersection", ctypes.c_bool, SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect])
-SDL_FUNC("SDL_GetRectUnion", ctypes.c_bool, SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect])
-SDL_FUNC("SDL_GetRectEnclosingPoints", ctypes.c_bool, SDL_POINTER[SDL_Point], ctypes.c_int, SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect])
-SDL_FUNC("SDL_GetRectAndLineIntersection", ctypes.c_bool, SDL_POINTER[SDL_Rect], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int])
+SDL_HasRectIntersection: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HasRectIntersection", ctypes.c_bool, [SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect]]]
+SDL_GetRectIntersection: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRectIntersection", ctypes.c_bool, [SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect]]]
+SDL_GetRectUnion: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRectUnion", ctypes.c_bool, [SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect]]]
+SDL_GetRectEnclosingPoints: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRectEnclosingPoints", ctypes.c_bool, [SDL_POINTER[SDL_Point], ctypes.c_int, SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect]]]
+SDL_GetRectAndLineIntersection: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRectAndLineIntersection", ctypes.c_bool, [SDL_POINTER[SDL_Rect], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]]]
 
 def SDL_PointInRectFloat(p: LP_SDL_FPoint, r: LP_SDL_FRect) -> bool:
     p, r = SDL_DEREFERENCE(p), SDL_DEREFERENCE(r)
@@ -84,8 +84,8 @@ def SDL_RectsEqualFloat(a: LP_SDL_FRect, b: LP_SDL_FRect) -> bool:
     a, b = SDL_DEREFERENCE(a), SDL_DEREFERENCE(b)
     return SDL_RectsEqualEpsilon(a, b, SDL_FLT_EPSILON)
 
-SDL_FUNC("SDL_HasRectIntersectionFloat", ctypes.c_bool, SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect])
-SDL_FUNC("SDL_GetRectIntersectionFloat", ctypes.c_bool, SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect])
-SDL_FUNC("SDL_GetRectUnionFloat", ctypes.c_bool, SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect])
-SDL_FUNC("SDL_GetRectEnclosingPointsFloat", ctypes.c_bool, SDL_POINTER[SDL_FPoint], ctypes.c_int, SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect])
-SDL_FUNC("SDL_GetRectAndLineIntersectionFloat", ctypes.c_bool, SDL_POINTER[SDL_FRect], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float])
+SDL_HasRectIntersectionFloat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HasRectIntersectionFloat", ctypes.c_bool, [SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect]]]
+SDL_GetRectIntersectionFloat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRectIntersectionFloat", ctypes.c_bool, [SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect]]]
+SDL_GetRectUnionFloat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRectUnionFloat", ctypes.c_bool, [SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect]]]
+SDL_GetRectEnclosingPointsFloat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRectEnclosingPointsFloat", ctypes.c_bool, [SDL_POINTER[SDL_FPoint], ctypes.c_int, SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect]]]
+SDL_GetRectAndLineIntersectionFloat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRectAndLineIntersectionFloat", ctypes.c_bool, [SDL_POINTER[SDL_FRect], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float]]]

@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window
@@ -57,5 +57,5 @@ class SDL_MessageBoxData(ctypes.Structure):
         ("colorScheme", SDL_POINTER[SDL_MessageBoxColorScheme])
     ]
 
-SDL_FUNC("SDL_ShowMessageBox", ctypes.c_bool, SDL_POINTER[SDL_MessageBoxData], SDL_POINTER[ctypes.c_int])
-SDL_FUNC("SDL_ShowSimpleMessageBox", ctypes.c_bool, SDL_MessageBoxFlags, ctypes.c_char_p, ctypes.c_char_p, SDL_POINTER[SDL_Window])
+SDL_ShowMessageBox: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShowMessageBox", ctypes.c_bool, [SDL_POINTER[SDL_MessageBoxData], SDL_POINTER[ctypes.c_int]]]
+SDL_ShowSimpleMessageBox: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShowSimpleMessageBox", ctypes.c_bool, [SDL_MessageBoxFlags, ctypes.c_char_p, ctypes.c_char_p, SDL_POINTER[SDL_Window]]]

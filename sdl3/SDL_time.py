@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_stdinc import SDL_Time
@@ -29,12 +29,12 @@ SDL_TimeFormat: typing.TypeAlias = SDL_TYPE["SDL_TimeFormat", ctypes.c_int]
 SDL_TIME_FORMAT_24HR = 0
 SDL_TIME_FORMAT_12HR = 1
 
-SDL_FUNC("SDL_GetDateTimeLocalePreferences", ctypes.c_bool, SDL_POINTER[SDL_DateFormat], SDL_POINTER[SDL_TimeFormat])
-SDL_FUNC("SDL_GetCurrentTime", ctypes.c_bool, SDL_POINTER[SDL_Time])
-SDL_FUNC("SDL_TimeToDateTime", ctypes.c_bool, SDL_Time, SDL_POINTER[SDL_DateTime], ctypes.c_bool)
-SDL_FUNC("SDL_DateTimeToTime", ctypes.c_bool, SDL_POINTER[SDL_DateTime], SDL_POINTER[SDL_Time])
-SDL_FUNC("SDL_TimeToWindows", None, SDL_Time, SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32])
-SDL_FUNC("SDL_TimeFromWindows", SDL_Time, ctypes.c_uint32, ctypes.c_uint32)
-SDL_FUNC("SDL_GetDaysInMonth", ctypes.c_int, ctypes.c_int, ctypes.c_int)
-SDL_FUNC("SDL_GetDayOfYear", ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)
-SDL_FUNC("SDL_GetDayOfWeek", ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)
+SDL_GetDateTimeLocalePreferences: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDateTimeLocalePreferences", ctypes.c_bool, [SDL_POINTER[SDL_DateFormat], SDL_POINTER[SDL_TimeFormat]]]
+SDL_GetCurrentTime: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentTime", ctypes.c_bool, [SDL_POINTER[SDL_Time]]]
+SDL_TimeToDateTime: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_TimeToDateTime", ctypes.c_bool, [SDL_Time, SDL_POINTER[SDL_DateTime], ctypes.c_bool]]
+SDL_DateTimeToTime: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DateTimeToTime", ctypes.c_bool, [SDL_POINTER[SDL_DateTime], SDL_POINTER[SDL_Time]]]
+SDL_TimeToWindows: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_TimeToWindows", None, [SDL_Time, SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32]]]
+SDL_TimeFromWindows: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_TimeFromWindows", SDL_Time, [ctypes.c_uint32, ctypes.c_uint32]]
+SDL_GetDaysInMonth: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDaysInMonth", ctypes.c_int, [ctypes.c_int, ctypes.c_int]]
+SDL_GetDayOfYear: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDayOfYear", ctypes.c_int, [ctypes.c_int, ctypes.c_int, ctypes.c_int]]
+SDL_GetDayOfWeek: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDayOfWeek", ctypes.c_int, [ctypes.c_int, ctypes.c_int, ctypes.c_int]]

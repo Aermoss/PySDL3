@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, SDL_FUNC_TYPE, \
+from .__init__ import ctypes, typing, abc, SDL_FUNC_TYPE, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
@@ -249,14 +249,14 @@ SDL_HINT_DEFAULT = 0
 SDL_HINT_NORMAL = 1
 SDL_HINT_OVERRIDE = 2
 
-SDL_FUNC("SDL_SetHintWithPriority", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p, SDL_HintPriority)
-SDL_FUNC("SDL_SetHint", ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_ResetHint", ctypes.c_bool, ctypes.c_char_p)
-SDL_FUNC("SDL_ResetHints", None)
-SDL_FUNC("SDL_GetHint", ctypes.c_char_p, ctypes.c_char_p)
-SDL_FUNC("SDL_GetHintBoolean", ctypes.c_bool, ctypes.c_char_p, ctypes.c_bool)
+SDL_SetHintWithPriority: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHintWithPriority", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_char_p, SDL_HintPriority]]
+SDL_SetHint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHint", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_char_p]]
+SDL_ResetHint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ResetHint", ctypes.c_bool, [ctypes.c_char_p]]
+SDL_ResetHints: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ResetHints", None, []]
+SDL_GetHint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHint", ctypes.c_char_p, [ctypes.c_char_p]]
+SDL_GetHintBoolean: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHintBoolean", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_bool]]
 
-SDL_HintCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_HintCallback", None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
+SDL_HintCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_HintCallback", None, [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]]
 
-SDL_FUNC("SDL_AddHintCallback", ctypes.c_bool, ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p)
-SDL_FUNC("SDL_RemoveHintCallback", None, ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p)
+SDL_AddHintCallback: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AddHintCallback", ctypes.c_bool, [ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p]]
+SDL_RemoveHintCallback: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RemoveHintCallback", None, [ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p]]
