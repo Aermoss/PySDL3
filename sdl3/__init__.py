@@ -465,7 +465,7 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
 
     return SDL_GENERATE_DOCS().encode("utf-8")
 
-if __doc_generator__ and int(os.environ.get("SDL_CTYPES_ALIAS_FIX", "0")) > 0:
+if int(os.environ.get("SDL_CTYPES_ALIAS_FIX", "0")) > 0:
     for i in dir(ctypes):
         if i.startswith("c_") and getattr(ctypes, i).__name__ != i and hasattr(getattr(ctypes, i), "_type_"):
             setattr(ctypes, i, SDL_TYPE[i, getattr(ctypes, i)])
