@@ -1,6 +1,6 @@
 """A pure Python wrapper for SDL3."""
 
-__version__ = "0.9.6b2"
+__version__ = "0.9.6b3"
 
 import sys, os, requests, ctypes, ctypes.util, platform, keyword, inspect, collections.abc as abc, \
     asyncio, aiohttp, zipfile, typing, types, array, importlib, atexit, packaging.version, json, re
@@ -472,9 +472,8 @@ SDL_VERSIONNUM_STRING: abc.Callable[[int], str] = lambda num: \
 
 if not __initialized__:
     if int(os.environ.get("SDL_CHECK_BINARY_VERSION", "1")) > 0:
-        for left, right in zip([SDL_GetVersion(), IMG_Version(), Mix_Version(), TTF_Version(), RTF_Version(), SDLNet_Version()], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
-            if left != right:
-                print("\33[35m", f"warning: version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(SDL_BINARY_VAR_MAP[i])}' (expected: {SDL_VERSIONNUM_STRING(version)}, got: {SDL_VERSIONNUM_STRING(binaryVersion)}).", "\33[0m", sep = "", flush = True)
+        for binary, left, right in zip(SDL_BINARY_VAR_MAP.values(), [SDL_GetVersion(), IMG_Version(), Mix_Version(), TTF_Version(), RTF_Version(), SDLNet_Version()], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
+            if left != right: print("\33[35m", f"warning: version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(binary)}' (expected: {SDL_VERSIONNUM_STRING(right)}, got: {SDL_VERSIONNUM_STRING(left)}).", "\33[0m", sep = "", flush = True)
 
     if __doc_generator__:
         if not os.path.exists(__doc_file__):
