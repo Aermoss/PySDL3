@@ -1,13 +1,11 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_FUNC_TYPE, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY, SDL_ENUM
+from .__init__ import ctypes, typing, abc, SDL_POINTER, \
+    SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
 
 from .SDL_properties import SDL_PropertiesID
 from .SDL_surface import SDL_Surface
 from .SDL_pixels import SDL_PixelFormat
 from .SDL_rect import SDL_Point, SDL_Rect
 from .SDL_stdinc import SDL_FunctionPointer
-
-SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_DisplayID: typing.TypeAlias = SDL_TYPE["SDL_DisplayID", ctypes.c_uint32]
 SDL_WindowID: typing.TypeAlias = SDL_TYPE["SDL_WindowID", ctypes.c_uint32]
@@ -71,14 +69,14 @@ SDL_WINDOW_TRANSPARENT = 0x0000000040000000
 SDL_WINDOW_NOT_FOCUSABLE = 0x0000000080000000
 
 SDL_WINDOWPOS_UNDEFINED_MASK = 0x1FFF0000
-SDL_WINDOWPOS_UNDEFINED_DISPLAY = lambda x: SDL_WINDOWPOS_UNDEFINED_MASK | x
+SDL_WINDOWPOS_UNDEFINED_DISPLAY: abc.Callable[[SDL_DisplayID], int] = lambda x: SDL_WINDOWPOS_UNDEFINED_MASK | x
 SDL_WINDOWPOS_UNDEFINED = SDL_WINDOWPOS_UNDEFINED_DISPLAY(0)
-SDL_WINDOWPOS_ISUNDEFINED = lambda x: (x & 0xFFFF0000) == SDL_WINDOWPOS_UNDEFINED_MASK
+SDL_WINDOWPOS_ISUNDEFINED: abc.Callable[[int], bool] = lambda x: (x & 0xFFFF0000) == SDL_WINDOWPOS_UNDEFINED_MASK
 
 SDL_WINDOWPOS_CENTERED_MASK = 0x2FFF0000
-SDL_WINDOWPOS_CENTERED_DISPLAY = lambda x: SDL_WINDOWPOS_CENTERED_MASK | x
+SDL_WINDOWPOS_CENTERED_DISPLAY: abc.Callable[[SDL_DisplayID], int] = lambda x: SDL_WINDOWPOS_CENTERED_MASK | x
 SDL_WINDOWPOS_CENTERED = SDL_WINDOWPOS_CENTERED_DISPLAY(0)
-SDL_WINDOWPOS_ISCENTERED = lambda x: (x & 0xFFFF0000) == SDL_WINDOWPOS_CENTERED_MASK
+SDL_WINDOWPOS_ISCENTERED: abc.Callable[[int], bool] = lambda x: (x & 0xFFFF0000) == SDL_WINDOWPOS_CENTERED_MASK
 
 SDL_FlashOperation: typing.TypeAlias = SDL_TYPE["SDL_FlashOperation", SDL_ENUM]
 
@@ -129,50 +127,50 @@ SDL_GLContextResetNotification: typing.TypeAlias = SDL_TYPE["SDL_GLContextResetN
 SDL_GL_CONTEXT_RESET_NO_NOTIFICATION = 0x0000
 SDL_GL_CONTEXT_RESET_LOSE_CONTEXT = 0x0001
 
-SDL_GetNumVideoDrivers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNumVideoDrivers", ctypes.c_int, []]
-SDL_GetVideoDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetVideoDriver", ctypes.c_char_p, [ctypes.c_int]]
-SDL_GetCurrentVideoDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentVideoDriver", ctypes.c_char_p, []]
-SDL_GetSystemTheme: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSystemTheme", SDL_SystemTheme, []]
-SDL_GetDisplays: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplays", SDL_POINTER[SDL_DisplayID], [SDL_POINTER[ctypes.c_int]]]
-SDL_GetPrimaryDisplay: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPrimaryDisplay", SDL_DisplayID, []]
-SDL_GetDisplayProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayProperties", SDL_PropertiesID, [SDL_DisplayID]]
+SDL_GetNumVideoDrivers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNumVideoDrivers", ctypes.c_int, [], SDL_BINARY]
+SDL_GetVideoDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetVideoDriver", ctypes.c_char_p, [ctypes.c_int], SDL_BINARY]
+SDL_GetCurrentVideoDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentVideoDriver", ctypes.c_char_p, [], SDL_BINARY]
+SDL_GetSystemTheme: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSystemTheme", SDL_SystemTheme, [], SDL_BINARY]
+SDL_GetDisplays: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplays", SDL_POINTER[SDL_DisplayID], [SDL_POINTER[ctypes.c_int]], SDL_BINARY]
+SDL_GetPrimaryDisplay: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPrimaryDisplay", SDL_DisplayID, [], SDL_BINARY]
+SDL_GetDisplayProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayProperties", SDL_PropertiesID, [SDL_DisplayID], SDL_BINARY]
 
 SDL_PROP_DISPLAY_HDR_ENABLED_BOOLEAN = "SDL.display.HDR_enabled".encode()
 SDL_PROP_DISPLAY_KMSDRM_PANEL_ORIENTATION_NUMBER = "SDL.display.KMSDRM.panel_orientation".encode()
 
-SDL_GetDisplayName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayName", ctypes.c_char_p, [SDL_DisplayID]]
-SDL_GetDisplayBounds: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayBounds", ctypes.c_bool, [SDL_DisplayID, SDL_POINTER[SDL_Rect]]]
-SDL_GetDisplayUsableBounds: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayUsableBounds", ctypes.c_bool, [SDL_DisplayID, SDL_POINTER[SDL_Rect]]]
+SDL_GetDisplayName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayName", ctypes.c_char_p, [SDL_DisplayID], SDL_BINARY]
+SDL_GetDisplayBounds: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayBounds", ctypes.c_bool, [SDL_DisplayID, SDL_POINTER[SDL_Rect]], SDL_BINARY]
+SDL_GetDisplayUsableBounds: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayUsableBounds", ctypes.c_bool, [SDL_DisplayID, SDL_POINTER[SDL_Rect]], SDL_BINARY]
 
-SDL_GetNaturalDisplayOrientation: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNaturalDisplayOrientation", SDL_DisplayOrientation, [SDL_DisplayID]]
-SDL_GetCurrentDisplayOrientation: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentDisplayOrientation", SDL_DisplayOrientation, [SDL_DisplayID]]
+SDL_GetNaturalDisplayOrientation: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNaturalDisplayOrientation", SDL_DisplayOrientation, [SDL_DisplayID], SDL_BINARY]
+SDL_GetCurrentDisplayOrientation: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentDisplayOrientation", SDL_DisplayOrientation, [SDL_DisplayID], SDL_BINARY]
 
-SDL_GetDisplayContentScale: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayContentScale", ctypes.c_float, [SDL_DisplayID]]
+SDL_GetDisplayContentScale: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayContentScale", ctypes.c_float, [SDL_DisplayID], SDL_BINARY]
 
-SDL_GetFullscreenDisplayModes: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetFullscreenDisplayModes", SDL_POINTER[SDL_POINTER[SDL_DisplayMode]], [SDL_DisplayID, SDL_POINTER[ctypes.c_int]]]
-SDL_GetClosestFullscreenDisplayMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetClosestFullscreenDisplayMode", ctypes.c_bool, [SDL_DisplayID, ctypes.c_int, ctypes.c_int, ctypes.c_float, ctypes.c_bool, SDL_POINTER[SDL_DisplayMode]]]
+SDL_GetFullscreenDisplayModes: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetFullscreenDisplayModes", SDL_POINTER[SDL_POINTER[SDL_DisplayMode]], [SDL_DisplayID, SDL_POINTER[ctypes.c_int]], SDL_BINARY]
+SDL_GetClosestFullscreenDisplayMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetClosestFullscreenDisplayMode", ctypes.c_bool, [SDL_DisplayID, ctypes.c_int, ctypes.c_int, ctypes.c_float, ctypes.c_bool, SDL_POINTER[SDL_DisplayMode]], SDL_BINARY]
 
-SDL_GetDesktopDisplayMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDesktopDisplayMode", SDL_POINTER[SDL_DisplayMode], [SDL_DisplayID]]
-SDL_GetCurrentDisplayMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentDisplayMode", SDL_POINTER[SDL_DisplayMode], [SDL_DisplayID]]
+SDL_GetDesktopDisplayMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDesktopDisplayMode", SDL_POINTER[SDL_DisplayMode], [SDL_DisplayID], SDL_BINARY]
+SDL_GetCurrentDisplayMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentDisplayMode", SDL_POINTER[SDL_DisplayMode], [SDL_DisplayID], SDL_BINARY]
 
-SDL_GetDisplayForPoint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayForPoint", SDL_DisplayID, [SDL_POINTER[SDL_Point]]]
-SDL_GetDisplayForRect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayForRect", SDL_DisplayID, [SDL_POINTER[SDL_Rect]]]
-SDL_GetDisplayForWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayForWindow", SDL_DisplayID, [SDL_POINTER[SDL_Window]]]
+SDL_GetDisplayForPoint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayForPoint", SDL_DisplayID, [SDL_POINTER[SDL_Point]], SDL_BINARY]
+SDL_GetDisplayForRect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayForRect", SDL_DisplayID, [SDL_POINTER[SDL_Rect]], SDL_BINARY]
+SDL_GetDisplayForWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayForWindow", SDL_DisplayID, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_GetWindowPixelDensity: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowPixelDensity", ctypes.c_float, [SDL_POINTER[SDL_Window]]]
-SDL_GetWindowDisplayScale: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowDisplayScale", ctypes.c_float, [SDL_POINTER[SDL_Window]]]
+SDL_GetWindowPixelDensity: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowPixelDensity", ctypes.c_float, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_GetWindowDisplayScale: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowDisplayScale", ctypes.c_float, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_SetWindowFullscreenMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowFullscreenMode", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_DisplayMode]]]
-SDL_GetWindowFullscreenMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowFullscreenMode", SDL_POINTER[SDL_DisplayMode], [SDL_POINTER[SDL_Window]]]
+SDL_SetWindowFullscreenMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowFullscreenMode", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_DisplayMode]], SDL_BINARY]
+SDL_GetWindowFullscreenMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowFullscreenMode", SDL_POINTER[SDL_DisplayMode], [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_GetWindowICCProfile: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowICCProfile", ctypes.c_void_p, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_size_t]]]
-SDL_GetWindowPixelFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowPixelFormat", SDL_PixelFormat, [SDL_POINTER[SDL_Window]]]
+SDL_GetWindowICCProfile: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowICCProfile", ctypes.c_void_p, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_size_t]], SDL_BINARY]
+SDL_GetWindowPixelFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowPixelFormat", SDL_PixelFormat, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_GetWindows: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindows", SDL_POINTER[SDL_POINTER[SDL_Window]], [SDL_POINTER[ctypes.c_int]]]
+SDL_GetWindows: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindows", SDL_POINTER[SDL_POINTER[SDL_Window]], [SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 
-SDL_CreateWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateWindow", SDL_POINTER[SDL_Window], [ctypes.c_char_p, ctypes.c_int, ctypes.c_int, SDL_WindowFlags]]
-SDL_CreatePopupWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreatePopupWindow", SDL_POINTER[SDL_Window], [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, SDL_WindowFlags]]
-SDL_CreateWindowWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateWindowWithProperties", SDL_POINTER[SDL_Window], [SDL_PropertiesID]]
+SDL_CreateWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateWindow", SDL_POINTER[SDL_Window], [ctypes.c_char_p, ctypes.c_int, ctypes.c_int, SDL_WindowFlags], SDL_BINARY]
+SDL_CreatePopupWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreatePopupWindow", SDL_POINTER[SDL_Window], [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, SDL_WindowFlags], SDL_BINARY]
+SDL_CreateWindowWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateWindowWithProperties", SDL_POINTER[SDL_Window], [SDL_PropertiesID], SDL_BINARY]
 
 SDL_PROP_WINDOW_CREATE_ALWAYS_ON_TOP_BOOLEAN = "SDL.window.create.always_on_top".encode()
 SDL_PROP_WINDOW_CREATE_BORDERLESS_BOOLEAN = "SDL.window.create.borderless".encode()
@@ -209,11 +207,11 @@ SDL_PROP_WINDOW_CREATE_WIN32_HWND_POINTER = "SDL.window.create.win32.hwnd".encod
 SDL_PROP_WINDOW_CREATE_WIN32_PIXEL_FORMAT_HWND_POINTER = "SDL.window.create.win32.pixel_format_hwnd".encode()
 SDL_PROP_WINDOW_CREATE_X11_WINDOW_NUMBER = "SDL.window.create.x11.window".encode()
 
-SDL_GetWindowID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowID", SDL_WindowID, [SDL_POINTER[SDL_Window]]]
-SDL_GetWindowFromID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowFromID", SDL_POINTER[SDL_Window], [SDL_WindowID]]
-SDL_GetWindowParent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowParent", SDL_POINTER[SDL_Window], [SDL_POINTER[SDL_Window]]]
+SDL_GetWindowID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowID", SDL_WindowID, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_GetWindowFromID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowFromID", SDL_POINTER[SDL_Window], [SDL_WindowID], SDL_BINARY]
+SDL_GetWindowParent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowParent", SDL_POINTER[SDL_Window], [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_GetWindowProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowProperties", SDL_PropertiesID, [SDL_POINTER[SDL_Window]]]
+SDL_GetWindowProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowProperties", SDL_PropertiesID, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
 SDL_PROP_WINDOW_SHAPE_POINTER = "SDL.window.shape".encode()
 SDL_PROP_WINDOW_HDR_ENABLED_BOOLEAN = "SDL.window.HDR_enabled".encode()
@@ -251,78 +249,78 @@ SDL_PROP_WINDOW_X11_DISPLAY_POINTER = "SDL.window.x11.display".encode()
 SDL_PROP_WINDOW_X11_SCREEN_NUMBER = "SDL.window.x11.screen".encode()
 SDL_PROP_WINDOW_X11_WINDOW_NUMBER = "SDL.window.x11.window".encode()
 
-SDL_GetWindowFlags: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowFlags", SDL_WindowFlags, [SDL_POINTER[SDL_Window]]]
+SDL_GetWindowFlags: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowFlags", SDL_WindowFlags, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_SetWindowTitle: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowTitle", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_char_p]]
-SDL_GetWindowTitle: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowTitle", ctypes.c_char_p, [SDL_POINTER[SDL_Window]]]
+SDL_SetWindowTitle: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowTitle", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_char_p], SDL_BINARY]
+SDL_GetWindowTitle: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowTitle", ctypes.c_char_p, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_SetWindowIcon: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowIcon", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Surface]]]
+SDL_SetWindowIcon: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowIcon", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Surface]], SDL_BINARY]
 
-SDL_SetWindowPosition: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowPosition", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int]]
-SDL_GetWindowPosition: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowPosition", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]]]
+SDL_SetWindowPosition: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowPosition", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int], SDL_BINARY]
+SDL_GetWindowPosition: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowPosition", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 
-SDL_SetWindowSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int]]
-SDL_GetWindowSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]]]
+SDL_SetWindowSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int], SDL_BINARY]
+SDL_GetWindowSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 
-SDL_GetWindowSafeArea: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowSafeArea", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Rect]]]
+SDL_GetWindowSafeArea: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowSafeArea", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Rect]], SDL_BINARY]
 
-SDL_SetWindowAspectRatio: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowAspectRatio", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_float, ctypes.c_float]]
-SDL_GetWindowAspectRatio: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowAspectRatio", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float]]]
+SDL_SetWindowAspectRatio: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowAspectRatio", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_float, ctypes.c_float], SDL_BINARY]
+SDL_GetWindowAspectRatio: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowAspectRatio", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float]], SDL_BINARY]
 
-SDL_GetWindowBordersSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowBordersSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]]]
-SDL_GetWindowSizeInPixels: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowSizeInPixels", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]]]
+SDL_GetWindowBordersSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowBordersSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
+SDL_GetWindowSizeInPixels: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowSizeInPixels", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 
-SDL_SetWindowMinimumSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowMinimumSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int]]
-SDL_GetWindowMinimumSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowMinimumSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]]]
+SDL_SetWindowMinimumSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowMinimumSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int], SDL_BINARY]
+SDL_GetWindowMinimumSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowMinimumSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 
-SDL_SetWindowMaximumSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowMaximumSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int]]
-SDL_GetWindowMaximumSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowMaximumSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]]]
+SDL_SetWindowMaximumSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowMaximumSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int], SDL_BINARY]
+SDL_GetWindowMaximumSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowMaximumSize", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 
-SDL_SetWindowBordered: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowBordered", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool]]
-SDL_SetWindowResizable: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowResizable", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool]]
-SDL_SetWindowAlwaysOnTop: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowAlwaysOnTop", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool]]
+SDL_SetWindowBordered: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowBordered", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
+SDL_SetWindowResizable: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowResizable", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
+SDL_SetWindowAlwaysOnTop: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowAlwaysOnTop", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
 
-SDL_ShowWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShowWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
-SDL_HideWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HideWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
-SDL_RaiseWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RaiseWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
-SDL_MaximizeWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_MaximizeWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
-SDL_MinimizeWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_MinimizeWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
-SDL_RestoreWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RestoreWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
+SDL_ShowWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShowWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_HideWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HideWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_RaiseWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RaiseWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_MaximizeWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_MaximizeWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_MinimizeWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_MinimizeWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_RestoreWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RestoreWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_SetWindowFullscreen: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowFullscreen", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool]]
-SDL_SyncWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SyncWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
-SDL_WindowHasSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WindowHasSurface", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
+SDL_SetWindowFullscreen: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowFullscreen", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
+SDL_SyncWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SyncWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_WindowHasSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WindowHasSurface", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_GetWindowSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowSurface", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_Window]]]
-SDL_SetWindowSurfaceVSync: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowSurfaceVSync", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int]]
+SDL_GetWindowSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowSurface", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_SetWindowSurfaceVSync: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowSurfaceVSync", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int], SDL_BINARY]
 
 SDL_WINDOW_SURFACE_VSYNC_DISABLED, SDL_WINDOW_SURFACE_VSYNC_ADAPTIVE = 0, -1
 
-SDL_GetWindowSurfaceVSync: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowSurfaceVSync", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int]]]
+SDL_GetWindowSurfaceVSync: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowSurfaceVSync", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 
-SDL_UpdateWindowSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateWindowSurface", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
-SDL_UpdateWindowSurfaceRects: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateWindowSurfaceRects", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Rect], ctypes.c_int]]
-SDL_DestroyWindowSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyWindowSurface", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
+SDL_UpdateWindowSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateWindowSurface", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_UpdateWindowSurfaceRects: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateWindowSurfaceRects", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Rect], ctypes.c_int], SDL_BINARY]
+SDL_DestroyWindowSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyWindowSurface", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_SetWindowKeyboardGrab: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowKeyboardGrab", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool]]
-SDL_SetWindowMouseGrab: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowMouseGrab", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool]]
+SDL_SetWindowKeyboardGrab: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowKeyboardGrab", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
+SDL_SetWindowMouseGrab: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowMouseGrab", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
 
-SDL_GetWindowKeyboardGrab: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowKeyboardGrab", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
-SDL_GetWindowMouseGrab: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowMouseGrab", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
+SDL_GetWindowKeyboardGrab: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowKeyboardGrab", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_GetWindowMouseGrab: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowMouseGrab", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_GetGrabbedWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGrabbedWindow", SDL_POINTER[SDL_Window], []]
+SDL_GetGrabbedWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGrabbedWindow", SDL_POINTER[SDL_Window], [], SDL_BINARY]
 
-SDL_SetWindowMouseRect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowMouseRect", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Rect]]]
-SDL_GetWindowMouseRect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowMouseRect", SDL_POINTER[SDL_Rect], [SDL_POINTER[SDL_Window]]]
+SDL_SetWindowMouseRect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowMouseRect", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Rect]], SDL_BINARY]
+SDL_GetWindowMouseRect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowMouseRect", SDL_POINTER[SDL_Rect], [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_SetWindowOpacity: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowOpacity", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_float]]
-SDL_GetWindowOpacity: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowOpacity", ctypes.c_float, [SDL_POINTER[SDL_Window]]]
+SDL_SetWindowOpacity: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowOpacity", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_float], SDL_BINARY]
+SDL_GetWindowOpacity: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowOpacity", ctypes.c_float, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_SetWindowParent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowParent", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Window]]]
-SDL_SetWindowModal: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowModal", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool]]
-SDL_SetWindowFocusable: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowFocusable", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool]]
+SDL_SetWindowParent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowParent", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_SetWindowModal: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowModal", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
+SDL_SetWindowFocusable: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowFocusable", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
 
-SDL_ShowWindowSystemMenu: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShowWindowSystemMenu", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int]]
+SDL_ShowWindowSystemMenu: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShowWindowSystemMenu", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_int, ctypes.c_int], SDL_BINARY]
 
 SDL_HitTestResult: typing.TypeAlias = SDL_TYPE["SDL_HitTestResult", SDL_ENUM]
 
@@ -331,41 +329,41 @@ SDL_HITTEST_NORMAL, SDL_HITTEST_DRAGGABLE, SDL_HITTEST_RESIZE_TOPLEFT, SDL_HITTE
 
 SDL_HitTest: typing.TypeAlias = SDL_FUNC_TYPE["SDL_HitTest", SDL_HitTestResult, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Point], ctypes.c_void_p]]
 
-SDL_SetWindowHitTest: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowHitTest", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_HitTest, ctypes.c_void_p]]
-SDL_SetWindowShape: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowShape", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Surface]]]
+SDL_SetWindowHitTest: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowHitTest", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_HitTest, ctypes.c_void_p], SDL_BINARY]
+SDL_SetWindowShape: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowShape", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Surface]], SDL_BINARY]
 
-SDL_FlashWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlashWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_FlashOperation]]]
-SDL_DestroyWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyWindow", None, [SDL_POINTER[SDL_Window]]]
+SDL_FlashWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlashWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_FlashOperation]], SDL_BINARY]
+SDL_DestroyWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyWindow", None, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_ScreenSaverEnabled: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ScreenSaverEnabled", ctypes.c_bool, []]
-SDL_EnableScreenSaver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EnableScreenSaver", ctypes.c_bool, []]
-SDL_DisableScreenSaver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DisableScreenSaver", ctypes.c_bool, []]
+SDL_ScreenSaverEnabled: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ScreenSaverEnabled", ctypes.c_bool, [], SDL_BINARY]
+SDL_EnableScreenSaver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EnableScreenSaver", ctypes.c_bool, [], SDL_BINARY]
+SDL_DisableScreenSaver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DisableScreenSaver", ctypes.c_bool, [], SDL_BINARY]
 
-SDL_GL_LoadLibrary: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_LoadLibrary", ctypes.c_bool, [ctypes.c_char_p]]
-SDL_GL_GetProcAddress: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_GetProcAddress", SDL_FunctionPointer, [ctypes.c_char_p]]
-SDL_EGL_GetProcAddress: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EGL_GetProcAddress", SDL_FunctionPointer, [ctypes.c_char_p]]
-SDL_GL_UnloadLibrary: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_UnloadLibrary", None, []]
+SDL_GL_LoadLibrary: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_LoadLibrary", ctypes.c_bool, [ctypes.c_char_p], SDL_BINARY]
+SDL_GL_GetProcAddress: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_GetProcAddress", SDL_FunctionPointer, [ctypes.c_char_p], SDL_BINARY]
+SDL_EGL_GetProcAddress: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EGL_GetProcAddress", SDL_FunctionPointer, [ctypes.c_char_p], SDL_BINARY]
+SDL_GL_UnloadLibrary: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_UnloadLibrary", None, [], SDL_BINARY]
 
-SDL_GL_ExtensionSupported: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_ExtensionSupported", ctypes.c_bool, [ctypes.c_char_p]]
+SDL_GL_ExtensionSupported: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_ExtensionSupported", ctypes.c_bool, [ctypes.c_char_p], SDL_BINARY]
 
-SDL_GL_ResetAttributes: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_ResetAttributes", None, []]
-SDL_GL_SetAttribute: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_SetAttribute", ctypes.c_bool, [SDL_GLAttr, ctypes.c_int]]
-SDL_GL_GetAttribute: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_GetAttribute", ctypes.c_bool, [SDL_GLAttr, SDL_POINTER[ctypes.c_int]]]
+SDL_GL_ResetAttributes: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_ResetAttributes", None, [], SDL_BINARY]
+SDL_GL_SetAttribute: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_SetAttribute", ctypes.c_bool, [SDL_GLAttr, ctypes.c_int], SDL_BINARY]
+SDL_GL_GetAttribute: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_GetAttribute", ctypes.c_bool, [SDL_GLAttr, SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 
-SDL_GL_CreateContext: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_CreateContext", SDL_GLContext, [SDL_POINTER[SDL_Window]]]
-SDL_GL_MakeCurrent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_MakeCurrent", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_GLContext]]
+SDL_GL_CreateContext: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_CreateContext", SDL_GLContext, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_GL_MakeCurrent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_MakeCurrent", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_GLContext], SDL_BINARY]
 
-SDL_GL_GetCurrentWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_GetCurrentWindow", SDL_POINTER[SDL_Window], []]
-SDL_GL_GetCurrentContext: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_GetCurrentContext", SDL_GLContext, []]
+SDL_GL_GetCurrentWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_GetCurrentWindow", SDL_POINTER[SDL_Window], [], SDL_BINARY]
+SDL_GL_GetCurrentContext: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_GetCurrentContext", SDL_GLContext, [], SDL_BINARY]
 
-SDL_EGL_GetCurrentDisplay: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EGL_GetCurrentDisplay", SDL_EGLDisplay, []]
-SDL_EGL_GetCurrentConfig: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EGL_GetCurrentConfig", SDL_EGLConfig, []]
-SDL_EGL_GetWindowSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EGL_GetWindowSurface", SDL_EGLSurface, [SDL_POINTER[SDL_Window]]]
+SDL_EGL_GetCurrentDisplay: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EGL_GetCurrentDisplay", SDL_EGLDisplay, [], SDL_BINARY]
+SDL_EGL_GetCurrentConfig: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EGL_GetCurrentConfig", SDL_EGLConfig, [], SDL_BINARY]
+SDL_EGL_GetWindowSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EGL_GetWindowSurface", SDL_EGLSurface, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
-SDL_EGL_SetAttributeCallbacks: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EGL_SetAttributeCallbacks", None, [SDL_EGLAttribArrayCallback, SDL_EGLIntArrayCallback, SDL_EGLIntArrayCallback, ctypes.c_void_p]]
+SDL_EGL_SetAttributeCallbacks: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EGL_SetAttributeCallbacks", None, [SDL_EGLAttribArrayCallback, SDL_EGLIntArrayCallback, SDL_EGLIntArrayCallback, ctypes.c_void_p], SDL_BINARY]
 
-SDL_GL_SetSwapInterval: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_SetSwapInterval", ctypes.c_bool, [ctypes.c_int]]
-SDL_GL_GetSwapInterval: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_GetSwapInterval", ctypes.c_bool, [SDL_POINTER[ctypes.c_int]]]
+SDL_GL_SetSwapInterval: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_SetSwapInterval", ctypes.c_bool, [ctypes.c_int], SDL_BINARY]
+SDL_GL_GetSwapInterval: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_GetSwapInterval", ctypes.c_bool, [SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 
-SDL_GL_SwapWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_SwapWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]]]
-SDL_GL_DestroyContext: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_DestroyContext", ctypes.c_bool, [SDL_GLContext]]
+SDL_GL_SwapWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_SwapWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_GL_DestroyContext: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GL_DestroyContext", ctypes.c_bool, [SDL_GLContext], SDL_BINARY]

@@ -1,7 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_FUNC_TYPE, SDL_ENUM, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
-
-SDL_SET_CURRENT_BINARY(SDL_BINARY)
+from .__init__ import ctypes, typing, abc, \
+    SDL_FUNC_TYPE, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 SDL_HINT_ALLOW_ALT_TAB_WHILE_GRABBED = "SDL_ALLOW_ALT_TAB_WHILE_GRABBED".encode()
 SDL_HINT_ANDROID_ALLOW_RECREATE_ACTIVITY = "SDL_ANDROID_ALLOW_RECREATE_ACTIVITY".encode()
@@ -247,14 +245,14 @@ SDL_HintPriority: typing.TypeAlias = SDL_TYPE["SDL_HintPriority", SDL_ENUM]
 
 SDL_HINT_DEFAULT, SDL_HINT_NORMAL, SDL_HINT_OVERRIDE = range(3)
 
-SDL_SetHintWithPriority: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHintWithPriority", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_char_p, SDL_HintPriority]]
-SDL_SetHint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHint", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_char_p]]
-SDL_ResetHint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ResetHint", ctypes.c_bool, [ctypes.c_char_p]]
-SDL_ResetHints: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ResetHints", None, []]
-SDL_GetHint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHint", ctypes.c_char_p, [ctypes.c_char_p]]
-SDL_GetHintBoolean: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHintBoolean", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_bool]]
+SDL_SetHintWithPriority: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHintWithPriority", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_char_p, SDL_HintPriority], SDL_BINARY]
+SDL_SetHint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHint", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_char_p], SDL_BINARY]
+SDL_ResetHint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ResetHint", ctypes.c_bool, [ctypes.c_char_p], SDL_BINARY]
+SDL_ResetHints: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ResetHints", None, [], SDL_BINARY]
+SDL_GetHint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHint", ctypes.c_char_p, [ctypes.c_char_p], SDL_BINARY]
+SDL_GetHintBoolean: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHintBoolean", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_bool], SDL_BINARY]
 
 SDL_HintCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_HintCallback", None, [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]]
 
-SDL_AddHintCallback: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AddHintCallback", ctypes.c_bool, [ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p]]
-SDL_RemoveHintCallback: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RemoveHintCallback", None, [ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p]]
+SDL_AddHintCallback: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AddHintCallback", ctypes.c_bool, [ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p], SDL_BINARY]
+SDL_RemoveHintCallback: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RemoveHintCallback", None, [ctypes.c_char_p, SDL_HintCallback, ctypes.c_void_p], SDL_BINARY]

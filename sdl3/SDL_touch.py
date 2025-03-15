@@ -1,9 +1,7 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_ENUM, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
+from .__init__ import ctypes, typing, abc, \
+    SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 from .SDL_mouse import SDL_MouseID
-
-SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_TouchID: typing.TypeAlias = SDL_TYPE["SDL_TouchID", ctypes.c_uint64]
 SDL_FingerID: typing.TypeAlias = SDL_TYPE["SDL_FingerID", ctypes.c_uint64]
@@ -24,7 +22,7 @@ class SDL_Finger(ctypes.Structure):
 SDL_TOUCH_MOUSEID, SDL_MOUSE_TOUCHID = \
     SDL_MouseID(-1), SDL_TouchID(-1)
 
-SDL_GetTouchDevices: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTouchDevices", SDL_POINTER[SDL_TouchID], [SDL_POINTER[ctypes.c_int]]]
-SDL_GetTouchDeviceName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTouchDeviceName", ctypes.c_char_p, [SDL_TouchID]]
-SDL_GetTouchDeviceType: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTouchDeviceType", SDL_TouchDeviceType, [SDL_TouchID]]
-SDL_GetTouchFingers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTouchFingers", SDL_POINTER[SDL_POINTER[SDL_Finger]], [SDL_TouchID, SDL_POINTER[ctypes.c_int]]]
+SDL_GetTouchDevices: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTouchDevices", SDL_POINTER[SDL_TouchID], [SDL_POINTER[ctypes.c_int]], SDL_BINARY]
+SDL_GetTouchDeviceName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTouchDeviceName", ctypes.c_char_p, [SDL_TouchID], SDL_BINARY]
+SDL_GetTouchDeviceType: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTouchDeviceType", SDL_TouchDeviceType, [SDL_TouchID], SDL_BINARY]
+SDL_GetTouchFingers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTouchFingers", SDL_POINTER[SDL_POINTER[SDL_Finger]], [SDL_TouchID, SDL_POINTER[ctypes.c_int]], SDL_BINARY]

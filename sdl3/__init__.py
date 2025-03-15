@@ -117,8 +117,8 @@ if not __initialized__:
         except requests.RequestException:
             ...
 
+    functions, binaryMap = {i: {} for i in SDL_BINARY_VAR_MAP_INV}, {}
     binaryData, missing = {"system": SDL_SYSTEM, "arch": SDL_ARCH, "files": []}, None
-    functions, binaryMap, currentBinary = {i: {} for i in SDL_BINARY_VAR_MAP_INV}, {}, None
     binaryPath = os.environ.get("SDL_BINARY_PATH", os.path.join(os.path.dirname(__file__), "bin"))
     absPath = lambda path: path if os.path.isabs(path) else os.path.abspath(os.path.join(binaryPath, path))
     if not os.path.exists(binaryPath): os.makedirs(binaryPath)
@@ -204,16 +204,7 @@ def SDL_GET_BINARY(name: str) -> ctypes.CDLL | None:
     """Get an SDL3 binary by its name."""
     return __module__.binaryMap.get(name, None)
 
-def SDL_SET_CURRENT_BINARY(name: str) -> None:
-    """Set the current SDL3 binary by its name."""
-    __module__.currentBinary = (SDL_GET_BINARY(name), name)
-
-def SDL_GET_CURRENT_BINARY() -> typing.Any:
-    """Get the current SDL3 binary."""
-    return __module__.currentBinary
-
 def SDL_NOT_IMPLEMENTED(name: str) -> abc.Callable[..., None]:
-    """Do not call this function directly."""
     return lambda *args, **kwargs: print("\33[31m", f"error: invoked an unimplemented function: '{name}'.", "\33[0m", sep = "", flush = True)
 
 SDL_ENUM: typing.TypeAlias = ctypes.c_int
@@ -225,22 +216,23 @@ class SDL_FUNC:
 
         if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
             assert isinstance(key, tuple), "Expected a tuple, got a single argument."
-            assert len(key) == 3, "Expected a tuple with length 3."
+            assert len(key) == 4, "Expected a tuple with length 4."
             assert isinstance(key[0], str), "Expected a string as the first argument."
             assert isinstance(key[1], type) or key[1] is None, "Expected a type as the second argument."
             assert isinstance(key[2], list), "Expected a list as the third argument."
+            assert isinstance(key[3], str), "Expected a string as the fourth argument."
+            assert key[3] in SDL_BINARY_VAR_MAP_INV, "Unknown binary."
 
-        if (binary := SDL_GET_CURRENT_BINARY())[0] and hasattr(binary[0], key[0]):
-            func = getattr(binary[0], key[0])
+        if binary := SDL_GET_BINARY(key[3]):
+            func = getattr(binary, key[0], None)
 
         else:
-            func = SDL_NOT_IMPLEMENTED(key[0])
+            if int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0:
+                print("\33[35m", f"warning: function '{key[0]}' not found in binary: '{key[3]}'.", "\33[0m", sep = "", flush = True)
 
-            if binary[0] and int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0:
-                print("\33[35m", f"warning: function '{key[0]}' not found in binary: '{binary[1]}'.", "\33[0m", sep = "", flush = True)
-
-        func.restype, func.argtypes, func.binary = key[1], key[2], binary[0]
-        __module__.functions[binary[1]][key[0]] = func; return func
+        if not binary or not func: func = SDL_NOT_IMPLEMENTED(key[0])
+        func.restype, func.argtypes, func.binary = key[1], key[2], binary
+        __module__.functions[key[3]][key[0]] = func; return func
 
 class SDL_POINTER:
     @classmethod
@@ -475,17 +467,13 @@ from sdl3.SDL import *
 if __doc_generator__:
     import sdl3.SDL as raw
 
-SDL_VERSIONNUM_STRING = lambda num: \
+SDL_VERSIONNUM_STRING: abc.Callable[[int], str] = lambda num: \
     f"{SDL_VERSIONNUM_MAJOR(num)}.{SDL_VERSIONNUM_MINOR(num)}.{SDL_VERSIONNUM_MICRO(num)}"
-
-SDL_BINARY_VERSION, SDL_IMAGE_BINARY_VERSION, SDL_MIXER_BINARY_VERSION, SDL_TTF_BINARY_VERSION, SDL_RTF_BINARY_VERSION, SDL_NET_BINARY_VERSION = \
-    (_ := SDL_GET_BINARY(SDL_BINARY)) and _.SDL_GetVersion(), (_ := SDL_GET_BINARY(SDL_IMAGE_BINARY)) and _.IMG_Version(), (_ := SDL_GET_BINARY(SDL_MIXER_BINARY)) and _.Mix_Version(), \
-        (_ := SDL_GET_BINARY(SDL_TTF_BINARY)) and _.TTF_Version(), (_ := SDL_GET_BINARY(SDL_RTF_BINARY)) and _.RTF_Version(), (_ := SDL_GET_BINARY(SDL_NET_BINARY)) and _.SDLNet_Version()
 
 if not __initialized__:
     if int(os.environ.get("SDL_CHECK_BINARY_VERSION", "1")) > 0:
-        for i in SDL_BINARY_VAR_MAP:
-            if (binaryVersion := locals()[f"{i}_VERSION"]) != (version := locals()[f"{i.replace('_BINARY', '')}_VERSION"]) and binaryVersion is not None:
+        for left, right in zip([SDL_GetVersion(), IMG_Version(), Mix_Version(), TTF_Version(), RTF_Version(), SDLNet_Version()], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
+            if left != right:
                 print("\33[35m", f"warning: version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(SDL_BINARY_VAR_MAP[i])}' (expected: {SDL_VERSIONNUM_STRING(version)}, got: {SDL_VERSIONNUM_STRING(binaryVersion)}).", "\33[0m", sep = "", flush = True)
 
     if __doc_generator__:

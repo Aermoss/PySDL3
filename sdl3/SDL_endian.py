@@ -4,16 +4,16 @@ SDL_LIL_ENDIAN, SDL_BIG_ENDIAN = 1234, 4321
 SDL_BYTEORDER = SDL_LIL_ENDIAN \
     if sys.byteorder == "little" else SDL_BIG_ENDIAN
 
-def SDL_Swap16(x):
+def SDL_Swap16(x: int) -> int:
     return ((x << 8) & 0xFF00) | ((x >> 8) & 0x00FF)
 
-def SDL_Swap32(x):
+def SDL_Swap32(x: int) -> int:
     return ((x << 24) & 0xFF000000) | ((x << 8) & 0x00FF0000) | ((x >> 8) & 0x0000FF00) | ((x >> 24) & 0x000000FF)
 
-def SDL_Swap64(x):
+def SDL_Swap64(x: int) -> int:
     return (SDL_Swap32(x & 0xFFFFFFFF) << 32) | (SDL_Swap32(x >> 32 & 0xFFFFFFFF))
 
-def SDL_SwapFloat(x):
+def SDL_SwapFloat(x: float) -> float:
     y = array.array("d", (x, ))
     y.byteswap(); return y[0]
 

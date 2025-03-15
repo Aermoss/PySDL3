@@ -1,5 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_FUNC_TYPE, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY, SDL_ENUM
+from .__init__ import ctypes, typing, abc, SDL_POINTER, \
+    SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
 
 from .SDL_video import SDL_Window, SDL_WindowID, SDL_DisplayID
 from .SDL_sensor import SDL_SensorID
@@ -13,8 +13,6 @@ from .SDL_audio import SDL_AudioDeviceID
 from .SDL_camera import SDL_CameraID
 from .SDL_pen import SDL_PenID, SDL_PenInputFlags, SDL_PenAxis
 from .SDL_touch import SDL_TouchID, SDL_FingerID
-
-SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_EventType: typing.TypeAlias = SDL_TYPE["SDL_EventType", SDL_ENUM]
 
@@ -546,30 +544,30 @@ class SDL_Event(ctypes.Union):
         ("padding", ctypes.c_uint8 * 128)
     ]
 
-SDL_PumpEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PumpEvents", None, []]
+SDL_PumpEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PumpEvents", None, [], SDL_BINARY]
 
 SDL_EventAction: typing.TypeAlias = SDL_TYPE["SDL_EventAction", SDL_ENUM]
 
 SDL_ADDEVENT, SDL_PEEKEVENT, SDL_GETEVENT = range(3)
 
-SDL_PeepEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PeepEvents", ctypes.c_int, [SDL_POINTER[SDL_Event], ctypes.c_int, SDL_EventAction, ctypes.c_uint32, ctypes.c_uint32]]
-SDL_HasEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HasEvent", ctypes.c_bool, [ctypes.c_uint32]]
-SDL_HasEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HasEvents", ctypes.c_bool, [ctypes.c_uint32, ctypes.c_uint32]]
-SDL_FlushEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlushEvent", None, [ctypes.c_uint32]]
-SDL_FlushEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlushEvents", None, [ctypes.c_uint32, ctypes.c_uint32]]
-SDL_PollEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PollEvent", ctypes.c_bool, [SDL_POINTER[SDL_Event]]]
-SDL_WaitEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WaitEvent", ctypes.c_bool, [SDL_POINTER[SDL_Event]]]
-SDL_WaitEventTimeout: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WaitEventTimeout", ctypes.c_bool, [SDL_POINTER[SDL_Event], ctypes.c_int32]]
-SDL_PushEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PushEvent", ctypes.c_bool, [SDL_POINTER[SDL_Event]]]
+SDL_PeepEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PeepEvents", ctypes.c_int, [SDL_POINTER[SDL_Event], ctypes.c_int, SDL_EventAction, ctypes.c_uint32, ctypes.c_uint32], SDL_BINARY]
+SDL_HasEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HasEvent", ctypes.c_bool, [ctypes.c_uint32], SDL_BINARY]
+SDL_HasEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HasEvents", ctypes.c_bool, [ctypes.c_uint32, ctypes.c_uint32], SDL_BINARY]
+SDL_FlushEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlushEvent", None, [ctypes.c_uint32], SDL_BINARY]
+SDL_FlushEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlushEvents", None, [ctypes.c_uint32, ctypes.c_uint32], SDL_BINARY]
+SDL_PollEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PollEvent", ctypes.c_bool, [SDL_POINTER[SDL_Event]], SDL_BINARY]
+SDL_WaitEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WaitEvent", ctypes.c_bool, [SDL_POINTER[SDL_Event]], SDL_BINARY]
+SDL_WaitEventTimeout: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WaitEventTimeout", ctypes.c_bool, [SDL_POINTER[SDL_Event], ctypes.c_int32], SDL_BINARY]
+SDL_PushEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PushEvent", ctypes.c_bool, [SDL_POINTER[SDL_Event]], SDL_BINARY]
 
 SDL_EventFilter: typing.TypeAlias = SDL_FUNC_TYPE["SDL_EventFilter", ctypes.c_bool, [ctypes.c_void_p, SDL_POINTER[SDL_Event]]]
 
-SDL_SetEventFilter: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetEventFilter", None, [SDL_EventFilter, ctypes.c_void_p]]
-SDL_GetEventFilter: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetEventFilter", ctypes.c_bool, [SDL_POINTER[SDL_EventFilter], SDL_POINTER[ctypes.c_void_p]]]
-SDL_AddEventWatch: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AddEventWatch", ctypes.c_bool, [SDL_EventFilter, ctypes.c_void_p]]
-SDL_RemoveEventWatch: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RemoveEventWatch", None, [SDL_EventFilter, ctypes.c_void_p]]
-SDL_FilterEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FilterEvents", None, [SDL_EventFilter, ctypes.c_void_p]]
-SDL_SetEventEnabled: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetEventEnabled", None, [ctypes.c_uint32, ctypes.c_bool]]
-SDL_EventEnabled: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EventEnabled", ctypes.c_bool, [ctypes.c_uint32]]
-SDL_RegisterEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RegisterEvents", ctypes.c_uint32, [ctypes.c_int]]
-SDL_GetWindowFromEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowFromEvent", SDL_POINTER[SDL_Window], [SDL_POINTER[SDL_Event]]]
+SDL_SetEventFilter: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetEventFilter", None, [SDL_EventFilter, ctypes.c_void_p], SDL_BINARY]
+SDL_GetEventFilter: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetEventFilter", ctypes.c_bool, [SDL_POINTER[SDL_EventFilter], SDL_POINTER[ctypes.c_void_p]], SDL_BINARY]
+SDL_AddEventWatch: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AddEventWatch", ctypes.c_bool, [SDL_EventFilter, ctypes.c_void_p], SDL_BINARY]
+SDL_RemoveEventWatch: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RemoveEventWatch", None, [SDL_EventFilter, ctypes.c_void_p], SDL_BINARY]
+SDL_FilterEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FilterEvents", None, [SDL_EventFilter, ctypes.c_void_p], SDL_BINARY]
+SDL_SetEventEnabled: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetEventEnabled", None, [ctypes.c_uint32, ctypes.c_bool], SDL_BINARY]
+SDL_EventEnabled: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_EventEnabled", ctypes.c_bool, [ctypes.c_uint32], SDL_BINARY]
+SDL_RegisterEvents: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RegisterEvents", ctypes.c_uint32, [ctypes.c_int], SDL_BINARY]
+SDL_GetWindowFromEvent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowFromEvent", SDL_POINTER[SDL_Window], [SDL_POINTER[SDL_Event]], SDL_BINARY]

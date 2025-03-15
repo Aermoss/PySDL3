@@ -1,9 +1,8 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_ENUM, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
+from .__init__ import ctypes, typing, abc, \
+    SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 from .SDL_endian import SDL_BYTEORDER, SDL_BIG_ENDIAN
-
-SDL_SET_CURRENT_BINARY(SDL_BINARY)
+from .SDL_stdinc import SDL_FOURCC
 
 SDL_ALPHA_OPAQUE, SDL_ALPHA_TRANSPARENT_FLOAT = 255, 1.0
 SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE_FLOAT = 0, 0.0
@@ -32,47 +31,38 @@ SDL_PackedLayout: typing.TypeAlias = SDL_TYPE["SDL_PackedLayout", SDL_ENUM]
 SDL_PACKEDLAYOUT_NONE, SDL_PACKEDLAYOUT_332, SDL_PACKEDLAYOUT_4444, SDL_PACKEDLAYOUT_1555, SDL_PACKEDLAYOUT_5551, SDL_PACKEDLAYOUT_565, \
     SDL_PACKEDLAYOUT_8888, SDL_PACKEDLAYOUT_2101010, SDL_PACKEDLAYOUT_1010102 = range(9)
 
-def SDL_FOURCC(a, b, c, d):
-    return (ord(a) << 0) | (ord(b) << 8) | (ord(c) << 16) | (ord(d) << 24)
-
-def SDL_DEFINE_PIXELFORMAT(ptype, order, layout, bits, pbytes):
+def SDL_DEFINE_PIXELFORMAT(ptype: int, order: int, layout: int, bits: int, pbytes: int) -> int:
     return (1 << 28) | (ptype << 24) | (order << 20) | (layout << 16) | (bits << 8) | (pbytes << 0)
 
 SDL_DEFINE_PIXELFOURCC = SDL_FOURCC
-SDL_ISPIXELFORMAT_FOURCC = lambda format: format and SDL_PIXELFLAG(format) != 1
+SDL_ISPIXELFORMAT_FOURCC: abc.Callable[..., bool] = lambda format: format and SDL_PIXELFLAG(format) != 1
 
-SDL_PIXELFLAG = lambda x: (x >> 28) & 0x0F
-SDL_PIXELTYPE = lambda x: (x >> 24) & 0x0F
-SDL_PIXELORDER = lambda x: (x >> 20) & 0x0F
-SDL_PIXELLAYOUT = lambda x: (x >> 16) & 0x0F
-SDL_BITSPERPIXEL = lambda x: (x >> 8) & 0xFF
+SDL_PIXELFLAG: abc.Callable[..., int] = lambda x: (x >> 28) & 0x0F
+SDL_PIXELTYPE: abc.Callable[..., int] = lambda x: (x >> 24) & 0x0F
+SDL_PIXELORDER: abc.Callable[..., int] = lambda x: (x >> 20) & 0x0F
+SDL_PIXELLAYOUT: abc.Callable[..., int] = lambda x: (x >> 16) & 0x0F
+SDL_BITSPERPIXEL: abc.Callable[..., int] = lambda x: (x >> 8) & 0xFF
 
-def SDL_BYTESPERPIXEL(x):
-    if SDL_ISPIXELFORMAT_FOURCC(x):
-        return 2 if x in (SDL_PIXELFORMAT_YUY2, SDL_PIXELFORMAT_UYVY, SDL_PIXELFORMAT_YVYU, SDL_PIXELFORMAT_P010) else 1
-        
-    else:
-        return (x >> 0) & 0xFF
+def SDL_BYTESPERPIXEL(x: int) -> int:
+    if not SDL_ISPIXELFORMAT_FOURCC(x): return (x >> 0) & 0xFF
+    else: return 2 if x in (SDL_PIXELFORMAT_YUY2, SDL_PIXELFORMAT_UYVY, SDL_PIXELFORMAT_YVYU, SDL_PIXELFORMAT_P010) else 1
 
-def SDL_ISPIXELFORMAT_INDEXED(format):
-    return not SDL_ISPIXELFORMAT_FOURCC(format) \
-        and (SDL_PIXELTYPE(format) in [SDL_PIXELTYPE_INDEX1, SDL_PIXELTYPE_INDEX2, SDL_PIXELTYPE_INDEX4, SDL_PIXELTYPE_INDEX8])
+def SDL_ISPIXELFORMAT_INDEXED(format: typing.Any) -> bool:
+    return not SDL_ISPIXELFORMAT_FOURCC(format) and (SDL_PIXELTYPE(format) in [SDL_PIXELTYPE_INDEX1, SDL_PIXELTYPE_INDEX2, SDL_PIXELTYPE_INDEX4, SDL_PIXELTYPE_INDEX8])
 
-def SDL_ISPIXELFORMAT_PACKED(format):
-    return not SDL_ISPIXELFORMAT_FOURCC(format) \
-        and (SDL_PIXELTYPE(format) in [SDL_PIXELTYPE_PACKED8, SDL_PIXELTYPE_PACKED16, SDL_PIXELTYPE_PACKED32])
+def SDL_ISPIXELFORMAT_PACKED(format: typing.Any) -> bool:
+    return not SDL_ISPIXELFORMAT_FOURCC(format) and (SDL_PIXELTYPE(format) in [SDL_PIXELTYPE_PACKED8, SDL_PIXELTYPE_PACKED16, SDL_PIXELTYPE_PACKED32])
 
-def SDL_ISPIXELFORMAT_ARRAY(format):
-    return not SDL_ISPIXELFORMAT_FOURCC(format) \
-        and SDL_PIXELTYPE(format) in [SDL_PIXELTYPE_ARRAYU8, SDL_PIXELTYPE_ARRAYU16, SDL_PIXELTYPE_ARRAYU32, SDL_PIXELTYPE_ARRAYF16, SDL_PIXELTYPE_ARRAYF32]
+def SDL_ISPIXELFORMAT_ARRAY(format: typing.Any) -> bool:
+    return not SDL_ISPIXELFORMAT_FOURCC(format) and SDL_PIXELTYPE(format) in [SDL_PIXELTYPE_ARRAYU8, SDL_PIXELTYPE_ARRAYU16, SDL_PIXELTYPE_ARRAYU32, SDL_PIXELTYPE_ARRAYF16, SDL_PIXELTYPE_ARRAYF32]
 
-def SDL_ISPIXELFORMAT_10BIT(format):
+def SDL_ISPIXELFORMAT_10BIT(format: typing.Any) -> bool:
     return not SDL_ISPIXELFORMAT_FOURCC(format) and (SDL_PIXELTYPE(format) == SDL_PIXELTYPE_PACKED32 and SDL_PIXELLAYOUT(format) == SDL_PACKEDLAYOUT_2101010)
 
-def SDL_ISPIXELFORMAT_FLOAT(format):
+def SDL_ISPIXELFORMAT_FLOAT(format: typing.Any) -> bool:
     return not SDL_ISPIXELFORMAT_FOURCC(format) and (SDL_PIXELTYPE(format) == SDL_PIXELTYPE_ARRAYF16 or SDL_PIXELTYPE(format) == SDL_PIXELTYPE_ARRAYF32)
 
-def SDL_ISPIXELFORMAT_ALPHA(format):
+def SDL_ISPIXELFORMAT_ALPHA(format: typing.Any) -> bool:
     return SDL_ISPIXELFORMAT_PACKED(format) and (SDL_PIXELORDER(format) in [SDL_PACKEDORDER_ARGB, SDL_PACKEDORDER_RGBA, SDL_PACKEDORDER_ABGR, SDL_PACKEDORDER_BGRA]) \
         or SDL_ISPIXELFORMAT_ARRAY(format) and (SDL_PIXELORDER(format) in [SDL_ARRAYORDER_ARGB, SDL_ARRAYORDER_RGBA, SDL_ARRAYORDER_ABGR, SDL_ARRAYORDER_BGRA])
 
@@ -253,14 +243,14 @@ class SDL_PixelFormatDetails(ctypes.Structure):
         ("refcount", ctypes.c_int)
     ]
 
-SDL_GetPixelFormatName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatName", ctypes.c_char_p, [SDL_PixelFormat]]
-SDL_GetMasksForPixelFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetMasksForPixelFormat", ctypes.c_bool, [SDL_PixelFormat, SDL_POINTER[ctypes.c_int32], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32]]]
-SDL_GetPixelFormatForMasks: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatForMasks", SDL_PixelFormat, [ctypes.c_int32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32]]
-SDL_GetPixelFormatDetails: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatDetails", SDL_POINTER[SDL_PixelFormatDetails], [SDL_PixelFormat]]
-SDL_CreatePalette: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreatePalette", SDL_POINTER[SDL_Palette], [ctypes.c_int]]
-SDL_SetPaletteColors: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetPaletteColors", ctypes.c_bool, [SDL_POINTER[SDL_Palette], SDL_POINTER[SDL_Color], ctypes.c_int, ctypes.c_int]]
-SDL_DestroyPalette: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyPalette", None, [SDL_POINTER[SDL_Palette]]]
-SDL_MapRGB: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_MapRGB", ctypes.c_uint32, [SDL_POINTER[SDL_PixelFormatDetails], SDL_POINTER[SDL_Palette], ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8]]
-SDL_MapRGBA: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_MapRGBA", ctypes.c_uint32, [SDL_POINTER[SDL_PixelFormatDetails], SDL_POINTER[SDL_Palette], ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8]]
-SDL_GetRGB: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRGB", None, [ctypes.c_uint32, SDL_POINTER[SDL_PixelFormatDetails], SDL_POINTER[SDL_Palette], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8]]]
-SDL_GetRGBA: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRGBA", None, [ctypes.c_uint32, SDL_POINTER[SDL_PixelFormatDetails], SDL_POINTER[SDL_Palette], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8]]]
+SDL_GetPixelFormatName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatName", ctypes.c_char_p, [SDL_PixelFormat], SDL_BINARY]
+SDL_GetMasksForPixelFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetMasksForPixelFormat", ctypes.c_bool, [SDL_PixelFormat, SDL_POINTER[ctypes.c_int32], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32]], SDL_BINARY]
+SDL_GetPixelFormatForMasks: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatForMasks", SDL_PixelFormat, [ctypes.c_int32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32], SDL_BINARY]
+SDL_GetPixelFormatDetails: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatDetails", SDL_POINTER[SDL_PixelFormatDetails], [SDL_PixelFormat], SDL_BINARY]
+SDL_CreatePalette: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreatePalette", SDL_POINTER[SDL_Palette], [ctypes.c_int], SDL_BINARY]
+SDL_SetPaletteColors: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetPaletteColors", ctypes.c_bool, [SDL_POINTER[SDL_Palette], SDL_POINTER[SDL_Color], ctypes.c_int, ctypes.c_int], SDL_BINARY]
+SDL_DestroyPalette: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyPalette", None, [SDL_POINTER[SDL_Palette]], SDL_BINARY]
+SDL_MapRGB: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_MapRGB", ctypes.c_uint32, [SDL_POINTER[SDL_PixelFormatDetails], SDL_POINTER[SDL_Palette], ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8], SDL_BINARY]
+SDL_MapRGBA: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_MapRGBA", ctypes.c_uint32, [SDL_POINTER[SDL_PixelFormatDetails], SDL_POINTER[SDL_Palette], ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8], SDL_BINARY]
+SDL_GetRGB: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRGB", None, [ctypes.c_uint32, SDL_POINTER[SDL_PixelFormatDetails], SDL_POINTER[SDL_Palette], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8]], SDL_BINARY]
+SDL_GetRGBA: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRGBA", None, [ctypes.c_uint32, SDL_POINTER[SDL_PixelFormatDetails], SDL_POINTER[SDL_Palette], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8]], SDL_BINARY]

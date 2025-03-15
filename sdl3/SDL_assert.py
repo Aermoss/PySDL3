@@ -1,7 +1,5 @@
-from .__init__ import os, inspect, ctypes, typing, abc, re, SDL_FUNC_TYPE, SDL_POINTER, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY, SDL_ENUM
-
-SDL_SET_CURRENT_BINARY(SDL_BINARY)
+from .__init__ import os, inspect, ctypes, typing, abc, re, \
+    SDL_FUNC_TYPE, SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
 
 SDL_ASSERT_LEVEL = 2
 SDL_NULL_WHILE_LOOP_CONDITION = 0
@@ -24,10 +22,10 @@ class SDL_AssertData(ctypes.Structure):
         ("next", SDL_POINTER[SDL_AssertData])
     ]
 
-SDL_ReportAssertion: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReportAssertion", SDL_AssertState, [SDL_POINTER[SDL_AssertData], ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int]]
+SDL_ReportAssertion: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReportAssertion", SDL_AssertState, [SDL_POINTER[SDL_AssertData], ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int], SDL_BINARY]
 
-SDL_TriggerBreakpoint = lambda: breakpoint()
-SDL_AssertBreakpoint = lambda: SDL_TriggerBreakpoint()
+SDL_TriggerBreakpoint: abc.Callable[[], None] = lambda: breakpoint()
+SDL_AssertBreakpoint: abc.Callable[[], None] = lambda: SDL_TriggerBreakpoint()
 
 def SDL_disabled_assert(condition: ctypes.c_bool) -> None:
     """Do not call this function directly."""
@@ -41,8 +39,7 @@ def SDL_enabled_assert(condition: ctypes.c_bool) -> None:
         while module.f_code.co_name != "<module>": module = module.f_back
         match = re.search(r"\((.*?)\)", inspect.getsource(module).split("\n")[current.f_lineno - 1])
         data.condition = (match.group(1) if match else "<condition>").encode()
-        state = SDL_GET_BINARY(SDL_BINARY).SDL_ReportAssertion \
-            (ctypes.byref(data), current.f_code.co_name.encode(), os.path.split(current.f_code.co_filename)[-1].encode(), current.f_lineno)
+        state = SDL_ReportAssertion(ctypes.byref(data), current.f_code.co_name.encode(), os.path.split(current.f_code.co_filename)[-1].encode(), current.f_lineno)
 
         if state in [SDL_ASSERTION_RETRY]:
             continue
@@ -52,33 +49,33 @@ def SDL_enabled_assert(condition: ctypes.c_bool) -> None:
 
 match SDL_ASSERT_LEVEL:
     case 0:
-        SDL_assert = lambda condition: SDL_disabled_assert(condition)
-        SDL_assert_release = lambda condition: SDL_disabled_assert(condition)
-        SDL_assert_paranoid = lambda condition: SDL_disabled_assert(condition)
+        SDL_assert: abc.Callable[[bool], None] = lambda condition: SDL_disabled_assert(condition)
+        SDL_assert_release: abc.Callable[[bool], None] = lambda condition: SDL_disabled_assert(condition)
+        SDL_assert_paranoid: abc.Callable[[bool], None] = lambda condition: SDL_disabled_assert(condition)
 
     case 1:
-        SDL_assert = lambda condition: SDL_disabled_assert(condition)
-        SDL_assert_release = lambda condition: SDL_enabled_assert(condition)
-        SDL_assert_paranoid = lambda condition: SDL_disabled_assert(condition)
+        SDL_assert: abc.Callable[[bool], None] = lambda condition: SDL_disabled_assert(condition)
+        SDL_assert_release: abc.Callable[[bool], None] = lambda condition: SDL_enabled_assert(condition)
+        SDL_assert_paranoid: abc.Callable[[bool], None] = lambda condition: SDL_disabled_assert(condition)
 
     case 2:
-        SDL_assert = lambda condition: SDL_enabled_assert(condition)
-        SDL_assert_release = lambda condition: SDL_enabled_assert(condition)
-        SDL_assert_paranoid = lambda condition: SDL_disabled_assert(condition)
+        SDL_assert: abc.Callable[[bool], None] = lambda condition: SDL_enabled_assert(condition)
+        SDL_assert_release: abc.Callable[[bool], None] = lambda condition: SDL_enabled_assert(condition)
+        SDL_assert_paranoid: abc.Callable[[bool], None] = lambda condition: SDL_disabled_assert(condition)
 
     case 3:
-        SDL_assert = lambda condition: SDL_enabled_assert(condition)
-        SDL_assert_release = lambda condition: SDL_enabled_assert(condition)
-        SDL_assert_paranoid = lambda condition: SDL_enabled_assert(condition)
+        SDL_assert: abc.Callable[[bool], None] = lambda condition: SDL_enabled_assert(condition)
+        SDL_assert_release: abc.Callable[[bool], None] = lambda condition: SDL_enabled_assert(condition)
+        SDL_assert_paranoid: abc.Callable[[bool], None] = lambda condition: SDL_enabled_assert(condition)
 
     case _:
         SDL_enabled_assert(False)
 
-SDL_assert_always = lambda condition: SDL_enabled_assert(condition)
+SDL_assert_always: abc.Callable[[bool], None] = lambda condition: SDL_enabled_assert(condition)
 SDL_AssertionHandler: typing.TypeAlias = SDL_FUNC_TYPE["SDL_AssertionHandler", SDL_AssertState, [SDL_POINTER[SDL_AssertData], ctypes.c_void_p]]
 
-SDL_SetAssertionHandler: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetAssertionHandler", None, [SDL_AssertionHandler, ctypes.c_void_p]]
-SDL_GetDefaultAssertionHandler: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDefaultAssertionHandler", SDL_AssertionHandler, []]
-SDL_GetAssertionHandler: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAssertionHandler", SDL_AssertionHandler, [SDL_POINTER[ctypes.c_void_p]]]
-SDL_GetAssertionReport: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAssertionReport", SDL_POINTER[SDL_AssertData], []]
-SDL_ResetAssertionReport: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ResetAssertionReport", None, []]
+SDL_SetAssertionHandler: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetAssertionHandler", None, [SDL_AssertionHandler, ctypes.c_void_p], SDL_BINARY]
+SDL_GetDefaultAssertionHandler: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDefaultAssertionHandler", SDL_AssertionHandler, [], SDL_BINARY]
+SDL_GetAssertionHandler: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAssertionHandler", SDL_AssertionHandler, [SDL_POINTER[ctypes.c_void_p]], SDL_BINARY]
+SDL_GetAssertionReport: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAssertionReport", SDL_POINTER[SDL_AssertData], [], SDL_BINARY]
+SDL_ResetAssertionReport: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ResetAssertionReport", None, [], SDL_BINARY]

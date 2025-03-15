@@ -1,7 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_ENUM, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
-
-SDL_SET_CURRENT_BINARY(SDL_BINARY)
+from .__init__ import ctypes, typing, abc, \
+    SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 SDL_BlendMode: typing.TypeAlias = SDL_TYPE["SDL_BlendMode", ctypes.c_uint32]
 
@@ -25,4 +23,4 @@ SDL_BLENDFACTOR_ZERO, SDL_BLENDFACTOR_ONE, SDL_BLENDFACTOR_SRC_COLOR, SDL_BLENDF
     SDL_BLENDFACTOR_SRC_ALPHA, SDL_BLENDFACTOR_ONE_MINUS_SRC_ALPHA, SDL_BLENDFACTOR_DST_COLOR, SDL_BLENDFACTOR_ONE_MINUS_DST_COLOR, \
         SDL_BLENDFACTOR_DST_ALPHA, SDL_BLENDFACTOR_ONE_MINUS_DST_ALPHA = range(1, 11)
 
-SDL_ComposeCustomBlendMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ComposeCustomBlendMode", SDL_BlendMode, [SDL_BlendFactor, SDL_BlendFactor, SDL_BlendOperation, SDL_BlendFactor, SDL_BlendFactor, SDL_BlendOperation]]
+SDL_ComposeCustomBlendMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ComposeCustomBlendMode", SDL_BlendMode, [SDL_BlendFactor, SDL_BlendFactor, SDL_BlendOperation, SDL_BlendFactor, SDL_BlendFactor, SDL_BlendOperation], SDL_BINARY]
