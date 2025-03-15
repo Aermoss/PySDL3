@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "temp
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 os.environ["SDL_DOC_GENERATOR"] = "0"
+os.environ["SDL_CTYPES_ALIAS_FIX"] = "1"
 os.environ["SDL_DISABLE_METADATA"] = "1"
 os.environ["SDL_PLATFORM_AGNOSTIC"] = "1"
 os.environ["SDL_IGNORE_MISSING_FUNCTIONS"] = "1"
@@ -25,11 +26,11 @@ release = sdl3.__version__
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
-    "sphinx.ext.napoleon",
+    "sphinx.ext.inheritance_diagram",
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
-    "sphinx.ext.todo",
-    "sphinx.ext.inheritance_diagram"
+    "sphinx.ext.napoleon",
+    "sphinx.ext.todo"
 ]
 
 templates_path = []
