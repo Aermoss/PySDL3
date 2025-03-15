@@ -215,39 +215,80 @@ def SDL_GET_CURRENT_BINARY() -> typing.Any:
 def SDL_NOT_IMPLEMENTED(name: str) -> abc.Callable[..., None]:
     return lambda *args, **kwargs: print("\33[31m", f"error: invoked an unimplemented function: '{name}'.", "\33[0m", sep = "", flush = True)
 
-def SDL_FUNC(name: str, retType: typing.Any, *argTypes: list[typing.Any]) -> None:
-    """Define an SDL3 function."""
+class SDL_FUNC:
+    """Create a new ctypes function definition."""
 
-    if (binary := SDL_GET_CURRENT_BINARY())[0] and hasattr(binary[0], name):
-        func = getattr(binary[0], name)
+    @classmethod
+    def __class_getitem__(cls, key) -> typing.Any:
+        if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
+            assert isinstance(key, tuple), "Expected a tuple, got a single argument."
+            assert len(key) == 3, "Expected a tuple with length 3."
+            assert isinstance(key[0], str), "Expected a string as the first argument."
+            assert isinstance(key[1], type) or key[1] is None, "Expected a type as the second argument."
+            assert isinstance(key[2], list), "Expected a list as the third argument."
 
-    else:
-        if binary[0] and int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0:
-            print("\33[35m", f"warning: function '{name}' not found in binary: '{binary[1]}'.", "\33[0m", sep = "", flush = True)
+        if (binary := SDL_GET_CURRENT_BINARY())[0] and hasattr(binary[0], key[0]):
+            func = getattr(binary[0], key[0])
 
-        func = SDL_NOT_IMPLEMENTED(name)
+        else:
+            func = SDL_NOT_IMPLEMENTED(key[0])
 
-    func.restype, func.argtypes, func.binary = retType, argTypes, binary[0]
-    __module__.functions[binary[1]][name] = func
-    if not __doc_generator__: setattr(__module__, name, func)
+            if binary[0] and int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0:
+                print("\33[35m", f"warning: function '{key[0]}' not found in binary: '{binary[1]}'.", "\33[0m", sep = "", flush = True)
+
+        func.restype, func.argtypes, func.binary = key[1], key[2], binary[0]
+        __module__.functions[binary[1]][key[0]] = func; return func
 
 class SDL_POINTER:
+    """Create a ctypes pointer type from a ctypes type."""
+
     @classmethod
     def __class_getitem__(cls, key) -> typing.Any:
-        """Create a pointer type from a ctypes type."""
+        if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
+            assert not isinstance(key, tuple), "Expected a single argument, got a tuple."
+            assert isinstance(key, type), "Expected a type as the first argument."
+
         return ctypes.POINTER(key)
 
-class SDL_TYPE:
+class SDL_CAST:
+    """Cast a ctypes pointer to an another type."""
+
     @classmethod
     def __class_getitem__(cls, key) -> typing.Any:
-        """Create a new type from a ctypes type."""
+        if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
+            assert isinstance(key, tuple), "Expected a tuple, got a single argument."
+            assert len(key) == 2, "Expected a tuple with length 2."
+            assert isinstance(key[0], ctypes._Pointer), "Expected a pointer as the first argument."
+            assert isinstance(key[1], type), "Expected a type as the second argument."
+
+        return ctypes.cast(key[0], key[1])
+
+class SDL_TYPE:
+    """Create a new type from a ctypes type."""
+
+    @classmethod
+    def __class_getitem__(cls, key) -> typing.Any:
+        if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
+            assert isinstance(key, tuple), "Expected a tuple, got a single argument."
+            assert len(key) == 2, "Expected a tuple with length 2."
+            assert isinstance(key[0], str), "Expected a string as the first argument."
+            assert isinstance(key[1], type), "Expected a type as the second argument."
+
         return type(key[0], (ctypes._SimpleCData, ), {"_type_": key[1]._type_})
 
 class SDL_FUNC_TYPE:
+    """Create a new ctypes function type."""
+
     @classmethod
     def __class_getitem__(cls, key) -> typing.Any:
-        """Create a new ctypes func type."""
-        value = ctypes.CFUNCTYPE(key[1], *key[2:])
+        if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
+            assert isinstance(key, tuple), "Expected a tuple, got a single argument."
+            assert len(key) == 3, "Expected a tuple with length 3."
+            assert isinstance(key[0], str), "Expected a string as the first argument."
+            assert isinstance(key[1], type) or key[1] is None, "Expected a type as the second argument."
+            assert isinstance(key[2], list), "Expected a list as the third argument."
+
+        value = ctypes.CFUNCTYPE(key[1], *key[2])
         value.__name__ = key[0]; return value
 
 async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
