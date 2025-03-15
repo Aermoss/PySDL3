@@ -1,15 +1,14 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_TYPE, SDL_FUNC_TYPE
+from .__init__ import ctypes, typing, \
+    SDL_POINTER, SDL_TYPE, SDL_ENUM, SDL_FUNC_TYPE
 
 from .SDL_rect import SDL_Rect
 from .SDL_properties import SDL_PropertiesID
 from .SDL_ttf import TTF_Font, TTF_Text, TTF_SubString
 from .SDL_pixels import SDL_FColor
 
-TTF_DrawCommand: typing.TypeAlias = SDL_TYPE["TTF_DrawCommand", ctypes.c_int]
+TTF_DrawCommand: typing.TypeAlias = SDL_TYPE["TTF_DrawCommand", SDL_ENUM]
 
-TTF_DRAW_COMMAND_NOOP = 0
-TTF_DRAW_COMMAND_FILL = 1
-TTF_DRAW_COMMAND_COPY = 2
+TTF_DRAW_COMMAND_NOOP, TTF_DRAW_COMMAND_FILL, TTF_DRAW_COMMAND_COPY = range(3)
 
 class TTF_FillOperation(ctypes.Structure):
     _fields_ = [

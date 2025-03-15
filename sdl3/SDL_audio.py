@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, abc, SDL_FUNC_TYPE, SDL_POINTER, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY, SDL_ENUM
 
 from .SDL_endian import SDL_BYTEORDER, SDL_LIL_ENDIAN
 from .SDL_properties import SDL_PropertiesID
@@ -15,7 +15,7 @@ SDL_AUDIO_MASK_SIGNED = 1 << 15
 SDL_DEFINE_AUDIO_FORMAT = lambda signed, bigendian, _float, size: \
     (signed << 15) | (bigendian << 12) | (_float << 8) | (size & SDL_AUDIO_MASK_BITSIZE)
 
-SDL_AudioFormat: typing.TypeAlias = SDL_TYPE["SDL_AudioFormat", ctypes.c_int]
+SDL_AudioFormat: typing.TypeAlias = SDL_TYPE["SDL_AudioFormat", SDL_ENUM]
 
 SDL_AUDIO_UNKNOWN = 0x0000
 SDL_AUDIO_U8 = 0x0008

@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_ENUM, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from.SDL_atomic import SDL_AtomicInt
@@ -51,12 +51,9 @@ SDL_BroadcastCondition: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_BroadcastC
 SDL_WaitCondition: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WaitCondition", None, [SDL_POINTER[SDL_Condition], SDL_POINTER[SDL_Mutex]]]
 SDL_WaitConditionTimeout: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WaitConditionTimeout", ctypes.c_bool, [SDL_POINTER[SDL_Condition], SDL_POINTER[SDL_Mutex], ctypes.c_int32]]
 
-SDL_InitStatus: typing.TypeAlias = SDL_TYPE["SDL_InitStatus", ctypes.c_int]
+SDL_InitStatus: typing.TypeAlias = SDL_TYPE["SDL_InitStatus", SDL_ENUM]
 
-SDL_INIT_STATUS_UNINITIALIZED = 0
-SDL_INIT_STATUS_INITIALIZING = 1
-SDL_INIT_STATUS_INITIALIZED = 2
-SDL_INIT_STATUS_UNINITIALIZING = 3
+SDL_INIT_STATUS_UNINITIALIZED, SDL_INIT_STATUS_INITIALIZING, SDL_INIT_STATUS_INITIALIZED, SDL_INIT_STATUS_UNINITIALIZING = range(4)
 
 class SDL_InitState(ctypes.Structure):
     _fields_ = [

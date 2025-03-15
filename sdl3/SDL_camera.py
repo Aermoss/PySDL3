@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_ENUM, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_pixels import SDL_PixelFormat, SDL_Colorspace
@@ -22,11 +22,9 @@ class SDL_CameraSpec(ctypes.Structure):
         ("framerate_denominator", ctypes.c_int)
     ]
 
-SDL_CameraPosition: typing.TypeAlias = SDL_TYPE["SDL_CameraPosition", ctypes.c_int]
+SDL_CameraPosition: typing.TypeAlias = SDL_TYPE["SDL_CameraPosition", SDL_ENUM]
 
-SDL_CAMERA_POSITION_UNKNOWN = 0
-SDL_CAMERA_POSITION_FRONT_FACING = 1
-SDL_CAMERA_POSITION_BACK_FACING = 2
+SDL_CAMERA_POSITION_UNKNOWN, SDL_CAMERA_POSITION_FRONT_FACING, SDL_CAMERA_POSITION_BACK_FACING = range(3)
 
 SDL_GetNumCameraDrivers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNumCameraDrivers", ctypes.c_int, []]
 SDL_GetCameraDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraDriver", ctypes.c_char_p, [ctypes.c_int]]

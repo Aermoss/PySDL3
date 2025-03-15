@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_ENUM, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_properties import SDL_PropertiesID
@@ -11,12 +11,10 @@ class SDL_Process(ctypes.c_void_p):
 
 SDL_CreateProcess: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateProcess", SDL_POINTER[SDL_Process], [SDL_POINTER[ctypes.c_char_p], ctypes.c_bool]]
 
-SDL_ProcessIO: typing.TypeAlias = SDL_TYPE["SDL_ProcessIO", ctypes.c_int]
+SDL_ProcessIO: typing.TypeAlias = SDL_TYPE["SDL_ProcessIO", SDL_ENUM]
 
-SDL_PROCESS_STDIO_INHERITED = 0
-SDL_PROCESS_STDIO_NULL = 1
-SDL_PROCESS_STDIO_APP = 2
-SDL_PROCESS_STDIO_REDIRECT = 3
+SDL_PROCESS_STDIO_INHERITED, SDL_PROCESS_STDIO_NULL, \
+    SDL_PROCESS_STDIO_APP, SDL_PROCESS_STDIO_REDIRECT = range(4)
 
 SDL_CreateProcessWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateProcessWithProperties", SDL_POINTER[SDL_Process], [SDL_PropertiesID]]
 

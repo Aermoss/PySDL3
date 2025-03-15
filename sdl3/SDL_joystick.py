@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_FUNC_TYPE, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY, SDL_ENUM
 
 from .SDL_sensor import SDL_SensorType
 from .SDL_properties import SDL_PropertiesID
@@ -12,29 +12,18 @@ class SDL_Joystick(ctypes.c_void_p):
     ...
 
 SDL_JoystickID: typing.TypeAlias = SDL_TYPE["SDL_JoystickID", ctypes.c_uint32]
-SDL_JoystickType: typing.TypeAlias = SDL_TYPE["SDL_JoystickType", ctypes.c_int]
+SDL_JoystickType: typing.TypeAlias = SDL_TYPE["SDL_JoystickType", SDL_ENUM]
 
-SDL_JOYSTICK_TYPE_UNKNOWN = 0
-SDL_JOYSTICK_TYPE_GAMEPAD = 1
-SDL_JOYSTICK_TYPE_WHEEL = 2
-SDL_JOYSTICK_TYPE_ARCADE_STICK = 3
-SDL_JOYSTICK_TYPE_FLIGHT_STICK = 4
-SDL_JOYSTICK_TYPE_DANCE_PAD = 5
-SDL_JOYSTICK_TYPE_GUITAR = 6
-SDL_JOYSTICK_TYPE_DRUM_KIT = 7
-SDL_JOYSTICK_TYPE_ARCADE_PAD = 8
-SDL_JOYSTICK_TYPE_THROTTLE = 9
-SDL_JOYSTICK_TYPE_COUNT = 10
+SDL_JOYSTICK_TYPE_UNKNOWN, SDL_JOYSTICK_TYPE_GAMEPAD, SDL_JOYSTICK_TYPE_WHEEL , SDL_JOYSTICK_TYPE_ARCADE_, \
+    SDL_JOYSTICK_TYPE_FLIGHT_, SDL_JOYSTICK_TYPE_DANCE_P, SDL_JOYSTICK_TYPE_GUITAR , SDL_JOYSTICK_TYPE_DRUM_KI, \
+        SDL_JOYSTICK_TYPE_ARCADE_, SDL_JOYSTICK_TYPE_THROTTL, SDL_JOYSTICK_TYPE_COUNT = range(11)
 
-SDL_JoystickConnectionState: typing.TypeAlias = SDL_TYPE["SDL_JoystickConnectionState", ctypes.c_int]
+SDL_JoystickConnectionState: typing.TypeAlias = SDL_TYPE["SDL_JoystickConnectionState", SDL_ENUM]
 
-SDL_JOYSTICK_CONNECTION_INVALID = -1
-SDL_JOYSTICK_CONNECTION_UNKNOWN = 0
-SDL_JOYSTICK_CONNECTION_WIRED = 1
-SDL_JOYSTICK_CONNECTION_WIRELESS = 2
+SDL_JOYSTICK_CONNECTION_INVALID, SDL_JOYSTICK_CONNECTION_UNKNOWN, \
+    SDL_JOYSTICK_CONNECTION_WIRED, SDL_JOYSTICK_CONNECTION_WIRELESS = range(-1, 3)
 
-SDL_JOYSTICK_AXIS_MAX = 32767
-SDL_JOYSTICK_AXIS_MIN = -32768
+SDL_JOYSTICK_AXIS_MAX, SDL_JOYSTICK_AXIS_MIN = 32767, -32768
 
 SDL_LockJoysticks: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LockJoysticks", None, []]
 SDL_UnlockJoysticks: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UnlockJoysticks", None, []]
@@ -137,15 +126,14 @@ SDL_GetJoystickAxisInitialState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_G
 SDL_GetJoystickBall: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetJoystickBall", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_int, SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]]]
 SDL_GetJoystickHat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetJoystickHat", ctypes.c_uint8, [SDL_POINTER[SDL_Joystick], ctypes.c_int]]
 
-SDL_HAT_CENTERED = 0x00
-SDL_HAT_UP = 0x01
-SDL_HAT_RIGHT = 0x02
-SDL_HAT_DOWN = 0x04
-SDL_HAT_LEFT = 0x08
-SDL_HAT_RIGHTUP = SDL_HAT_RIGHT | SDL_HAT_UP
-SDL_HAT_RIGHTDOWN = SDL_HAT_RIGHT | SDL_HAT_DOWN
-SDL_HAT_LEFTUP = SDL_HAT_LEFT | SDL_HAT_UP
-SDL_HAT_LEFTDOWN = SDL_HAT_LEFT | SDL_HAT_DOWN
+SDL_HAT_CENTERED, SDL_HAT_UP, SDL_HAT_RIGHT, \
+    SDL_HAT_DOWN, SDL_HAT_LEFT = 0x00, 0x01, 0x02, 0x04, 0x08
+
+SDL_HAT_RIGHTUP, SDL_HAT_RIGHTDOWN = \
+    SDL_HAT_RIGHT | SDL_HAT_UP, SDL_HAT_RIGHT | SDL_HAT_DOWN
+
+SDL_HAT_LEFTUP, SDL_HAT_LEFTDOWN = \
+    SDL_HAT_LEFT | SDL_HAT_UP, SDL_HAT_LEFT | SDL_HAT_DOWN
 
 SDL_GetJoystickButton: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetJoystickButton", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_int]]
 SDL_RumbleJoystick: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RumbleJoystick", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_uint16, ctypes.c_uint16, ctypes.c_uint32]]

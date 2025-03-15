@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_FUNC_TYPE, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_FUNC_TYPE, SDL_ENUM, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_BINARY
 
 from .SDL_atomic import SDL_AtomicInt
@@ -11,26 +11,19 @@ class SDL_Thread(ctypes.c_void_p):
     ...
 
 SDL_ThreadID: typing.TypeAlias = SDL_TYPE["SDL_ThreadID", ctypes.c_uint64]
-SDL_TLSID = SDL_AtomicInt
+SDL_TLSID: typing.TypeAlias = SDL_AtomicInt
 
-SDL_ThreadPriority: typing.TypeAlias = SDL_TYPE["SDL_ThreadPriority", ctypes.c_int]
+SDL_ThreadPriority: typing.TypeAlias = SDL_TYPE["SDL_ThreadPriority", SDL_ENUM]
 
-SDL_THREAD_PRIORITY_LOW = 0
-SDL_THREAD_PRIORITY_NORMAL = 1
-SDL_THREAD_PRIORITY_HIGH = 2
-SDL_THREAD_PRIORITY_TIME_CRITICAL = 3
+SDL_THREAD_PRIORITY_LOW, SDL_THREAD_PRIORITY_NORMAL, SDL_THREAD_PRIORITY_HIGH, SDL_THREAD_PRIORITY_TIME_CRITICAL = range(4)
 
-SDL_ThreadState: typing.TypeAlias = SDL_TYPE["SDL_ThreadState", ctypes.c_int]
+SDL_ThreadState: typing.TypeAlias = SDL_TYPE["SDL_ThreadState", SDL_ENUM]
 
-SDL_THREAD_UNKNOWN = 0
-SDL_THREAD_ALIVE = 1
-SDL_THREAD_DETACHED = 2
-SDL_THREAD_COMPLETE = 3
+SDL_THREAD_UNKNOWN, SDL_THREAD_ALIVE, SDL_THREAD_DETACHED, SDL_THREAD_COMPLETE = range(4)
 
 SDL_ThreadFunction: typing.TypeAlias = SDL_FUNC_TYPE["SDL_ThreadFunction", ctypes.c_int, [ctypes.c_void_p]]
 
-SDL_BeginThreadFunction = SDL_FunctionPointer(0)
-SDL_EndThreadFunction = SDL_FunctionPointer(0)
+SDL_BeginThreadFunction, SDL_EndThreadFunction = SDL_FunctionPointer(0), SDL_FunctionPointer(0)
 
 SDL_CreateThreadRuntime: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateThreadRuntime", SDL_POINTER[SDL_Thread], [SDL_ThreadFunction, ctypes.c_char_p, ctypes.c_void_p, SDL_FunctionPointer, SDL_FunctionPointer]]
 SDL_CreateThreadWithPropertiesRuntime: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateThreadWithPropertiesRuntime", SDL_POINTER[SDL_Thread], [SDL_PropertiesID, SDL_FunctionPointer, SDL_FunctionPointer]]

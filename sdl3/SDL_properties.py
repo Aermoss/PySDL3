@@ -1,17 +1,13 @@
-from .__init__ import ctypes, typing, abc, SDL_FUNC_TYPE, \
+from .__init__ import ctypes, typing, abc, SDL_FUNC_TYPE, SDL_ENUM, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_PropertiesID: typing.TypeAlias = SDL_TYPE["SDL_PropertiesID", ctypes.c_uint32]
-SDL_PropertyType: typing.TypeAlias = SDL_TYPE["SDL_PropertyType", ctypes.c_int]
+SDL_PropertyType: typing.TypeAlias = SDL_TYPE["SDL_PropertyType", SDL_ENUM]
 
-SDL_PROPERTY_TYPE_INVALID = 0
-SDL_PROPERTY_TYPE_POINTER = 1
-SDL_PROPERTY_TYPE_STRING = 2
-SDL_PROPERTY_TYPE_NUMBER = 3
-SDL_PROPERTY_TYPE_FLOAT = 4
-SDL_PROPERTY_TYPE_BOOLEAN = 5
+SDL_PROPERTY_TYPE_INVALID, SDL_PROPERTY_TYPE_POINTER, SDL_PROPERTY_TYPE_STRING, \
+    SDL_PROPERTY_TYPE_NUMBER, SDL_PROPERTY_TYPE_FLOAT, SDL_PROPERTY_TYPE_BOOLEAN = range(6)
 
 SDL_GetGlobalProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGlobalProperties", SDL_PropertiesID, []]
 SDL_CreateProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateProperties", SDL_PropertiesID, []]

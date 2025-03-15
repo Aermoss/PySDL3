@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_ENUM, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_stdinc import SDL_Time
@@ -18,16 +18,13 @@ class SDL_DateTime(ctypes.Structure):
         ("utc_offset", ctypes.c_int)
     ]
 
-SDL_DateFormat: typing.TypeAlias = SDL_TYPE["SDL_DateFormat", ctypes.c_int]
+SDL_DateFormat: typing.TypeAlias = SDL_TYPE["SDL_DateFormat", SDL_ENUM]
 
-SDL_DATE_FORMAT_YYYYMMDD = 0
-SDL_DATE_FORMAT_DDMMYYYY = 1
-SDL_DATE_FORMAT_MMDDYYYY = 2 
+SDL_DATE_FORMAT_YYYYMMDD, SDL_DATE_FORMAT_DDMMYYYY, SDL_DATE_FORMAT_MMDDYYYY = range(3)
 
-SDL_TimeFormat: typing.TypeAlias = SDL_TYPE["SDL_TimeFormat", ctypes.c_int]
+SDL_TimeFormat: typing.TypeAlias = SDL_TYPE["SDL_TimeFormat", SDL_ENUM]
 
-SDL_TIME_FORMAT_24HR = 0
-SDL_TIME_FORMAT_12HR = 1
+SDL_TIME_FORMAT_24HR, SDL_TIME_FORMAT_12HR = range(2)
 
 SDL_GetDateTimeLocalePreferences: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDateTimeLocalePreferences", ctypes.c_bool, [SDL_POINTER[SDL_DateFormat], SDL_POINTER[SDL_TimeFormat]]]
 SDL_GetCurrentTime: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentTime", ctypes.c_bool, [SDL_POINTER[SDL_Time]]]

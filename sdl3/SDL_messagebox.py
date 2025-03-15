@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_ENUM, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_video import SDL_Window
@@ -32,14 +32,10 @@ class SDL_MessageBoxColor(ctypes.Structure):
         ("b", ctypes.c_uint8)
     ]
 
-SDL_MessageBoxColorType: typing.TypeAlias = SDL_TYPE["SDL_MessageBoxColorType", ctypes.c_int]
+SDL_MessageBoxColorType: typing.TypeAlias = SDL_TYPE["SDL_MessageBoxColorType", SDL_ENUM]
 
-SDL_MESSAGEBOX_COLOR_BACKGROUND = 0
-SDL_MESSAGEBOX_COLOR_TEXT = 1
-SDL_MESSAGEBOX_COLOR_BUTTON_BORDER = 2
-SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND = 3
-SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED = 4
-SDL_MESSAGEBOX_COLOR_COUNT = 5
+SDL_MESSAGEBOX_COLOR_BACKGROUND, SDL_MESSAGEBOX_COLOR_TEXT, SDL_MESSAGEBOX_COLOR_BUTTON_BORDER, \
+    SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND, SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, SDL_MESSAGEBOX_COLOR_COUNT = range(6)
 
 class SDL_MessageBoxColorScheme(ctypes.Structure):
     _fields_ = [

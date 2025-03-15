@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_ENUM, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
@@ -6,13 +6,10 @@ SDL_SET_CURRENT_BINARY(SDL_BINARY)
 class SDL_hid_device(ctypes.c_void_p):
     ...
 
-SDL_hid_bus_type: typing.TypeAlias = SDL_TYPE["SDL_hid_bus_type", ctypes.c_int]
+SDL_hid_bus_type: typing.TypeAlias = SDL_TYPE["SDL_hid_bus_type", SDL_ENUM]
 
-SDL_HID_API_BUS_UNKNOWN = 0x00
-SDL_HID_API_BUS_USB = 0x01
-SDL_HID_API_BUS_BLUETOOTH = 0x02
-SDL_HID_API_BUS_I2C = 0x03
-SDL_HID_API_BUS_SPI = 0x04
+SDL_HID_API_BUS_UNKNOWN, SDL_HID_API_BUS_USB, SDL_HID_API_BUS_BLUETOOTH, \
+    SDL_HID_API_BUS_I2C, SDL_HID_API_BUS_SPI = range(5)
 
 SDL_hid_device_info: typing.TypeAlias = SDL_TYPE["SDL_hid_device_info", ctypes.c_void_p]
 

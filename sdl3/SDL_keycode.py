@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_TYPE
+from .__init__ import ctypes, typing, SDL_TYPE
 
 SDL_Keycode: typing.TypeAlias = SDL_TYPE["SDL_Keycode", ctypes.c_uint32]
 

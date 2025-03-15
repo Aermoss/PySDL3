@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_FUNC_TYPE, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_MIXER_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_MIXER_BINARY, SDL_ENUM
 
 from .SDL_iostream import SDL_IOStream
 from .SDL_audio import SDL_AudioDeviceID, SDL_AudioSpec, SDL_AudioFormat, SDL_AUDIO_S16
@@ -7,9 +7,7 @@ from .SDL_version import SDL_VERSIONNUM
 
 SDL_SET_CURRENT_BINARY(SDL_MIXER_BINARY)
 
-SDL_MIXER_MAJOR_VERSION = 3
-SDL_MIXER_MINOR_VERSION = 0
-SDL_MIXER_MICRO_VERSION = 0
+SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION = 3, 0, 0
 
 SDL_MIXER_VERSION = \
     SDL_VERSIONNUM(SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION)
@@ -39,7 +37,7 @@ MIX_CHANNELS = 8
 MIX_DEFAULT_FREQUENCY = 44100
 MIX_DEFAULT_FORMAT = SDL_AUDIO_S16
 MIX_DEFAULT_CHANNELS = 2
-MIX_MAX_VOLUME = 128 
+MIX_MAX_VOLUME = 128
 
 class Mix_Chunk(ctypes.Structure):
     _fields_ = [
@@ -49,26 +47,14 @@ class Mix_Chunk(ctypes.Structure):
         ("volume", ctypes.c_uint8)
     ]
 
-Mix_Fading: typing.TypeAlias = SDL_TYPE["Mix_Fading", ctypes.c_int]
+Mix_Fading: typing.TypeAlias = SDL_TYPE["Mix_Fading", SDL_ENUM]
 
-MIX_NO_FADING = 0
-MIX_FADING_OUT = 1
-MIX_FADING_IN = 2
+MIX_NO_FADING, MIX_FADING_OUT, MIX_FADING_IN = range(3)
 
-Mix_MusicType: typing.TypeAlias = SDL_TYPE["Mix_MusicType", ctypes.c_int]
+Mix_MusicType: typing.TypeAlias = SDL_TYPE["Mix_MusicType", SDL_ENUM]
 
-MUS_NONE = 0
-MUS_WAV = 1
-MUS_MOD = 2
-MUS_MID = 3
-MUS_OGG = 4
-MUS_MP3 = 5
-MUS_MP3_MAD_UNUSED = 6
-MUS_FLAC = 7
-MUS_MODPLUG_UNUSED = 8
-MUS_OPUS = 9
-MUS_WAVPACK = 10
-MUS_GME = 11
+MUS_NONE, MUS_WAV, MUS_MOD, MUS_MID, MUS_OGG, MUS_MP3, MUS_MP3_MAD_UNUSED, \
+    MUS_FLAC, MUS_MODPLUG_UNUSED, MUS_OPUS, MUS_WAVPACK, MUS_GME = range(12)
 
 class Mix_Music(ctypes.c_void_p):
     ...

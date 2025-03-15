@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, abc, SDL_PLATFORM_SPECIFIC, SDL_POINTER, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_TTF_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_TTF_BINARY, SDL_ENUM
 
 from .SDL_pixels import SDL_Color
 from .SDL_gpu import SDL_GPUDevice, SDL_GPUTexture
@@ -12,9 +12,7 @@ from .SDL_rect import SDL_Rect, SDL_FPoint
 
 SDL_SET_CURRENT_BINARY(SDL_TTF_BINARY)
 
-SDL_TTF_MAJOR_VERSION = 3
-SDL_TTF_MINOR_VERSION = 2
-SDL_TTF_MICRO_VERSION = 0
+SDL_TTF_MAJOR_VERSION, SDL_TTF_MINOR_VERSION, SDL_TTF_MICRO_VERSION = 3, 2, 0
 
 SDL_TTF_VERSION = \
     SDL_VERSIONNUM(SDL_TTF_MAJOR_VERSION, SDL_TTF_MINOR_VERSION, SDL_TTF_MICRO_VERSION)
@@ -68,24 +66,17 @@ TTF_GetFontDPI: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontDPI", ctype
 
 TTF_FontStyleFlags: typing.TypeAlias = SDL_TYPE["TTF_FontStyleFlags", ctypes.c_uint32]
 
-TTF_STYLE_NORMAL = 0x00
-TTF_STYLE_BOLD = 0x01
-TTF_STYLE_ITALIC = 0x02
-TTF_STYLE_UNDERLINE = 0x04
-TTF_STYLE_STRIKETHROUGH = 0x08
+TTF_STYLE_NORMAL, TTF_STYLE_BOLD, TTF_STYLE_ITALIC, TTF_STYLE_UNDERLINE, \
+     TTF_STYLE_STRIKETHROUGH = 0x00, 0x01, 0x02, 0x04, 0x08
 
 TTF_SetFontStyle: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_SetFontStyle", None, [SDL_POINTER[TTF_Font], TTF_FontStyleFlags]]
 TTF_GetFontStyle: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontStyle", TTF_FontStyleFlags, [SDL_POINTER[TTF_Font]]]
 TTF_SetFontOutline: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_SetFontOutline", ctypes.c_bool, [SDL_POINTER[TTF_Font], ctypes.c_int]]
 TTF_GetFontOutline: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontOutline", ctypes.c_int, [SDL_POINTER[TTF_Font]]]
 
-TTF_HintingFlags: typing.TypeAlias = SDL_TYPE["TTF_HintingFlags", ctypes.c_int]
+TTF_HintingFlags: typing.TypeAlias = SDL_TYPE["TTF_HintingFlags", SDL_ENUM]
 
-TTF_HINTING_NORMAL = 0
-TTF_HINTING_LIGHT = 1
-TTF_HINTING_MONO = 2
-TTF_HINTING_NONE = 3
-TTF_HINTING_LIGHT_SUBPIXEL = 4
+TTF_HINTING_NORMAL, TTF_HINTING_LIGHT, TTF_HINTING_MONO, TTF_HINTING_NONE, TTF_HINTING_LIGHT_SUBPIXEL = range(5)
 
 TTF_SetFontHinting: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_SetFontHinting", None, [SDL_POINTER[TTF_Font], TTF_HintingFlags]]
 TTF_GetNumFontFaces: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetNumFontFaces", ctypes.c_int, [SDL_POINTER[TTF_Font]]]
@@ -94,12 +85,9 @@ TTF_GetFontHinting: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontHinting
 TTF_SetFontSDF: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_SetFontSDF", ctypes.c_bool, [SDL_POINTER[TTF_Font], ctypes.c_bool]]
 TTF_GetFontSDF: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontSDF", ctypes.c_bool, [SDL_POINTER[TTF_Font]]]
 
-TTF_HorizontalAlignment: typing.TypeAlias = SDL_TYPE["TTF_HorizontalAlignment", ctypes.c_int]
+TTF_HorizontalAlignment: typing.TypeAlias = SDL_TYPE["TTF_HorizontalAlignment", SDL_ENUM]
 
-TTF_HORIZONTAL_ALIGN_INVALID = -1
-TTF_HORIZONTAL_ALIGN_LEFT = 0
-TTF_HORIZONTAL_ALIGN_CENTER = 1
-TTF_HORIZONTAL_ALIGN_RIGHT = 2
+TTF_HORIZONTAL_ALIGN_INVALID, TTF_HORIZONTAL_ALIGN_LEFT, TTF_HORIZONTAL_ALIGN_CENTER, TTF_HORIZONTAL_ALIGN_RIGHT = range(-1, 3)
 
 TTF_SetFontWrapAlignment: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_SetFontWrapAlignment", None, [SDL_POINTER[TTF_Font], TTF_HorizontalAlignment]]
 TTF_GetFontWrapAlignment: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontWrapAlignment", TTF_HorizontalAlignment, [SDL_POINTER[TTF_Font]]]
@@ -120,13 +108,9 @@ TTF_FontIsScalable: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_FontIsScalable
 TTF_GetFontFamilyName: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontFamilyName", ctypes.c_char_p, [SDL_POINTER[TTF_Font]]]
 TTF_GetFontStyleName: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontStyleName", ctypes.c_char_p, [SDL_POINTER[TTF_Font]]]
 
-TTF_Direction: typing.TypeAlias = SDL_TYPE["TTF_Direction", ctypes.c_int]
+TTF_Direction: typing.TypeAlias = SDL_TYPE["TTF_Direction", SDL_ENUM]
 
-TTF_DIRECTION_INVALID = 0
-TTF_DIRECTION_LTR = 4
-TTF_DIRECTION_RTL = 5
-TTF_DIRECTION_TTB = 6
-TTF_DIRECTION_BTT = 7
+TTF_DIRECTION_INVALID, (TTF_DIRECTION_LTR, TTF_DIRECTION_RTL, TTF_DIRECTION_TTB, TTF_DIRECTION_BTT) = 0, range(4, 8)
 
 TTF_SetFontDirection: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_SetFontDirection", ctypes.c_bool, [SDL_POINTER[TTF_Font], TTF_Direction]]
 TTF_GetFontDirection: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontDirection", TTF_Direction, [SDL_POINTER[TTF_Font]]]
@@ -142,12 +126,9 @@ TTF_GetGlyphScript: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetGlyphScript
 TTF_SetFontLanguage: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_SetFontLanguage", ctypes.c_bool, [SDL_POINTER[TTF_Font], ctypes.c_char_p]]
 TTF_FontHasGlyph: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_FontHasGlyph", ctypes.c_bool, [SDL_POINTER[TTF_Font], ctypes.c_uint32]]
 
-TTF_ImageType: typing.TypeAlias = SDL_TYPE["TTF_ImageType", ctypes.c_int]
+TTF_ImageType: typing.TypeAlias = SDL_TYPE["TTF_ImageType", SDL_ENUM]
 
-TTF_IMAGE_INVALID = 0
-TTF_IMAGE_ALPHA = 1
-TTF_IMAGE_COLOR = 2
-TTF_IMAGE_SDF = 3
+TTF_IMAGE_INVALID, TTF_IMAGE_ALPHA, TTF_IMAGE_COLOR, TTF_IMAGE_SDF = range(4)
 
 TTF_GetGlyphImage: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetGlyphImage", SDL_POINTER[SDL_Surface], [SDL_POINTER[TTF_Font], ctypes.c_uint32, SDL_POINTER[TTF_ImageType]]]
 TTF_GetGlyphImageForIndex: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetGlyphImageForIndex", SDL_POINTER[SDL_Surface], [SDL_POINTER[TTF_Font], ctypes.c_uint32, SDL_POINTER[TTF_ImageType]]]
@@ -226,11 +207,9 @@ class TTF_GPUAtlasDrawSequence(ctypes.Structure):
 TTF_GetGPUTextDrawData: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetGPUTextDrawData", SDL_POINTER[TTF_GPUAtlasDrawSequence], [SDL_POINTER[TTF_Text]]]
 TTF_DestroyGPUTextEngine: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_DestroyGPUTextEngine", None, [SDL_POINTER[TTF_TextEngine]]]
 
-TTF_GPUTextEngineWinding: typing.TypeAlias = SDL_TYPE["TTF_GPUTextEngineWinding", ctypes.c_int]
+TTF_GPUTextEngineWinding: typing.TypeAlias = SDL_TYPE["TTF_GPUTextEngineWinding", SDL_ENUM]
 
-TTF_GPU_TEXTENGINE_WINDING_INVALID = -1,
-TTF_GPU_TEXTENGINE_WINDING_CLOCKWISE = 0
-TTF_GPU_TEXTENGINE_WINDING_COUNTER_CLOCKWISE = 1
+TTF_GPU_TEXTENGINE_WINDING_INVALID, TTF_GPU_TEXTENGINE_WINDING_CLOCKWISE, TTF_GPU_TEXTENGINE_WINDING_COUNTER_CLOCKWISE = range(-1, 2)
 
 TTF_SetGPUTextEngineWinding: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_SetGPUTextEngineWinding", None, [SDL_POINTER[TTF_TextEngine], TTF_GPUTextEngineWinding]]
 TTF_GetGPUTextEngineWinding: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetGPUTextEngineWinding", TTF_GPUTextEngineWinding, [SDL_POINTER[TTF_TextEngine]]]
@@ -276,11 +255,8 @@ TTF_GetTextSize: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetTextSize", cty
 
 TTF_SubStringFlags: typing.TypeAlias = SDL_TYPE["TTF_SubStringFlags", ctypes.c_uint32]
 
-TTF_SUBSTRING_DIRECTION_MASK = 0x000000FF
-TTF_SUBSTRING_TEXT_START = 0x00000100
-TTF_SUBSTRING_LINE_START = 0x00000200
-TTF_SUBSTRING_LINE_END = 0x00000400
-TTF_SUBSTRING_TEXT_END = 0x00000800
+TTF_SUBSTRING_DIRECTION_MASK, TTF_SUBSTRING_TEXT_START, TTF_SUBSTRING_LINE_START, \
+    TTF_SUBSTRING_LINE_END, TTF_SUBSTRING_TEXT_END = 0x000000FF, 0x00000100, 0x00000200, 0x00000400, 0x00000800
 
 class TTF_SubString(ctypes.Structure):
     _fields_ = [

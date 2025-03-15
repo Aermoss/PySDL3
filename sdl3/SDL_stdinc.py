@@ -5,55 +5,45 @@ SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
 SDL_arraysize = lambda array: ctypes.sizeof(array) // ctypes.sizeof(array[0])
 
-SDL_FALSE = False
-SDL_TRUE = True
+SDL_FALSE, SDL_TRUE = False, True
 
 SDL_bool: typing.TypeAlias = SDL_TYPE["SDL_bool", ctypes.c_bool]
 
 Sint8: typing.TypeAlias = SDL_TYPE["Sint8", ctypes.c_int8]
 
-SDL_MAX_SINT8 = 0x7F
-SDL_MIN_SINT8 = ~0X7F
+SDL_MAX_SINT8, SDL_MIN_SINT8 = 0x7F, ~0X7F
 
 Uint8: typing.TypeAlias = SDL_TYPE["Uint8", ctypes.c_uint8]
 
-SDL_MAX_UINT8 = 0xFF
-SDL_MIN_UINT8 = 0X00
+SDL_MAX_UINT8, SDL_MIN_UINT8 = 0xFF, 0X00
 
 Sint16: typing.TypeAlias = SDL_TYPE["Sint16", ctypes.c_int16]
 
-SDL_MAX_SINT16 = 0x7FFF
-SDL_MIN_SINT16 = ~0X7FFF
+SDL_MAX_SINT16, SDL_MIN_SINT16 = 0x7FFF, ~0X7FFF
 
 Uint16: typing.TypeAlias = SDL_TYPE["Uint16", ctypes.c_uint16]
 
-SDL_MAX_UINT16 = 0xFFFF
-SDL_MIN_UINT16 = 0X0000
+SDL_MAX_UINT16, SDL_MIN_UINT16 = 0xFFFF, 0X0000
 
 Sint32: typing.TypeAlias = SDL_TYPE["Sint32", ctypes.c_int32]
 
-SDL_MAX_SINT32 = 0x7FFFFFFF
-SDL_MIN_SINT32 = ~0X7FFFFFFF
+SDL_MAX_SINT32, SDL_MIN_SINT32 = 0x7FFFFFFF, ~0X7FFFFFFF
 
 Uint32: typing.TypeAlias = SDL_TYPE["Uint32", ctypes.c_uint32]
 
-SDL_MAX_UINT32 = 0xFFFFFFFF
-SDL_MIN_UINT32 = 0X00000000
+SDL_MAX_UINT32, SDL_MIN_UINT32 = 0xFFFFFFFF, 0X00000000
 
 Sint64: typing.TypeAlias = SDL_TYPE["Sint64", ctypes.c_int64]
 
-SDL_MAX_SINT64 = 0x7FFFFFFFFFFFFFFF
-SDL_MIN_SINT64 = ~0X7FFFFFFFFFFFFFFF
+SDL_MAX_SINT64, SDL_MIN_SINT64 = 0x7FFFFFFFFFFFFFFF, ~0X7FFFFFFFFFFFFFFF
 
 Uint64: typing.TypeAlias = SDL_TYPE["Uint64", ctypes.c_uint64]
 
-SDL_MAX_UINT64 = 0xFFFFFFFFFFFFFFFF
-SDL_MIN_UINT64 = 0X0000000000000000
+SDL_MAX_UINT64, SDL_MIN_UINT64 = 0xFFFFFFFFFFFFFFFF, 0X0000000000000000
 
 SDL_Time: typing.TypeAlias = SDL_TYPE["SDL_Time", Sint64]
 
-SDL_MAX_TIME = SDL_MAX_SINT64
-SDL_MIN_TIME = SDL_MIN_SINT64
+SDL_MAX_TIME, SDL_MIN_TIME = SDL_MAX_SINT64, SDL_MIN_SINT64
 
 SDL_FLT_EPSILON = 1.1920928955078125e-07
 
@@ -271,10 +261,8 @@ SDL_iconv_open: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_iconv_open", SDL_i
 SDL_iconv_close: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_iconv_close", ctypes.c_int, [SDL_iconv_t]]
 SDL_iconv: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_iconv", ctypes.c_size_t, [SDL_iconv_t, SDL_POINTER[ctypes.c_char_p], SDL_POINTER[ctypes.c_size_t], SDL_POINTER[ctypes.c_char_p], SDL_POINTER[ctypes.c_size_t]]]
 
-SDL_ICONV_ERROR = -1
-SDL_ICONV_E2BIG = -2
-SDL_ICONV_EILSEQ = -3
-SDL_ICONV_EINVAL = -4
+SDL_ICONV_ERROR, SDL_ICONV_E2BIG, SDL_ICONV_EILSEQ, \
+    SDL_ICONV_EINVAL = -1, -2, -3, -4
 
 SDL_iconv_string: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_iconv_string", ctypes.c_char_p, [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_size_t]]
 

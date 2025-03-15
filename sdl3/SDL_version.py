@@ -3,9 +3,7 @@ from .__init__ import ctypes, typing, abc, \
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
 
-SDL_MAJOR_VERSION = 3
-SDL_MINOR_VERSION = 2
-SDL_MICRO_VERSION = 8
+SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_MICRO_VERSION = 3, 2, 8
 
 SDL_VERSIONNUM = lambda major, minor, patch: \
     major * 1000000 + minor * 1000 + patch

@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_FUNC_TYPE, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY, SDL_ENUM
 
 from .SDL_stdinc import SDL_Time
 
@@ -8,29 +8,16 @@ SDL_SET_CURRENT_BINARY(SDL_BINARY)
 SDL_GetBasePath: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetBasePath", ctypes.c_char_p, []]
 SDL_GetPrefPath: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPrefPath", ctypes.c_char_p, [ctypes.c_char_p, ctypes.c_char_p]]
 
-SDL_Folder: typing.TypeAlias = SDL_TYPE["SDL_Folder", ctypes.c_int]
+SDL_Folder: typing.TypeAlias = SDL_TYPE["SDL_Folder", SDL_ENUM]
 
-SDL_FOLDER_HOME = 0
-SDL_FOLDER_DESKTOP = 1
-SDL_FOLDER_DOCUMENTS = 2
-SDL_FOLDER_DOWNLOADS = 3
-SDL_FOLDER_MUSIC = 4
-SDL_FOLDER_PICTURES = 5
-SDL_FOLDER_PUBLICSHARE = 6
-SDL_FOLDER_SAVEDGAMES = 7
-SDL_FOLDER_SCREENSHOTS = 8
-SDL_FOLDER_TEMPLATES = 9
-SDL_FOLDER_VIDEOS = 10
-SDL_FOLDER_COUNT = 11
+SDL_FOLDER_HOME, SDL_FOLDER_DESKTOP, SDL_FOLDER_DOCUMENTS, SDL_FOLDER_DOWNLOADS, SDL_FOLDER_MUSIC, SDL_FOLDER_PICTURES, SDL_FOLDER_PUBLICSHARE, \
+    SDL_FOLDER_SAVEDGAMES, SDL_FOLDER_SCREENSHOTS, SDL_FOLDER_TEMPLATES, SDL_FOLDER_VIDEOS , SDL_FOLDER_COUNT = range(12)
 
 SDL_GetUserFolder: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetUserFolder", ctypes.c_char_p, [SDL_Folder]]
 
-SDL_PathType: typing.TypeAlias = SDL_TYPE["SDL_PathType", ctypes.c_int]
+SDL_PathType: typing.TypeAlias = SDL_TYPE["SDL_PathType", SDL_ENUM]
 
-SDL_PATHTYPE_NONE = 0
-SDL_PATHTYPE_FILE = 1
-SDL_PATHTYPE_DIRECTORY = 2
-SDL_PATHTYPE_OTHER = 3
+SDL_PATHTYPE_NONE, SDL_PATHTYPE_FILE, SDL_PATHTYPE_DIRECTORY, SDL_PATHTYPE_OTHER = range(4)
 
 class SDL_PathInfo(ctypes.Structure):
     _fields_ = [
@@ -47,11 +34,9 @@ SDL_GLOB_CASEINSENSITIVE = 1 << 0
 
 SDL_CreateDirectory: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateDirectory", ctypes.c_bool, [ctypes.c_char_p]]
 
-SDL_EnumerationResult: typing.TypeAlias = SDL_TYPE["SDL_EnumerationResult", ctypes.c_int]
+SDL_EnumerationResult: typing.TypeAlias = SDL_TYPE["SDL_EnumerationResult", SDL_ENUM]
 
-SDL_ENUM_CONTINUE = 0
-SDL_ENUM_SUCCESS = 1
-SDL_ENUM_FAILURE = 2
+SDL_ENUM_CONTINUE, SDL_ENUM_SUCCESS, SDL_ENUM_FAILURE = range(3)
 
 SDL_EnumerateDirectoryCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_EnumerateDirectoryCallback", SDL_EnumerationResult, [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p]]
 

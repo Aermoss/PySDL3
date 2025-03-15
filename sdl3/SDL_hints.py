@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_FUNC_TYPE, \
+from .__init__ import ctypes, typing, abc, SDL_FUNC_TYPE, SDL_ENUM, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 SDL_SET_CURRENT_BINARY(SDL_BINARY)
@@ -243,11 +243,9 @@ SDL_HINT_ASSERT = "SDL_ASSERT".encode()
 SDL_HINT_PEN_MOUSE_EVENTS = "SDL_PEN_MOUSE_EVENTS".encode()
 SDL_HINT_PEN_TOUCH_EVENTS = "SDL_PEN_TOUCH_EVENTS".encode()
 
-SDL_HintPriority: typing.TypeAlias = SDL_TYPE["SDL_HintPriority", ctypes.c_int]
+SDL_HintPriority: typing.TypeAlias = SDL_TYPE["SDL_HintPriority", SDL_ENUM]
 
-SDL_HINT_DEFAULT = 0
-SDL_HINT_NORMAL = 1
-SDL_HINT_OVERRIDE = 2
+SDL_HINT_DEFAULT, SDL_HINT_NORMAL, SDL_HINT_OVERRIDE = range(3)
 
 SDL_SetHintWithPriority: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHintWithPriority", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_char_p, SDL_HintPriority]]
 SDL_SetHint: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHint", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_char_p]]

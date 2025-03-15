@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, abc, SDL_NOT_IMPLEMENTED, SDL_POINTER, SDL_FUNC_TYPE, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_RTF_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_GET_BINARY, SDL_RTF_BINARY, SDL_BINARY, SDL_ENUM
 
 from .SDL_pixels import SDL_Color
 from .SDL_render import SDL_Renderer, SDL_Texture
@@ -9,9 +9,7 @@ from .SDL_rect import SDL_Rect
 
 SDL_SET_CURRENT_BINARY(SDL_RTF_BINARY)
 
-SDL_RTF_MAJOR_VERSION = 3
-SDL_RTF_MINOR_VERSION = 0
-SDL_RTF_MICRO_VERSION = 0
+SDL_RTF_MAJOR_VERSION, SDL_RTF_MINOR_VERSION, SDL_RTF_MICRO_VERSION = 3, 0, 0
 
 SDL_RTF_VERSION = \
     SDL_VERSIONNUM(SDL_RTF_MAJOR_VERSION, SDL_RTF_MINOR_VERSION, SDL_RTF_MICRO_VERSION)
@@ -26,23 +24,15 @@ RTF_Version: abc.Callable[..., typing.Any] = SDL_FUNC["RTF_Version", ctypes.c_in
 class RTF_Context(ctypes.c_void_p):
     ...
 
-RTF_FontFamily: typing.TypeAlias = SDL_TYPE["RTF_FontFamily", ctypes.c_int]
+RTF_FontFamily: typing.TypeAlias = SDL_TYPE["RTF_FontFamily", SDL_ENUM]
 
-RTF_FontDefault = 0
-RTF_FontRoman = 1
-RTF_FontSwiss = 2
-RTF_FontModern = 3
-RTF_FontScript = 4
-RTF_FontDecor = 5
-RTF_FontTech = 6
-RTF_FontBidi = 7
+RTF_FontDefault, RTF_FontRoman, RTF_FontSwiss, RTF_FontModern, \
+    RTF_FontScript, RTF_FontDecor, RTF_FontTech, RTF_FontBidi = range(8)
 
-RTF_FontStyle: typing.TypeAlias = SDL_TYPE["RTF_FontStyle", ctypes.c_int]
+RTF_FontStyle: typing.TypeAlias = SDL_TYPE["RTF_FontStyle", SDL_ENUM]
 
-RTF_FontNormal = 0x00
-RTF_FontBold = 0x01
-RTF_FontItalic = 0x02
-RTF_FontUnderline = 0x04
+RTF_FontNormal, RTF_FontBold, RTF_FontItalic, \
+    RTF_FontUnderline = 0x00, 0x01, 0x02, 0x04
 
 RTF_FONT_ENGINE_VERSION = 1
 

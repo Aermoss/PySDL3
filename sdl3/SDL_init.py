@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_FUNC_TYPE, \
-    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY, SDL_ENUM
 
 from .SDL_events import SDL_Event
 
@@ -16,11 +16,9 @@ SDL_INIT_EVENTS = 0x00004000
 SDL_INIT_SENSOR = 0x00008000
 SDL_INIT_CAMERA = 0x00010000
 
-SDL_AppResult: typing.TypeAlias = SDL_TYPE["SDL_AppResult", ctypes.c_int]
+SDL_AppResult: typing.TypeAlias = SDL_TYPE["SDL_AppResult", SDL_ENUM]
 
-SDL_APP_CONTINUE = 0
-SDL_APP_SUCCESS = 1
-SDL_APP_FAILURE = 2
+SDL_APP_CONTINUE, SDL_APP_SUCCESS, SDL_APP_FAILURE = range(3)
 
 SDL_AppInit_func: typing.TypeAlias = SDL_FUNC_TYPE["SDL_AppInit_func", SDL_AppResult, [SDL_POINTER[ctypes.c_void_p], ctypes.c_int, SDL_POINTER[ctypes.c_char_p]]]
 SDL_AppIterate_func: typing.TypeAlias = SDL_FUNC_TYPE["SDL_AppIterate_func", SDL_AppResult, [ctypes.c_void_p]]

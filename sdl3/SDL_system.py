@@ -1,5 +1,5 @@
 from .__init__ import ctypes, typing, abc, SDL_PLATFORM_SPECIFIC, SDL_POINTER, \
-    SDL_FUNC, SDL_FUNC_TYPE, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
+    SDL_FUNC, SDL_FUNC_TYPE, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY, SDL_ENUM
 
 from .SDL_video import SDL_DisplayID
 
@@ -28,13 +28,10 @@ if SDL_PLATFORM_SPECIFIC(system = ["Linux"]):
 SDL_IsTablet: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IsTablet", ctypes.c_bool, []]
 SDL_IsTV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IsTV", ctypes.c_bool, []]
 
-SDL_Sandbox: typing.TypeAlias = SDL_TYPE["SDL_Sandbox", ctypes.c_int]
+SDL_Sandbox: typing.TypeAlias = SDL_TYPE["SDL_Sandbox", SDL_ENUM]
 
-SDL_SANDBOX_NONE = 0
-SDL_SANDBOX_UNKNOWN_CONTAINER = 1
-SDL_SANDBOX_FLATPAK = 2
-SDL_SANDBOX_SNAP = 3
-SDL_SANDBOX_MACOS = 4
+SDL_SANDBOX_NONE, SDL_SANDBOX_UNKNOWN_CONTAINER, SDL_SANDBOX_FLATPAK, \
+    SDL_SANDBOX_SNAP, SDL_SANDBOX_MACOS = range(5)
 
 SDL_GetSandbox: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSandbox", SDL_Sandbox, []]
 

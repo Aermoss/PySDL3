@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_ENUM, \
     SDL_FUNC, SDL_TYPE, SDL_SET_CURRENT_BINARY, SDL_BINARY
 
 from .SDL_events import SDL_Event
@@ -20,19 +20,14 @@ class SDL_Vertex(ctypes.Structure):
         ("tex_coord", SDL_FPoint)
     ]
 
-SDL_TextureAccess: typing.TypeAlias = SDL_TYPE["SDL_TextureAccess", ctypes.c_int]
+SDL_TextureAccess: typing.TypeAlias = SDL_TYPE["SDL_TextureAccess", SDL_ENUM]
 
-SDL_TEXTUREACCESS_STATIC = 0
-SDL_TEXTUREACCESS_STREAMING = 1
-SDL_TEXTUREACCESS_TARGET = 2
+SDL_TEXTUREACCESS_STATIC, SDL_TEXTUREACCESS_STREAMING, SDL_TEXTUREACCESS_TARGET = range(3)
 
-SDL_RendererLogicalPresentation: typing.TypeAlias = SDL_TYPE["SDL_RendererLogicalPresentation", ctypes.c_int]
+SDL_RendererLogicalPresentation: typing.TypeAlias = SDL_TYPE["SDL_RendererLogicalPresentation", SDL_ENUM]
 
-SDL_LOGICAL_PRESENTATION_DISABLED = 0
-SDL_LOGICAL_PRESENTATION_STRETCH = 1
-SDL_LOGICAL_PRESENTATION_LETTERBOX = 2
-SDL_LOGICAL_PRESENTATION_OVERSCAN = 3
-SDL_LOGICAL_PRESENTATION_INTEGER_SCALE = 4
+SDL_LOGICAL_PRESENTATION_DISABLED, SDL_LOGICAL_PRESENTATION_STRETCH, SDL_LOGICAL_PRESENTATION_LETTERBOX, \
+    SDL_LOGICAL_PRESENTATION_OVERSCAN, SDL_LOGICAL_PRESENTATION_INTEGER_SCALE = range(5)
 
 class SDL_Renderer(ctypes.c_void_p):
     ...
@@ -260,8 +255,7 @@ SDL_AddVulkanRenderSemaphores: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_Add
 
 SDL_SetRenderVSync: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetRenderVSync", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], ctypes.c_int]]
 
-SDL_RENDERER_VSYNC_DISABLED = 0
-SDL_RENDERER_VSYNC_ADAPTIVE = -1
+SDL_RENDERER_VSYNC_DISABLED, SDL_RENDERER_VSYNC_ADAPTIVE = 0, -1
 
 SDL_GetRenderVSync: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRenderVSync", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[ctypes.c_int]]]
 
