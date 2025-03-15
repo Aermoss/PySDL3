@@ -425,7 +425,7 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
             if not rst: definitions += f"\n{' ' * 4}https://wiki.libsdl.org/{module}/{func}\n"
             if not rst or description is not None: definitions += f"{' ' * 4}\"\"\"\n"
             if not rst: definitions += f"{' ' * 4}return raw.{func}({', '.join(arguments)})"
-            else: definitions += f"{' ' * 4}..."
+            if rst and description is None: definitions += f"{' ' * 4}..."
 
             if _index != len(__module__.functions[module]) - 1:
                 definitions += "\n\n"
