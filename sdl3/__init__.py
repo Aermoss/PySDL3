@@ -213,7 +213,10 @@ def SDL_GET_CURRENT_BINARY() -> typing.Any:
     return __module__.currentBinary
 
 def SDL_NOT_IMPLEMENTED(name: str) -> abc.Callable[..., None]:
+    """Do not call this function directly."""
     return lambda *args, **kwargs: print("\33[31m", f"error: invoked an unimplemented function: '{name}'.", "\33[0m", sep = "", flush = True)
+
+SDL_ENUM: typing.TypeAlias = ctypes.c_int
 
 class SDL_FUNC:
     """Create a new ctypes function definition."""
