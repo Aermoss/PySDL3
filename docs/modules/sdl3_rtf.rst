@@ -4,3 +4,4 @@ This page is under development.
 
 .. automodule:: SDL3_rtf
   :members:
+  :undoc-members:
