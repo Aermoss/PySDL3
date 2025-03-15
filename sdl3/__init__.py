@@ -219,10 +219,10 @@ def SDL_NOT_IMPLEMENTED(name: str) -> abc.Callable[..., None]:
 SDL_ENUM: typing.TypeAlias = ctypes.c_int
 
 class SDL_FUNC:
-    """Create a new ctypes function definition."""
-
     @classmethod
     def __class_getitem__(cls, key) -> typing.Any:
+        """Create a new ctypes function definition."""
+
         if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
             assert isinstance(key, tuple), "Expected a tuple, got a single argument."
             assert len(key) == 3, "Expected a tuple with length 3."
@@ -243,10 +243,10 @@ class SDL_FUNC:
         __module__.functions[binary[1]][key[0]] = func; return func
 
 class SDL_POINTER:
-    """Create a ctypes pointer type from a ctypes type."""
-
     @classmethod
     def __class_getitem__(cls, key) -> typing.Any:
+        """Create a ctypes pointer type from a ctypes type."""
+
         if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
             assert not isinstance(key, tuple), "Expected a single argument, got a tuple."
             assert isinstance(key, type), "Expected a type as the first argument."
@@ -254,10 +254,10 @@ class SDL_POINTER:
         return ctypes.POINTER(key)
 
 class SDL_CAST:
-    """Cast a ctypes pointer to an another type."""
-
     @classmethod
     def __class_getitem__(cls, key) -> typing.Any:
+        """Cast a ctypes pointer to an another type."""
+
         if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
             assert isinstance(key, tuple), "Expected a tuple, got a single argument."
             assert len(key) == 2, "Expected a tuple with length 2."
@@ -267,10 +267,10 @@ class SDL_CAST:
         return ctypes.cast(key[0], key[1])
 
 class SDL_TYPE:
-    """Create a new type from a ctypes type."""
-
     @classmethod
     def __class_getitem__(cls, key) -> typing.Any:
+        """Create a new type from a ctypes type."""
+
         if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
             assert isinstance(key, tuple), "Expected a tuple, got a single argument."
             assert len(key) == 2, "Expected a tuple with length 2."
@@ -280,10 +280,10 @@ class SDL_TYPE:
         return type(key[0], (ctypes._SimpleCData, ), {"_type_": key[1]._type_})
 
 class SDL_FUNC_TYPE:
-    """Create a new ctypes function type."""
-
     @classmethod
     def __class_getitem__(cls, key) -> typing.Any:
+        """Create a new ctypes function type."""
+
         if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
             assert isinstance(key, tuple), "Expected a tuple, got a single argument."
             assert len(key) == 3, "Expected a tuple with length 3."
