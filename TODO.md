@@ -1,1 +1,1 @@
-- [ ] 'SDL_shadercross' and 'SDL_shader_tools' implementation.
+- [ ] Add 'SDL_shadercross' implementation.
