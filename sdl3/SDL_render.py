@@ -14,7 +14,7 @@ SDL_SOFTWARE_RENDERER = "software".encode()
 class SDL_Vertex(ctypes.Structure):
     _fields_ = [
         ("position", SDL_FPoint),
-        ("color", SDL_Color),
+        ("color", SDL_FColor),
         ("tex_coord", SDL_FPoint)
     ]
 
