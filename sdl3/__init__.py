@@ -5,8 +5,8 @@ __version__ = "0.9.6b3"
 import sys, os, requests, ctypes, ctypes.util, platform, keyword, inspect, collections.abc as abc, \
     asyncio, aiohttp, zipfile, typing, types, array, importlib, atexit, packaging.version, json, re
 
-SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_TTF_BINARY, SDL_RTF_BINARY, SDL_NET_BINARY = \
-    "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_ttf", "SDL3_rtf", "SDL3_net"
+SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_TTF_BINARY, SDL_RTF_BINARY, SDL_NET_BINARY, SDL_SHADERCROSS_BINARY = \
+    "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_ttf", "SDL3_rtf", "SDL3_net", "SDL3_shadercross"
 
 SDL_BINARY_VAR_MAP: dict[str, str] = {}
 
