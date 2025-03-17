@@ -57,15 +57,11 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
 
     headers = {"Accept": "application/vnd.github+json"}
 
-    if "SDL_GITHUB_TOKEN" in os.environ:
+    if len(os.environ.get("SDL_GITHUB_TOKEN", "")) != 0:
         headers["Authorization"] = f"Bearer {os.environ['SDL_GITHUB_TOKEN']}"
 
     try:
         for release in requests.get("https://api.github.com/repos/Aermoss/PySDL3-Build/releases", headers = headers).json():
-            if isinstance(release, str):
-                print("\33[35m", f"warning: {release.lower()}.", "\33[0m", sep = "", flush = True)
-                continue
-            
             if release["draft"] or release["prerelease"]:
                 continue
 
