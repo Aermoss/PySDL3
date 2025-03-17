@@ -62,6 +62,10 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
 
     try:
         for release in requests.get("https://api.github.com/repos/Aermoss/PySDL3-Build/releases", headers = headers).json():
+            if isinstance(release, str):
+                print("\33[35m", f"warning: {release.lower()}.", "\33[0m", sep = "", flush = True)
+                continue
+            
             if release["draft"] or release["prerelease"]:
                 continue
 
