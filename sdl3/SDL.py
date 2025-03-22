@@ -47,6 +47,7 @@ from .SDL_render import *
 from .SDL_rtf import *
 from .SDL_scancode import *
 from .SDL_sensor import *
+from .SDL_shadercross import *
 from .SDL_stdinc import *
 from .SDL_storage import *
 from .SDL_surface import *

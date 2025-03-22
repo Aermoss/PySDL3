@@ -1,1 +1,1 @@
-- [ ] Add 'SDL_shadercross' implementation.
+- [x] Add 'SDL_shadercross' implementation.

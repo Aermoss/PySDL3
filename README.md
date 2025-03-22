@@ -8,7 +8,7 @@
 [![PyPI Downloads](https://img.shields.io/pypi/dm/PySDL3.svg)](https://pypi.org/project/PySDL3)
 [![PyPI Status](https://img.shields.io/pypi/status/PySDL3.svg)](https://pypi.org/project/PySDL3)
 
-PySDL3 is a pure Python wrapper around the SDL3, SDL3\_image, SDL3\_mixer, SDL3\_ttf, SDL3\_rtf and SDL3\_net libraries.
+PySDL3 is a pure Python wrapper around the SDL3, SDL3\_image, SDL3\_mixer, SDL3\_ttf, SDL3\_rtf, SDL3\_net and SDL3\_shadercross libraries.
 It uses the built-in ctypes library to interface with SDL3 while providing an **understandable** function definition with docstrings, argument names and type hints, like this:
 
 [![Screenshot](https://github.com/Aermoss/PySDL3/blob/main/res/snippet.png?raw=true)](https://github.com/Aermoss/PySDL3/blob/main/gpu.py)

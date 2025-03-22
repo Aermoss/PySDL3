@@ -11,3 +11,4 @@ This page is under development.
   sdl3_ttf.rst
   sdl3_rtf.rst
   sdl3_net.rst
+  sdl3_shadercross.rst
