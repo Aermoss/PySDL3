@@ -260,4 +260,4 @@ SDL_GetRenderVSync: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRenderVSync
 SDL_DEBUG_TEXT_FONT_CHARACTER_SIZE = 8
 
 SDL_RenderDebugText: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderDebugText", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, ctypes.c_char_p], SDL_BINARY]
-SDL_RenderDebugTextFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderDebugTextFormat", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, ctypes.c_char_p], SDL_BINARY]
+SDL_RenderDebugTextFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderDebugTextFormat", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, ctypes.c_char_p, ...], SDL_BINARY]

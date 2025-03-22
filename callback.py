@@ -14,11 +14,11 @@ def SDL_AppInit(appstate: sdl3.LP_c_void_p, argc: ctypes.c_int, argv: sdl3.LP_c_
     appstate[0] = ctypes.cast(ctypes.pointer(state := AppState()), ctypes.c_void_p)
 
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO):
-        sdl3.SDL_Log("Couldn't initialize SDL: ".encode() + sdl3.SDL_GetError())
+        sdl3.SDL_Log("Couldn't initialize SDL: %s.".encode(), sdl3.SDL_GetError())
         return sdl3.SDL_APP_FAILURE
 
     if not sdl3.SDL_CreateWindowAndRenderer("Aermoss".encode(), 1600, 900, 0, ctypes.byref(state.window), ctypes.byref(state.renderer)):
-        sdl3.SDL_Log("Couldn't create window/renderer: ".encode() + sdl3.SDL_GetError())
+        sdl3.SDL_Log("Couldn't create window/renderer: %s.".encode(), sdl3.SDL_GetError())
         return sdl3.SDL_APP_FAILURE
 
     return sdl3.SDL_APP_CONTINUE

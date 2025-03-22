@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_VA_LIST, \
     SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
 
 from .SDL_properties import SDL_PropertiesID
@@ -56,8 +56,8 @@ SDL_TellIO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_TellIO", ctypes.c_int6
 SDL_ReadIO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReadIO", ctypes.c_size_t, [SDL_POINTER[SDL_IOStream], ctypes.c_void_p, ctypes.c_size_t], SDL_BINARY]
 SDL_WriteIO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WriteIO", ctypes.c_size_t, [SDL_POINTER[SDL_IOStream], ctypes.c_void_p, ctypes.c_size_t], SDL_BINARY]
 
-SDL_IOprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IOprintf", ctypes.c_size_t, [SDL_POINTER[SDL_IOStream], ctypes.c_char_p], SDL_BINARY]
-SDL_IOvprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IOvprintf", ctypes.c_size_t, [SDL_POINTER[SDL_IOStream], ctypes.c_char_p, ctypes.c_void_p], SDL_BINARY]
+SDL_IOprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IOprintf", ctypes.c_size_t, [SDL_POINTER[SDL_IOStream], ctypes.c_char_p, ...], SDL_BINARY]
+SDL_IOvprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IOvprintf", ctypes.c_size_t, [SDL_POINTER[SDL_IOStream], ctypes.c_char_p, SDL_VA_LIST], SDL_BINARY]
 
 SDL_FlushIO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlushIO", ctypes.c_bool, [SDL_POINTER[SDL_IOStream]], SDL_BINARY]
 

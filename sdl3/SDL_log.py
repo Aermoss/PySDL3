@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
+from .__init__ import ctypes, typing, abc, SDL_POINTER, SDL_VA_LIST, \
     SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
 
 SDL_LogCategory: typing.TypeAlias = SDL_TYPE["SDL_LogCategory", SDL_ENUM]
@@ -19,16 +19,16 @@ SDL_GetLogPriority: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetLogPriority
 SDL_ResetLogPriorities: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ResetLogPriorities", None, [], SDL_BINARY]
 SDL_SetLogPriorityPrefix: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetLogPriorityPrefix", ctypes.c_bool, [SDL_LogPriority, ctypes.c_char_p], SDL_BINARY]
 
-SDL_Log: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_Log", None, [ctypes.c_char_p], SDL_BINARY]
-SDL_LogTrace: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogTrace", None, [ctypes.c_int, ctypes.c_char_p], SDL_BINARY]
-SDL_LogVerbose: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogVerbose", None, [ctypes.c_int, ctypes.c_char_p], SDL_BINARY]
-SDL_LogDebug: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogDebug", None, [ctypes.c_int, ctypes.c_char_p], SDL_BINARY]
-SDL_LogInfo: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogInfo", None, [ctypes.c_int, ctypes.c_char_p], SDL_BINARY]
-SDL_LogWarn: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogWarn", None, [ctypes.c_int, ctypes.c_char_p], SDL_BINARY]
-SDL_LogError: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogError", None, [ctypes.c_int, ctypes.c_char_p], SDL_BINARY]
-SDL_LogCritical: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogCritical", None, [ctypes.c_int, ctypes.c_char_p], SDL_BINARY]
-SDL_LogMessage: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogMessage", None, [ctypes.c_int, SDL_LogPriority, ctypes.c_char_p], SDL_BINARY]
-SDL_LogMessageV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogMessageV", None, [ctypes.c_int, SDL_LogPriority, ctypes.c_char_p, ctypes.c_char_p], SDL_BINARY]
+SDL_Log: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_Log", None, [ctypes.c_char_p, ...], SDL_BINARY]
+SDL_LogTrace: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogTrace", None, [ctypes.c_int, ctypes.c_char_p, ...], SDL_BINARY]
+SDL_LogVerbose: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogVerbose", None, [ctypes.c_int, ctypes.c_char_p, ...], SDL_BINARY]
+SDL_LogDebug: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogDebug", None, [ctypes.c_int, ctypes.c_char_p, ...], SDL_BINARY]
+SDL_LogInfo: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogInfo", None, [ctypes.c_int, ctypes.c_char_p, ...], SDL_BINARY]
+SDL_LogWarn: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogWarn", None, [ctypes.c_int, ctypes.c_char_p, ...], SDL_BINARY]
+SDL_LogError: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogError", None, [ctypes.c_int, ctypes.c_char_p, ...], SDL_BINARY]
+SDL_LogCritical: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogCritical", None, [ctypes.c_int, ctypes.c_char_p, ...], SDL_BINARY]
+SDL_LogMessage: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogMessage", None, [ctypes.c_int, SDL_LogPriority, ctypes.c_char_p, ...], SDL_BINARY]
+SDL_LogMessageV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LogMessageV", None, [ctypes.c_int, SDL_LogPriority, ctypes.c_char_p, SDL_VA_LIST], SDL_BINARY]
 
 SDL_LogOutputFunction: typing.TypeAlias = SDL_FUNC_TYPE["SDL_LogOutputFunction", None, [ctypes.c_void_p, ctypes.c_int, SDL_LogPriority, ctypes.c_char_p]]
 

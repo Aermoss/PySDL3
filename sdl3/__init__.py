@@ -208,6 +208,7 @@ def SDL_NOT_IMPLEMENTED(name: str) -> abc.Callable[..., None]:
     return lambda *args, **kwargs: print("\33[31m", f"error: invoked an unimplemented function: '{name}'.", "\33[0m", sep = "", flush = True)
 
 SDL_ENUM: typing.TypeAlias = ctypes.c_int
+SDL_VA_LIST: typing.TypeAlias = ctypes.c_char_p
 
 class SDL_FUNC:
     @classmethod
@@ -220,6 +221,8 @@ class SDL_FUNC:
             assert isinstance(key[0], str), "Expected a string as the first argument."
             assert isinstance(key[1], type) or key[1] is None, "Expected a type as the second argument."
             assert isinstance(key[2], list), "Expected a list as the third argument."
+            assert ... not in key[2] or key[2].count(...) == 1, "Expected at most 1 '...' in the argument list."
+            assert ... not in key[2] or key[2][-1] == ..., "Expected '...' at the end of the argument list."
             assert isinstance(key[3], str), "Expected a string as the fourth argument."
             assert key[3] in SDL_BINARY_VAR_MAP_INV, "Unknown binary."
 
@@ -231,8 +234,29 @@ class SDL_FUNC:
                 print("\33[35m", f"warning: function '{key[0]}' not found in binary: '{key[3]}'.", "\33[0m", sep = "", flush = True)
 
         if not binary or not func: func = SDL_NOT_IMPLEMENTED(key[0])
-        func.restype, func.argtypes, func.binary = key[1], key[2], binary
-        __module__.functions[key[3]][key[0]] = func; return func
+        func.restype, func.binary = key[1], binary
+
+        if ... in key[2]:
+            def __inner__(*args: list[typing.Any], **kwargs: dict[str, typing.Any]) -> typing.Any:
+                for arg in args[len(__inner__.func.argtypes):]:
+                    if isinstance(arg, int): __inner__.func.argtypes += [ctypes.c_int]
+                    elif isinstance(arg, float): __inner__.func.argtypes += [ctypes.c_float]
+                    elif isinstance(arg, bytes): __inner__.func.argtypes += [ctypes.c_char_p]
+                    elif isinstance(arg, bool): __inner__.func.argtypes += [ctypes.c_bool]
+                    else: __inner__.func.argtypes += [arg.__class__]
+
+                value = __inner__.func(*args, **kwargs)
+                __inner__.func.argtypes = key[2][:-1]
+                return value
+
+            func.argtypes, func.vararg = key[2][:-1], True
+            func, __inner__.func = __inner__, func
+
+        else:
+            func.argtypes, func.vararg = key[2], False
+
+        __module__.functions[key[3]][key[0]] = func
+        return func
 
 class SDL_POINTER:
     @classmethod
@@ -386,8 +410,8 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
 
     for module in modules:
         for func in __module__.functions[module]:
-            __module__.functions[module][func].__doc__ = \
-                (descriptions[__index := __index + 1], arguments[__index])
+            if (_ := __module__.functions[module][func]).__name__ == "__inner__": _ = _.func
+            _.__doc__ = (descriptions[__index := __index + 1], arguments[__index])
 
     result = "" if rst else f"\"\"\"\n# This file is auto-generated, do not modify it.\nmeta = "
     if not rst: result += f"{{\"target\": \"v{__version__}\", \"system\": \"{SDL_SYSTEM}\"}}\n\"\"\"\n\n"
@@ -406,17 +430,16 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
         if not rst: definitions += f"# {SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(module)} implementation.\n\n"
 
         for _index, func in enumerate(__module__.functions[module]):
-            retType, argtypes, (description, arguments) = \
-                __module__.functions[module][func].restype, __module__.functions[module][func].argtypes, __module__.functions[module][func].__doc__
-
+            if (_ := __module__.functions[module][func]).__name__ == "__inner__": _ = _.func
+            vararg, restype, argtypes, (description, arguments) = _.vararg, _.restype, _.argtypes, _.__doc__
             assert arguments is None or (arguments is not None and len(arguments) == len(argtypes)), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{func}'."
             arguments = [f"{'_' if arguments is None or arguments[i] in keyword.kwlist else ''}{i if arguments is None else arguments[i]}" for i in range(len(argtypes))]
-            definitions += f"def {func}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)])}) -> {SDL_GET_NAME(retType)}:\n"
+            definitions += f"def {func}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)] + (['*args: list[typing.Any]'] if vararg else []))}) -> {SDL_GET_NAME(restype)}:\n"
             if not rst or description is not None: definitions += f"{' ' * 4}\"\"\"\n"
             if description is not None: definitions += f"    {description}\n"
             if not rst: definitions += f"\n{' ' * 4}https://wiki.libsdl.org/{module}/{func}\n"
             if not rst or description is not None: definitions += f"{' ' * 4}\"\"\""
-            if not rst: definitions += f"\n{' ' * 4}return raw.{func}({', '.join(arguments)})"
+            if not rst: definitions += f"\n{' ' * 4}return raw.{func}({', '.join(arguments + (['*args'] if vararg else []))})"
             elif description is None: definitions += f"\n{' ' * 4}..."
 
             if _index != len(__module__.functions[module]) - 1:

@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, \
+from .__init__ import ctypes, typing, abc, SDL_VA_LIST, \
     SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 SDL_arraysize: abc.Callable[[typing.Any], int] = lambda array: ctypes.sizeof(array) // ctypes.sizeof(array[0])
@@ -183,14 +183,14 @@ SDL_StepUTF8: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_StepUTF8", ctypes.c_
 SDL_StepBackUTF8: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_StepBackUTF8", ctypes.c_uint32, [ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p]], SDL_BINARY]
 SDL_UCS4ToUTF8: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UCS4ToUTF8", ctypes.c_char_p, [ctypes.c_uint32, ctypes.c_char_p], SDL_BINARY]
 
-SDL_sscanf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_sscanf", ctypes.c_int, [ctypes.c_char_p, ctypes.c_char_p], SDL_BINARY]
-SDL_vsscanf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_vsscanf", ctypes.c_int, [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_void_p], SDL_BINARY]
-SDL_snprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_snprintf", ctypes.c_int, [ctypes.c_char_p, ctypes.c_size_t, ctypes.c_char_p], SDL_BINARY]
-SDL_swprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_swprintf", ctypes.c_int, [ctypes.c_wchar_p, ctypes.c_size_t, ctypes.c_wchar_p], SDL_BINARY]
-SDL_vsnprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_vsnprintf", ctypes.c_int, [ctypes.c_char_p, ctypes.c_size_t, ctypes.c_char_p, ctypes.c_void_p], SDL_BINARY]
-SDL_vswprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_vswprintf", ctypes.c_int, [ctypes.c_wchar_p, ctypes.c_size_t, ctypes.c_wchar_p, ctypes.c_void_p], SDL_BINARY]
-SDL_asprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_asprintf", ctypes.c_int, [SDL_POINTER[ctypes.c_char_p], ctypes.c_char_p], SDL_BINARY]
-SDL_vasprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_vasprintf", ctypes.c_int, [SDL_POINTER[ctypes.c_char_p], ctypes.c_char_p, ctypes.c_void_p], SDL_BINARY]
+SDL_sscanf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_sscanf", ctypes.c_int, [ctypes.c_char_p, ctypes.c_char_p, ...], SDL_BINARY]
+SDL_vsscanf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_vsscanf", ctypes.c_int, [ctypes.c_char_p, ctypes.c_char_p, SDL_VA_LIST], SDL_BINARY]
+SDL_snprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_snprintf", ctypes.c_int, [ctypes.c_char_p, ctypes.c_size_t, ctypes.c_char_p, ...], SDL_BINARY]
+SDL_swprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_swprintf", ctypes.c_int, [ctypes.c_wchar_p, ctypes.c_size_t, ctypes.c_wchar_p, ...], SDL_BINARY]
+SDL_vsnprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_vsnprintf", ctypes.c_int, [ctypes.c_char_p, ctypes.c_size_t, ctypes.c_char_p, SDL_VA_LIST], SDL_BINARY]
+SDL_vswprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_vswprintf", ctypes.c_int, [ctypes.c_wchar_p, ctypes.c_size_t, ctypes.c_wchar_p, SDL_VA_LIST], SDL_BINARY]
+SDL_asprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_asprintf", ctypes.c_int, [SDL_POINTER[ctypes.c_char_p], ctypes.c_char_p, ...], SDL_BINARY]
+SDL_vasprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_vasprintf", ctypes.c_int, [SDL_POINTER[ctypes.c_char_p], ctypes.c_char_p, SDL_VA_LIST], SDL_BINARY]
 
 SDL_srand: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_srand", None, [ctypes.c_uint64], SDL_BINARY]
 SDL_rand: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_rand", ctypes.c_int32, [ctypes.c_int64], SDL_BINARY]
