@@ -124,14 +124,10 @@ SDL_GetJoystickAxisInitialState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_G
 SDL_GetJoystickBall: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetJoystickBall", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_int, SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 SDL_GetJoystickHat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetJoystickHat", ctypes.c_uint8, [SDL_POINTER[SDL_Joystick], ctypes.c_int], SDL_BINARY]
 
-SDL_HAT_CENTERED, SDL_HAT_UP, SDL_HAT_RIGHT, \
-    SDL_HAT_DOWN, SDL_HAT_LEFT = 0x00, 0x01, 0x02, 0x04, 0x08
+SDL_HAT_CENTERED, SDL_HAT_UP, SDL_HAT_RIGHT, SDL_HAT_DOWN, SDL_HAT_LEFT = 0x00, 0x01, 0x02, 0x04, 0x08
 
-SDL_HAT_RIGHTUP, SDL_HAT_RIGHTDOWN = \
-    SDL_HAT_RIGHT | SDL_HAT_UP, SDL_HAT_RIGHT | SDL_HAT_DOWN
-
-SDL_HAT_LEFTUP, SDL_HAT_LEFTDOWN = \
-    SDL_HAT_LEFT | SDL_HAT_UP, SDL_HAT_LEFT | SDL_HAT_DOWN
+SDL_HAT_RIGHTUP, SDL_HAT_RIGHTDOWN, SDL_HAT_LEFTUP, SDL_HAT_LEFTDOWN = \
+    SDL_HAT_RIGHT | SDL_HAT_UP, SDL_HAT_RIGHT | SDL_HAT_DOWN, SDL_HAT_LEFT | SDL_HAT_UP, SDL_HAT_LEFT | SDL_HAT_DOWN
 
 SDL_GetJoystickButton: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetJoystickButton", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_int], SDL_BINARY]
 SDL_RumbleJoystick: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RumbleJoystick", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_uint16, ctypes.c_uint16, ctypes.c_uint32], SDL_BINARY]

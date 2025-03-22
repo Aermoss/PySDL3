@@ -2,13 +2,13 @@ from .__init__ import ctypes, typing, abc, SDL_PLATFORM_SPECIFIC, \
     SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_TTF_BINARY, SDL_ENUM
 
 from .SDL_pixels import SDL_Color
+from .SDL_surface import SDL_Surface
+from .SDL_rect import SDL_Rect, SDL_FPoint
 from .SDL_gpu import SDL_GPUDevice, SDL_GPUTexture
 from .SDL_properties import SDL_PropertiesID
-from .SDL_render import SDL_Renderer
-from .SDL_surface import SDL_Surface
-from .SDL_iostream import SDL_IOStream
 from .SDL_version import SDL_VERSIONNUM
-from .SDL_rect import SDL_Rect, SDL_FPoint
+from .SDL_iostream import SDL_IOStream
+from .SDL_render import SDL_Renderer
 
 SDL_TTF_MAJOR_VERSION, SDL_TTF_MINOR_VERSION, SDL_TTF_MICRO_VERSION = 3, 2, 0
 SDL_TTF_VERSION: int = SDL_VERSIONNUM(SDL_TTF_MAJOR_VERSION, SDL_TTF_MINOR_VERSION, SDL_TTF_MICRO_VERSION)
@@ -37,7 +37,7 @@ TTF_PROP_FONT_CREATE_SIZE_FLOAT: bytes = "SDL_ttf.font.create.size".encode()
 TTF_PROP_FONT_CREATE_FACE_NUMBER: bytes = "SDL_ttf.font.create.face".encode()
 TTF_PROP_FONT_CREATE_HORIZONTAL_DPI_NUMBER: bytes = "SDL_ttf.font.create.hdpi".encode()
 TTF_PROP_FONT_CREATE_VERTICAL_DPI_NUMBER: bytes = "SDL_ttf.font.create.vdpi".encode()
-TTF_PROP_FONT_CREATE_EXISTING_FONT: bytes = "SDL_ttf.font.create.existing_font"
+TTF_PROP_FONT_CREATE_EXISTING_FONT: bytes = "SDL_ttf.font.create.existing_font".encode()
 
 TTF_CopyFont: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_CopyFont", SDL_POINTER[TTF_Font], [SDL_POINTER[TTF_Font]], SDL_TTF_BINARY]
 
@@ -172,8 +172,8 @@ TTF_DestroySurfaceTextEngine: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_Dest
 TTF_CreateRendererTextEngine: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_CreateRendererTextEngine", SDL_POINTER[TTF_TextEngine], [SDL_POINTER[SDL_Renderer]], SDL_TTF_BINARY]
 TTF_CreateRendererTextEngineWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_CreateRendererTextEngineWithProperties", SDL_POINTER[TTF_TextEngine], [SDL_PropertiesID], SDL_TTF_BINARY]
 
-TTF_PROP_RENDERER_TEXT_ENGINE_RENDERER: bytes = "SDL_ttf.renderer_text_engine.create.renderer"
-TTF_PROP_RENDERER_TEXT_ENGINE_ATLAS_TEXTURE_SIZE: bytes = "SDL_ttf.renderer_text_engine.create.atlas_texture_size"
+TTF_PROP_RENDERER_TEXT_ENGINE_RENDERER: bytes = "SDL_ttf.renderer_text_engine.create.renderer".encode()
+TTF_PROP_RENDERER_TEXT_ENGINE_ATLAS_TEXTURE_SIZE: bytes = "SDL_ttf.renderer_text_engine.create.atlas_texture_size".encode()
 
 TTF_DrawRendererText: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_DrawRendererText", ctypes.c_bool, [SDL_POINTER[TTF_Text], ctypes.c_float, ctypes.c_float], SDL_TTF_BINARY]
 TTF_DestroyRendererTextEngine: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_DestroyRendererTextEngine", None, [SDL_POINTER[TTF_TextEngine]], SDL_TTF_BINARY]
@@ -181,8 +181,8 @@ TTF_DestroyRendererTextEngine: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_Des
 TTF_CreateGPUTextEngine: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_CreateGPUTextEngine", SDL_POINTER[TTF_TextEngine], [SDL_POINTER[SDL_GPUDevice]], SDL_TTF_BINARY]
 TTF_CreateGPUTextEngineWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_CreateGPUTextEngineWithProperties", SDL_POINTER[TTF_TextEngine], [SDL_PropertiesID], SDL_TTF_BINARY]
 
-TTF_PROP_GPU_TEXT_ENGINE_DEVICE: bytes = "SDL_ttf.gpu_text_engine.create.device"
-TTF_PROP_GPU_TEXT_ENGINE_ATLAS_TEXTURE_SIZE: bytes = "SDL_ttf.gpu_text_engine.create.atlas_texture_size"
+TTF_PROP_GPU_TEXT_ENGINE_DEVICE: bytes = "SDL_ttf.gpu_text_engine.create.device".encode()
+TTF_PROP_GPU_TEXT_ENGINE_ATLAS_TEXTURE_SIZE: bytes = "SDL_ttf.gpu_text_engine.create.atlas_texture_size".encode()
 
 class TTF_GPUAtlasDrawSequence(ctypes.c_void_p):
     ...

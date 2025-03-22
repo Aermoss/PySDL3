@@ -28,8 +28,8 @@ SDL_BUTTON_LEFT, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT, SDL_BUTTON_X1, SDL_BUTTON_
 
 SDL_BUTTON_MASK: abc.Callable[..., int] = lambda x: 1 << (x - 1)
 
-SDL_BUTTON_LMASK, SDL_BUTTON_MMASK, SDL_BUTTON_RMASK, SDL_BUTTON_X1MASK, SDL_BUTTON_X2MASK = \
-    [SDL_BUTTON_MASK(x) for x in range(1, 6)]
+SDL_BUTTON_LMASK, SDL_BUTTON_MMASK, SDL_BUTTON_RMASK, \
+    SDL_BUTTON_X1MASK, SDL_BUTTON_X2MASK = [SDL_BUTTON_MASK(x) for x in range(1, 6)]
 
 SDL_HasMouse: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HasMouse", ctypes.c_bool, [], SDL_BINARY]
 SDL_GetMice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetMice", SDL_POINTER[SDL_MouseID], [SDL_POINTER[ctypes.c_int]], SDL_BINARY]

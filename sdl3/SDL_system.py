@@ -6,7 +6,7 @@ from .SDL_video import SDL_DisplayID
 if SDL_PLATFORM_SPECIFIC(system = ["Windows"]):
     import ctypes.wintypes as wintypes
 
-    MSG = wintypes.tagMSG
+    MSG: typing.TypeAlias = wintypes.tagMSG
     SDL_WindowsMessageHook: typing.TypeAlias = SDL_FUNC_TYPE["SDL_WindowsMessageHook", ctypes.c_bool, [ctypes.c_void_p, SDL_POINTER[MSG]]]
     SDL_SetWindowsMessageHook: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowsMessageHook", None, [SDL_WindowsMessageHook, ctypes.c_void_p], SDL_BINARY]
 

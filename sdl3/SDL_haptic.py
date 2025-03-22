@@ -35,7 +35,7 @@ SDL_HAPTIC_INFINITY: int = 4294967295
 class SDL_HapticDirection(ctypes.Structure):
     _fields_ = [
         ("type", ctypes.c_uint8),
-        ("dir", ctypes.c_int32* 3)
+        ("dir", ctypes.c_int32 * 3)
     ]
 
 class SDL_HapticConstant(ctypes.Structure):
@@ -79,12 +79,12 @@ class SDL_HapticCondition(ctypes.Structure):
         ("delay", ctypes.c_uint16),
         ("button", ctypes.c_uint16),
         ("interval", ctypes.c_uint16),
-        ("right_sat", ctypes.c_uint16* 3),
-        ("left_sat", ctypes.c_uint16* 3),
-        ("right_coeff", ctypes.c_int16* 3),
-        ("left_coeff", ctypes.c_int16* 3),
-        ("deadband", ctypes.c_uint16* 3),
-        ("center", ctypes.c_int16* 3)
+        ("right_sat", ctypes.c_uint16 * 3),
+        ("left_sat", ctypes.c_uint16 * 3),
+        ("right_coeff", ctypes.c_int16 * 3),
+        ("left_coeff", ctypes.c_int16 * 3),
+        ("deadband", ctypes.c_uint16 * 3),
+        ("center", ctypes.c_int16 * 3)
     ]
 
 class SDL_HapticRamp(ctypes.Structure):

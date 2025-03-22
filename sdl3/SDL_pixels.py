@@ -1,8 +1,8 @@
 from .__init__ import ctypes, typing, abc, \
     SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
-from .SDL_endian import SDL_BYTEORDER, SDL_BIG_ENDIAN
 from .SDL_stdinc import SDL_FOURCC
+from .SDL_endian import SDL_BYTEORDER, SDL_BIG_ENDIAN
 
 SDL_ALPHA_OPAQUE, SDL_ALPHA_TRANSPARENT_FLOAT = 255, 1.0
 SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE_FLOAT = 0, 0.0
@@ -34,7 +34,7 @@ SDL_PACKEDLAYOUT_NONE, SDL_PACKEDLAYOUT_332, SDL_PACKEDLAYOUT_4444, SDL_PACKEDLA
 def SDL_DEFINE_PIXELFORMAT(ptype: int, order: int, layout: int, bits: int, pbytes: int) -> int:
     return (1 << 28) | (ptype << 24) | (order << 20) | (layout << 16) | (bits << 8) | (pbytes << 0)
 
-SDL_DEFINE_PIXELFOURCC = SDL_FOURCC
+SDL_DEFINE_PIXELFOURCC: abc.Callable[[int, int, int, int], int] = SDL_FOURCC
 SDL_ISPIXELFORMAT_FOURCC: abc.Callable[..., bool] = lambda format: format and SDL_PIXELFLAG(format) != 1
 
 SDL_PIXELFLAG: abc.Callable[..., int] = lambda x: (x >> 28) & 0x0F

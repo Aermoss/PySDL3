@@ -212,7 +212,7 @@ SDL_VA_LIST: typing.TypeAlias = ctypes.c_char_p
 
 class SDL_FUNC:
     @classmethod
-    def __class_getitem__(cls, key) -> typing.Any:
+    def __class_getitem__(cls, key: tuple[str, type, list[type], str]) -> typing.Any:
         """Create a new ctypes function definition."""
 
         if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
@@ -260,7 +260,7 @@ class SDL_FUNC:
 
 class SDL_POINTER:
     @classmethod
-    def __class_getitem__(cls, key) -> typing.Any:
+    def __class_getitem__(cls, key: type) -> type:
         """Create a ctypes pointer type from a ctypes type."""
 
         if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
@@ -271,7 +271,7 @@ class SDL_POINTER:
 
 class SDL_CAST:
     @classmethod
-    def __class_getitem__(cls, key) -> typing.Any:
+    def __class_getitem__(cls, key: tuple[typing.Any, type]) -> typing.Any:
         """Cast a ctypes pointer to an another type."""
 
         if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
@@ -284,7 +284,7 @@ class SDL_CAST:
 
 class SDL_TYPE:
     @classmethod
-    def __class_getitem__(cls, key) -> typing.Any:
+    def __class_getitem__(cls, key: tuple[str, type]) -> type:
         """Create a new type from a ctypes type."""
 
         if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
@@ -297,7 +297,7 @@ class SDL_TYPE:
 
 class SDL_FUNC_TYPE:
     @classmethod
-    def __class_getitem__(cls, key) -> typing.Any:
+    def __class_getitem__(cls, key: tuple[str, type, list[type]]) -> type:
         """Create a new ctypes function type."""
 
         if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:

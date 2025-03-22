@@ -2,10 +2,10 @@ from .__init__ import ctypes, typing, abc, \
     SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 from .SDL_events import SDL_Event
-from .SDL_rect import SDL_FPoint, SDL_Rect, SDL_FRect
-from .SDL_pixels import SDL_Color, SDL_FColor, SDL_PixelFormat
-from .SDL_surface import SDL_Surface, SDL_ScaleMode, SDL_FlipMode
 from .SDL_video import SDL_Window, SDL_WindowFlags
+from .SDL_rect import SDL_FPoint, SDL_Rect, SDL_FRect
+from .SDL_surface import SDL_Surface, SDL_ScaleMode, SDL_FlipMode
+from .SDL_pixels import SDL_FColor, SDL_PixelFormat
 from .SDL_properties import SDL_PropertiesID
 from .SDL_blendmode import SDL_BlendMode
 

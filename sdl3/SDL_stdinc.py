@@ -1,7 +1,8 @@
 from .__init__ import ctypes, typing, abc, SDL_VA_LIST, \
     SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
-SDL_arraysize: abc.Callable[[typing.Any], int] = lambda array: ctypes.sizeof(array) // ctypes.sizeof(array[0])
+SDL_arraysize: abc.Callable[[typing.Any], int] = lambda array: \
+    ctypes.sizeof(array) // ctypes.sizeof(array[0])
 
 def SDL_FOURCC(a: int, b: int, c: int, d: int) -> int:
     return (ord(a) << 0) | (ord(b) << 8) | (ord(c) << 16) | (ord(d) << 24)

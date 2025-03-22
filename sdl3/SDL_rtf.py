@@ -2,10 +2,10 @@ from .__init__ import ctypes, typing, abc, SDL_POINTER, \
     SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_RTF_BINARY, SDL_ENUM
 
 from .SDL_pixels import SDL_Color
+from .SDL_iostream import SDL_IOStream
 from .SDL_error import SDL_SetError, SDL_GetError
 from .SDL_render import SDL_Renderer, SDL_Texture
 from .SDL_version import SDL_VERSIONNUM
-from .SDL_iostream import SDL_IOStream
 from .SDL_rect import SDL_Rect
 
 SDL_RTF_MAJOR_VERSION, SDL_RTF_MINOR_VERSION, SDL_RTF_MICRO_VERSION = 3, 0, 0
