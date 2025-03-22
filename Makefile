@@ -1,5 +1,5 @@
 sourceDir := docs
-buildDir := docs/_build
+buildDir := docs/build
 
 help:
 	@sphinx-build -M help "$(sourceDir)" "$(buildDir)"

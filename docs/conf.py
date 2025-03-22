@@ -34,7 +34,7 @@ extensions = [
 ]
 
 templates_path = []
-exclude_patterns = ["_build"]
+exclude_patterns = ["build"]
 
 language = "en"
 pygments_style = None
