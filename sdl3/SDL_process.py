@@ -16,24 +16,24 @@ SDL_PROCESS_STDIO_INHERITED, SDL_PROCESS_STDIO_NULL, \
 
 SDL_CreateProcessWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateProcessWithProperties", SDL_POINTER[SDL_Process], [SDL_PropertiesID], SDL_BINARY]
 
-SDL_PROP_PROCESS_CREATE_ARGS_POINTER = "SDL.process.create.args".encode()
-SDL_PROP_PROCESS_CREATE_ENVIRONMENT_POINTER = "SDL.process.create.environment".encode()
-SDL_PROP_PROCESS_CREATE_STDIN_NUMBER = "SDL.process.create.stdin_option".encode()
-SDL_PROP_PROCESS_CREATE_STDIN_POINTER = "SDL.process.create.stdin_source".encode()
-SDL_PROP_PROCESS_CREATE_STDOUT_NUMBER = "SDL.process.create.stdout_option".encode()
-SDL_PROP_PROCESS_CREATE_STDOUT_POINTER = "SDL.process.create.stdout_source".encode()
-SDL_PROP_PROCESS_CREATE_STDERR_NUMBER = "SDL.process.create.stderr_option".encode()
-SDL_PROP_PROCESS_CREATE_STDERR_POINTER = "SDL.process.create.stderr_source".encode()
-SDL_PROP_PROCESS_CREATE_STDERR_TO_STDOUT_BOOLEAN = "SDL.process.create.stderr_to_stdout".encode()
-SDL_PROP_PROCESS_CREATE_BACKGROUND_BOOLEAN = "SDL.process.create.background".encode()
+SDL_PROP_PROCESS_CREATE_ARGS_POINTER: bytes = "SDL.process.create.args".encode()
+SDL_PROP_PROCESS_CREATE_ENVIRONMENT_POINTER: bytes = "SDL.process.create.environment".encode()
+SDL_PROP_PROCESS_CREATE_STDIN_NUMBER: bytes = "SDL.process.create.stdin_option".encode()
+SDL_PROP_PROCESS_CREATE_STDIN_POINTER: bytes = "SDL.process.create.stdin_source".encode()
+SDL_PROP_PROCESS_CREATE_STDOUT_NUMBER: bytes = "SDL.process.create.stdout_option".encode()
+SDL_PROP_PROCESS_CREATE_STDOUT_POINTER: bytes = "SDL.process.create.stdout_source".encode()
+SDL_PROP_PROCESS_CREATE_STDERR_NUMBER: bytes = "SDL.process.create.stderr_option".encode()
+SDL_PROP_PROCESS_CREATE_STDERR_POINTER: bytes = "SDL.process.create.stderr_source".encode()
+SDL_PROP_PROCESS_CREATE_STDERR_TO_STDOUT_BOOLEAN: bytes = "SDL.process.create.stderr_to_stdout".encode()
+SDL_PROP_PROCESS_CREATE_BACKGROUND_BOOLEAN: bytes = "SDL.process.create.background".encode()
 
 SDL_GetProcessProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetProcessProperties", SDL_PropertiesID, [SDL_POINTER[SDL_Process]], SDL_BINARY]
 
-SDL_PROP_PROCESS_PID_NUMBER = "SDL.process.pid".encode()
-SDL_PROP_PROCESS_STDIN_POINTER = "SDL.process.stdin".encode()
-SDL_PROP_PROCESS_STDOUT_POINTER = "SDL.process.stdout".encode()
-SDL_PROP_PROCESS_STDERR_POINTER = "SDL.process.stderr".encode()
-SDL_PROP_PROCESS_BACKGROUND_BOOLEAN = "SDL.process.background".encode()
+SDL_PROP_PROCESS_PID_NUMBER: bytes = "SDL.process.pid".encode()
+SDL_PROP_PROCESS_STDIN_POINTER: bytes = "SDL.process.stdin".encode()
+SDL_PROP_PROCESS_STDOUT_POINTER: bytes = "SDL.process.stdout".encode()
+SDL_PROP_PROCESS_STDERR_POINTER: bytes = "SDL.process.stderr".encode()
+SDL_PROP_PROCESS_BACKGROUND_BOOLEAN: bytes = "SDL.process.background".encode()
 
 SDL_ReadProcess: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReadProcess", ctypes.c_void_p, [SDL_POINTER[SDL_Process], SDL_POINTER[ctypes.c_size_t], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 

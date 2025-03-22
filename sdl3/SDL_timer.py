@@ -1,11 +1,11 @@
 from .__init__ import ctypes, typing, abc, \
     SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
-SDL_MS_PER_SECOND = 1000
-SDL_US_PER_SECOND = 1000000
-SDL_NS_PER_SECOND = 1000000000
-SDL_NS_PER_MS = 1000000
-SDL_NS_PER_US = 1000
+SDL_MS_PER_SECOND: int = 1000
+SDL_US_PER_SECOND: int = 1000000
+SDL_NS_PER_SECOND: int = 1000000000
+SDL_NS_PER_MS: int = 1000000
+SDL_NS_PER_US: int = 1000
 
 SDL_SECONDS_TO_NS: abc.Callable[[int | float], int | float] = lambda s: s * SDL_NS_PER_SECOND
 SDL_NS_TO_SECONDS: abc.Callable[[int | float], float] = lambda ns: ns / SDL_NS_PER_SECOND

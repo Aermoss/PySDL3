@@ -28,21 +28,21 @@ class SDL_IOStream(ctypes.c_void_p):
 
 SDL_IOFromFile: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IOFromFile", SDL_POINTER[SDL_IOStream], [ctypes.c_char_p, ctypes.c_char_p], SDL_BINARY]
 
-SDL_PROP_IOSTREAM_WINDOWS_HANDLE_POINTER = "SDL.iostream.windows.handle".encode()
-SDL_PROP_IOSTREAM_STDIO_FILE_POINTER = "SDL.iostream.stdio.file".encode()
-SDL_PROP_IOSTREAM_FILE_DESCRIPTOR_NUMBER = "SDL.iostream.file_descriptor".encode()
-SDL_PROP_IOSTREAM_ANDROID_AASSET_POINTER = "SDL.iostream.android.aasset".encode()
+SDL_PROP_IOSTREAM_WINDOWS_HANDLE_POINTER: bytes = "SDL.iostream.windows.handle".encode()
+SDL_PROP_IOSTREAM_STDIO_FILE_POINTER: bytes = "SDL.iostream.stdio.file".encode()
+SDL_PROP_IOSTREAM_FILE_DESCRIPTOR_NUMBER: bytes = "SDL.iostream.file_descriptor".encode()
+SDL_PROP_IOSTREAM_ANDROID_AASSET_POINTER: bytes = "SDL.iostream.android.aasset".encode()
 
 SDL_IOFromMem: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IOFromMem", SDL_POINTER[SDL_IOStream], [ctypes.c_void_p, ctypes.c_size_t], SDL_BINARY]
 
-SDL_PROP_IOSTREAM_MEMORY_POINTER = "SDL.iostream.memory.base".encode()
-SDL_PROP_IOSTREAM_MEMORY_SIZE_NUMBER = "SDL.iostream.memory.size".encode()
+SDL_PROP_IOSTREAM_MEMORY_POINTER: bytes = "SDL.iostream.memory.base".encode()
+SDL_PROP_IOSTREAM_MEMORY_SIZE_NUMBER: bytes = "SDL.iostream.memory.size".encode()
 
 SDL_IOFromConstMem: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IOFromConstMem", SDL_POINTER[SDL_IOStream], [ctypes.c_void_p, ctypes.c_size_t], SDL_BINARY]
 SDL_IOFromDynamicMem: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IOFromDynamicMem", SDL_POINTER[SDL_IOStream], [], SDL_BINARY]
 
-SDL_PROP_IOSTREAM_DYNAMIC_MEMORY_POINTER = "SDL.iostream.dynamic.memory".encode()
-SDL_PROP_IOSTREAM_DYNAMIC_CHUNKSIZE_NUMBER = "SDL.iostream.dynamic.chunksize".encode()
+SDL_PROP_IOSTREAM_DYNAMIC_MEMORY_POINTER: bytes = "SDL.iostream.dynamic.memory".encode()
+SDL_PROP_IOSTREAM_DYNAMIC_CHUNKSIZE_NUMBER: bytes = "SDL.iostream.dynamic.chunksize".encode()
 
 SDL_OpenIO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_OpenIO", SDL_POINTER[SDL_IOStream], [SDL_POINTER[SDL_IOStreamInterface], ctypes.c_void_p], SDL_BINARY]
 SDL_CloseIO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CloseIO", ctypes.c_bool, [SDL_POINTER[SDL_IOStream]], SDL_BINARY]

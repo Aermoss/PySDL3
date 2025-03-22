@@ -9,7 +9,7 @@ from .SDL_iostream import SDL_IOStream
 from .SDL_rect import SDL_Rect
 
 SDL_RTF_MAJOR_VERSION, SDL_RTF_MINOR_VERSION, SDL_RTF_MICRO_VERSION = 3, 0, 0
-SDL_RTF_VERSION = SDL_VERSIONNUM(SDL_RTF_MAJOR_VERSION, SDL_RTF_MINOR_VERSION, SDL_RTF_MICRO_VERSION)
+SDL_RTF_VERSION: int = SDL_VERSIONNUM(SDL_RTF_MAJOR_VERSION, SDL_RTF_MINOR_VERSION, SDL_RTF_MICRO_VERSION)
 
 SDL_RTF_VERSION_ATLEAST: abc.Callable[[int, int, int], bool] = lambda x, y, z: \
     (SDL_RTF_MAJOR_VERSION >= x) and (SDL_RTF_MAJOR_VERSION > x or SDL_RTF_MINOR_VERSION >= y) and \
@@ -30,7 +30,7 @@ RTF_FontStyle: typing.TypeAlias = SDL_TYPE["RTF_FontStyle", SDL_ENUM]
 RTF_FontNormal, RTF_FontBold, RTF_FontItalic, \
     RTF_FontUnderline = 0x00, 0x01, 0x02, 0x04
 
-RTF_FONT_ENGINE_VERSION = 1
+RTF_FONT_ENGINE_VERSION: int = 1
 
 class RTF_FontEngine(ctypes.Structure):
     _fields_ = [

@@ -1,8 +1,7 @@
 from .__init__ import sys, array
 
 SDL_LIL_ENDIAN, SDL_BIG_ENDIAN = 1234, 4321
-SDL_BYTEORDER = SDL_LIL_ENDIAN \
-    if sys.byteorder == "little" else SDL_BIG_ENDIAN
+SDL_BYTEORDER: int = {"little": SDL_LIL_ENDIAN, "big": SDL_BIG_ENDIAN}[sys.byteorder]
 
 def SDL_Swap16(x: int) -> int:
     return ((x << 8) & 0xFF00) | ((x >> 8) & 0x00FF)

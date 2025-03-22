@@ -8,7 +8,7 @@ class SDL_Sensor(ctypes.c_void_p):
 
 SDL_SensorID: typing.TypeAlias = SDL_TYPE["SDL_SensorID", ctypes.c_uint32]
 
-SDL_STANDARD_GRAVITY = 9.80665
+SDL_STANDARD_GRAVITY: float = 9.80665
 
 SDL_SensorType: typing.TypeAlias = SDL_TYPE["SDL_SensorType", SDL_ENUM]
 

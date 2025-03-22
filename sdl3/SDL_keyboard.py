@@ -39,11 +39,11 @@ SDL_CAPITALIZE_NONE, SDL_CAPITALIZE_SENTENCES, SDL_CAPITALIZE_WORDS, SDL_CAPITAL
 
 SDL_StartTextInputWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_StartTextInputWithProperties", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_PropertiesID], SDL_BINARY]
 
-SDL_PROP_TEXTINPUT_TYPE_NUMBER = "SDL.textinput.type".encode()
-SDL_PROP_TEXTINPUT_CAPITALIZATION_NUMBER = "SDL.textinput.capitalization".encode()
-SDL_PROP_TEXTINPUT_AUTOCORRECT_BOOLEAN = "SDL.textinput.autocorrect".encode()
-SDL_PROP_TEXTINPUT_MULTILINE_BOOLEAN = "SDL.textinput.multiline".encode()
-SDL_PROP_TEXTINPUT_ANDROID_INPUTTYPE_NUMBER = "SDL.textinput.android.inputtype".encode()
+SDL_PROP_TEXTINPUT_TYPE_NUMBER: bytes = "SDL.textinput.type".encode()
+SDL_PROP_TEXTINPUT_CAPITALIZATION_NUMBER: bytes = "SDL.textinput.capitalization".encode()
+SDL_PROP_TEXTINPUT_AUTOCORRECT_BOOLEAN: bytes = "SDL.textinput.autocorrect".encode()
+SDL_PROP_TEXTINPUT_MULTILINE_BOOLEAN: bytes = "SDL.textinput.multiline".encode()
+SDL_PROP_TEXTINPUT_ANDROID_INPUTTYPE_NUMBER: bytes = "SDL.textinput.android.inputtype".encode()
 
 SDL_TextInputActive: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_TextInputActive", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 SDL_StopTextInput: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_StopTextInput", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]

@@ -9,7 +9,7 @@ SDL_VERSIONNUM_MAJOR: abc.Callable[[int], int] = lambda version: int(version / 1
 SDL_VERSIONNUM_MINOR: abc.Callable[[int], int] = lambda version: int(version / 1000) % 1000
 SDL_VERSIONNUM_MICRO: abc.Callable[[int], int] = lambda version: version % 1000
 
-SDL_VERSION = SDL_VERSIONNUM(SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_MICRO_VERSION)
+SDL_VERSION: int = SDL_VERSIONNUM(SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_MICRO_VERSION)
 SDL_VERSION_ATLEAST: abc.Callable[[int, int, int], bool] = lambda x, y, z: SDL_VERSION >= SDL_VERSIONNUM(x, y, z)
 
 SDL_GetVersion: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetVersion", ctypes.c_int, [], SDL_BINARY]

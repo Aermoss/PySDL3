@@ -32,10 +32,10 @@ SDL_CreateThread: abc.Callable[[SDL_ThreadFunction, ctypes.c_char_p, ctypes.c_vo
 SDL_CreateThreadWithProperties: abc.Callable[[SDL_PropertiesID], SDL_POINTER[SDL_Thread]] = lambda props: \
     SDL_CreateThreadWithPropertiesRuntime(props, SDL_BeginThreadFunction, SDL_EndThreadFunction)
 
-SDL_PROP_THREAD_CREATE_ENTRY_FUNCTION_POINTER = "SDL.thread.create.entry_function".encode()
-SDL_PROP_THREAD_CREATE_NAME_STRING = "SDL.thread.create.name".encode()
-SDL_PROP_THREAD_CREATE_USERDATA_POINTER = "SDL.thread.create.userdata".encode()
-SDL_PROP_THREAD_CREATE_STACKSIZE_NUMBER = "SDL.thread.create.stacksize".encode()
+SDL_PROP_THREAD_CREATE_ENTRY_FUNCTION_POINTER: bytes = "SDL.thread.create.entry_function".encode()
+SDL_PROP_THREAD_CREATE_NAME_STRING: bytes = "SDL.thread.create.name".encode()
+SDL_PROP_THREAD_CREATE_USERDATA_POINTER: bytes = "SDL.thread.create.userdata".encode()
+SDL_PROP_THREAD_CREATE_STACKSIZE_NUMBER: bytes = "SDL.thread.create.stacksize".encode()
 
 SDL_GetThreadName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetThreadName", ctypes.c_char_p, [SDL_POINTER[SDL_Thread]], SDL_BINARY]
 SDL_GetCurrentThreadID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentThreadID", SDL_ThreadID, [], SDL_BINARY]

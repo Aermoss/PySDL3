@@ -1,6 +1,6 @@
 from .__init__ import ctypes, typing, abc, SDL_FUNC, SDL_BINARY
 
-SDL_CACHELINE_SIZE = 128
+SDL_CACHELINE_SIZE: int = 128
 
 SDL_GetNumLogicalCPUCores: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNumLogicalCPUCores", ctypes.c_int, [], SDL_BINARY]
 SDL_GetCPUCacheLineSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCPUCacheLineSize", ctypes.c_int, [], SDL_BINARY]

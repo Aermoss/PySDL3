@@ -44,8 +44,8 @@ class SDL_ShaderCross_SPIRV_Info(ctypes.Structure):
         ("props", SDL_PropertiesID)
     ]
 
-SDL_SHADERCROSS_PROP_SPIRV_PSSL_COMPATIBILITY = "SDL.shadercross.spirv.pssl.compatibility".encode()
-SDL_SHADERCROSS_PROP_SPIRV_MSL_VERSION = "SDL.shadercross.spirv.msl.version".encode()
+SDL_SHADERCROSS_PROP_SPIRV_PSSL_COMPATIBILITY: bytes = "SDL.shadercross.spirv.pssl.compatibility".encode()
+SDL_SHADERCROSS_PROP_SPIRV_MSL_VERSION: bytes = "SDL.shadercross.spirv.msl.version".encode()
 
 class SDL_ShaderCross_HLSL_Define(ctypes.Structure):
     _fields_ = [

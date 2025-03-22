@@ -92,11 +92,11 @@ SDL_SetJoystickVirtualTouchpad: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_Se
 SDL_SendJoystickVirtualSensorData: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SendJoystickVirtualSensorData", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], SDL_SensorType, ctypes.c_uint64, SDL_POINTER[ctypes.c_float], ctypes.c_int], SDL_BINARY]
 SDL_GetJoystickProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetJoystickProperties", SDL_PropertiesID, [SDL_POINTER[SDL_Joystick]], SDL_BINARY]
 
-SDL_PROP_JOYSTICK_CAP_MONO_LED_BOOLEAN = "SDL.joystick.cap.mono_led".encode()
-SDL_PROP_JOYSTICK_CAP_RGB_LED_BOOLEAN = "SDL.joystick.cap.rgb_led".encode()
-SDL_PROP_JOYSTICK_CAP_PLAYER_LED_BOOLEAN = "SDL.joystick.cap.player_led".encode()
-SDL_PROP_JOYSTICK_CAP_RUMBLE_BOOLEAN = "SDL.joystick.cap.rumble".encode()
-SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN = "SDL.joystick.cap.trigger_rumble".encode()
+SDL_PROP_JOYSTICK_CAP_MONO_LED_BOOLEAN: bytes = "SDL.joystick.cap.mono_led".encode()
+SDL_PROP_JOYSTICK_CAP_RGB_LED_BOOLEAN: bytes = "SDL.joystick.cap.rgb_led".encode()
+SDL_PROP_JOYSTICK_CAP_PLAYER_LED_BOOLEAN: bytes = "SDL.joystick.cap.player_led".encode()
+SDL_PROP_JOYSTICK_CAP_RUMBLE_BOOLEAN: bytes = "SDL.joystick.cap.rumble".encode()
+SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN: bytes = "SDL.joystick.cap.trigger_rumble".encode()
 
 SDL_GetJoystickName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetJoystickName", ctypes.c_char_p, [SDL_POINTER[SDL_Joystick]], SDL_BINARY]
 SDL_GetJoystickPath: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetJoystickPath", ctypes.c_char_p, [SDL_POINTER[SDL_Joystick]], SDL_BINARY]

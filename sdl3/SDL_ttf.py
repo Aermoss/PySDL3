@@ -11,7 +11,7 @@ from .SDL_version import SDL_VERSIONNUM
 from .SDL_rect import SDL_Rect, SDL_FPoint
 
 SDL_TTF_MAJOR_VERSION, SDL_TTF_MINOR_VERSION, SDL_TTF_MICRO_VERSION = 3, 2, 0
-SDL_TTF_VERSION = SDL_VERSIONNUM(SDL_TTF_MAJOR_VERSION, SDL_TTF_MINOR_VERSION, SDL_TTF_MICRO_VERSION)
+SDL_TTF_VERSION: int = SDL_VERSIONNUM(SDL_TTF_MAJOR_VERSION, SDL_TTF_MINOR_VERSION, SDL_TTF_MICRO_VERSION)
 
 SDL_TTF_VERSION_ATLEAST: abc.Callable[[int, int, int], bool] = lambda x, y, z: \
     (SDL_TTF_MAJOR_VERSION >= x) and (SDL_TTF_MAJOR_VERSION > x or SDL_TTF_MINOR_VERSION >= y) and \
@@ -29,23 +29,23 @@ TTF_OpenFont: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_OpenFont", SDL_POINT
 TTF_OpenFontIO: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_OpenFontIO", SDL_POINTER[TTF_Font], [SDL_POINTER[SDL_IOStream], ctypes.c_bool, ctypes.c_float], SDL_TTF_BINARY]
 TTF_OpenFontWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_OpenFontWithProperties", SDL_POINTER[TTF_Font], [SDL_PropertiesID], SDL_TTF_BINARY]
 
-TTF_PROP_FONT_CREATE_FILENAME_STRING = "SDL_ttf.font.create.filename".encode()
-TTF_PROP_FONT_CREATE_IOSTREAM_POINTER = "SDL_ttf.font.create.iostream".encode()
-TTF_PROP_FONT_CREATE_IOSTREAM_OFFSET_NUMBER = "SDL_ttf.font.create.iostream.offset".encode()
-TTF_PROP_FONT_CREATE_IOSTREAM_AUTOCLOSE_BOOLEAN = "SDL_ttf.font.create.iostream.autoclose".encode()
-TTF_PROP_FONT_CREATE_SIZE_FLOAT = "SDL_ttf.font.create.size".encode()
-TTF_PROP_FONT_CREATE_FACE_NUMBER = "SDL_ttf.font.create.face".encode()
-TTF_PROP_FONT_CREATE_HORIZONTAL_DPI_NUMBER = "SDL_ttf.font.create.hdpi".encode()
-TTF_PROP_FONT_CREATE_VERTICAL_DPI_NUMBER = "SDL_ttf.font.create.vdpi".encode()
-TTF_PROP_FONT_CREATE_EXISTING_FONT = "SDL_ttf.font.create.existing_font"
+TTF_PROP_FONT_CREATE_FILENAME_STRING: bytes = "SDL_ttf.font.create.filename".encode()
+TTF_PROP_FONT_CREATE_IOSTREAM_POINTER: bytes = "SDL_ttf.font.create.iostream".encode()
+TTF_PROP_FONT_CREATE_IOSTREAM_OFFSET_NUMBER: bytes = "SDL_ttf.font.create.iostream.offset".encode()
+TTF_PROP_FONT_CREATE_IOSTREAM_AUTOCLOSE_BOOLEAN: bytes = "SDL_ttf.font.create.iostream.autoclose".encode()
+TTF_PROP_FONT_CREATE_SIZE_FLOAT: bytes = "SDL_ttf.font.create.size".encode()
+TTF_PROP_FONT_CREATE_FACE_NUMBER: bytes = "SDL_ttf.font.create.face".encode()
+TTF_PROP_FONT_CREATE_HORIZONTAL_DPI_NUMBER: bytes = "SDL_ttf.font.create.hdpi".encode()
+TTF_PROP_FONT_CREATE_VERTICAL_DPI_NUMBER: bytes = "SDL_ttf.font.create.vdpi".encode()
+TTF_PROP_FONT_CREATE_EXISTING_FONT: bytes = "SDL_ttf.font.create.existing_font"
 
 TTF_CopyFont: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_CopyFont", SDL_POINTER[TTF_Font], [SDL_POINTER[TTF_Font]], SDL_TTF_BINARY]
 
 TTF_GetFontProperties: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontProperties", SDL_PropertiesID, [SDL_POINTER[TTF_Font]], SDL_TTF_BINARY]
 
-TTF_PROP_FONT_OUTLINE_LINE_CAP_NUMBER = "SDL_ttf.font.outline.line_cap".encode()
-TTF_PROP_FONT_OUTLINE_LINE_JOIN_NUMBER = "SDL_ttf.font.outline.line_join".encode()
-TTF_PROP_FONT_OUTLINE_MITER_LIMIT_NUMBER = "SDL_ttf.font.outline.miter_limit".encode()
+TTF_PROP_FONT_OUTLINE_LINE_CAP_NUMBER: bytes = "SDL_ttf.font.outline.line_cap".encode()
+TTF_PROP_FONT_OUTLINE_LINE_JOIN_NUMBER: bytes = "SDL_ttf.font.outline.line_join".encode()
+TTF_PROP_FONT_OUTLINE_MITER_LIMIT_NUMBER: bytes = "SDL_ttf.font.outline.miter_limit".encode()
 
 TTF_GetFontGeneration: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontGeneration", ctypes.c_uint32, [SDL_POINTER[TTF_Font]], SDL_TTF_BINARY]
 
@@ -172,8 +172,8 @@ TTF_DestroySurfaceTextEngine: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_Dest
 TTF_CreateRendererTextEngine: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_CreateRendererTextEngine", SDL_POINTER[TTF_TextEngine], [SDL_POINTER[SDL_Renderer]], SDL_TTF_BINARY]
 TTF_CreateRendererTextEngineWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_CreateRendererTextEngineWithProperties", SDL_POINTER[TTF_TextEngine], [SDL_PropertiesID], SDL_TTF_BINARY]
 
-TTF_PROP_RENDERER_TEXT_ENGINE_RENDERER = "SDL_ttf.renderer_text_engine.create.renderer"
-TTF_PROP_RENDERER_TEXT_ENGINE_ATLAS_TEXTURE_SIZE = "SDL_ttf.renderer_text_engine.create.atlas_texture_size"
+TTF_PROP_RENDERER_TEXT_ENGINE_RENDERER: bytes = "SDL_ttf.renderer_text_engine.create.renderer"
+TTF_PROP_RENDERER_TEXT_ENGINE_ATLAS_TEXTURE_SIZE: bytes = "SDL_ttf.renderer_text_engine.create.atlas_texture_size"
 
 TTF_DrawRendererText: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_DrawRendererText", ctypes.c_bool, [SDL_POINTER[TTF_Text], ctypes.c_float, ctypes.c_float], SDL_TTF_BINARY]
 TTF_DestroyRendererTextEngine: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_DestroyRendererTextEngine", None, [SDL_POINTER[TTF_TextEngine]], SDL_TTF_BINARY]
@@ -181,8 +181,8 @@ TTF_DestroyRendererTextEngine: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_Des
 TTF_CreateGPUTextEngine: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_CreateGPUTextEngine", SDL_POINTER[TTF_TextEngine], [SDL_POINTER[SDL_GPUDevice]], SDL_TTF_BINARY]
 TTF_CreateGPUTextEngineWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_CreateGPUTextEngineWithProperties", SDL_POINTER[TTF_TextEngine], [SDL_PropertiesID], SDL_TTF_BINARY]
 
-TTF_PROP_GPU_TEXT_ENGINE_DEVICE = "SDL_ttf.gpu_text_engine.create.device"
-TTF_PROP_GPU_TEXT_ENGINE_ATLAS_TEXTURE_SIZE = "SDL_ttf.gpu_text_engine.create.atlas_texture_size"
+TTF_PROP_GPU_TEXT_ENGINE_DEVICE: bytes = "SDL_ttf.gpu_text_engine.create.device"
+TTF_PROP_GPU_TEXT_ENGINE_ATLAS_TEXTURE_SIZE: bytes = "SDL_ttf.gpu_text_engine.create.atlas_texture_size"
 
 class TTF_GPUAtlasDrawSequence(ctypes.c_void_p):
     ...

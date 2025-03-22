@@ -40,11 +40,11 @@ SDL_DestroySurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroySurface
 
 SDL_GetSurfaceProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSurfaceProperties", SDL_PropertiesID, [SDL_POINTER[SDL_Surface]], SDL_BINARY]
 
-SDL_PROP_SURFACE_SDR_WHITE_POINT_FLOAT = "SDL.surface.SDR_white_point".encode()
-SDL_PROP_SURFACE_HDR_HEADROOM_FLOAT = "SDL.surface.HDR_headroom".encode()
-SDL_PROP_SURFACE_TONEMAP_OPERATOR_STRING = "SDL.surface.tonemap".encode()
-SDL_PROP_SURFACE_HOTSPOT_X_NUMBER = "SDL.surface.hotspot.x".encode()
-SDL_PROP_SURFACE_HOTSPOT_Y_NUMBER = "SDL.surface.hotspot.y".encode()
+SDL_PROP_SURFACE_SDR_WHITE_POINT_FLOAT: bytes = "SDL.surface.SDR_white_point".encode()
+SDL_PROP_SURFACE_HDR_HEADROOM_FLOAT: bytes = "SDL.surface.HDR_headroom".encode()
+SDL_PROP_SURFACE_TONEMAP_OPERATOR_STRING: bytes = "SDL.surface.tonemap".encode()
+SDL_PROP_SURFACE_HOTSPOT_X_NUMBER: bytes = "SDL.surface.hotspot.x".encode()
+SDL_PROP_SURFACE_HOTSPOT_Y_NUMBER: bytes = "SDL.surface.hotspot.y".encode()
 
 SDL_SetSurfaceColorspace: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetSurfaceColorspace", ctypes.c_bool, [SDL_POINTER[SDL_Surface], SDL_Colorspace], SDL_BINARY]
 SDL_GetSurfaceColorspace: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSurfaceColorspace", SDL_Colorspace, [SDL_POINTER[SDL_Surface]], SDL_BINARY]

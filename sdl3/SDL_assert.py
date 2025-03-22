@@ -1,8 +1,8 @@
 from .__init__ import os, inspect, ctypes, typing, abc, re, \
     SDL_FUNC_TYPE, SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
 
-SDL_ASSERT_LEVEL = 2
-SDL_NULL_WHILE_LOOP_CONDITION = 0
+SDL_ASSERT_LEVEL: int = 2
+SDL_NULL_WHILE_LOOP_CONDITION: int = 0
 
 SDL_AssertState: typing.TypeAlias = SDL_TYPE["SDL_AssertState", SDL_ENUM]
 
@@ -27,10 +27,10 @@ SDL_ReportAssertion: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReportAsserti
 SDL_TriggerBreakpoint: abc.Callable[[], None] = lambda: breakpoint()
 SDL_AssertBreakpoint: abc.Callable[[], None] = lambda: SDL_TriggerBreakpoint()
 
-def SDL_disabled_assert(condition: ctypes.c_bool) -> None:
+def SDL_disabled_assert(condition: bool) -> None:
     """Do not call this function directly."""
 
-def SDL_enabled_assert(condition: ctypes.c_bool) -> None:
+def SDL_enabled_assert(condition: bool) -> None:
     """Do not call this function directly."""
 
     while not condition:

@@ -6,7 +6,7 @@ from .SDL_audio import SDL_AudioDeviceID, SDL_AudioSpec, SDL_AudioFormat, SDL_AU
 from .SDL_version import SDL_VERSIONNUM
 
 SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION = 3, 0, 0
-SDL_MIXER_VERSION = SDL_VERSIONNUM(SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION)
+SDL_MIXER_VERSION: int = SDL_VERSIONNUM(SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION)
 
 SDL_MIXER_VERSION_ATLEAST: abc.Callable[[int, int, int], bool] = lambda x, y, z: \
     (SDL_MIXER_MAJOR_VERSION >= x) and (SDL_MIXER_MAJOR_VERSION > x or SDL_MIXER_MINOR_VERSION >= y) and \
@@ -16,23 +16,23 @@ Mix_Version: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_Version", ctypes.c_in
 
 MIX_InitFlags: typing.TypeAlias = SDL_TYPE["MIX_InitFlags", ctypes.c_uint32]
 
-MIX_INIT_FLAC = 0x00000001
-MIX_INIT_MOD = 0x00000002
-MIX_INIT_MP3 = 0x00000008
-MIX_INIT_OGG = 0x00000010
-MIX_INIT_MID = 0x00000020
-MIX_INIT_OPUS = 0x00000040
-MIX_INIT_WAVPACK = 0x00000080
+MIX_INIT_FLAC: int = 0x00000001
+MIX_INIT_MOD: int = 0x00000002
+MIX_INIT_MP3: int = 0x00000008
+MIX_INIT_OGG: int = 0x00000010
+MIX_INIT_MID: int = 0x00000020
+MIX_INIT_OPUS: int = 0x00000040
+MIX_INIT_WAVPACK: int = 0x00000080
 
 Mix_Init: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_Init", MIX_InitFlags, [MIX_InitFlags], SDL_MIXER_BINARY]
 Mix_Quit: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_Quit", None, [], SDL_MIXER_BINARY]
 
-MIX_CHANNELS = 8
+MIX_CHANNELS: int = 8
 
-MIX_DEFAULT_FREQUENCY = 44100
-MIX_DEFAULT_FORMAT = SDL_AUDIO_S16
-MIX_DEFAULT_CHANNELS = 2
-MIX_MAX_VOLUME = 128
+MIX_DEFAULT_FREQUENCY: int = 44100
+MIX_DEFAULT_FORMAT: int = SDL_AUDIO_S16
+MIX_DEFAULT_CHANNELS: int = 2
+MIX_MAX_VOLUME: int = 128
 
 class Mix_Chunk(ctypes.Structure):
     _fields_ = [
@@ -94,7 +94,7 @@ Mix_ChannelFinishedCallback: typing.TypeAlias = SDL_FUNC_TYPE["Mix_ChannelFinish
 
 Mix_ChannelFinished: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_ChannelFinished", None, [Mix_ChannelFinishedCallback], SDL_MIXER_BINARY]
 
-MIX_CHANNEL_POST = -2
+MIX_CHANNEL_POST: int = -2
 
 Mix_EffectFunc_t: typing.TypeAlias = SDL_FUNC_TYPE["Mix_EffectFunc_t", None, [ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p]]
 Mix_EffectDone_t: typing.TypeAlias = SDL_FUNC_TYPE["Mix_EffectDone_t", None, [ctypes.c_int, ctypes.c_void_p]]
@@ -103,7 +103,7 @@ Mix_RegisterEffect: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_RegisterEffect
 Mix_UnregisterEffect: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_UnregisterEffect", ctypes.c_bool, [ctypes.c_int, Mix_EffectFunc_t], SDL_MIXER_BINARY]
 Mix_UnregisterAllEffects: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_UnregisterAllEffects", ctypes.c_bool, [ctypes.c_int], SDL_MIXER_BINARY]
 
-MIX_EFFECTSMAXSPEED = "MIX_EFFECTSMAXSPEED".encode()
+MIX_EFFECTSMAXSPEED: bytes = "MIX_EFFECTSMAXSPEED".encode()
 
 Mix_SetPanning: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_SetPanning", ctypes.c_bool, [ctypes.c_int, ctypes.c_uint8, ctypes.c_uint8], SDL_MIXER_BINARY]
 Mix_SetPosition: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_SetPosition", ctypes.c_bool, [ctypes.c_int, ctypes.c_int16, ctypes.c_uint8], SDL_MIXER_BINARY]

@@ -28,7 +28,7 @@ class SDL_PathInfo(ctypes.Structure):
 
 SDL_GlobFlags: typing.TypeAlias = SDL_TYPE["SDL_GlobFlags", ctypes.c_uint32]
 
-SDL_GLOB_CASEINSENSITIVE = 1 << 0
+SDL_GLOB_CASEINSENSITIVE: int = 1 << 0
 
 SDL_CreateDirectory: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateDirectory", ctypes.c_bool, [ctypes.c_char_p], SDL_BINARY]
 

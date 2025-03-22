@@ -4,7 +4,7 @@ from .__init__ import ctypes, typing, abc, \
 from.SDL_atomic import SDL_AtomicInt
 from .SDL_thread import SDL_ThreadID
 
-SDL_MUTEX_TIMEDOUT = 1
+SDL_MUTEX_TIMEDOUT: int = 1
 
 class SDL_Mutex(ctypes.c_void_p):
     ...
@@ -18,7 +18,7 @@ SDL_DestroyMutex: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyMutex", N
 class SDL_RWLock(ctypes.c_void_p):
     ...
 
-SDL_RWLOCK_TIMEDOUT = SDL_MUTEX_TIMEDOUT
+SDL_RWLOCK_TIMEDOUT: int = SDL_MUTEX_TIMEDOUT
 
 SDL_CreateRWLock: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateRWLock", SDL_POINTER[SDL_RWLock], [], SDL_BINARY]
 SDL_LockRWLockForReading: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LockRWLockForReading", None, [SDL_POINTER[SDL_RWLock]], SDL_BINARY]

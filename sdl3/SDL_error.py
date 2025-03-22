@@ -10,5 +10,4 @@ def SDL_Unsupported() -> ctypes.c_int:
     return SDL_SetError("That operation is not supported".encode())
 
 def SDL_InvalidParamError(param: ctypes.c_char_p) -> ctypes.c_int:
-    if isinstance(param, bytes): param = param.decode()
-    return SDL_SetError(f"Parameter '{param}' is invalid".encode())
+    return SDL_SetError("Parameter '%s' is invalid".encode(), param)

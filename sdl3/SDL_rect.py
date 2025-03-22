@@ -31,22 +31,14 @@ class SDL_FRect(ctypes.Structure):
         ("h", ctypes.c_float)
     ]
 
-class LP_SDL_Point(SDL_POINTER[SDL_Point]):
-    ...
-
-class LP_SDL_FPoint(SDL_POINTER[SDL_FPoint]):
-    ...
-
-class LP_SDL_Rect(SDL_POINTER[SDL_Rect]):
-    ...
-
-class LP_SDL_FRect(SDL_POINTER[SDL_FRect]):
-    ...
+LP_SDL_Point: typing.TypeAlias = SDL_POINTER[SDL_Point]
+LP_SDL_FPoint: typing.TypeAlias = SDL_POINTER[SDL_FPoint]
+LP_SDL_Rect: typing.TypeAlias = SDL_POINTER[SDL_Rect]
+LP_SDL_FRect: typing.TypeAlias = SDL_POINTER[SDL_FRect]
 
 def SDL_RectToFRect(rect: LP_SDL_Rect, frect: LP_SDL_FRect) -> None:
     rect, frect = SDL_DEREFERENCE(rect), SDL_DEREFERENCE(frect)
-    frect.x, frect.y, frect.w, frect.h = \
-        float(rect.x), float(rect.y), float(rect.w), float(rect.h)
+    frect.x, frect.y, frect.w, frect.h = float(rect.x), float(rect.y), float(rect.w), float(rect.h)
     
 def SDL_PointInRect(p: LP_SDL_Point, r: LP_SDL_Rect) -> bool:
     p, r = SDL_DEREFERENCE(p), SDL_DEREFERENCE(r)

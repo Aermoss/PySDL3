@@ -599,16 +599,16 @@ SDL_GPUSupportsProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GPUSupp
 SDL_CreateGPUDevice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUDevice", SDL_POINTER[SDL_GPUDevice], [SDL_GPUShaderFormat, ctypes.c_bool, ctypes.c_char_p], SDL_BINARY]
 SDL_CreateGPUDeviceWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUDeviceWithProperties", SDL_POINTER[SDL_GPUDevice], [SDL_PropertiesID], SDL_BINARY]
 
-SDL_PROP_GPU_DEVICE_CREATE_DEBUGMODE_BOOLEAN = "SDL.gpu.device.create.debugmode".encode()
-SDL_PROP_GPU_DEVICE_CREATE_PREFERLOWPOWER_BOOLEAN = "SDL.gpu.device.create.preferlowpower".encode()
-SDL_PROP_GPU_DEVICE_CREATE_NAME_STRING = "SDL.gpu.device.create.name".encode()
-SDL_PROP_GPU_DEVICE_CREATE_SHADERS_PRIVATE_BOOLEAN = "SDL.gpu.device.create.shaders.private".encode()
-SDL_PROP_GPU_DEVICE_CREATE_SHADERS_SPIRV_BOOLEAN = "SDL.gpu.device.create.shaders.spirv".encode()
-SDL_PROP_GPU_DEVICE_CREATE_SHADERS_DXBC_BOOLEAN = "SDL.gpu.device.create.shaders.dxbc".encode()
-SDL_PROP_GPU_DEVICE_CREATE_SHADERS_DXIL_BOOLEAN = "SDL.gpu.device.create.shaders.dxil".encode()
-SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN = "SDL.gpu.device.create.shaders.msl".encode()
-SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN = "SDL.gpu.device.create.shaders.metallib".encode()
-SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING = "SDL.gpu.device.create.d3d12.semantic".encode()
+SDL_PROP_GPU_DEVICE_CREATE_DEBUGMODE_BOOLEAN: bytes = "SDL.gpu.device.create.debugmode".encode()
+SDL_PROP_GPU_DEVICE_CREATE_PREFERLOWPOWER_BOOLEAN: bytes = "SDL.gpu.device.create.preferlowpower".encode()
+SDL_PROP_GPU_DEVICE_CREATE_NAME_STRING: bytes = "SDL.gpu.device.create.name".encode()
+SDL_PROP_GPU_DEVICE_CREATE_SHADERS_PRIVATE_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.private".encode()
+SDL_PROP_GPU_DEVICE_CREATE_SHADERS_SPIRV_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.spirv".encode()
+SDL_PROP_GPU_DEVICE_CREATE_SHADERS_DXBC_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.dxbc".encode()
+SDL_PROP_GPU_DEVICE_CREATE_SHADERS_DXIL_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.dxil".encode()
+SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.msl".encode()
+SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.metallib".encode()
+SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING: bytes = "SDL.gpu.device.create.d3d12.semantic".encode()
 
 SDL_DestroyGPUDevice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyGPUDevice", None, [SDL_POINTER[SDL_GPUDevice]], SDL_BINARY]
 
@@ -619,37 +619,37 @@ SDL_GetGPUShaderFormats: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGPUSha
 
 SDL_CreateGPUComputePipeline: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUComputePipeline", SDL_POINTER[SDL_GPUComputePipeline], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUComputePipelineCreateInfo]], SDL_BINARY]
 
-SDL_PROP_GPU_COMPUTEPIPELINE_CREATE_NAME_STRING = "SDL.gpu.computepipeline.create.name".encode()
+SDL_PROP_GPU_COMPUTEPIPELINE_CREATE_NAME_STRING: bytes = "SDL.gpu.computepipeline.create.name".encode()
 
 SDL_CreateGPUGraphicsPipeline: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUGraphicsPipeline", SDL_POINTER[SDL_GPUGraphicsPipeline], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUGraphicsPipelineCreateInfo]], SDL_BINARY]
 
-SDL_PROP_GPU_GRAPHICSPIPELINE_CREATE_NAME_STRING = "SDL.gpu.graphicspipeline.create.name".encode()
+SDL_PROP_GPU_GRAPHICSPIPELINE_CREATE_NAME_STRING: bytes = "SDL.gpu.graphicspipeline.create.name".encode()
 
 SDL_CreateGPUSampler: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUSampler", SDL_POINTER[SDL_GPUSampler], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUSamplerCreateInfo]], SDL_BINARY]
 
-SDL_PROP_GPU_SAMPLER_CREATE_NAME_STRING = "SDL.gpu.sampler.create.name".encode()
+SDL_PROP_GPU_SAMPLER_CREATE_NAME_STRING: bytes = "SDL.gpu.sampler.create.name".encode()
 
 SDL_CreateGPUShader: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUShader", SDL_POINTER[SDL_GPUShader], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUShaderCreateInfo]], SDL_BINARY]
 
-SDL_PROP_GPU_SHADER_CREATE_NAME_STRING = "SDL.gpu.shader.create.name".encode()
+SDL_PROP_GPU_SHADER_CREATE_NAME_STRING: bytes = "SDL.gpu.shader.create.name".encode()
 
 SDL_CreateGPUTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUTexture", SDL_POINTER[SDL_GPUTexture], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTextureCreateInfo]], SDL_BINARY]
 
-SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_R_FLOAT = "SDL.gpu.texture.create.d3d12.clear.r".encode()
-SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_G_FLOAT = "SDL.gpu.texture.create.d3d12.clear.g".encode()
-SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_B_FLOAT = "SDL.gpu.texture.create.d3d12.clear.b".encode()
-SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_A_FLOAT = "SDL.gpu.texture.create.d3d12.clear.a".encode()
-SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_DEPTH_FLOAT = "SDL.gpu.texture.create.d3d12.clear.depth".encode()
-SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_STENCIL_UINT8 = "SDL.gpu.texture.create.d3d12.clear.stencil".encode()
-SDL_PROP_GPU_TEXTURE_CREATE_NAME_STRING = "SDL.gpu.texture.create.name".encode()
+SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_R_FLOAT: bytes = "SDL.gpu.texture.create.d3d12.clear.r".encode()
+SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_G_FLOAT: bytes = "SDL.gpu.texture.create.d3d12.clear.g".encode()
+SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_B_FLOAT: bytes = "SDL.gpu.texture.create.d3d12.clear.b".encode()
+SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_A_FLOAT: bytes = "SDL.gpu.texture.create.d3d12.clear.a".encode()
+SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_DEPTH_FLOAT: bytes = "SDL.gpu.texture.create.d3d12.clear.depth".encode()
+SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_STENCIL_UINT8: bytes = "SDL.gpu.texture.create.d3d12.clear.stencil".encode()
+SDL_PROP_GPU_TEXTURE_CREATE_NAME_STRING: bytes = "SDL.gpu.texture.create.name".encode()
 
 SDL_CreateGPUBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUBuffer", SDL_POINTER[SDL_GPUBuffer], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBufferCreateInfo]], SDL_BINARY]
 
-SDL_PROP_GPU_BUFFER_CREATE_NAME_STRING = "SDL.gpu.buffer.create.name".encode()
+SDL_PROP_GPU_BUFFER_CREATE_NAME_STRING: bytes = "SDL.gpu.buffer.create.name".encode()
 
 SDL_CreateGPUTransferBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUTransferBuffer", SDL_POINTER[SDL_GPUTransferBuffer], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTransferBufferCreateInfo]], SDL_BINARY]
 
-SDL_PROP_GPU_TRANSFERBUFFER_CREATE_NAME_STRING = "SDL.gpu.transferbuffer.create.name".encode()
+SDL_PROP_GPU_TRANSFERBUFFER_CREATE_NAME_STRING: bytes = "SDL.gpu.transferbuffer.create.name".encode()
 
 SDL_SetGPUBufferName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPUBufferName", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBuffer], ctypes.c_char_p], SDL_BINARY]
 SDL_SetGPUTextureName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPUTextureName", None, [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUTexture], ctypes.c_char_p], SDL_BINARY]

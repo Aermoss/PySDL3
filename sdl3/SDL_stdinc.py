@@ -42,7 +42,7 @@ SDL_Time: typing.TypeAlias = SDL_TYPE["SDL_Time", Sint64]
 
 SDL_MAX_TIME, SDL_MIN_TIME = SDL_MAX_SINT64, SDL_MIN_SINT64
 
-SDL_FLT_EPSILON = 1.1920928955078125e-07
+SDL_FLT_EPSILON: float = 1.1920928955078125e-07
 
 SDL_malloc: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_malloc", ctypes.c_void_p, [ctypes.c_size_t], SDL_BINARY]
 SDL_calloc: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_calloc", ctypes.c_void_p, [ctypes.c_size_t, ctypes.c_size_t], SDL_BINARY]
@@ -177,7 +177,7 @@ SDL_strncmp: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_strncmp", ctypes.c_in
 SDL_strcasecmp: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_strcasecmp", ctypes.c_int, [ctypes.c_char_p, ctypes.c_char_p], SDL_BINARY]
 SDL_strncasecmp: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_strncasecmp", ctypes.c_int, [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_size_t], SDL_BINARY]
 
-SDL_INVALID_UNICODE_CODEPOINT = 0xFFFD
+SDL_INVALID_UNICODE_CODEPOINT: int = 0xFFFD
 
 SDL_StepUTF8: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_StepUTF8", ctypes.c_uint32, [SDL_POINTER[ctypes.c_char_p], SDL_POINTER[ctypes.c_size_t]], SDL_BINARY]
 SDL_StepBackUTF8: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_StepBackUTF8", ctypes.c_uint32, [ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p]], SDL_BINARY]
