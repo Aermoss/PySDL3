@@ -207,9 +207,6 @@ def SDL_GET_BINARY(name: str) -> ctypes.CDLL | None:
 def SDL_NOT_IMPLEMENTED(name: str) -> abc.Callable[..., None]:
     return lambda *args, **kwargs: print("\33[31m", f"error: invoked an unimplemented function: '{name}'.", "\33[0m", sep = "", flush = True)
 
-SDL_ENUM: typing.TypeAlias = ctypes.c_int
-SDL_VA_LIST: typing.TypeAlias = ctypes.c_char_p
-
 class SDL_FUNC:
     @classmethod
     def __class_getitem__(cls, key: tuple[str, type, list[type], str]) -> typing.Any:
@@ -293,7 +290,14 @@ class SDL_TYPE:
             assert isinstance(key[0], str), "Expected a string as the first argument."
             assert isinstance(key[1], type), "Expected a type as the second argument."
 
-        return type(key[0], (ctypes._SimpleCData, ), {"_type_": key[1]._type_})
+        if hasattr(key[1], "contents"):
+            return type(key[0], (ctypes._Pointer, ), {"_type_": key[1]._type_, "contents": key[1].contents})
+        
+        elif hasattr(key[1], "_fields_"):
+            return type(key[0], (ctypes.Structure, ), {"_fields_": key[1]._fields_})
+
+        else:
+            return type(key[0], (ctypes._SimpleCData, ), {"_type_": key[1]._type_})
 
 class SDL_FUNC_TYPE:
     @classmethod
@@ -307,8 +311,14 @@ class SDL_FUNC_TYPE:
             assert isinstance(key[1], type) or key[1] is None, "Expected a type as the second argument."
             assert isinstance(key[2], list), "Expected a list as the third argument."
 
+        if int(os.environ.get("SDL_RESET_CTYPES_CACHE", "1")) > 0:
+            ctypes._reset_cache()
+
         value = ctypes.CFUNCTYPE(key[1], *key[2])
         value.__name__ = key[0]; return value
+
+SDL_ENUM: typing.TypeAlias = SDL_TYPE["SDL_ENUM", ctypes.c_int]
+SDL_VA_LIST: typing.TypeAlias = SDL_TYPE["SDL_VA_LIST", ctypes.c_char_p]
 
 async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
     """Get latest releases of SDL3 modules from their official github repositories."""
@@ -358,13 +368,14 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: list[tuple[str, str]], rst: bool = Fa
     
     responses = await asyncio.gather(*tasks)
     print("\33[32m", f"info: response gathering completed ({len(responses)} response(s)).", "\33[0m", sep = "", flush = True)
-    descriptions, arguments = [], []
+    descriptions, arguments, returns = [], [], []
 
     for response in responses:
         if response.status != 200:
             print("\33[35m", f"warning: failed to get description of '{response.url}', skipping (status: {response.status}).", "\33[0m", sep = "", flush = True)
             descriptions.append(None)
             arguments.append(None)
+            returns.append(None)
 
         else:
             content = (await response.content.read()).decode()
@@ -373,6 +384,7 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: list[tuple[str, str]], rst: bool = Fa
                 print("\33[35m", f"warning: no such page found for '{response.url}', skipping.", "\33[0m", sep = "", flush = True)
                 descriptions.append(None)
                 arguments.append(None)
+                returns.append(None)
                 continue
 
             for a, b in zip(list(re.finditer(r"<p>", content)), list(re.finditer(r"</p>", content))):
@@ -394,24 +406,33 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: list[tuple[str, str]], rst: bool = Fa
                 if "sourceCode c" not in content[a.start():a.end()]: continue
                 text = re.sub(r"<(/)?([a-zA-Z0-9_=#\s\"\-]+)>", r"", content[a.end():b.start()]).split(";")[0]
                 if "\n" in text: text = " ".join(text.split("\n"))
-                text = text[text.index("(") + 1:text.index(")") + 1].replace(")", ",").replace("[", "").replace("]", "")
-                if text == "void,": text = ""
-                arguments.append([text[arg.start():arg.end() - 1] for arg in re.finditer(r"([a-zA-Z0-9_]+)\,", text)])
+                returns.append(" ".join([i for i in text.split("(")[0].split(" ")[:-1] if i and i not in ["extern", "SDL_DECLSPEC"]]))
+                text = text[text.index("(") + 1:text.index(")") + 1].replace(")", ",")[:-1]
+                arguments.append({})
+
+                for i in (text.split(", ") if "," in text else [text]) if text != "void" else []:
+                    while i.startswith(" "): i = i[1:]
+                    if i == "...": continue
+                    _ = i.split(" ")
+
+                    arguments[-1][_[-1].replace("*", "")] = \
+                        " ".join(_[:-1]) + "*" * _[-1].count("*")
+
                 break
 
     await session.close()
-    return descriptions, arguments
+    return descriptions, arguments, returns
 
 def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), rst: bool = False) -> str:
     """Generate type hints and documentation for SDL3 functions."""
 
-    __index, (descriptions, arguments) = -1, \
+    __index, (descriptions, arguments, returns) = -1, \
         asyncio.run(SDL_GET_FUNC_DESCRIPTIONS([(module, func) for module in modules for func in __module__.functions[module]], rst))
 
     for module in modules:
         for func in __module__.functions[module]:
             if (_ := __module__.functions[module][func]).__name__ == "__inner__": _ = _.func
-            _.__doc__ = (descriptions[__index := __index + 1], arguments[__index])
+            _.__doc__ = (descriptions[__index := __index + 1], arguments[__index], returns[__index])
 
     result = "" if rst else f"\"\"\"\n# This file is auto-generated, do not modify it.\nmeta = "
     if not rst: result += f"{{\"target\": \"v{__version__}\", \"system\": \"{SDL_SYSTEM}\"}}\n\"\"\"\n\n"
@@ -419,11 +440,37 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
     result += f"from {'sdl3' if rst else ''}.__init__ import {'' if rst else 'raw, '}ctypes, typing, SDL_POINTER\n\n"
     types, definitions = set(), ""
 
-    def SDL_GET_NAME(i):
-        if i is None: return "None"
-        if i.__name__.startswith("LP_"): types.add(i.__name__)
-        if i.__name__.startswith("c_"): return f"ctypes.{i.__name__}"
-        else: return i.__name__
+    def SDL_GET_NAME(type: type | None) -> str:
+        if type is None: return "None"
+        if type.__name__.startswith("LP_"): types.add(type.__name__)
+        if type.__name__.startswith("c_"): return f"ctypes.{type.__name__}"
+        else: return type.__name__
+
+    def SDL_PYTHONIZE_TYPE(type: type, name: str | None = None) -> str:
+        type, count = type.replace("*", ""), type.count("*") + (0 if name is None else name.count("["))
+        if " " in type: type = " ".join([i for i in type.split(" ") if i and i not in ["const", "struct", "union", "enum", "SDLCALL"]])
+
+        if type in (sdlTypes := {
+            "Sint8": "ctypes.c_int8", "Uint8": "ctypes.c_uint8", "Sint16": "ctypes.c_int16", "Uint16": "ctypes.c_uint16",
+            "Sint32": "ctypes.c_int32", "Uint32": "ctypes.c_uint32", "Sint64": "ctypes.c_int64", "Uint64": "ctypes.c_uint64"
+        }): type = sdlTypes[type]
+
+        if count and type in ["void", "char", "wchar_t"]:
+            type, count = f"ctypes.c_{type.replace('_t', '')}_p", count - 1
+
+        if type in (cTypes := {
+            "int": "ctypes.c_int", "bool": "ctypes.c_bool", "float": "ctypes.c_float", "double": "ctypes.c_double",
+            "char": "ctypes.c_char", "short": "ctypes.c_short", "long long": "ctypes.c_longlong", "long": "ctypes.c_long",
+            "size_t": "ctypes.c_size_t", "ssize_t": "ctypes.c_ssize_t", "intptr_t": "ctypes.c_intptr_t", "uintptr_t": "ctypes.c_uintptr_t",
+            "int8_t": "ctypes.c_int8", "uint8_t": "ctypes.c_uint8", "int16_t": "ctypes.c_int16", "uint16_t": "ctypes.c_uint16",
+            "int32_t": "ctypes.c_int32", "uint32_t": "ctypes.c_uint32", "int64_t": "ctypes.c_int64", "uint64_t": "ctypes.c_uint64",
+            "unsigned short": "ctypes.c_ushort", "unsigned long long": "ctypes.c_ulonglong", "unsigned long": "ctypes.c_ulong",
+            "unsigned char": "ctypes.c_ubyte", "unsigned int": "ctypes.c_uint", "wchar_t": "ctypes.c_wchar", "va_list": "SDL_VA_LIST"
+        }): type = cTypes[type]
+
+        if not count and type in ["void"]: type = "None"
+        if count and type.startswith("ctypes."): type = type.split(".")[1]
+        return f"{'LP_' * count}{type}"
 
     for index, module in enumerate(modules):
         if len(__module__.functions[module]) == 0: continue
@@ -431,9 +478,19 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
 
         for _index, func in enumerate(__module__.functions[module]):
             if (_ := __module__.functions[module][func]).__name__ == "__inner__": _ = _.func
-            vararg, restype, argtypes, (description, arguments) = _.vararg, _.restype, _.argtypes, _.__doc__
-            assert arguments is None or (arguments is not None and len(arguments) == len(argtypes)), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{func}'."
-            arguments = [f"{'_' if arguments is None or arguments[i] in keyword.kwlist else ''}{i if arguments is None else arguments[i]}" for i in range(len(argtypes))]
+            vararg, restype, argtypes, (description, arguments, _return) = _.vararg, _.restype, _.argtypes, _.__doc__
+            assert arguments is None or len(arguments) == len(argtypes), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{func}'."
+
+            if arguments is None:
+                arguments = [f"_{i}" for i in range(len(argtypes))]
+
+            else:
+                for __index, i in enumerate(arguments):
+                    assert SDL_PYTHONIZE_TYPE(arguments[i], i) == SDL_GET_NAME(argtypes[__index]), f"argument type mismatch for 'https://wiki.libsdl.org/{module}/{func}'."
+
+                arguments = [f"{'_' if i in keyword.kwlist else ''}{i.replace('[', '').replace(']', '')}" for i in arguments]
+
+            assert _return is None or SDL_PYTHONIZE_TYPE(_return) == SDL_GET_NAME(restype), f"return type mismatch for 'https://wiki.libsdl.org/{module}/{func}'."
             definitions += f"def {func}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)] + (['*args: list[typing.Any]'] if vararg else []))}) -> {SDL_GET_NAME(restype)}:\n"
             if not rst or description is not None: definitions += f"{' ' * 4}\"\"\"\n"
             if description is not None: definitions += f"    {description}\n"
@@ -480,7 +537,7 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
 
     return SDL_GENERATE_DOCS().encode("utf-8")
 
-if not __initialized__ and int(os.environ.get("SDL_CTYPES_ALIAS_FIX", "0")) > 0:
+if not __initialized__ and int(os.environ.get("SDL_CTYPES_ALIAS_FIX", os.environ.get("SDL_DEBUG", "0"))) > 0:
     for i in dir(ctypes):
         if i.startswith("c_") and getattr(ctypes, i).__name__ != i and hasattr(getattr(ctypes, i), "_type_"):
             setattr(ctypes, i, SDL_TYPE[i, getattr(ctypes, i)])
