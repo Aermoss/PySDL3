@@ -8,6 +8,7 @@ os.environ["SDL_CTYPES_ALIAS_FIX"] = "1"
 os.environ["SDL_DISABLE_METADATA"] = "1"
 os.environ["SDL_PLATFORM_AGNOSTIC"] = "1"
 os.environ["SDL_IGNORE_MISSING_FUNCTIONS"] = "1"
+os.environ["SDL_CHECK_BINARY_VERSION"] = "0"
 os.environ["SDL_DOWNLOAD_BINARIES"] = "0"
 os.environ["SDL_FIND_BINARIES"] = "0"
 os.makedirs("temp", exist_ok = True)
