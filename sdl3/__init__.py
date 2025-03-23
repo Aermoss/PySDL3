@@ -311,11 +311,10 @@ class SDL_FUNC_TYPE:
             assert isinstance(key[1], type) or key[1] is None, "Expected a type as the second argument."
             assert isinstance(key[2], list), "Expected a list as the third argument."
 
-        if int(os.environ.get("SDL_RESET_CTYPES_CACHE", "1")) > 0:
-            ctypes._reset_cache()
-
+        _, ctypes._c_functype_cache = ctypes._c_functype_cache, {}
         value = ctypes.CFUNCTYPE(key[1], *key[2])
-        value.__name__ = key[0]; return value
+        value.__name__, ctypes._c_functype_cache = key[0], _
+        return value
 
 SDL_ENUM: typing.TypeAlias = SDL_TYPE["SDL_ENUM", ctypes.c_int]
 SDL_VA_LIST: typing.TypeAlias = SDL_TYPE["SDL_VA_LIST", ctypes.c_char_p]
