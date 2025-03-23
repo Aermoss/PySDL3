@@ -227,7 +227,7 @@ class SDL_FUNC:
             func = getattr(binary, key[0], None)
 
         else:
-            if int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0:
+            if not int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0:
                 print("\33[35m", f"warning: function '{key[0]}' not found in binary: '{key[3]}'.", "\33[0m", sep = "", flush = True)
 
         if not binary or not func: func = SDL_NOT_IMPLEMENTED(key[0])
