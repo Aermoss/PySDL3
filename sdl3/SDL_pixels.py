@@ -244,8 +244,8 @@ class SDL_PixelFormatDetails(ctypes.Structure):
     ]
 
 SDL_GetPixelFormatName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatName", ctypes.c_char_p, [SDL_PixelFormat], SDL_BINARY]
-SDL_GetMasksForPixelFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetMasksForPixelFormat", ctypes.c_bool, [SDL_PixelFormat, SDL_POINTER[ctypes.c_int32], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32]], SDL_BINARY]
-SDL_GetPixelFormatForMasks: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatForMasks", SDL_PixelFormat, [ctypes.c_int32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32], SDL_BINARY]
+SDL_GetMasksForPixelFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetMasksForPixelFormat", ctypes.c_bool, [SDL_PixelFormat, SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32], SDL_POINTER[ctypes.c_uint32]], SDL_BINARY]
+SDL_GetPixelFormatForMasks: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatForMasks", SDL_PixelFormat, [ctypes.c_int, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32], SDL_BINARY]
 SDL_GetPixelFormatDetails: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatDetails", SDL_POINTER[SDL_PixelFormatDetails], [SDL_PixelFormat], SDL_BINARY]
 SDL_CreatePalette: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreatePalette", SDL_POINTER[SDL_Palette], [ctypes.c_int], SDL_BINARY]
 SDL_SetPaletteColors: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetPaletteColors", ctypes.c_bool, [SDL_POINTER[SDL_Palette], SDL_POINTER[SDL_Color], ctypes.c_int, ctypes.c_int], SDL_BINARY]

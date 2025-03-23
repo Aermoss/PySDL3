@@ -171,8 +171,8 @@ SDL_SetTextureScaleMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetTextur
 SDL_GetTextureScaleMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTextureScaleMode", ctypes.c_bool, [SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_ScaleMode]], SDL_BINARY]
 
 SDL_UpdateTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateTexture", ctypes.c_bool, [SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], ctypes.c_void_p, ctypes.c_int], SDL_BINARY]
-SDL_UpdateYUVTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateYUVTexture", ctypes.c_bool, [SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int], SDL_BINARY]
-SDL_UpdateNVTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateNVTexture", ctypes.c_bool, [SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int], SDL_BINARY]
+SDL_UpdateYUVTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateYUVTexture", ctypes.c_bool, [SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], SDL_POINTER[ctypes.c_uint8], ctypes.c_int, SDL_POINTER[ctypes.c_uint8], ctypes.c_int, SDL_POINTER[ctypes.c_uint8], ctypes.c_int], SDL_BINARY]
+SDL_UpdateNVTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateNVTexture", ctypes.c_bool, [SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], SDL_POINTER[ctypes.c_uint8], ctypes.c_int, SDL_POINTER[ctypes.c_uint8], ctypes.c_int], SDL_BINARY]
 
 SDL_LockTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LockTexture", ctypes.c_bool, [SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], SDL_POINTER[ctypes.c_void_p], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 SDL_LockTextureToSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LockTextureToSurface", ctypes.c_bool, [SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_POINTER[SDL_Surface]]], SDL_BINARY]
@@ -183,7 +183,7 @@ SDL_GetRenderTarget: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRenderTarg
 
 SDL_SetRenderLogicalPresentation: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetRenderLogicalPresentation", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], ctypes.c_int, ctypes.c_int, SDL_RendererLogicalPresentation], SDL_BINARY]
 SDL_GetRenderLogicalPresentation: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRenderLogicalPresentation", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[SDL_RendererLogicalPresentation]], SDL_BINARY]
-SDL_GetRenderLogicalPresentationRect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRenderLogicalPresentationRect", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Rect]], SDL_BINARY]
+SDL_GetRenderLogicalPresentationRect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRenderLogicalPresentationRect", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_FRect]], SDL_BINARY]
 
 SDL_RenderCoordinatesFromWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderCoordinatesFromWindow", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float]], SDL_BINARY]
 SDL_RenderCoordinatesToWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderCoordinatesToWindow", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float]], SDL_BINARY]

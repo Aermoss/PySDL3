@@ -9,7 +9,7 @@ class SDL_Thread(ctypes.c_void_p):
     ...
 
 SDL_ThreadID: typing.TypeAlias = SDL_TYPE["SDL_ThreadID", ctypes.c_uint64]
-SDL_TLSID: typing.TypeAlias = SDL_AtomicInt
+SDL_TLSID: typing.TypeAlias = SDL_TYPE["SDL_TLSID", SDL_AtomicInt]
 
 SDL_ThreadPriority: typing.TypeAlias = SDL_TYPE["SDL_ThreadPriority", SDL_ENUM]
 

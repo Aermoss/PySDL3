@@ -86,9 +86,9 @@ SDL_DetachVirtualJoystick: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DetachV
 SDL_IsJoystickVirtual: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IsJoystickVirtual", ctypes.c_bool, [SDL_JoystickID], SDL_BINARY]
 SDL_SetJoystickVirtualAxis: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetJoystickVirtualAxis", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_int16], SDL_BINARY]
 SDL_SetJoystickVirtualBall: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetJoystickVirtualBall", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_int16, ctypes.c_int16], SDL_BINARY]
-SDL_SetJoystickVirtualButton: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetJoystickVirtualButton", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_uint8], SDL_BINARY]
+SDL_SetJoystickVirtualButton: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetJoystickVirtualButton", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_bool], SDL_BINARY]
 SDL_SetJoystickVirtualHat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetJoystickVirtualHat", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_uint8], SDL_BINARY]
-SDL_SetJoystickVirtualTouchpad: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetJoystickVirtualTouchpad", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_int, ctypes.c_uint8, ctypes.c_float, ctypes.c_float, ctypes.c_float], SDL_BINARY]
+SDL_SetJoystickVirtualTouchpad: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetJoystickVirtualTouchpad", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], ctypes.c_int, ctypes.c_int, ctypes.c_bool, ctypes.c_float, ctypes.c_float, ctypes.c_float], SDL_BINARY]
 SDL_SendJoystickVirtualSensorData: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SendJoystickVirtualSensorData", ctypes.c_bool, [SDL_POINTER[SDL_Joystick], SDL_SensorType, ctypes.c_uint64, SDL_POINTER[ctypes.c_float], ctypes.c_int], SDL_BINARY]
 SDL_GetJoystickProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetJoystickProperties", SDL_PropertiesID, [SDL_POINTER[SDL_Joystick]], SDL_BINARY]
 

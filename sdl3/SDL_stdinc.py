@@ -162,15 +162,15 @@ SDL_itoa: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_itoa", ctypes.c_char_p, 
 SDL_uitoa: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_uitoa", ctypes.c_char_p, [ctypes.c_uint, ctypes.c_char_p, ctypes.c_int], SDL_BINARY]
 SDL_ltoa: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ltoa", ctypes.c_char_p, [ctypes.c_long, ctypes.c_char_p, ctypes.c_int], SDL_BINARY]
 SDL_ultoa: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ultoa", ctypes.c_char_p, [ctypes.c_ulong, ctypes.c_char_p, ctypes.c_int], SDL_BINARY]
-SDL_lltoa: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_lltoa", ctypes.c_char_p, [ctypes.c_int64, ctypes.c_char_p, ctypes.c_int], SDL_BINARY]
-SDL_ulltoa: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ulltoa", ctypes.c_char_p, [ctypes.c_uint64, ctypes.c_char_p, ctypes.c_int], SDL_BINARY]
+SDL_lltoa: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_lltoa", ctypes.c_char_p, [ctypes.c_longlong, ctypes.c_char_p, ctypes.c_int], SDL_BINARY]
+SDL_ulltoa: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ulltoa", ctypes.c_char_p, [ctypes.c_ulonglong, ctypes.c_char_p, ctypes.c_int], SDL_BINARY]
 
 SDL_atoi: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_atoi", ctypes.c_int, [ctypes.c_char_p], SDL_BINARY]
 SDL_atof: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_atof", ctypes.c_double, [ctypes.c_char_p], SDL_BINARY]
 SDL_strtol: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_strtol", ctypes.c_long, [ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p], ctypes.c_int], SDL_BINARY]
 SDL_strtoul: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_strtoul", ctypes.c_ulong, [ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p], ctypes.c_int], SDL_BINARY]
-SDL_strtoll: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_strtoll", ctypes.c_int64, [ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p], ctypes.c_int], SDL_BINARY]
-SDL_strtoull: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_strtoull", ctypes.c_uint64, [ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p], ctypes.c_int], SDL_BINARY]
+SDL_strtoll: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_strtoll", ctypes.c_longlong, [ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p], ctypes.c_int], SDL_BINARY]
+SDL_strtoull: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_strtoull", ctypes.c_ulonglong, [ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p], ctypes.c_int], SDL_BINARY]
 SDL_strtod: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_strtod", ctypes.c_double, [ctypes.c_char_p, SDL_POINTER[ctypes.c_char_p]], SDL_BINARY]
 
 SDL_strcmp: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_strcmp", ctypes.c_int, [ctypes.c_char_p, ctypes.c_char_p], SDL_BINARY]
@@ -194,7 +194,7 @@ SDL_asprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_asprintf", ctypes.c_
 SDL_vasprintf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_vasprintf", ctypes.c_int, [SDL_POINTER[ctypes.c_char_p], ctypes.c_char_p, SDL_VA_LIST], SDL_BINARY]
 
 SDL_srand: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_srand", None, [ctypes.c_uint64], SDL_BINARY]
-SDL_rand: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_rand", ctypes.c_int32, [ctypes.c_int64], SDL_BINARY]
+SDL_rand: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_rand", ctypes.c_int32, [ctypes.c_int32], SDL_BINARY]
 SDL_randf: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_randf", ctypes.c_float, [], SDL_BINARY]
 SDL_rand_bits: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_rand_bits", ctypes.c_uint32, [], SDL_BINARY]
 SDL_rand_r: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_rand_r", ctypes.c_int32, [SDL_POINTER[ctypes.c_uint64], ctypes.c_int32], SDL_BINARY]

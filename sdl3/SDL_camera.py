@@ -36,6 +36,6 @@ SDL_GetCameraPermissionState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetC
 SDL_GetCameraID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraID", SDL_CameraID, [SDL_POINTER[SDL_Camera]], SDL_BINARY]
 SDL_GetCameraProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraProperties", SDL_PropertiesID, [SDL_POINTER[SDL_Camera]], SDL_BINARY]
 SDL_GetCameraFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraFormat", ctypes.c_bool, [SDL_POINTER[SDL_Camera], SDL_POINTER[SDL_CameraSpec]], SDL_BINARY]
-SDL_AcquireCameraFrame: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AcquireCameraFrame", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_Camera], SDL_POINTER[ctypes.c_int64]], SDL_BINARY]
+SDL_AcquireCameraFrame: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AcquireCameraFrame", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_Camera], SDL_POINTER[ctypes.c_uint64]], SDL_BINARY]
 SDL_ReleaseCameraFrame: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReleaseCameraFrame", None, [SDL_POINTER[SDL_Camera], SDL_POINTER[SDL_Surface]], SDL_BINARY]
 SDL_CloseCamera: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CloseCamera", None, [SDL_POINTER[SDL_Camera]], SDL_BINARY]

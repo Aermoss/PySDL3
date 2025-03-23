@@ -43,5 +43,5 @@ SDL_RemovePath: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RemovePath", ctype
 SDL_RenamePath: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenamePath", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_char_p], SDL_BINARY]
 SDL_CopyFile: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CopyFile", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_char_p], SDL_BINARY]
 SDL_GetPathInfo: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPathInfo", ctypes.c_bool, [ctypes.c_char_p, SDL_POINTER[SDL_PathInfo]], SDL_BINARY]
-SDL_GlobDirectory: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GlobDirectory", SDL_POINTER[ctypes.c_char_p], [ctypes.c_char_p, ctypes.c_char_p, SDL_POINTER[SDL_GlobFlags], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
+SDL_GlobDirectory: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GlobDirectory", SDL_POINTER[ctypes.c_char_p], [ctypes.c_char_p, ctypes.c_char_p, SDL_GlobFlags, SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 SDL_GetCurrentDirectory: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentDirectory", ctypes.c_char_p, [], SDL_BINARY]

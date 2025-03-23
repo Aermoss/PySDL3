@@ -85,7 +85,7 @@ SDL_FLASH_CANCEL, SDL_FLASH_BRIEFLY, SDL_FLASH_UNTIL_FOCUSED = range(3)
 class SDL_GLContextState(ctypes.c_void_p):
     ...
 
-SDL_GLContext: typing.TypeAlias = SDL_POINTER[SDL_GLContextState]
+SDL_GLContext: typing.TypeAlias = SDL_TYPE["SDL_GLContext", SDL_POINTER[SDL_GLContextState]]
 
 SDL_EGLDisplay: typing.TypeAlias = SDL_TYPE["SDL_EGLDisplay", ctypes.c_void_p]
 SDL_EGLConfig: typing.TypeAlias = SDL_TYPE["SDL_EGLConfig", ctypes.c_void_p]
@@ -332,7 +332,7 @@ SDL_HitTest: typing.TypeAlias = SDL_FUNC_TYPE["SDL_HitTest", SDL_HitTestResult, 
 SDL_SetWindowHitTest: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowHitTest", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_HitTest, ctypes.c_void_p], SDL_BINARY]
 SDL_SetWindowShape: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowShape", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Surface]], SDL_BINARY]
 
-SDL_FlashWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlashWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_FlashOperation]], SDL_BINARY]
+SDL_FlashWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlashWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_FlashOperation], SDL_BINARY]
 SDL_DestroyWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyWindow", None, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
 SDL_ScreenSaverEnabled: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ScreenSaverEnabled", ctypes.c_bool, [], SDL_BINARY]

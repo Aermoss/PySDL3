@@ -24,7 +24,7 @@ TTF_GetHarfBuzzVersion: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetHarfBuz
 class TTF_Font(ctypes.c_void_p):
     ...
 
-TTF_Init: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_Init", ctypes.c_int, [], SDL_TTF_BINARY]
+TTF_Init: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_Init", ctypes.c_bool, [], SDL_TTF_BINARY]
 TTF_OpenFont: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_OpenFont", SDL_POINTER[TTF_Font], [ctypes.c_char_p, ctypes.c_float], SDL_TTF_BINARY]
 TTF_OpenFontIO: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_OpenFontIO", SDL_POINTER[TTF_Font], [SDL_POINTER[SDL_IOStream], ctypes.c_bool, ctypes.c_float], SDL_TTF_BINARY]
 TTF_OpenFontWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_OpenFontWithProperties", SDL_POINTER[TTF_Font], [SDL_PropertiesID], SDL_TTF_BINARY]
@@ -269,7 +269,7 @@ TTF_GetTextSubStringsForRange: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_Get
 TTF_GetTextSubStringForPoint: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetTextSubStringForPoint", ctypes.c_bool, [SDL_POINTER[TTF_Text], ctypes.c_int, ctypes.c_int, SDL_POINTER[TTF_SubString]], SDL_TTF_BINARY]
 TTF_GetPreviousTextSubString: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetPreviousTextSubString", ctypes.c_bool, [SDL_POINTER[TTF_Text], SDL_POINTER[TTF_SubString], SDL_POINTER[TTF_SubString]], SDL_TTF_BINARY]
 TTF_GetNextTextSubString: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetNextTextSubString", ctypes.c_bool, [SDL_POINTER[TTF_Text], SDL_POINTER[TTF_SubString], SDL_POINTER[TTF_SubString]], SDL_TTF_BINARY]
-TTF_UpdateText: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_UpdateText", None, [SDL_POINTER[TTF_Text]], SDL_TTF_BINARY]
+TTF_UpdateText: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_UpdateText", ctypes.c_bool, [SDL_POINTER[TTF_Text]], SDL_TTF_BINARY]
 TTF_DestroyText: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_DestroyText", None, [SDL_POINTER[TTF_Text]], SDL_TTF_BINARY]
 
 TTF_CloseFont: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_CloseFont", None, [SDL_POINTER[TTF_Font]], SDL_TTF_BINARY]

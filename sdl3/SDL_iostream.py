@@ -64,8 +64,8 @@ SDL_FlushIO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlushIO", ctypes.c_bo
 SDL_LoadFile_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadFile_IO", ctypes.c_void_p, [SDL_POINTER[SDL_IOStream], SDL_POINTER[ctypes.c_size_t], ctypes.c_bool], SDL_BINARY]
 SDL_LoadFile: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadFile", ctypes.c_void_p, [ctypes.c_char_p, SDL_POINTER[ctypes.c_size_t]], SDL_BINARY]
 
-SDL_SaveFile_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SaveFile_IO", ctypes.c_bool, [SDL_POINTER[SDL_IOStream], SDL_POINTER[ctypes.c_void_p], ctypes.c_size_t, ctypes.c_bool], SDL_BINARY]
-SDL_SaveFile: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SaveFile", ctypes.c_bool, [ctypes.c_char_p, SDL_POINTER[ctypes.c_void_p], ctypes.c_size_t], SDL_BINARY]
+SDL_SaveFile_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SaveFile_IO", ctypes.c_bool, [SDL_POINTER[SDL_IOStream], ctypes.c_void_p, ctypes.c_size_t, ctypes.c_bool], SDL_BINARY]
+SDL_SaveFile: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SaveFile", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_void_p, ctypes.c_size_t], SDL_BINARY]
 
 SDL_ReadU8: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReadU8", ctypes.c_bool, [SDL_POINTER[SDL_IOStream], SDL_POINTER[ctypes.c_uint8]], SDL_BINARY]
 SDL_ReadS8: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReadS8", ctypes.c_bool, [SDL_POINTER[SDL_IOStream], SDL_POINTER[ctypes.c_int8]], SDL_BINARY]
