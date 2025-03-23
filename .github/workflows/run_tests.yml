@@ -35,13 +35,11 @@ jobs:
 
       - name: Install dependencies.
         shell: bash
-        run: |
-          python -m pip install .
+        run: python -m pip install .
 
       - name: Run tests.
         shell: bash
-        run: |
-          python -c "import tests"
+        run: python -c "import tests"
         env:
           SDL_DOC_GENERATOR: ${{github.event_name == 'workflow_run' && '1' || '0'}}
           SDL_GITHUB_TOKEN: ${{secrets.PERSONAL_ACCESS_TOKEN}}
