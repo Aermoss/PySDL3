@@ -2,7 +2,7 @@ import os, sys, collections.abc as abc
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import sdl3, ctypes, atexit
+import sdl3, ctypes, atexit, traceback
 
 functions: dict[abc.Callable[..., None], list[str]] = {}
 
@@ -30,9 +30,13 @@ def TEST_RunAllTests() -> None:
                 print("\33[32m", f"Test '{func.__name__}' passed.", "\33[0m", sep = "", flush = True)
                 passed += 1
 
-        except AssertionError as error:
-            print("\33[31m", f"Test '{func.__name__}' failed: {error}", "\33[0m", sep = "", flush = True)
+        except AssertionError as exc:
+            print("\33[31m", f"Test '{func.__name__}' failed: {str(exc).capitalize()}", "\33[0m", sep = "", flush = True)
             failed += 1
+        
+        except Exception as exc:
+            print("\33[31m", f"Test '{func.__name__}' failed: {str(exc).capitalize()}.\n\n{traceback.format_exc()}", "\33[0m", sep = "", flush = True)
+            os._exit(-1)
 
     print("\33[31m" if failed else "\33[32m", f"{'Failed' if failed else 'Passed'}! {passed} test(s) passed, {failed} test(s) failed.", "\33[0m", sep = "", flush = True)
     if failed: os._exit(-1)
