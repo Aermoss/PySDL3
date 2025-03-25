@@ -226,9 +226,8 @@ class SDL_FUNC:
         if binary := SDL_GET_BINARY(key[3]):
             func = getattr(binary, key[0], None)
 
-        else:
-            if not int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0:
-                print("\33[35m", f"warning: function '{key[0]}' not found in binary: '{key[3]}'.", "\33[0m", sep = "", flush = True)
+            if not func and not int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "0")) > 0:
+                print("\33[35m", f"warning: function '{key[0]}' not found in binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(key[3])}'.", "\33[0m", sep = "", flush = True)
 
         if not binary or not func: func = SDL_NOT_IMPLEMENTED(key[0])
         func.restype, func.binary = key[1], binary
@@ -554,24 +553,22 @@ if not __initialized__:
         for binary, left, right in zip(SDL_BINARY_VAR_MAP.values(), [SDL_GetVersion, IMG_Version, Mix_Version, TTF_Version, RTF_Version, SDLNet_Version], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
             if binary in binaryMap and (_ := left()) != right: print("\33[35m", f"warning: version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(binary)}' (expected: {SDL_VERSIONNUM_STRING(right)}, got: {SDL_VERSIONNUM_STRING(_)}).", "\33[0m", sep = "", flush = True)
 
-    def SDL_TRY_WRITE_DOCS() -> None:
+    def SDL_TRY_WRITE_DOCS() -> bool | None:
         try:
             with open(__doc_file__, "wb") as file:
                 file.write(SDL_GET_OR_GENERATE_DOCS())
 
+            return True
+
         except OSError as exc:
             print("\33[31m", f"error: failed to write docs: {str(exc).lower()}.", "\33[0m", sep = "", flush = True)
-
-    if __doc_generator__:
-        if not os.path.exists(__doc_file__):
-            SDL_TRY_WRITE_DOCS()
-
+    
+    if __doc_generator__ and (os.path.exists(__doc_file__) or SDL_TRY_WRITE_DOCS()):
         from .__doc__ import *
         try: exec(getattr(__doc__, "__doc__"), data := {})
-        except SyntaxError: data = None
+        except (SyntaxError, TypeError): data = None
 
-        if not data or data["meta"]["target"] != f"v{__version__}" or data["meta"]["system"] != SDL_SYSTEM:
-            SDL_TRY_WRITE_DOCS()
+        if os.path.exists(__doc_file__) and (not data or data["meta"]["target"] != f"v{__version__}" or data["meta"]["system"] != SDL_SYSTEM) and SDL_TRY_WRITE_DOCS():
             del sys.modules["sdl3.__doc__"]
             print("\33[35m", f"warning: reloading module: 'sdl3.__doc__'.", "\33[0m", sep = "", flush = True)
             from .__doc__ import *
