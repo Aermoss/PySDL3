@@ -546,31 +546,40 @@ from sdl3.SDL import *
 if __doc_generator__:
     import sdl3.SDL as raw
 
-SDL_VERSIONNUM_STRING: abc.Callable[[int], str] = lambda num: \
+SDL_VERSIONNUM_STRING: abc.Callable[[int], str] = lambda num: str(None).lower() if not num else \
     f"{SDL_VERSIONNUM_MAJOR(num)}.{SDL_VERSIONNUM_MINOR(num)}.{SDL_VERSIONNUM_MICRO(num)}"
 
 if not __initialized__:
     if int(os.environ.get("SDL_CHECK_BINARY_VERSION", "1")) > 0:
-        for binary, left, right in zip(SDL_BINARY_VAR_MAP.values(), [SDL_GetVersion(), IMG_Version(), Mix_Version(), TTF_Version(), RTF_Version(), SDLNet_Version()], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
-            if left != right: print("\33[35m", f"warning: version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(binary)}' (expected: {SDL_VERSIONNUM_STRING(right)}, got: {SDL_VERSIONNUM_STRING(left)}).", "\33[0m", sep = "", flush = True)
+        for binary, left, right in zip(SDL_BINARY_VAR_MAP.values(), [SDL_GetVersion, IMG_Version, Mix_Version, TTF_Version, RTF_Version, SDLNet_Version], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
+            if binary in binaryMap and (_ := left()) != right: print("\33[35m", f"warning: version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(binary)}' (expected: {SDL_VERSIONNUM_STRING(right)}, got: {SDL_VERSIONNUM_STRING(_)}).", "\33[0m", sep = "", flush = True)
+
+    def SDL_TRY_WRITE_DOCS() -> None:
+        try:
+            with open(__doc_file__, "wb") as file:
+                file.write(SDL_GET_OR_GENERATE_DOCS())
+
+        except OSError as exc:
+            print("\33[31m", f"error: failed to write docs: {str(exc).lower()}.", "\33[0m", sep = "", flush = True)
 
     if __doc_generator__:
         if not os.path.exists(__doc_file__):
-            with open(__doc_file__, "wb") as file:
-                file.write(SDL_GET_OR_GENERATE_DOCS())
+            SDL_TRY_WRITE_DOCS()
 
         from .__doc__ import *
         try: exec(getattr(__doc__, "__doc__"), data := {})
         except SyntaxError: data = None
 
         if not data or data["meta"]["target"] != f"v{__version__}" or data["meta"]["system"] != SDL_SYSTEM:
-            with open(__doc_file__, "wb") as file:
-                file.write(SDL_GET_OR_GENERATE_DOCS())
-
+            SDL_TRY_WRITE_DOCS()
             del sys.modules["sdl3.__doc__"]
             print("\33[35m", f"warning: reloading module: 'sdl3.__doc__'.", "\33[0m", sep = "", flush = True)
             from .__doc__ import *
 
     else:
-        if os.path.exists(__doc_file__):
-            os.remove(__doc_file__)
+        try:
+            if not __frozen__ and int(os.environ.get("SDL_DEBUG", "0")) > 0:
+                if os.path.exists(__doc_file__): os.remove(__doc_file__)
+
+        except PermissionError as exc:
+            print("\33[31m", f"error: failed to remove docs: '{str(exc).lower()}'.", "\33[0m", sep = "", flush = True)
