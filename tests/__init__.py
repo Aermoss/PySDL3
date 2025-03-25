@@ -10,8 +10,9 @@ def TEST_RegisterFunction(systems: list[str]) -> abc.Callable[[abc.Callable[...,
     return lambda func: functions.update({func: systems})
 
 from tests.TEST_init import *
-from tests.TEST_video import *
 from tests.TEST_locale import *
+from tests.TEST_version import *
+from tests.TEST_video import *
 
 @atexit.register
 def TEST_RunAllTests() -> None:
