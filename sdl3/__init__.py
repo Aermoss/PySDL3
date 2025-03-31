@@ -40,7 +40,7 @@ __initialized__: bool = __name__.split(".")[0] in sys.modules if "." in __name__
 __module__: types.ModuleType = sys.modules[__name__.split(".")[0] if "." in __name__ else __name__]
 
 def SDL_FIND_BINARIES(libraries: list[str]) -> list[str]:
-    """Find binaries of system libraries."""
+    """Search for binaries in system libraries."""
     libraries = libraries + [f"{library}d" for library in libraries]
     binaries = [f"./{file}" if SDL_SYSTEM in ["Windows"] and not ("/" in file or "\\" in file) else file for library in libraries if (file := ctypes.util.find_library(library))]
 
@@ -49,7 +49,7 @@ def SDL_FIND_BINARIES(libraries: list[str]) -> list[str]:
 
     return binaries
 
-def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_ARCH) -> None:
+def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_ARCH) -> bool:
     """Download specific SDL3 binaries to the given path."""
     assert system.capitalize() in ["Darwin", "Linux", "Windows"], "Unknown system."
     assert arch.upper() in ["AMD64", "ARM64"], "Unknown architecture."
@@ -61,7 +61,11 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
         headers["Authorization"] = f"Bearer {os.environ['SDL_GITHUB_TOKEN']}"
 
     try:
-        for release in requests.get("https://api.github.com/repos/Aermoss/PySDL3-Build/releases", headers = headers).json():
+        for release in (_ := requests.get("https://api.github.com/repos/Aermoss/PySDL3-Build/releases", headers = headers).json()):
+            if isinstance(release, str):
+                print("\33[31m", f"error: failed to download binaries: {_[release].lower()}", "\33[0m", sep = "", flush = True)
+                return False
+
             if release["draft"] or release["prerelease"]:
                 continue
 
@@ -101,10 +105,14 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
                         json.dump(data, file, indent = 4)
 
                     os.remove(os.path.join(path, asset["name"]))
-                    return
-                
+                    return True
+
+            print("\33[31m", "error: failed to download binaries: no binaries found.", "\33[0m", sep = "", flush = True)
+            return False
+
     except requests.RequestException as exc:
-        print("\33[31m", f"error: failed to download binaries: {str(exc).lower()}", "\33[0m", sep = "", flush = True)
+        print("\33[31m", f"error: failed to download binaries: {str(exc).lower()}.", "\33[0m", sep = "", flush = True)
+        return False
 
 if not __initialized__:
     if int(os.environ.get("SDL_CHECK_VERSION", str(int(not __frozen__)))) > 0:
@@ -155,11 +163,10 @@ if not __initialized__:
         missing = True
 
     if int(os.environ.get("SDL_DOWNLOAD_BINARIES", str(int(binaryData.get("repair", True))))) > 0 and missing:
-        SDL_DOWNLOAD_BINARIES(binaryPath, SDL_SYSTEM, SDL_ARCH)
-
-        with open(os.path.join(binaryPath, "metadata.json"), "r") as file:
-            binaryData, missing = json.load(file), None
-            binaryData["files"] = [absPath(i) for i in binaryData["files"]]
+        if _ := SDL_DOWNLOAD_BINARIES(binaryPath, SDL_SYSTEM, SDL_ARCH):
+            with open(os.path.join(binaryPath, "metadata.json"), "r") as file:
+                binaryData, missing = json.load(file), None
+                binaryData["files"] = [absPath(i) for i in binaryData["files"]]
 
     if int(os.environ.get("SDL_FIND_BINARIES", str(int(binaryData.get("find", missing is None))))) > 0:
         binaryData["files"] += SDL_FIND_BINARIES(list(SDL_BINARY_VAR_MAP_INV.keys()))
@@ -361,29 +368,22 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: list[tuple[str, str]], rst: bool = Fa
 
     for module, func in funcs:
         url = f"https://wiki.libsdl.org/{module}/{func}"
-        print("\33[32m", f"info: sending a request to '{url}'.", "\33[0m", sep = "", flush = True)
+        # print("\33[32m", f"info: sending a request to '{url}'.", "\33[0m", sep = "", flush = True)
         tasks.append(asyncio.create_task(session.get(url, ssl = False)))
     
     responses = await asyncio.gather(*tasks)
-    print("\33[32m", f"info: response gathering completed ({len(responses)} response(s)).", "\33[0m", sep = "", flush = True)
+    # print("\33[32m", f"info: response gathering completed ({len(responses)} response(s)).", "\33[0m", sep = "", flush = True)
     descriptions, arguments, returns = [], [], []
 
     for response in responses:
         if response.status != 200:
-            print("\33[35m", f"warning: failed to get description of '{response.url}', skipping (status: {response.status}).", "\33[0m", sep = "", flush = True)
+            print("\33[35m", f"warning: no such page: '{response.url}', skipping (status: {response.status}).", "\33[0m", sep = "", flush = True)
             descriptions.append(None)
             arguments.append(None)
             returns.append(None)
 
         else:
             content = (await response.content.read()).decode()
-
-            if "no such page" in content.lower():
-                print("\33[35m", f"warning: no such page found for '{response.url}', skipping.", "\33[0m", sep = "", flush = True)
-                descriptions.append(None)
-                arguments.append(None)
-                returns.append(None)
-                continue
 
             for a, b in zip(list(re.finditer(r"<p>", content)), list(re.finditer(r"</p>", content))):
                 if content[a.end()] == "<":
@@ -477,18 +477,18 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
         for _index, func in enumerate(__module__.functions[module]):
             if (_ := __module__.functions[module][func]).__name__ == "__inner__": _ = _.func
             vararg, restype, argtypes, (description, arguments, _return) = _.vararg, _.restype, _.argtypes, _.__doc__
-            assert arguments is None or len(arguments) == len(argtypes), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{func}'."
+            assert arguments is None or len(arguments) == len(argtypes), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{func}' (expected: {len(arguments)}, got: {len(argtypes)})."
 
             if arguments is None:
                 arguments = [f"_{i}" for i in range(len(argtypes))]
 
             else:
                 for __index, i in enumerate(arguments):
-                    assert SDL_PYTHONIZE_TYPE(arguments[i], i) == SDL_GET_NAME(argtypes[__index]), f"argument type mismatch for 'https://wiki.libsdl.org/{module}/{func}'."
+                    assert SDL_PYTHONIZE_TYPE(arguments[i], i) == SDL_GET_NAME(argtypes[__index]), f"argument type mismatch for 'https://wiki.libsdl.org/{module}/{func}' (argument: {i}, expected: {SDL_PYTHONIZE_TYPE(arguments[i], i)}, got: {SDL_GET_NAME(argtypes[__index])})."
 
                 arguments = [f"{'_' if i in keyword.kwlist else ''}{i.replace('[', '').replace(']', '')}" for i in arguments]
 
-            assert _return is None or SDL_PYTHONIZE_TYPE(_return) == SDL_GET_NAME(restype), f"return type mismatch for 'https://wiki.libsdl.org/{module}/{func}'."
+            assert _return is None or SDL_PYTHONIZE_TYPE(_return) == SDL_GET_NAME(restype), f"return type mismatch for 'https://wiki.libsdl.org/{module}/{func}' (expected: {SDL_PYTHONIZE_TYPE(_return)}, got: {SDL_GET_NAME(restype)})."
             definitions += f"def {func}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)] + (['*args: list[typing.Any]'] if vararg else []))}) -> {SDL_GET_NAME(restype)}:\n"
             if not rst or description is not None: definitions += f"{' ' * 4}\"\"\"\n"
             if description is not None: definitions += f"    {description}\n"
@@ -518,7 +518,11 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
         if "SDL_GITHUB_TOKEN" in os.environ:
             headers["Authorization"] = f"Bearer {os.environ['SDL_GITHUB_TOKEN']}"
 
-        for release in requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases", headers = headers).json():
+        for release in (_ := requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases", headers = headers).json()):
+            if isinstance(release, str):
+                print("\33[31m", f"error: failed to get docs from github: {_[release].lower()}", "\33[0m", sep = "", flush = True)
+                break
+
             if release["tag_name"] != f"v{__version__}":
                 continue
 
@@ -529,10 +533,11 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
                 with requests.get(asset["browser_download_url"], headers = headers, stream = True) as response:
                     assert response.status_code == 200, f"failed to get docs from github, status: {response.status_code}."
                     return bytearray().join([chunk for chunk in response.iter_content(chunk_size = 8192) if chunk])
-            
+
     except requests.RequestException as exc:
         print("\33[31m", f"error: failed to get docs from github: {str(exc).lower()}.", "\33[0m", sep = "", flush = True)
 
+    print("\33[35m", "warning: generating docs, you can ignore the folowing warnings...", "\33[0m", sep = "", flush = True)
     return SDL_GENERATE_DOCS().encode("utf-8")
 
 if not __initialized__ and int(os.environ.get("SDL_CTYPES_ALIAS_FIX", os.environ.get("SDL_DEBUG", "0"))) > 0:
@@ -570,7 +575,7 @@ if not __initialized__:
 
         if os.path.exists(__doc_file__) and (not data or data["meta"]["target"] != f"v{__version__}" or data["meta"]["system"] != SDL_SYSTEM) and SDL_TRY_WRITE_DOCS():
             del sys.modules["sdl3.__doc__"]
-            print("\33[35m", f"warning: reloading module: 'sdl3.__doc__'.", "\33[0m", sep = "", flush = True)
+            print("\33[35m", f"warning: reloading module: 'sdl3.__doc__'...", "\33[0m", sep = "", flush = True)
             from .__doc__ import *
 
     else:
