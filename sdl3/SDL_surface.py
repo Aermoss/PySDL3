@@ -16,7 +16,7 @@ SDL_MUSTLOCK: abc.Callable[..., bool] = lambda s: (s.flags & SDL_SURFACE_LOCK_NE
 
 SDL_ScaleMode: typing.TypeAlias = SDL_TYPE["SDL_ScaleMode", SDL_ENUM]
 
-SDL_SCALEMODE_NEAREST, SDL_SCALEMODE_LINEAR = range(2)
+SDL_SCALEMODE_INVALID, SDL_SCALEMODE_NEAREST, SDL_SCALEMODE_LINEAR = range(-1, 2)
 
 SDL_FlipMode: typing.TypeAlias = SDL_TYPE["SDL_FlipMode", SDL_ENUM]
 
