@@ -26,11 +26,11 @@ SDL_BeginThreadFunction, SDL_EndThreadFunction = SDL_FunctionPointer(0), SDL_Fun
 SDL_CreateThreadRuntime: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateThreadRuntime", SDL_POINTER[SDL_Thread], [SDL_ThreadFunction, ctypes.c_char_p, ctypes.c_void_p, SDL_FunctionPointer, SDL_FunctionPointer], SDL_BINARY]
 SDL_CreateThreadWithPropertiesRuntime: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateThreadWithPropertiesRuntime", SDL_POINTER[SDL_Thread], [SDL_PropertiesID, SDL_FunctionPointer, SDL_FunctionPointer], SDL_BINARY]
 
-SDL_CreateThread: abc.Callable[[SDL_ThreadFunction, ctypes.c_char_p, ctypes.c_void_p], SDL_POINTER[SDL_Thread]] = lambda fn, name, data: \
-    SDL_CreateThreadRuntime(fn, name, data, SDL_BeginThreadFunction, SDL_EndThreadFunction)
+SDL_CreateThread: abc.Callable[[SDL_ThreadFunction, ctypes.c_char_p, ctypes.c_void_p], SDL_POINTER[SDL_Thread]] = \
+    lambda fn, name, data: SDL_CreateThreadRuntime(fn, name, data, SDL_BeginThreadFunction, SDL_EndThreadFunction)
 
-SDL_CreateThreadWithProperties: abc.Callable[[SDL_PropertiesID], SDL_POINTER[SDL_Thread]] = lambda props: \
-    SDL_CreateThreadWithPropertiesRuntime(props, SDL_BeginThreadFunction, SDL_EndThreadFunction)
+SDL_CreateThreadWithProperties: abc.Callable[[SDL_PropertiesID], SDL_POINTER[SDL_Thread]] = \
+    lambda props: SDL_CreateThreadWithPropertiesRuntime(props, SDL_BeginThreadFunction, SDL_EndThreadFunction)
 
 SDL_PROP_THREAD_CREATE_ENTRY_FUNCTION_POINTER: bytes = "SDL.thread.create.entry_function".encode()
 SDL_PROP_THREAD_CREATE_NAME_STRING: bytes = "SDL.thread.create.name".encode()

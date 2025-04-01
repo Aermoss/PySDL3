@@ -12,7 +12,8 @@ SDL_SurfaceFlags: typing.TypeAlias = SDL_TYPE["SDL_SurfaceFlags", ctypes.c_uint3
 SDL_SURFACE_PREALLOCATED, SDL_SURFACE_LOCK_NEEDED, SDL_SURFACE_LOCKED, \
     SDL_SURFACE_SIMD_ALIGNED = 0x00000001, 0x00000002, 0x00000004, 0x00000008
 
-SDL_MUSTLOCK: abc.Callable[..., bool] = lambda s: (s.flags & SDL_SURFACE_LOCK_NEEDED) == SDL_SURFACE_LOCK_NEEDED
+SDL_MUSTLOCK: abc.Callable[..., bool] = lambda s: \
+    (s.flags & SDL_SURFACE_LOCK_NEEDED) == SDL_SURFACE_LOCK_NEEDED
 
 SDL_ScaleMode: typing.TypeAlias = SDL_TYPE["SDL_ScaleMode", SDL_ENUM]
 

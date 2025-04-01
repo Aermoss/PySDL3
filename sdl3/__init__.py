@@ -212,7 +212,8 @@ def SDL_GET_BINARY(name: str) -> ctypes.CDLL | None:
     return __module__.binaryMap.get(name, None)
 
 def SDL_NOT_IMPLEMENTED(name: str) -> abc.Callable[..., None]:
-    return lambda *args, **kwargs: print("\33[31m", f"error: invoked an unimplemented function: '{name}'.", "\33[0m", sep = "", flush = True)
+    return lambda *args, **kwargs: \
+        print("\33[31m", f"error: invoked an unimplemented function: '{name}'.", "\33[0m", sep = "", flush = True)
 
 class SDL_FUNC:
     @classmethod
