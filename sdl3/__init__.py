@@ -181,9 +181,12 @@ if not __initialized__:
                     binaryData["files"].remove(path)
                     break
 
-def SDL_ARRAY(*args: list[typing.Any], **kwargs: dict[str, typing.Any]) -> tuple[ctypes.Array[typing.Any], int]:
-    """Create a ctypes array."""
-    return ((kwargs.get("type") or args[0].__class__) * len(args))(*args), len(args)
+BaseType = typing.TypeVar("BaseType")
+TargetType = typing.TypeVar("TargetType")
+
+def SDL_ARRAY(*args: BaseType, **kwargs: TargetType) -> tuple[ctypes.Array[BaseType | TargetType], int]:
+    """Create a ctypes array from the given arguments."""
+    return ((kwargs.get("type", None) or args[0].__class__) * len(args))(*args), len(args)
 
 def SDL_DEREFERENCE(value: typing.Any) -> typing.Any:
     """Dereference a ctypes pointer or object."""
@@ -195,7 +198,7 @@ def SDL_CACHE_FUNC(func: abc.Callable[..., typing.Any]) -> abc.Callable[..., typ
     """Simple function cache decorator."""
     cache = {}
 
-    def __inner__(*args: list[typing.Any], **kwargs: dict[str, typing.Any]) -> typing.Any:
+    def __inner__(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
         _hash = hash((args, tuple(frozenset(sorted(kwargs.items())))))
         if _hash not in cache: cache.update({_hash: func(*args, **kwargs)})
         return cache.get(_hash, None)
@@ -241,7 +244,7 @@ class SDL_FUNC:
         func.restype, func.binary = key[1], binary
 
         if ... in key[2]:
-            def __inner__(*args: list[typing.Any], **kwargs: dict[str, typing.Any]) -> typing.Any:
+            def __inner__(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
                 for arg in args[len(__inner__.func.argtypes):]:
                     if isinstance(arg, int): __inner__.func.argtypes += [ctypes.c_int]
                     elif isinstance(arg, float): __inner__.func.argtypes += [ctypes.c_float]
@@ -490,7 +493,7 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
                 arguments = [f"{'_' if i in keyword.kwlist else ''}{i.replace('[', '').replace(']', '')}" for i in arguments]
 
             assert _return is None or SDL_PYTHONIZE_TYPE(_return) == SDL_GET_NAME(restype), f"return type mismatch for 'https://wiki.libsdl.org/{module}/{func}' (expected: {SDL_PYTHONIZE_TYPE(_return)}, got: {SDL_GET_NAME(restype)})."
-            definitions += f"def {func}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)] + (['*args: list[typing.Any]'] if vararg else []))}) -> {SDL_GET_NAME(restype)}:\n"
+            definitions += f"def {func}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)] + (['*args: typing.Any'] if vararg else []))}) -> {SDL_GET_NAME(restype)}:\n"
             if not rst or description is not None: definitions += f"{' ' * 4}\"\"\"\n"
             if description is not None: definitions += f"    {description}\n"
             if not rst: definitions += f"\n{' ' * 4}https://wiki.libsdl.org/{module}/{func}\n"
