@@ -71,7 +71,7 @@ TTF_GetFontOutline: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontOutline
 
 TTF_HintingFlags: typing.TypeAlias = SDL_TYPE["TTF_HintingFlags", SDL_ENUM]
 
-TTF_HINTING_NORMAL, TTF_HINTING_LIGHT, TTF_HINTING_MONO, TTF_HINTING_NONE, TTF_HINTING_LIGHT_SUBPIXEL = range(5)
+TTF_HINTING_INVALID, TTF_HINTING_NORMAL, TTF_HINTING_LIGHT, TTF_HINTING_MONO, TTF_HINTING_NONE, TTF_HINTING_LIGHT_SUBPIXEL = range(-1, 5)
 
 TTF_SetFontHinting: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_SetFontHinting", None, [SDL_POINTER[TTF_Font], TTF_HintingFlags], SDL_TTF_BINARY]
 TTF_GetNumFontFaces: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetNumFontFaces", ctypes.c_int, [SDL_POINTER[TTF_Font]], SDL_TTF_BINARY]
@@ -79,6 +79,11 @@ TTF_GetFontHinting: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontHinting
 
 TTF_SetFontSDF: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_SetFontSDF", ctypes.c_bool, [SDL_POINTER[TTF_Font], ctypes.c_bool], SDL_TTF_BINARY]
 TTF_GetFontSDF: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontSDF", ctypes.c_bool, [SDL_POINTER[TTF_Font]], SDL_TTF_BINARY]
+
+TTF_GetFontWeight: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetFontWeight", ctypes.c_int, [SDL_POINTER[TTF_Font]], SDL_TTF_BINARY]
+
+TTF_FONT_WEIGHT_THIN, TTF_FONT_WEIGHT_EXTRA_LIGHT, TTF_FONT_WEIGHT_LIGHT, TTF_FONT_WEIGHT_NORMAL, TTF_FONT_WEIGHT_MEDIUM, TTF_FONT_WEIGHT_SEMI_BOLD, \
+    TTF_FONT_WEIGHT_BOLD, TTF_FONT_WEIGHT_EXTRA_BOLD, TTF_FONT_WEIGHT_BLACK, TTF_FONT_WEIGHT_EXTRA_BLACK = *range(100, 1000, 100), 950
 
 TTF_HorizontalAlignment: typing.TypeAlias = SDL_TYPE["TTF_HorizontalAlignment", SDL_ENUM]
 
