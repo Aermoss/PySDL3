@@ -26,7 +26,7 @@ class UniformData(ctypes.Structure):
 @sdl3.SDL_main_func
 def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_AUDIO):
-        print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
+        print(f"Failed to initialize library: {sdl3.SDL_GetError().decode()}.")
         return -1
     
     window = sdl3.SDL_CreateWindow("Aermoss".encode(), 1600, 900, sdl3.SDL_WINDOW_RESIZABLE)
@@ -35,14 +35,14 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     gpuDrivers = [sdl3.SDL_GetGPUDriver(i).decode() for i in range(sdl3.SDL_GetNumGPUDrivers())]
     tryGetDriver, tryUseVulkan = lambda order, drivers: next((i for i in order if i in drivers), None), True
     gpuDriver = tryGetDriver(["vulkan"] if tryUseVulkan else [], gpuDrivers)
-    print(f"available gpu drivers: {', '.join(gpuDrivers)}. (current: {gpuDriver})")
+    print(f"Available GPU drivers: {', '.join(gpuDrivers)} (current: {gpuDriver}).")
 
     if not (device := sdl3.SDL_CreateGPUDevice(sdl3.SDL_GPU_SHADERFORMAT_SPIRV, True, gpuDriver.encode())):
-        print(f"failed to create gpu device: {sdl3.SDL_GetError().decode().lower()}.")
+        print(f"Failed to create GPU device: {sdl3.SDL_GetError().decode()}.")
         return -1
 
     if not sdl3.SDL_ClaimWindowForGPUDevice(device, window):
-        print(f"failed to claim window for gpu device: {sdl3.SDL_GetError().decode().lower()}")
+        print(f"Failed to claim window for GPU device: {sdl3.SDL_GetError().decode()}")
         return -1
 
     vertexShader = sdl3.SDL_CreateGPUShader(device, sdl3.SDL_GPUShaderCreateInfo(*shader.vertexData, entrypoint = "main".encode(), format = sdl3.SDL_GPU_SHADERFORMAT_SPIRV, stage = sdl3.SDL_GPU_SHADERSTAGE_VERTEX, num_uniform_buffers = 1))
@@ -58,7 +58,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     sdl3.SDL_ReleaseGPUShader(device, vertexShader)
     
     if not pipeline:
-        print(f"failed to create gpu pipeline: {sdl3.SDL_GetError().decode().lower()}.")
+        print(f"Failed to create GPU pipeline: {sdl3.SDL_GetError().decode()}.")
         return -1
     
     vertexBuffer = sdl3.SDL_CreateGPUBuffer(device, sdl3.SDL_GPUBufferCreateInfo(sdl3.SDL_GPU_BUFFERUSAGE_VERTEX, ctypes.sizeof(Vertex) * 3))
@@ -92,14 +92,14 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
         commandBuffer = sdl3.SDL_AcquireGPUCommandBuffer(device)
 
         if not commandBuffer:
-            print(f"failed to acquire gpu command buffer: {sdl3.SDL_GetError().decode().lower()}")
+            print(f"Failed to acquire GPU command buffer: {sdl3.SDL_GetError().decode()}.")
             return -1
 
         swapChainTexture = sdl3.LP_SDL_GPUTexture()
         sdl3.SDL_WaitAndAcquireGPUSwapchainTexture(commandBuffer, window, ctypes.byref(swapChainTexture), None, None)
 
         if not swapChainTexture:
-            print(f"failed to acquire gpu swapchain texture: {sdl3.SDL_GetError().decode().lower()}")
+            print(f"Failed to acquire GPU swapchain texture: {sdl3.SDL_GetError().decode()}.")
             return -1
         
         lastTime, deltaTime = \

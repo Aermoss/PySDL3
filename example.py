@@ -2,11 +2,11 @@ import os, sdl3, ctypes, colorsys, time
 
 @sdl3.SDL_main_func
 def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
-    print(f"total lines of code: {sum([len(open(f'sdl3/{i}', 'r').readlines()) for i in os.listdir('sdl3') if i.endswith('.py')])}.")
-    print(f"loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
+    print(f"Total lines of code: {sum([len(open(f'sdl3/{i}', 'r').readlines()) for i in os.listdir('sdl3') if i.endswith('.py')])}.")
+    print(f"Loaded {sum(len(v) for k, v in sdl3.functions.items())} functions.")
 
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_AUDIO):
-        print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
+        print(f"Failed to initialize library: {sdl3.SDL_GetError().decode()}.")
         return -1
     
     window = sdl3.SDL_CreateWindow("Aermoss".encode(), 1600, 900, sdl3.SDL_WINDOW_RESIZABLE)
@@ -14,24 +14,24 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     renderDrivers = [sdl3.SDL_GetRenderDriver(i).decode() for i in range(sdl3.SDL_GetNumRenderDrivers())]
     tryGetDriver, tryUseVulkan = lambda order, drivers: next((i for i in order if i in drivers), None), False
     renderDriver = tryGetDriver((["vulkan"] if tryUseVulkan else []) + ["opengl", "software"], renderDrivers)
-    print(f"available render drivers: {', '.join(renderDrivers)} (current: {renderDriver}).")
+    print(f"Available render drivers: {', '.join(renderDrivers)} (current: {renderDriver}).")
 
     if not (renderer := sdl3.SDL_CreateRenderer(window, renderDriver.encode())):
-        print(f"failed to create renderer: {sdl3.SDL_GetError().decode().lower()}.")
+        print(f"Failed to create renderer: {sdl3.SDL_GetError().decode()}.")
         return -1
     
     audioDrivers = [sdl3.SDL_GetAudioDriver(i).decode() for i in range(sdl3.SDL_GetNumAudioDrivers())]
-    print(f"available audio drivers: {', '.join(audioDrivers)} (current: {sdl3.SDL_GetCurrentAudioDriver().decode().lower()}).")
+    print(f"Available audio drivers: {', '.join(audioDrivers)} (current: {sdl3.SDL_GetCurrentAudioDriver().decode()}).")
 
     if currentAudioDevice := sdl3.SDL_OpenAudioDevice(sdl3.SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, None):
         sdl3.Mix_Init(sdl3.MIX_INIT_WAVPACK)
         sdl3.Mix_OpenAudio(currentAudioDevice, ctypes.byref(audioSpec := sdl3.SDL_AudioSpec()))
-        print(f"current audio device: {sdl3.SDL_GetAudioDeviceName(currentAudioDevice).decode().lower()}.")
+        print(f"Current audio device: {sdl3.SDL_GetAudioDeviceName(currentAudioDevice).decode()}.")
         chunks = [sdl3.Mix_LoadWAV(f"res/voice/{i}".encode()) for i in os.listdir("res/voice")]
         currentIndex, channel = 0, 0
 
     else:
-        print(f"failed to open audio device: {sdl3.SDL_GetAudioDeviceName(sdl3.SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK).decode().lower()}, error: {sdl3.SDL_GetError().decode().lower()}.")
+        print(f"Failed to open audio device: {sdl3.SDL_GetAudioDeviceName(sdl3.SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK).decode()}, error: {sdl3.SDL_GetError().decode()}.")
 
     surface = sdl3.IMG_Load("res/example.png".encode())
     texture = sdl3.SDL_CreateTextureFromSurface(renderer, surface)
@@ -94,7 +94,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
             sdl3.SDL_RectToFRect(ctypes.byref(textRect), ctypes.byref(textFRect))
 
         if error := sdl3.SDL_GetError():
-            print(f"error: {error.decode().lower()}.")
+            print(f"Error: {error.decode()}.")
             return -1
 
         if textTexture is not None:

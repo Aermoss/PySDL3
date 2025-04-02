@@ -17,7 +17,7 @@ from tests.TEST_video import *
 @atexit.register
 def TEST_RunAllTests() -> None:
     if not functions: return
-    print("\33[32m", f"Initializing tests... (Version: {sdl3.__version__}, System: {sdl3.SDL_SYSTEM}, Arch: {sdl3.SDL_ARCH})", "\33[0m", sep = "", flush = True)
+    print("\33[32m", f"Initializing tests... (version: {sdl3.__version__}, system: {sdl3.SDL_SYSTEM}, arch: {sdl3.SDL_ARCH}).", "\33[0m", sep = "", flush = True)
     passed, failed = 0, 0
 
     for func, systems in functions.items():

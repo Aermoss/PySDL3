@@ -179,7 +179,7 @@ class SDL3Renderer(ProgrammablePipelineRenderer):
 @sdl3.SDL_main_func
 def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS):
-        print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
+        print(f"Failed to initialize library: {sdl3.SDL_GetError().decode()}.")
         return -1
     
     sdl3.SDL_GL_SetAttribute(sdl3.SDL_GL_CONTEXT_MAJOR_VERSION, 4)
@@ -189,14 +189,14 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     window = sdl3.SDL_CreateWindow("Aermoss".encode(), 1600, 900, sdl3.SDL_WINDOW_OPENGL | sdl3.SDL_WINDOW_RESIZABLE)
 
     if not window:
-        print(f"failed to create window: {sdl3.SDL_GetError().decode().lower()}.", flush = True)
+        print(f"Failed to create window: {sdl3.SDL_GetError().decode()}.", flush = True)
         return -1
 
     context = sdl3.SDL_GL_CreateContext(window)
     sdl3.SDL_GL_MakeCurrent(window, context)
 
     if not context:
-        print(f"failed to create context: {sdl3.SDL_GetError().decode().lower()}.", flush = True)
+        print(f"Failed to create context: {sdl3.SDL_GetError().decode()}.", flush = True)
         return -1
 
     imgui.create_context()
