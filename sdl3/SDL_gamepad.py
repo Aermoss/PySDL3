@@ -7,9 +7,8 @@ from .SDL_sensor import SDL_SensorType
 from .SDL_iostream import SDL_IOStream
 from .SDL_properties import SDL_PropertiesID
 from .SDL_joystick import SDL_Joystick, SDL_JoystickID, SDL_JoystickConnectionState, \
-    SDL_PROP_JOYSTICK_CAP_MONO_LED_BOOLEAN, SDL_PROP_JOYSTICK_CAP_RGB_LED_BOOLEAN, \
-        SDL_PROP_JOYSTICK_CAP_PLAYER_LED_BOOLEAN, SDL_PROP_JOYSTICK_CAP_RUMBLE_BOOLEAN, \
-            SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN
+    SDL_PROP_JOYSTICK_CAP_MONO_LED_BOOLEAN, SDL_PROP_JOYSTICK_CAP_RGB_LED_BOOLEAN, SDL_PROP_JOYSTICK_CAP_PLAYER_LED_BOOLEAN, \
+        SDL_PROP_JOYSTICK_CAP_RUMBLE_BOOLEAN, SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN
 
 class SDL_Gamepad(ctypes.c_void_p):
     ...
@@ -30,8 +29,8 @@ SDL_GAMEPAD_BUTTON_INVALID, SDL_GAMEPAD_BUTTON_SOUTH, SDL_GAMEPAD_BUTTON_EAST, S
 
 SDL_GamepadButtonLabel: typing.TypeAlias = SDL_TYPE["SDL_GamepadButtonLabel", SDL_ENUM]
 
-SDL_GAMEPAD_BUTTON_LABEL_UNKNOWN, SDL_GAMEPAD_BUTTON_LABEL_A, SDL_GAMEPAD_BUTTON_LABEL_B, SDL_GAMEPAD_BUTTON_LABEL_X, SDL_GAMEPAD_BUTTON_LABEL_Y, SDL_GAMEPAD_BUTTON_LABEL_CROSS, \
-    SDL_GAMEPAD_BUTTON_LABEL_CIRCLE, SDL_GAMEPAD_BUTTON_LABEL_SQUARE, SDL_GAMEPAD_BUTTON_LABEL_TRIANGLE = range(9)
+SDL_GAMEPAD_BUTTON_LABEL_UNKNOWN, SDL_GAMEPAD_BUTTON_LABEL_A, SDL_GAMEPAD_BUTTON_LABEL_B, SDL_GAMEPAD_BUTTON_LABEL_X, SDL_GAMEPAD_BUTTON_LABEL_Y, \
+    SDL_GAMEPAD_BUTTON_LABEL_CROSS, SDL_GAMEPAD_BUTTON_LABEL_CIRCLE, SDL_GAMEPAD_BUTTON_LABEL_SQUARE, SDL_GAMEPAD_BUTTON_LABEL_TRIANGLE = range(9)
 
 SDL_GamepadAxis: typing.TypeAlias = SDL_TYPE["SDL_GamepadAxis", SDL_ENUM]
 
@@ -43,38 +42,38 @@ SDL_GamepadBindingType: typing.TypeAlias = SDL_TYPE["SDL_GamepadBindingType", SD
 SDL_GAMEPAD_BINDTYPE_NONE, SDL_GAMEPAD_BINDTYPE_BUTTON, \
     SDL_GAMEPAD_BINDTYPE_AXIS, SDL_GAMEPAD_BINDTYPE_HAT = range(4)
 
-class _axis(ctypes.Structure):
+class _SDL_GamepadBinding_axis(ctypes.Structure):
     _fields_ = [
         ("axis", SDL_GamepadAxis),
         ("axis_min", ctypes.c_int),
         ("axis_max", ctypes.c_int)
     ]
 
-class _hat(ctypes.Structure):
+class _SDL_GamepadBinding_hat(ctypes.Structure):
     _fields_ = [
         ("hat", ctypes.c_int),
-        ("mask", ctypes.c_int)
+        ("hat_mask", ctypes.c_int)
     ]
 
-class _input(ctypes.Union):
+class _SDL_GamepadBinding_input(ctypes.Union):
     _fields_ = [
         ("button", SDL_GamepadButton),
-        ("axis", _axis),
-        ("hat", _hat)
+        ("axis", _SDL_GamepadBinding_axis),
+        ("hat", _SDL_GamepadBinding_hat)
     ]
 
-class _output(ctypes.Union):
+class _SDL_GamepadBinding_output(ctypes.Union):
     _fields_ = [
         ("button", SDL_GamepadButton),
-        ("axis", _axis)
+        ("axis", _SDL_GamepadBinding_axis)
     ]
 
 class SDL_GamepadBinding(ctypes.Structure):
     _fields_ = [
         ("input_type", SDL_GamepadBindingType),
-        ("input", _input),
+        ("input", _SDL_GamepadBinding_input),
         ("output_type", SDL_GamepadBindingType),
-        ("output", _output)
+        ("output", _SDL_GamepadBinding_output)
     ]
 
 SDL_AddGamepadMapping: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AddGamepadMapping", ctypes.c_int, [ctypes.c_char_p], SDL_BINARY]
