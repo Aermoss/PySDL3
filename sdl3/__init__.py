@@ -582,9 +582,9 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
                     if (left := SDL_GET_FULL_NAME(field[1]._restype_)) != (right := SDL_PYTHONIZE_TYPE(members[member]["return"], globals = raw.__dict__)):
                         SDL_LOGGER.Log(SDL_LOGGER.Error, f"Member return type mismatch for https://wiki.libsdl.org/{module}/{name} (member: {_}, expected: {right}, got: {left}).")
 
-                    for left, (name, right) in zip(field[1]._argtypes_, members[member]["arguments"].items()):
-                        if (_left := SDL_GET_FULL_NAME(left)) != (_right := SDL_PYTHONIZE_TYPE(right, name, globals = raw.__dict__)):
-                            SDL_LOGGER.Log(SDL_LOGGER.Error, f"Member argument type mismatch for https://wiki.libsdl.org/{module}/{name} (member: {_}, argument: {name}, expected: {_right}, got: {_left}).")
+                    for left, (_name, right) in zip(field[1]._argtypes_, members[member]["arguments"].items()):
+                        if (_left := SDL_GET_FULL_NAME(left)) != (_right := SDL_PYTHONIZE_TYPE(right, _name, globals = raw.__dict__)):
+                            SDL_LOGGER.Log(SDL_LOGGER.Error, f"Member argument type mismatch for https://wiki.libsdl.org/{module}/{name} (member: {_}, argument: {_name}, expected: {_right}, got: {_left}).")
 
                 else:
                     if (left := SDL_GET_FULL_NAME(field[1])) != (right := SDL_PYTHONIZE_TYPE(members[member], member, globals = raw.__dict__)):
