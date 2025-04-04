@@ -56,7 +56,7 @@ SDL_INIT_STATUS_UNINITIALIZED, SDL_INIT_STATUS_INITIALIZING, SDL_INIT_STATUS_INI
 class SDL_InitState(ctypes.Structure):
     _fields_ = [
         ("status", SDL_AtomicInt),
-        ("error", SDL_ThreadID),
+        ("thread", SDL_ThreadID),
         ("reserved", ctypes.c_void_p)
     ]
 

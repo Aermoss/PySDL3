@@ -83,7 +83,7 @@ SDL_EVENT_ENUM_PADDING: int = 0x7FFFFFFF
 
 class SDL_CommonEvent(ctypes.Structure):
     _fields_ = [
-        ("type", SDL_EventType),
+        ("type", ctypes.c_uint32),
         ("reserved", ctypes.c_uint32),
         ("timestamp", ctypes.c_uint64)
     ]

@@ -12,7 +12,7 @@ class SDL_Camera(ctypes.c_void_p):
 
 class SDL_CameraSpec(ctypes.Structure):
     _fields_ = [
-        ("format", SDL_POINTER[SDL_PixelFormat]),
+        ("format", SDL_PixelFormat),
         ("colorspace", SDL_Colorspace),
         ("width", ctypes.c_int),
         ("height", ctypes.c_int),

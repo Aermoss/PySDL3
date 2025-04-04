@@ -239,8 +239,7 @@ class SDL_PixelFormatDetails(ctypes.Structure):
         ("Rshift", ctypes.c_uint8),
         ("Gshift", ctypes.c_uint8),
         ("Bshift", ctypes.c_uint8),
-        ("Ashift", ctypes.c_uint8),
-        ("refcount", ctypes.c_int)
+        ("Ashift", ctypes.c_uint8)
     ]
 
 SDL_GetPixelFormatName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatName", ctypes.c_char_p, [SDL_PixelFormat], SDL_BINARY]
