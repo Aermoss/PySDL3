@@ -136,7 +136,7 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
             return False
 
     except requests.RequestException as exc:
-        SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to download binaries: {str(exc).capitalize()}.")
+        SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to download binaries: {exc}.")
         return False
 
 if not __initialized__:
@@ -354,6 +354,12 @@ class SDL_FUNC_TYPE:
 SDL_ENUM: typing.TypeAlias = SDL_TYPE["SDL_ENUM", ctypes.c_int]
 SDL_VA_LIST: typing.TypeAlias = SDL_TYPE["SDL_VA_LIST", ctypes.c_char_p]
 
+def SDL_PROCESS_DESCRIPTION(description: str, url: str | None = None, rst: bool = False) -> str:
+    """Process HTML description."""
+
+    return re.sub(r"<a href=\"([a-zA-Z0-9_]+)\">([a-zA-Z0-9_]+)</a>", r"\1" if rst or not url else rf"[\2]({'/'.join(url.split('/')[:-1])}/\1)", description) \
+        .replace("</", "<").replace("<em>", "" if rst else "*").replace("<code>", "`" if rst else "``").replace("<strong>", "" if rst else "**")
+
 async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
     """Get latest releases of SDL3 modules from their official github repositories."""
     session, releases, tasks = aiohttp.ClientSession(), {}, []
@@ -390,7 +396,7 @@ async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
     return releases
 
 async def SDL_GET_FUNC_DESCRIPTIONS(funcs: list[tuple[str, str]], rst: bool = False) -> tuple[list[str], list[list[str]]]:
-    """Get descriptions and arguments of SDL3 functions from the official SDL3 wiki."""
+    """Get descriptions, arguments and return types of SDL3 functions from the official SDL3 wiki."""
     session, tasks = aiohttp.ClientSession(), []
 
     for module, func in funcs:
@@ -413,18 +419,8 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: list[tuple[str, str]], rst: bool = Fa
             content = (await response.content.read()).decode()
 
             for a, b in zip(list(re.finditer(r"<p>", content)), list(re.finditer(r"</p>", content))):
-                if content[a.end()] == "<":
-                    continue
-
-                if rst:
-                    description = re.sub(r"<a href=\"([a-zA-Z0-9_]+)\">([a-zA-Z0-9_]+)</a>", r"\1", content[a.end():b.start()]) \
-                        .replace("<em>", "*").replace("</em>", "*").replace("<code>", "``").replace("</code>", "``").replace("<strong>", "**").replace("</strong>", "**")
-
-                else:
-                    description = re.sub(r"<a href=\"([a-zA-Z0-9_]+)\">([a-zA-Z0-9_]+)</a>", rf"[\2]({'/'.join(str(response.url).split('/')[:-1])}/\1)", content[a.end():b.start()]) \
-                        .replace("<em>", "").replace("</em>", "").replace("<code>", "`").replace("</code>", "`").replace("<strong>", "").replace("</strong>", "")
-                
-                descriptions.append(description)
+                if content[a.end()] == "<": continue
+                descriptions.append(SDL_PROCESS_DESCRIPTION(content[a.end():b.start()], str(response.url), rst))
                 break
 
             for a, b in zip(list(re.finditer(r"<code([a-zA-Z0-9_=#\s\"\-]*)>", content)), list(re.finditer(r"</code>", content))):
@@ -436,20 +432,115 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: list[tuple[str, str]], rst: bool = Fa
                 arguments.append({})
 
                 for i in (text.split(", ") if "," in text else [text]) if text != "void" else []:
-                    while i.startswith(" "): i = i[1:]
-                    if i == "...": continue
-                    _ = i.split(" ")
+                    if i != "...": i = i.split(" ")
+                    else: continue
 
-                    arguments[-1][_[-1].replace("*", "")] = \
-                        " ".join(_[:-1]) + "*" * _[-1].count("*")
+                    arguments[-1][i[-1].replace("*", "")] = \
+                        " ".join(i[:-1]) + "*" * i[-1].count("*")
 
                 break
 
     await session.close()
     return descriptions, arguments, returns
 
-def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), rst: bool = False) -> str:
-    """Generate type hints and documentation for SDL3 functions."""
+async def SDL_GET_STRUCT_DESCRIPTIONS(structs: list[tuple[str, str]], rst: bool = False) -> tuple[list[str], list[list[str]]]:
+    """Get descriptions and members of SDL3 structures from the official SDL3 wiki."""
+    session, tasks = aiohttp.ClientSession(), []
+
+    for module, struct in structs:
+        url = f"https://wiki.libsdl.org/{module}/{struct}"
+        SDL_LOGGER.Log(SDL_LOGGER.Info, f"Sending a request to '{url}'.")
+        tasks.append(asyncio.create_task(session.get(url, ssl = False)))
+
+    responses = await asyncio.gather(*tasks)
+    SDL_LOGGER.Log(SDL_LOGGER.Info, f"Response gathering completed ({len(responses)} responses).")
+    descriptions, members = [], []
+
+    for response in responses:
+        if response.status != 200:
+            SDL_LOGGER.Log(SDL_LOGGER.Warning, f"No such page: '{response.url}', skipping (status: {response.status}).")
+            descriptions.append(None)
+            members.append(None)
+
+        else:
+            content = (await response.content.read()).decode()
+
+            for a, b in zip(list(re.finditer(r"<p>", content)), list(re.finditer(r"</p>", content))):
+                if content[a.end()] == "<": continue
+                descriptions.append(SDL_PROCESS_DESCRIPTION(content[a.end():b.start()], str(response.url), rst))
+                break
+
+            for a, b in zip(list(re.finditer(r"<code([a-zA-Z0-9_=#\s\"\-]*)>", content)), list(re.finditer(r"</code>", content))):
+                if "sourceCode c" not in content[a.start():a.end()]: continue
+                text = re.sub(r"<(/)?([a-zA-Z0-9_=#\s\"\-]+)>", r"", content[a.end():b.start()])
+                text, _ = re.sub(r"//.*", r"", re.sub(r"/\*[\s\S]*?\*/", r"", text)), text.split(" ")
+                members.append({})
+
+                for line in text.split("\n"):
+                    if ";" not in line or "{" in line or "}" in line:
+                        continue
+
+                    line = line.split(";")[0].strip().replace(", ", ",")
+
+                    if "SDLCALL" not in line:
+                        count, line = line.count("*"), line.replace("*", "").split(" ")
+
+                        for i in line[-1].split(",") if "," in line[-1] else [line[-1]]:
+                            members[-1][i] = " ".join(line[:-1]) + "*" * count
+
+                    else:
+                        _ = line.replace("SDLCALL", "").split("(")
+                        arguments, name = _[2].split(")")[0].strip(), _[1].split(")")[0].replace("*", "").strip()
+                        members[-1][name] = {"return": _[0].strip(), "arguments": {}}
+
+                        for i in arguments.split(",") if "," in arguments else [arguments]:
+                            if i in ["...", "void"]: continue
+                            count, i = i.count("*"), i.replace("*", "").split(" ")
+                            members[-1][name]["arguments"][i[-1]] = " ".join(i[:-1]) + "*" * count
+
+                break
+
+    await session.close()
+    return descriptions, members
+
+def SDL_GET_MODULE_BY_NAME(name: str) -> str:
+    """Get the module of an SDL3 function/structure by its name."""
+
+    for prefix, module in sorted({"SDL": "SDL3", "IMG": "SDL3_image", "Mix": "SDL3_mixer", "TTF": "SDL3_ttf", "RTF": "SDL3_rtf", "SDLNet": "SDL3_net", "SDL_ShaderCross": "SDL3_shadercross"}.items(), key = lambda x: -len(x[0])):
+        if name.startswith(prefix): return module
+
+def SDL_PYTHONIZE_TYPE(type: str, name: str | None = None, globals: dict[str, typing.Any] = {}) -> str:
+    """Pythonize C/C++ types."""
+    array = (_ if str.isnumeric(_ := name.split("[")[1].split("]")[0]) else eval(_, globals)) if name is not None and name.count("[") == 1 and name.index("]") - name.index("[") != 1 else None
+    type, count = type.replace("*", ""), type.count("*") + (0 if name is None or array is not None else name.count("["))
+
+    if " " in type:
+        type = " ".join([i for i in type.split(" ") if i and i not in ["const", "struct", "union", "enum", "SDLCALL"]])
+
+    if type in (sdlTypes := {
+        "Sint8": "ctypes.c_int8", "Uint8": "ctypes.c_uint8", "Sint16": "ctypes.c_int16", "Uint16": "ctypes.c_uint16",
+        "Sint32": "ctypes.c_int32", "Uint32": "ctypes.c_uint32", "Sint64": "ctypes.c_int64", "Uint64": "ctypes.c_uint64"
+    }): type = sdlTypes[type]
+
+    if count and type in ["void", "char", "wchar_t"]:
+        type, count = f"ctypes.c_{type.replace('_t', '')}_p", count - 1
+
+    if type in (cTypes := {
+        "int": "ctypes.c_int", "bool": "ctypes.c_bool", "float": "ctypes.c_float", "double": "ctypes.c_double",
+        "char": "ctypes.c_char", "short": "ctypes.c_short", "long long": "ctypes.c_longlong", "long": "ctypes.c_long",
+        "size_t": "ctypes.c_size_t", "ssize_t": "ctypes.c_ssize_t", "intptr_t": "ctypes.c_intptr_t", "uintptr_t": "ctypes.c_uintptr_t",
+        "int8_t": "ctypes.c_int8", "uint8_t": "ctypes.c_uint8", "int16_t": "ctypes.c_int16", "uint16_t": "ctypes.c_uint16",
+        "int32_t": "ctypes.c_int32", "uint32_t": "ctypes.c_uint32", "int64_t": "ctypes.c_int64", "uint64_t": "ctypes.c_uint64",
+        "unsigned short": "ctypes.c_ushort", "unsigned long long": "ctypes.c_ulonglong", "unsigned long": "ctypes.c_ulong",
+        "unsigned char": "ctypes.c_ubyte", "unsigned int": "ctypes.c_uint", "wchar_t": "ctypes.c_wchar", "va_list": "SDL_VA_LIST"
+    }): type = cTypes[type]
+
+    if not count and type in ["void"]: type = "None"
+    if count and type.startswith("ctypes."): type = type.split(".")[1]
+    return f"{'LP_' * count}{type}{'_Array_%s' % array if array else ''}"
+
+def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), raw: types.ModuleType | None = None, rst: bool = False) -> str:
+    """Generate type hints and docstring for SDL3 functions/structures using SDL3 wiki."""
 
     __index, (descriptions, arguments, returns) = -1, \
         asyncio.run(SDL_GET_FUNC_DESCRIPTIONS([(module, func) for module in modules for func in __module__.functions[module]], rst))
@@ -459,43 +550,49 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
             if (_ := __module__.functions[module][func]).__name__ == "__inner__": _ = _.func
             _.__doc__ = (descriptions[__index := __index + 1], arguments[__index], returns[__index])
 
-    result = "" if rst else f"\"\"\"\n# This file is auto-generated, do not modify it.\nmeta = "
+    result = "" if rst else f"\"\"\"\n# This file is auto-generated, do not modify it.\n__meta__ = "
     if not rst: result += f"{{\"target\": \"v{__version__}\", \"system\": \"{SDL_SYSTEM}\"}}\n\"\"\"\n\n"
     result += f"from {'sdl3' if rst else ''}.SDL import *\n\n"
-    result += f"from {'sdl3' if rst else ''}.__init__ import {'' if rst else 'raw, '}ctypes, typing, SDL_POINTER\n\n"
+    result += f"from {'sdl3' if rst else ''}.__init__ import {'' if rst else 'raw, '}ctypes, typing, \\\n"
+    result += f"{' ' * 4}SDL_POINTER, SDL_CLONE_METACLASS as SDL_CloneMeta\n\n"
     types, definitions = set(), ""
 
-    def SDL_GET_NAME(type: type | None) -> str:
+    def SDL_GET_FULL_NAME(type: type | None) -> str:
         if type is None: return "None"
         if type.__name__.startswith("LP_"): types.add(type.__name__)
         if type.__name__.startswith("c_"): return f"ctypes.{type.__name__}"
         else: return type.__name__
 
-    def SDL_PYTHONIZE_TYPE(type: type, name: str | None = None) -> str:
-        type, count = type.replace("*", ""), type.count("*") + (0 if name is None else name.count("["))
-        if " " in type: type = " ".join([i for i in type.split(" ") if i and i not in ["const", "struct", "union", "enum", "SDLCALL"]])
+    if not rst and raw is not None:
+        structs = [(SDL_GET_MODULE_BY_NAME(name), name) for name in dir(raw) if hasattr(getattr(raw, name), "_fields_") \
+            and not name.startswith("_") and "_" in name and name not in ["SDL_GamepadBinding", "SDL_TLSID"]]
 
-        if type in (sdlTypes := {
-            "Sint8": "ctypes.c_int8", "Uint8": "ctypes.c_uint8", "Sint16": "ctypes.c_int16", "Uint16": "ctypes.c_uint16",
-            "Sint32": "ctypes.c_int32", "Uint32": "ctypes.c_uint32", "Sint64": "ctypes.c_int64", "Uint64": "ctypes.c_uint64"
-        }): type = sdlTypes[type]
+        for (module, name), description, members in zip(structs, *asyncio.run(SDL_GET_STRUCT_DESCRIPTIONS(structs))):
+            if not description or not members:
+                continue
 
-        if count and type in ["void", "char", "wchar_t"]:
-            type, count = f"ctypes.c_{type.replace('_t', '')}_p", count - 1
+            if len(members) != len(_fields_ := getattr(raw, name)._fields_):
+                SDL_LOGGER.Log(SDL_LOGGER.Error, f"Member count mismatch for https://wiki.libsdl.org/{module}/{name} (expected: {len(members)}, got: {len(_fields_)}).")
 
-        if type in (cTypes := {
-            "int": "ctypes.c_int", "bool": "ctypes.c_bool", "float": "ctypes.c_float", "double": "ctypes.c_double",
-            "char": "ctypes.c_char", "short": "ctypes.c_short", "long long": "ctypes.c_longlong", "long": "ctypes.c_long",
-            "size_t": "ctypes.c_size_t", "ssize_t": "ctypes.c_ssize_t", "intptr_t": "ctypes.c_intptr_t", "uintptr_t": "ctypes.c_uintptr_t",
-            "int8_t": "ctypes.c_int8", "uint8_t": "ctypes.c_uint8", "int16_t": "ctypes.c_int16", "uint16_t": "ctypes.c_uint16",
-            "int32_t": "ctypes.c_int32", "uint32_t": "ctypes.c_uint32", "int64_t": "ctypes.c_int64", "uint64_t": "ctypes.c_uint64",
-            "unsigned short": "ctypes.c_ushort", "unsigned long long": "ctypes.c_ulonglong", "unsigned long": "ctypes.c_ulong",
-            "unsigned char": "ctypes.c_ubyte", "unsigned int": "ctypes.c_uint", "wchar_t": "ctypes.c_wchar", "va_list": "SDL_VA_LIST"
-        }): type = cTypes[type]
+            for field, member in zip(_fields_, members):
+                if field[0] != (_ := member.split("[")[0] if "[" in member else member):
+                    SDL_LOGGER.Log(SDL_LOGGER.Error, f"Member name mismatch for https://wiki.libsdl.org/{module}/{name} (expected: {_}, got: {field[0]}).")
 
-        if not count and type in ["void"]: type = "None"
-        if count and type.startswith("ctypes."): type = type.split(".")[1]
-        return f"{'LP_' * count}{type}"
+                if isinstance(members[member], dict):
+                    if (left := SDL_GET_FULL_NAME(field[1]._restype_)) != (right := SDL_PYTHONIZE_TYPE(members[member]["return"], globals = raw.__dict__)):
+                        SDL_LOGGER.Log(SDL_LOGGER.Error, f"Member return type mismatch for https://wiki.libsdl.org/{module}/{name} (member: {_}, expected: {right}, got: {left}).")
+
+                    for left, (name, right) in zip(field[1]._argtypes_, members[member]["arguments"].items()):
+                        if (_left := SDL_GET_FULL_NAME(left)) != (_right := SDL_PYTHONIZE_TYPE(right, name, globals = raw.__dict__)):
+                            SDL_LOGGER.Log(SDL_LOGGER.Error, f"Member argument type mismatch for https://wiki.libsdl.org/{module}/{name} (member: {_}, argument: {name}, expected: {_right}, got: {_left}).")
+
+                else:
+                    if (left := SDL_GET_FULL_NAME(field[1])) != (right := SDL_PYTHONIZE_TYPE(members[member], member, globals = raw.__dict__)):
+                        SDL_LOGGER.Log(SDL_LOGGER.Error, f"Member type mismatch for https://wiki.libsdl.org/{module}/{name} (member: {member}, expected: {right}, got: {left}).")
+
+            result += f"class {name}(metaclass = SDL_CloneMeta):\n{' ' * 4}\"\"\"{description}{'' if description.endswith('.') else '.'}\"\"\"\n\n"
+            # result += f"{' ' * 4}def __init__({', '.join(["self"] + [f'{_[0]}: {SDL_GET_FULL_NAME(_[1])}' for _ in _fields_])}) -> None:\n"
+            # result += f"{' ' * 8}super({name}, self).__init__()\n\n{' ' * 8}{', '.join([f'self.{_[0]}' for _ in _fields_])} = {', '.join([_[0] for _ in _fields_])}\n\n"
 
     for index, module in enumerate(modules):
         if len(__module__.functions[module]) == 0: continue
@@ -504,25 +601,31 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
         for _index, func in enumerate(__module__.functions[module]):
             if (_ := __module__.functions[module][func]).__name__ == "__inner__": _ = _.func
             vararg, restype, argtypes, (description, arguments, _return) = _.vararg, _.restype, _.argtypes, _.__doc__
-            assert arguments is None or len(arguments) == len(argtypes), f"argument count mismatch for 'https://wiki.libsdl.org/{module}/{func}' (expected: {len(arguments)}, got: {len(argtypes)})."
+
+            if arguments is not None and len(arguments) != len(argtypes):
+                SDL_LOGGER.Log(SDL_LOGGER.Error, f"Argument count mismatch for 'https://wiki.libsdl.org/{module}/{func}' (expected: {len(arguments)}, got: {len(argtypes)}).")
 
             if arguments is None:
                 arguments = [f"_{i}" for i in range(len(argtypes))]
 
             else:
                 for __index, i in enumerate(arguments):
-                    assert SDL_PYTHONIZE_TYPE(arguments[i], i) == SDL_GET_NAME(argtypes[__index]), f"argument type mismatch for 'https://wiki.libsdl.org/{module}/{func}' (argument: {i}, expected: {SDL_PYTHONIZE_TYPE(arguments[i], i)}, got: {SDL_GET_NAME(argtypes[__index])})."
+                    if (left := SDL_PYTHONIZE_TYPE(arguments[i], i)) != (right := SDL_GET_FULL_NAME(argtypes[__index])):
+                        SDL_LOGGER.Log(SDL_LOGGER.Error, f"Argument type mismatch for 'https://wiki.libsdl.org/{module}/{func}' (argument: {i}, expected: {left}, got: {right}).")
 
                 arguments = [f"{'_' if i in keyword.kwlist else ''}{i.replace('[', '').replace(']', '')}" for i in arguments]
 
-            assert _return is None or SDL_PYTHONIZE_TYPE(_return) == SDL_GET_NAME(restype), f"return type mismatch for 'https://wiki.libsdl.org/{module}/{func}' (expected: {SDL_PYTHONIZE_TYPE(_return)}, got: {SDL_GET_NAME(restype)})."
-            definitions += f"def {func}({', '.join([f'{arg}: {SDL_GET_NAME(type)}' for arg, type in zip(arguments, argtypes)] + (['*args: typing.Any'] if vararg else []))}) -> {SDL_GET_NAME(restype)}:\n"
+            if _return is not None and (left := SDL_PYTHONIZE_TYPE(_return)) != (right := SDL_GET_FULL_NAME(restype)):
+                SDL_LOGGER.Log(SDL_LOGGER.Error, f"Return type mismatch for 'https://wiki.libsdl.org/{module}/{func}' (expected: {left}, got: {right}).")
+
+            definitions += f"def {func}({', '.join([f'{arg}: {SDL_GET_FULL_NAME(type)}' for arg, type in zip(arguments, argtypes)] + (['*args: typing.Any'] if vararg else []))}) -> {SDL_GET_FULL_NAME(restype)}:\n"
+
             if not rst or description is not None: definitions += f"{' ' * 4}\"\"\"\n"
             if description is not None: definitions += f"    {description}\n"
             if not rst: definitions += f"\n{' ' * 4}https://wiki.libsdl.org/{module}/{func}\n"
             if not rst or description is not None: definitions += f"{' ' * 4}\"\"\""
             if not rst: definitions += f"\n{' ' * 4}return raw.{func}({', '.join(arguments + (['*args'] if vararg else []))})"
-            elif description is None: definitions += f"\n{' ' * 4}..."
+            if rst and description is None: definitions += f"\n{' ' * 4}..."
 
             if _index != len(__module__.functions[module]) - 1:
                 definitions += "\n\n"
@@ -536,8 +639,8 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
 
     return f"{result}\n{definitions}"
 
-def SDL_GET_OR_GENERATE_DOCS() -> bytes:
-    """Get type hints and documentation for SDL3 functions from github or generate it."""
+def SDL_GET_OR_GENERATE_DOCS(*args: typing.Any, **kwargs: typing.Any) -> bytes:
+    """Get type hints and docstrings for SDL3 functions/structures from github or by generating them."""
 
     try:
         headers = {"Accept": "application/vnd.github+json"}
@@ -565,12 +668,12 @@ def SDL_GET_OR_GENERATE_DOCS() -> bytes:
                     return bytearray().join([chunk for chunk in response.iter_content(chunk_size = 8192) if chunk])
 
     except requests.RequestException as exc:
-        SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to get docs from github: {str(exc).capitalize()}.")
+        SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to get docs from github: {exc}.")
 
     SDL_LOGGER.Log(SDL_LOGGER.Warning, "Generating docs... this may take a while.")
-    return SDL_GENERATE_DOCS().encode("utf-8")
+    return SDL_GENERATE_DOCS(*args, **kwargs).encode("utf-8")
 
-if not __initialized__ and int(os.environ.get("SDL_CTYPES_ALIAS_FIX", "0" if __release__ else "1")) > 0:
+if not __initialized__ and int(os.environ.get("SDL_CTYPES_ALIAS_FIX", "0" if __frozen__ or __release__ else "1")) > 0:
     for i in dir(ctypes):
         if i.startswith("c_") and getattr(ctypes, i).__name__ != i and hasattr(getattr(ctypes, i), "_type_"):
             setattr(ctypes, i, SDL_TYPE[i, getattr(ctypes, i)])
@@ -579,6 +682,18 @@ from sdl3.SDL import *
 
 if __doc_generator__:
     import sdl3.SDL as raw
+
+    class SDL_CLONE_METACLASS:
+        """Simple clone metaclass."""
+
+        def __new__(cls, name: str, _: typing.Any, attributes: dict[str, typing.Any]) -> typing.Any:
+            _class = getattr(raw, name)
+            
+            for key, value in attributes.items():
+                if key in ["__init__"]:
+                    setattr(_class, key, value)
+
+            return _class
 
 SDL_VERSIONNUM_STRING: abc.Callable[[int], str] = lambda num: str(None).lower() if not num else \
     f"{SDL_VERSIONNUM_MAJOR(num)}.{SDL_VERSIONNUM_MINOR(num)}.{SDL_VERSIONNUM_MICRO(num)}"
@@ -591,21 +706,25 @@ if not __initialized__:
     def SDL_TRY_WRITE_DOCS() -> bool | None:
         try:
             with open(__doc_file__, "wb") as file:
-                file.write(SDL_GET_OR_GENERATE_DOCS())
+                file.write(SDL_GET_OR_GENERATE_DOCS(raw = raw))
 
             return True
 
         except OSError as exc:
-            SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to write docs: {str(exc).capitalize()}.")
+            SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to write docs: {exc}.")
     
     if __doc_generator__ and (os.path.exists(__doc_file__) or SDL_TRY_WRITE_DOCS()):
-        from .__doc__ import *
-        try: exec(getattr(__doc__, "__doc__"), data := {})
-        except (SyntaxError, TypeError): data = None
+        try:
+            from .__doc__ import *
+            exec(getattr(__doc__, "__doc__"), data := {})
 
-        if os.path.exists(__doc_file__) and (not data or data["meta"]["target"] != f"v{__version__}" or data["meta"]["system"] != SDL_SYSTEM) and SDL_TRY_WRITE_DOCS():
-            del sys.modules["sdl3.__doc__"]
-            SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Reloading module: 'sdl3.__doc__'...")
+        except (SyntaxError, NameError, TypeError) as exc:
+            SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to read docs: {exc}.")
+            data = None
+
+        if os.path.exists(__doc_file__) and (not data or data["__meta__"]["target"] != f"v{__version__}" or data["__meta__"]["system"] != SDL_SYSTEM) and SDL_TRY_WRITE_DOCS():
+            if "sdl3.__doc__" in sys.modules: del sys.modules["sdl3.__doc__"]
+            SDL_LOGGER.Log(SDL_LOGGER.Warning, "Reloading module: 'sdl3.__doc__'...")
             from .__doc__ import *
 
     else:
@@ -614,4 +733,4 @@ if not __initialized__:
                 if os.path.exists(__doc_file__): os.remove(__doc_file__)
 
         except PermissionError as exc:
-            SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to remove docs: {str(exc).capitalize()}.")
+            SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to remove docs: {exc}.")
