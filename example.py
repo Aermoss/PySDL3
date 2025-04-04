@@ -8,7 +8,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_AUDIO):
         print(f"Failed to initialize library: {sdl3.SDL_GetError().decode()}.")
         return -1
-    
+
     window = sdl3.SDL_CreateWindow("Aermoss".encode(), 1600, 900, sdl3.SDL_WINDOW_RESIZABLE)
 
     renderDrivers = [sdl3.SDL_GetRenderDriver(i).decode() for i in range(sdl3.SDL_GetNumRenderDrivers())]
