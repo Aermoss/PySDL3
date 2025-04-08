@@ -354,6 +354,9 @@ class SDL_FUNC_TYPE:
 SDL_ENUM: typing.TypeAlias = SDL_TYPE["SDL_ENUM", ctypes.c_int]
 SDL_VA_LIST: typing.TypeAlias = SDL_TYPE["SDL_VA_LIST", ctypes.c_char_p]
 
+def SDL_PARSE_ARGUMENTS(argc: ctypes.c_int, argv: SDL_POINTER[ctypes.c_char_p]) -> typing.List[str]:
+    return [SDL_DEREFERENCE(argv[i]).decode("utf-8") for i in range(argc)]
+
 def SDL_PROCESS_DESCRIPTION(description: str, url: str | None = None, rst: bool = False) -> str:
     """Process HTML description."""
 
