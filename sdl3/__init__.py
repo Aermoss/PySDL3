@@ -556,8 +556,8 @@ def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), 
     result = "" if rst else f"\"\"\"\n# This file is auto-generated, do not modify it.\n__meta__ = "
     if not rst: result += f"{{\"target\": \"v{__version__}\", \"system\": \"{SDL_SYSTEM}\"}}\n\"\"\"\n\n"
     result += f"from {'sdl3' if rst else ''}.SDL import *\n\n"
-    result += f"from {'sdl3' if rst else ''}.__init__ import {'' if rst else 'raw, '}ctypes, typing, \\\n"
-    result += f"{' ' * 4}SDL_POINTER, SDL_CLONE_METACLASS as SDL_CloneMeta\n\n"
+    result += f"from {'sdl3' if rst else ''}.__init__ import {'' if rst else 'raw, '}ctypes, typing, {'SDL_POINTER' if rst else '\\'}\n"
+    if not rst: result += f"{' ' * 4}SDL_POINTER, SDL_CLONE_METACLASS as SDL_CloneMeta\n\n"
     types, definitions = set(), ""
 
     def SDL_GET_FULL_NAME(type: type | None) -> str:
