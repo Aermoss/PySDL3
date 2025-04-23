@@ -40,7 +40,6 @@ SDL_GetGlobalMouseState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGlobal
 SDL_GetRelativeMouseState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRelativeMouseState", SDL_MouseButtonFlags, [SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float]], SDL_BINARY]
 SDL_WarpMouseInWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WarpMouseInWindow", None, [SDL_POINTER[SDL_Window], ctypes.c_float, ctypes.c_float], SDL_BINARY]
 SDL_WarpMouseGlobal: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_WarpMouseGlobal", ctypes.c_bool, [ctypes.c_float, ctypes.c_float], SDL_BINARY]
-SDL_SetRelativeMouseTransform: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetRelativeMouseTransform", ctypes.c_bool, [SDL_MouseMotionTransformCallback, ctypes.c_void_p], SDL_BINARY]
 SDL_SetWindowRelativeMouseMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowRelativeMouseMode", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
 SDL_GetWindowRelativeMouseMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowRelativeMouseMode", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 SDL_CaptureMouse: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CaptureMouse", ctypes.c_bool, [ctypes.c_bool], SDL_BINARY]
