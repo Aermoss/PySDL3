@@ -78,7 +78,7 @@ In order to use this method, you just need to set ``SDL_DISABLE_METADATA`` to "1
   os.environ["SDL_DISABLE_METADATA"] = "1" # Disable metadata method, "0" by default.
   os.environ["SDL_BINARY_PATH"] = "/path/to/your/binaries" # Set the path to your binaries, "sdl3/bin" by default.
   os.environ["SDL_CHECK_BINARY_VERSION"] = "0" # Disable binary version checking, "1" by default.
-  os.environ["SDL_IGNORE_MISSING_FUNCTIONS"] = "1" # Disable missing function warnings, "0" by default.
+  os.environ["SDL_IGNORE_MISSING_FUNCTIONS"] = "1" # Disable missing function warnings, "1" by default.
   os.environ["SDL_FIND_BINARIES"] = "1" # Search for binaries in the system libraries, "1" by default.
 
   import sdl3
