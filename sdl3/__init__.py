@@ -725,7 +725,7 @@ if not __initialized__:
             SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to read docs: {exc}.")
             data = None
 
-        if os.path.exists(__doc_file__) and (not data or data["__meta__"]["target"] != f"v{__version__}" or data["__meta__"]["system"] != SDL_SYSTEM) and SDL_TRY_WRITE_DOCS():
+        if os.path.exists(__doc_file__) and (not data or "__meta__" not in data or data["__meta__"]["target"] != f"v{__version__}" or data["__meta__"]["system"] != SDL_SYSTEM) and SDL_TRY_WRITE_DOCS():
             if "sdl3.__doc__" in sys.modules: del sys.modules["sdl3.__doc__"]
             SDL_LOGGER.Log(SDL_LOGGER.Warning, "Reloading module: 'sdl3.__doc__'...")
             from .__doc__ import *
