@@ -214,7 +214,9 @@ class SDL_MouseWheelEvent(ctypes.Structure):
         ("y", ctypes.c_float),
         ("direction", SDL_MouseWheelDirection),
         ("mouse_x", ctypes.c_float),
-        ("mouse_y", ctypes.c_float)
+        ("mouse_y", ctypes.c_float),
+        ("integer_x", ctypes.c_int32),
+        ("integer_y", ctypes.c_int32)
     ]
 
 class SDL_JoyAxisEvent(ctypes.Structure):
