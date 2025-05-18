@@ -640,7 +640,7 @@ SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_G_FLOAT: bytes = "SDL.gpu.texture.create
 SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_B_FLOAT: bytes = "SDL.gpu.texture.create.d3d12.clear.b".encode()
 SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_A_FLOAT: bytes = "SDL.gpu.texture.create.d3d12.clear.a".encode()
 SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_DEPTH_FLOAT: bytes = "SDL.gpu.texture.create.d3d12.clear.depth".encode()
-SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_STENCIL_UINT8: bytes = "SDL.gpu.texture.create.d3d12.clear.stencil".encode()
+SDL_PROP_GPU_TEXTURE_CREATE_D3D12_CLEAR_STENCIL_NUMBER: bytes = "SDL.gpu.texture.create.d3d12.clear.stencil".encode()
 SDL_PROP_GPU_TEXTURE_CREATE_NAME_STRING: bytes = "SDL.gpu.texture.create.name".encode()
 
 SDL_CreateGPUBuffer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUBuffer", SDL_POINTER[SDL_GPUBuffer], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUBufferCreateInfo]], SDL_BINARY]
