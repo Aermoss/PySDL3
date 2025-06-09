@@ -6,9 +6,24 @@ from .SDL_gpu import SDL_GPUDevice, SDL_GPUShaderFormat, SDL_GPUShader, SDL_GPUC
 
 SDL_SHADERCROSS_MAJOR_VERSION, SDL_SHADERCROSS_MINOR_VERSION, SDL_SHADERCROSS_MICRO_VERSION = 3, 0, 0
 
+SDL_ShaderCross_IOVarType: typing.TypeAlias = SDL_TYPE["SDL_ShaderCross_IOVarType", SDL_ENUM]
+
+SDL_SHADERCROSS_IOVAR_TYPE_UNKNOWN, SDL_SHADERCROSS_IOVAR_TYPE_INT8, SDL_SHADERCROSS_IOVAR_TYPE_UINT8, SDL_SHADERCROSS_IOVAR_TYPE_INT16, SDL_SHADERCROSS_IOVAR_TYPE_UINT16, \
+    SDL_SHADERCROSS_IOVAR_TYPE_INT32, SDL_SHADERCROSS_IOVAR_TYPE_UINT32, SDL_SHADERCROSS_IOVAR_TYPE_INT64, SDL_SHADERCROSS_IOVAR_TYPE_UINT64, \
+        SDL_SHADERCROSS_IOVAR_TYPE_FLOAT16, SDL_SHADERCROSS_IOVAR_TYPE_FLOAT32, SDL_SHADERCROSS_IOVAR_TYPE_FLOAT64 = range(12)
+
 SDL_ShaderCross_ShaderStage: typing.TypeAlias = SDL_TYPE["SDL_ShaderCross_ShaderStage", SDL_ENUM]
 
 SDL_SHADERCROSS_SHADERSTAGE_VERTEX, SDL_SHADERCROSS_SHADERSTAGE_FRAGMENT, SDL_SHADERCROSS_SHADERSTAGE_COMPUTE = range(3)
+
+class SDL_ShaderCross_IOVarMetadata(ctypes.Structure):
+    _fields_ = [
+        ("name", ctypes.c_char_p),
+        ("location", ctypes.c_uint32),
+        ("offset", ctypes.c_uint32),
+        ("vector_type", SDL_ShaderCross_IOVarType),
+        ("vector_size", ctypes.c_uint32)
+    ]
 
 class SDL_ShaderCross_GraphicsShaderMetadata(ctypes.Structure):
     _fields_ = [
@@ -16,7 +31,10 @@ class SDL_ShaderCross_GraphicsShaderMetadata(ctypes.Structure):
         ("num_storage_textures", ctypes.c_uint32),
         ("num_storage_buffers", ctypes.c_uint32),
         ("num_uniform_buffers", ctypes.c_uint32),
-        ("props", SDL_PropertiesID)
+        ("num_inputs", ctypes.c_uint32),
+        ("inputs", SDL_POINTER[SDL_ShaderCross_IOVarMetadata]),
+        ("num_outputs", ctypes.c_uint32),
+        ("outputs", SDL_POINTER[SDL_ShaderCross_IOVarMetadata])
     ]
 
 class SDL_ShaderCross_ComputePipelineMetadata(ctypes.Structure):
@@ -29,8 +47,7 @@ class SDL_ShaderCross_ComputePipelineMetadata(ctypes.Structure):
         ("num_uniform_buffers", ctypes.c_uint32),
         ("threadcount_x", ctypes.c_uint32),
         ("threadcount_y", ctypes.c_uint32),
-        ("threadcount_z", ctypes.c_uint32),
-        ("props", SDL_PropertiesID)
+        ("threadcount_z", ctypes.c_uint32)
     ]
 
 class SDL_ShaderCross_SPIRV_Info(ctypes.Structure):
@@ -75,17 +92,14 @@ SDL_ShaderCross_TranspileHLSLFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC
 SDL_ShaderCross_CompileDXBCFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileDXBCFromSPIRV", ctypes.c_void_p, [SDL_POINTER[SDL_ShaderCross_SPIRV_Info], SDL_POINTER[ctypes.c_size_t]], SDL_SHADERCROSS_BINARY]
 SDL_ShaderCross_CompileDXILFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileDXILFromSPIRV", ctypes.c_void_p, [SDL_POINTER[SDL_ShaderCross_SPIRV_Info], SDL_POINTER[ctypes.c_size_t]], SDL_SHADERCROSS_BINARY]
 
-SDL_ShaderCross_CompileGraphicsShaderFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileGraphicsShaderFromSPIRV", SDL_POINTER[SDL_GPUShader], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_ShaderCross_SPIRV_Info], SDL_POINTER[SDL_ShaderCross_GraphicsShaderMetadata]], SDL_SHADERCROSS_BINARY]
-SDL_ShaderCross_CompileComputePipelineFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileComputePipelineFromSPIRV", SDL_POINTER[SDL_GPUComputePipeline], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_ShaderCross_SPIRV_Info], SDL_POINTER[SDL_ShaderCross_ComputePipelineMetadata]], SDL_SHADERCROSS_BINARY]
+SDL_ShaderCross_CompileGraphicsShaderFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileGraphicsShaderFromSPIRV", SDL_POINTER[SDL_GPUShader], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_ShaderCross_SPIRV_Info], SDL_POINTER[SDL_ShaderCross_GraphicsShaderMetadata], SDL_PropertiesID], SDL_SHADERCROSS_BINARY]
+SDL_ShaderCross_CompileComputePipelineFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileComputePipelineFromSPIRV", SDL_POINTER[SDL_GPUComputePipeline], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_ShaderCross_SPIRV_Info], SDL_POINTER[SDL_ShaderCross_ComputePipelineMetadata], SDL_PropertiesID], SDL_SHADERCROSS_BINARY]
 
-SDL_ShaderCross_ReflectGraphicsSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_ReflectGraphicsSPIRV", ctypes.c_bool, [SDL_POINTER[ctypes.c_uint8], ctypes.c_size_t, SDL_POINTER[SDL_ShaderCross_GraphicsShaderMetadata]], SDL_SHADERCROSS_BINARY]
-SDL_ShaderCross_ReflectComputeSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_ReflectComputeSPIRV", ctypes.c_bool, [SDL_POINTER[ctypes.c_uint8], ctypes.c_size_t, SDL_POINTER[SDL_ShaderCross_ComputePipelineMetadata]], SDL_SHADERCROSS_BINARY]
+SDL_ShaderCross_ReflectGraphicsSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_ReflectGraphicsSPIRV", SDL_POINTER[SDL_ShaderCross_GraphicsShaderMetadata], [SDL_POINTER[ctypes.c_uint8], ctypes.c_size_t, SDL_PropertiesID], SDL_SHADERCROSS_BINARY]
+SDL_ShaderCross_ReflectComputeSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_ReflectComputeSPIRV", SDL_POINTER[SDL_ShaderCross_ComputePipelineMetadata], [SDL_POINTER[ctypes.c_uint8], ctypes.c_size_t, SDL_PropertiesID], SDL_SHADERCROSS_BINARY]
 
 SDL_ShaderCross_GetHLSLShaderFormats: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_GetHLSLShaderFormats", SDL_GPUShaderFormat, [], SDL_SHADERCROSS_BINARY]
 
 SDL_ShaderCross_CompileDXBCFromHLSL: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileDXBCFromHLSL", ctypes.c_void_p, [SDL_POINTER[SDL_ShaderCross_HLSL_Info], SDL_POINTER[ctypes.c_size_t]], SDL_SHADERCROSS_BINARY]
 SDL_ShaderCross_CompileDXILFromHLSL: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileDXILFromHLSL", ctypes.c_void_p, [SDL_POINTER[SDL_ShaderCross_HLSL_Info], SDL_POINTER[ctypes.c_size_t]], SDL_SHADERCROSS_BINARY]
 SDL_ShaderCross_CompileSPIRVFromHLSL: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileSPIRVFromHLSL", ctypes.c_void_p, [SDL_POINTER[SDL_ShaderCross_HLSL_Info], SDL_POINTER[ctypes.c_size_t]], SDL_SHADERCROSS_BINARY]
-
-SDL_ShaderCross_CompileGraphicsShaderFromHLSL: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileGraphicsShaderFromHLSL", SDL_POINTER[SDL_GPUShader], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_ShaderCross_HLSL_Info], SDL_POINTER[SDL_ShaderCross_GraphicsShaderMetadata]], SDL_SHADERCROSS_BINARY]
-SDL_ShaderCross_CompileComputePipelineFromHLSL: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileComputePipelineFromHLSL", SDL_POINTER[SDL_GPUComputePipeline], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_ShaderCross_HLSL_Info], SDL_POINTER[SDL_ShaderCross_ComputePipelineMetadata]], SDL_SHADERCROSS_BINARY]
