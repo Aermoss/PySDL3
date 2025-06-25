@@ -24,8 +24,8 @@ def SDL_FORMAT_ARCH(arch: str) -> str:
     assert False, "Unknown architecture."
 
 SDL_SYSTEM, SDL_ARCH = platform.system(), SDL_FORMAT_ARCH(platform.machine())
-SDL_BINARY_PATTERNS: dict[str, list[str]] = \
-    {"Windows": ["{}.dll"], "Darwin": ["lib{}.dylib", "{0}.framework/{0}", "{0}.framework/Versions/A/{0}"], "Linux": ["lib{}.so"]}
+SDL_BINARY_EXTENSIONS, SDL_BINARY_PATTERNS = {"Windows": ["dll"], "Darwin": ["dylib"], "Linux": ["so"]}, \
+    {"Windows": ["{}.dll"], "Darwin": ["lib{}.dylib", "{0}.framework/{0}", "{0}.framework/Versions/Current/{0}"], "Linux": ["lib{}.so"]}
 
 def SDL_PLATFORM_SPECIFIC(system: list[str] = None, arch: list[str] = None) -> bool:
     """Check if the current platform is inside the given platforms."""
@@ -64,10 +64,10 @@ class SDL_LOGGER:
 def SDL_FIND_BINARIES(libraries: list[str]) -> list[str]:
     """Search for binaries in the system libraries."""
     libraries = libraries + [f"{library}d" for library in libraries]
-    binaries = [f"./{file}" if SDL_SYSTEM in ["Windows"] and not ("/" in file or "\\" in file) else file for library in libraries if (file := ctypes.util.find_library(library))]
+    binaries = [(f"./{file}" if SDL_SYSTEM in ["Windows"] and not ("/" in file or "\\" in file) else file) for library in libraries if (file := ctypes.util.find_library(library))]
 
     if SDL_SYSTEM in ["Darwin"] and SDL_ARCH in ["ARM64"] and os.path.exists(path := "/opt/Homebrew/lib"):
-        binaries += [file for library in libraries for pattern in SDL_BINARY_PATTERNS if os.path.exists(file := os.path.join(path, pattern.format(library)))]
+        binaries += [file for library in libraries for pattern in SDL_BINARY_PATTERNS[SDL_SYSTEM] if os.path.exists(file := os.path.join(path, pattern.format(library)))]
 
     return binaries
 
@@ -139,6 +139,15 @@ def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_A
         SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to download binaries: {exc}.")
         return False
 
+def SDL_CHECK_BINARY_NAME(name: str) -> bool:
+    """Check if the given name is a valid binary name in the current system."""
+
+    if len(_ := name.split(".")) > 1:
+        return _[1] in SDL_BINARY_EXTENSIONS[SDL_SYSTEM]
+
+    else:
+        return SDL_SYSTEM in ["Darwin"]
+
 if not __initialized__:
     if int(os.environ.get("SDL_CHECK_VERSION", "0" if __frozen__ else "1")) > 0:
         try:
@@ -150,24 +159,30 @@ if not __initialized__:
         except requests.RequestException:
             ...
 
-    functions, binaryMap = {i: {} for i in SDL_BINARY_VAR_MAP_INV}, {}
+    functions, binaryMap = {binary: {} for binary in SDL_BINARY_VAR_MAP_INV}, {}
     binaryData, missing = {"system": SDL_SYSTEM, "arch": SDL_ARCH, "files": []}, None
     binaryPath = os.environ.get("SDL_BINARY_PATH", os.path.join(os.path.dirname(__file__), "bin"))
     absPath = lambda path: path if os.path.isabs(path) else os.path.abspath(os.path.join(binaryPath, path))
-    if not os.path.exists(binaryPath): os.makedirs(binaryPath)
+
+    if not os.path.exists(binaryPath):
+        try:
+            os.makedirs(binaryPath)
+
+        except OSError as exc:
+            SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to create binary path: {exc}.")
 
     if int(os.environ.get("SDL_DISABLE_METADATA", "0")) > 0:
-        for root, _, files in os.walk(binaryPath):
-            for file in files:
-                if (file.endswith(".dll") and SDL_SYSTEM in ["Windows"]) \
-                or ((file.endswith(".dylib") or ".framework" in file) and SDL_SYSTEM in ["Darwin"]) \
-                or (".so" in file and SDL_SYSTEM in ["Linux"]):
-                    binaryData["files"].append(os.path.join(root, file))
+        if os.path.exists(binaryPath) and os.path.isdir(binaryPath):
+            for root, _, files in os.walk(binaryPath):
+                binaryData["files"] += [os.path.join(root, file) for file in files if SDL_CHECK_BINARY_NAME(file)]
+
+        else:
+            SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Binary path does not exist.")
 
     elif "metadata.json" in (files := os.listdir(binaryPath)):
         with open(os.path.join(binaryPath, "metadata.json"), "r") as file:
-            missing, binaryData = True, json.load(file)
-            binaryData["files"] = [absPath(i) for i in binaryData["files"]]
+            binaryData, missing = json.load(file), True
+            binaryData["files"] = [absPath(path) for path in binaryData["files"]]
 
         if packaging.version.parse(__version__) > packaging.version.parse(binaryData.get("target", __version__)):
             SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Incompatible target version detected: '{binaryData['target']}', current: 'v{__version__}'.")
@@ -176,11 +191,11 @@ if not __initialized__:
             SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Incompatible binary architecture and/or system detected: '{binaryData['system']} ({binaryData['arch']})'.")
             binaryData["repair"] = True
 
-            for i in binaryData["files"]:
-                if os.path.exists(i): os.remove(i)
+            for path in binaryData["files"]:
+                if os.path.exists(path): os.remove(path)
 
         else:
-            if missing := [i for i in binaryData["files"] if not os.path.exists(i)]:
+            if missing := [path for path in binaryData["files"] if not os.path.exists(path)]:
                 SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Missing binary file(s) detected: '{', '.join(missing)}'.")
 
     else:
@@ -191,20 +206,20 @@ if not __initialized__:
         if _ := SDL_DOWNLOAD_BINARIES(binaryPath, SDL_SYSTEM, SDL_ARCH):
             with open(os.path.join(binaryPath, "metadata.json"), "r") as file:
                 binaryData, missing = json.load(file), None
-                binaryData["files"] = [absPath(i) for i in binaryData["files"]]
+                binaryData["files"] = [absPath(path) for path in binaryData["files"]]
 
     if int(os.environ.get("SDL_FIND_BINARIES", "1" if binaryData.get("find", missing is None) else "0")) > 0:
         binaryData["files"] += SDL_FIND_BINARIES(list(SDL_BINARY_VAR_MAP_INV.keys()))
 
     for binary in SDL_BINARY_VAR_MAP_INV:
-        for path in binaryData["files"].copy():
-            if (file := os.path.split(path)[1]).split(".")[0].endswith(binary) and os.path.exists(path):
-                if (file.endswith(".dll") and SDL_SYSTEM in ["Windows"]) \
-                or ((file.endswith(".dylib") or ".framework" in file) and SDL_SYSTEM in ["Darwin"]) \
-                or (".so" in file and SDL_SYSTEM in ["Linux"]):
-                    binaryMap[binary], functions[binary] = ctypes.CDLL(os.path.abspath(path)), {}
-                    binaryData["files"].remove(path)
-                    break
+        for path in binaryData["files"]:
+            if binary in binaryMap:
+                break
+
+            if os.path.exists(path) and SDL_CHECK_BINARY_NAME(name := os.path.split(path)[1]):
+                for _binary in [binary, f"{binary}d"]:
+                    if (name.split(".")[0] if "." in name else name).endswith(_binary):
+                        binaryMap[binary] = ctypes.CDLL(os.path.abspath(path))
 
 BaseType = typing.TypeVar("BaseType")
 TargetType = typing.TypeVar("TargetType")
