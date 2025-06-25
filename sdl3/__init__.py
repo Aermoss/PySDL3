@@ -150,7 +150,7 @@ if not __initialized__:
         except requests.RequestException:
             ...
 
-    functions, binaryMap = {binary: {} for binary in SDL_MODULES}, {}
+    functions, binaryMap = {module: {} for module in SDL_MODULES}, {}
     binaryData, missing = {"system": SDL_SYSTEM, "arch": SDL_ARCH, "files": []}, None
     binaryPath = os.environ.get("SDL_BINARY_PATH", os.path.join(os.path.dirname(__file__), "bin"))
     absPath = lambda path: path if os.path.isabs(path) else os.path.abspath(os.path.join(binaryPath, path))
@@ -202,15 +202,15 @@ if not __initialized__:
     if int(os.environ.get("SDL_FIND_BINARIES", "1" if binaryData.get("find", missing is None) else "0")) > 0:
         binaryData["files"] += SDL_FIND_BINARIES(SDL_MODULES)
 
-    for binary in SDL_MODULES:
+    for module in SDL_MODULES:
         for path in binaryData["files"]:
-            if binary in binaryMap:
+            if module in binaryMap:
                 break
 
             if os.path.exists(path) and SDL_CHECK_BINARY_NAME(name := os.path.split(path)[1]):
-                for _binary in [binary, f"{binary}d"]:
-                    if (name.split(".")[0] if "." in name else name).endswith(_binary):
-                        binaryMap[binary] = ctypes.CDLL(os.path.abspath(path))
+                for _name in [module, f"{module}d"]:
+                    if (name.split(".")[0] if "." in name else name).endswith(_name):
+                        binaryMap[module] = ctypes.CDLL(os.path.abspath(path))
 
 BaseType = typing.TypeVar("BaseType")
 TargetType = typing.TypeVar("TargetType")
@@ -377,18 +377,18 @@ async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
     if "SDL_GITHUB_TOKEN" in os.environ:
         headers["Authorization"] = f"Bearer {os.environ['SDL_GITHUB_TOKEN']}"
 
-    for repo in SDL_MODULES:
-        url = f"https://api.github.com/repos/libsdl-org/{repo}/releases"
+    for module in SDL_MODULES:
+        url = f"https://api.github.com/repos/libsdl-org/{module}/releases"
         tasks.append(asyncio.create_task(session.get(url, headers = headers, ssl = False)))
         SDL_LOGGER.Log(SDL_LOGGER.Info, f"Sending a request to '{url}'.")
 
     responses = await asyncio.gather(*tasks)
     SDL_LOGGER.Log(SDL_LOGGER.Info, f"Response gathering completed ({len(responses)} responses).")
 
-    for response, repo in zip(responses, SDL_MODULES):
+    for response, module in zip(responses, SDL_MODULES):
         if response.status != 200:
             SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Failed to get latest release of '{response.url}', skipping (status: {response.status}).")
-            releases[repo] = None
+            releases[module] = None
 
         else:
             latestRelease = (None, None)
@@ -399,7 +399,7 @@ async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
                 if not latestRelease[0] or score > latestRelease[0]:
                     latestRelease = (score, release["tag_name"])
 
-            releases[repo] = latestRelease[1]
+            releases[module] = latestRelease[1]
 
     await session.close()
     return releases
@@ -709,8 +709,8 @@ SDL_VERSIONNUM_STRING: abc.Callable[[int], str] = lambda num: str(None).lower() 
 
 if not __initialized__:
     if int(os.environ.get("SDL_CHECK_BINARY_VERSION", "1")) > 0:
-        for binary, left, right in zip(SDL_MODULES, [SDL_GetVersion, IMG_Version, Mix_Version, TTF_Version, RTF_Version, NET_GetVersion], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
-            if binary in binaryMap and (_ := left()) != right: SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(binary)}' (expected: {SDL_VERSIONNUM_STRING(right)}, got: {SDL_VERSIONNUM_STRING(_)}).")
+        for module, left, right in zip(SDL_MODULES, [SDL_GetVersion, IMG_Version, Mix_Version, TTF_Version, RTF_Version, NET_GetVersion], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
+            if module in binaryMap and (_ := left()) != right: SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(module)}' (expected: {SDL_VERSIONNUM_STRING(right)}, got: {SDL_VERSIONNUM_STRING(_)}).")
 
     def SDL_TRY_WRITE_DOCS() -> bool | None:
         try:
