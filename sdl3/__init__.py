@@ -5,17 +5,8 @@ __version__ = "0.9.8b4"
 import sys, os, requests, ctypes, ctypes.util, platform, keyword, inspect, collections.abc as abc, \
     asyncio, aiohttp, zipfile, typing, types, array, importlib, atexit, packaging.version, json, re
 
-SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_TTF_BINARY, SDL_RTF_BINARY, SDL_NET_BINARY, SDL_SHADERCROSS_BINARY = \
-    "SDL3", "SDL3_image", "SDL3_mixer", "SDL3_ttf", "SDL3_rtf", "SDL3_net", "SDL3_shadercross"
-
-SDL_BINARY_VAR_MAP: dict[str, str] = {}
-
-for i in locals().copy():
-    if i.startswith("SDL_") and i.endswith("_BINARY"):
-        SDL_BINARY_VAR_MAP[i] = locals()[i]
-
-SDL_BINARY_VAR_MAP_INV: dict[str, str] = {value: key for key, value in SDL_BINARY_VAR_MAP.items()}
-SDL_REPOSITORIES: list[str] = [key.replace("3", "") for key, _ in SDL_BINARY_VAR_MAP_INV.items()]
+SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_TTF_BINARY, SDL_RTF_BINARY, SDL_NET_BINARY, SDL_SHADERCROSS_BINARY, \
+    *SDL_MODULES = ["SDL3", "SDL3_image", "SDL3_mixer", "SDL3_ttf", "SDL3_rtf", "SDL3_net", "SDL3_shadercross"] * 2
 
 def SDL_FORMAT_ARCH(arch: str) -> str:
     """Format the architecture string."""
@@ -159,7 +150,7 @@ if not __initialized__:
         except requests.RequestException:
             ...
 
-    functions, binaryMap = {binary: {} for binary in SDL_BINARY_VAR_MAP_INV}, {}
+    functions, binaryMap = {binary: {} for binary in SDL_MODULES}, {}
     binaryData, missing = {"system": SDL_SYSTEM, "arch": SDL_ARCH, "files": []}, None
     binaryPath = os.environ.get("SDL_BINARY_PATH", os.path.join(os.path.dirname(__file__), "bin"))
     absPath = lambda path: path if os.path.isabs(path) else os.path.abspath(os.path.join(binaryPath, path))
@@ -209,9 +200,9 @@ if not __initialized__:
                 binaryData["files"] = [absPath(path) for path in binaryData["files"]]
 
     if int(os.environ.get("SDL_FIND_BINARIES", "1" if binaryData.get("find", missing is None) else "0")) > 0:
-        binaryData["files"] += SDL_FIND_BINARIES(list(SDL_BINARY_VAR_MAP_INV.keys()))
+        binaryData["files"] += SDL_FIND_BINARIES(SDL_MODULES)
 
-    for binary in SDL_BINARY_VAR_MAP_INV:
+    for binary in SDL_MODULES:
         for path in binaryData["files"]:
             if binary in binaryMap:
                 break
@@ -272,7 +263,7 @@ class SDL_FUNC:
             assert ... not in key[2] or key[2].count(...) == 1, "Expected at most 1 '...' in the argument list."
             assert ... not in key[2] or key[2][-1] == ..., "Expected '...' at the end of the argument list."
             assert isinstance(key[3], str), "Expected a string as the fourth argument."
-            assert key[3] in SDL_BINARY_VAR_MAP_INV, "Unknown binary."
+            assert key[3] in SDL_MODULES, "Unknown binary."
 
         if binary := SDL_GET_BINARY(key[3]):
             func = getattr(binary, key[0], None)
@@ -386,7 +377,7 @@ async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
     if "SDL_GITHUB_TOKEN" in os.environ:
         headers["Authorization"] = f"Bearer {os.environ['SDL_GITHUB_TOKEN']}"
 
-    for repo in SDL_REPOSITORIES:
+    for repo in SDL_MODULES:
         url = f"https://api.github.com/repos/libsdl-org/{repo}/releases"
         tasks.append(asyncio.create_task(session.get(url, headers = headers, ssl = False)))
         SDL_LOGGER.Log(SDL_LOGGER.Info, f"Sending a request to '{url}'.")
@@ -394,7 +385,7 @@ async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
     responses = await asyncio.gather(*tasks)
     SDL_LOGGER.Log(SDL_LOGGER.Info, f"Response gathering completed ({len(responses)} responses).")
 
-    for response, repo in zip(responses, SDL_REPOSITORIES):
+    for response, repo in zip(responses, SDL_MODULES):
         if response.status != 200:
             SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Failed to get latest release of '{response.url}', skipping (status: {response.status}).")
             releases[repo] = None
@@ -557,7 +548,7 @@ def SDL_PYTHONIZE_TYPE(type: str, name: str | None = None, globals: dict[str, ty
     if count and type.startswith("ctypes."): type = type.split(".")[1]
     return f"{'LP_' * count}{type}{'_Array_%s' % array if array else ''}"
 
-def SDL_GENERATE_DOCS(modules: list[str] = list(SDL_BINARY_VAR_MAP_INV.keys()), raw: types.ModuleType | None = None, rst: bool = False) -> str:
+def SDL_GENERATE_DOCS(modules: list[str] = SDL_MODULES, raw: types.ModuleType | None = None, rst: bool = False) -> str:
     """Generate type hints and docstring for SDL3 functions/structures using SDL3 wiki."""
 
     __index, (descriptions, arguments, returns) = -1, \
@@ -718,7 +709,7 @@ SDL_VERSIONNUM_STRING: abc.Callable[[int], str] = lambda num: str(None).lower() 
 
 if not __initialized__:
     if int(os.environ.get("SDL_CHECK_BINARY_VERSION", "1")) > 0:
-        for binary, left, right in zip(SDL_BINARY_VAR_MAP.values(), [SDL_GetVersion, IMG_Version, Mix_Version, TTF_Version, RTF_Version, NET_GetVersion], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
+        for binary, left, right in zip(SDL_MODULES, [SDL_GetVersion, IMG_Version, Mix_Version, TTF_Version, RTF_Version, NET_GetVersion], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
             if binary in binaryMap and (_ := left()) != right: SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(binary)}' (expected: {SDL_VERSIONNUM_STRING(right)}, got: {SDL_VERSIONNUM_STRING(_)}).")
 
     def SDL_TRY_WRITE_DOCS() -> bool | None:
@@ -733,10 +724,15 @@ if not __initialized__:
     
     if __doc_generator__ and (os.path.exists(__doc_file__) or SDL_TRY_WRITE_DOCS()):
         try:
+            if "sdl3.__doc__" in sys.modules:
+                del sys.modules["sdl3.__doc__"]
+
             from .__doc__ import *
             exec(getattr(__doc__, "__doc__"), data := {})
 
         except (SyntaxError, NameError, TypeError) as exc:
+            import traceback
+            traceback.print_exc()
             SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to read docs: {exc}.")
             data = None
 

@@ -15,9 +15,9 @@ os.makedirs("temp", exist_ok = True)
 
 import sdl3
 
-for i in list(sdl3.SDL_BINARY_VAR_MAP_INV.keys()):
-    with open(f"temp/{i}.py", "w") as file:
-        file.write(sdl3.SDL_GENERATE_DOCS([i], rst = True))
+for module in sdl3.SDL_MODULES:
+    with open(f"temp/{module}.py", "w") as file:
+        file.write(sdl3.SDL_GENERATE_DOCS([module], rst = True))
 
 project = "PySDL3"
 copyright = "2025, Yusuf Rençber"
