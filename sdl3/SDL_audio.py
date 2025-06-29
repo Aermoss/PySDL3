@@ -121,7 +121,7 @@ SDL_SetAudioPostmixCallback: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetAu
 
 SDL_LoadWAV_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadWAV_IO", ctypes.c_bool, [SDL_POINTER[SDL_IOStream], ctypes.c_bool, SDL_POINTER[SDL_AudioSpec], SDL_POINTER[SDL_POINTER[ctypes.c_uint8]], SDL_POINTER[ctypes.c_uint32]], SDL_BINARY]
 SDL_LoadWAV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadWAV", ctypes.c_bool, [ctypes.c_char_p, SDL_POINTER[SDL_AudioSpec], SDL_POINTER[SDL_POINTER[ctypes.c_uint8]], SDL_POINTER[ctypes.c_uint32]], SDL_BINARY]
-SDL_MixAudio: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_MixAudio", ctypes.c_bool, [SDL_POINTER[ctypes.c_uint8], SDL_POINTER[ctypes.c_uint8], SDL_AudioFormat, ctypes.c_uint32, ctypes.c_float], SDL_BINARY]
-SDL_ConvertAudioSamples: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ConvertAudioSamples", ctypes.c_bool, [SDL_POINTER[SDL_AudioSpec], SDL_POINTER[ctypes.c_uint8], ctypes.c_int, SDL_POINTER[SDL_AudioSpec], SDL_POINTER[SDL_POINTER[ctypes.c_uint8]], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
-SDL_GetAudioFormatName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAudioFormatName", ctypes.c_char_p, [SDL_AudioFormat], SDL_BINARY]
+SDL_FreeWAV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FreeWAV", None, [SDL_POINTER[ctypes.c_uint8]], SDL_BINARY]
+SDL_GetNumAudioDevices: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNumAudioDevices", ctypes.c_int, [ctypes.c_bool], SDL_BINARY]
+
 SDL_GetSilenceValueForFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSilenceValueForFormat", ctypes.c_int, [SDL_AudioFormat], SDL_BINARY]
