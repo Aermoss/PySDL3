@@ -15,6 +15,9 @@ SDL_IMAGE_VERSION_ATLEAST: abc.Callable[[int, int, int], bool] = lambda x, y, z:
 
 IMG_Version: abc.Callable[..., typing.Any] = SDL_FUNC["IMG_Version", ctypes.c_int, [], SDL_IMAGE_BINARY]
 
+IMG_Init: abc.Callable[..., typing.Any] = SDL_FUNC["IMG_Init", ctypes.c_int, [ctypes.c_int], SDL_IMAGE_BINARY]
+IMG_Quit: abc.Callable[..., typing.Any] = SDL_FUNC["IMG_Quit", None, [], SDL_IMAGE_BINARY]
+
 IMG_LoadTyped_IO: abc.Callable[..., typing.Any] = SDL_FUNC["IMG_LoadTyped_IO", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_IOStream], ctypes.c_bool, ctypes.c_char_p], SDL_IMAGE_BINARY]
 IMG_Load: abc.Callable[..., typing.Any] = SDL_FUNC["IMG_Load", SDL_POINTER[SDL_Surface], [ctypes.c_char_p], SDL_IMAGE_BINARY]
 IMG_Load_IO: abc.Callable[..., typing.Any] = SDL_FUNC["IMG_Load_IO", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_IMAGE_BINARY]
