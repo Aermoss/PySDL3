@@ -140,6 +140,17 @@ def SDL_CHECK_BINARY_NAME(name: str) -> bool:
         return SDL_SYSTEM in ["Darwin"]
 
 if not __initialized__:
+    if int(os.environ.get("SDL_RELOAD_FIX", "1")) > 0:
+        reloaded = False
+
+        for module in sys.modules.copy():
+            if module.startswith("sdl3."):
+                del sys.modules[module]
+                reloaded = True
+
+        if "sdl3" in sys.modules and reloaded:
+            del sys.modules["sdl3"]
+
     if int(os.environ.get("SDL_CHECK_VERSION", "0" if __frozen__ else "1")) > 0:
         try:
             version = requests.get(f"https://pypi.org/pypi/PySDL3/json", timeout = 0.5).json()["info"]["version"]
