@@ -18,7 +18,7 @@ SDL_SYSTEM, SDL_ARCH = platform.system(), SDL_FORMAT_ARCH(platform.machine())
 SDL_BINARY_EXTENSIONS, SDL_BINARY_PATTERNS = {"Windows": ["dll"], "Darwin": ["dylib"], "Linux": ["so"]}, \
     {"Windows": ["{}.dll"], "Darwin": ["lib{}.dylib", "{0}.framework/{0}", "{0}.framework/Versions/Current/{0}"], "Linux": ["lib{}.so"]}
 
-def SDL_PLATFORM_SPECIFIC(system: list[str] = None, arch: list[str] = None) -> bool:
+def SDL_PLATFORM_SPECIFIC(system: list[str] | None = None, arch: list[str] | None = None) -> bool:
     """Check if the current platform is inside the given platforms."""
     if int(os.environ.get("SDL_PLATFORM_AGNOSTIC", "0")) > 0: return True
     return (not system or SDL_SYSTEM in system) and (not arch or SDL_ARCH in arch)
@@ -561,7 +561,7 @@ def SDL_GENERATE_DOCS(modules: list[str] = SDL_MODULES, raw: types.ModuleType | 
 
     result = "" if rst else f"\"\"\"\n# This file is auto-generated, do not modify it.\n__meta__ = "
     if not rst: result += f"{{\"target\": \"v{__version__}\", \"system\": \"{SDL_SYSTEM}\"}}\n\"\"\"\n\n"
-    result += f"from {'sdl3' if rst else ''}.SDL import *\n\n"
+    result += f"from {'sdl3' if rst else ''}.SDL import * # type: ignore\n\n"
     result += f"from {'sdl3' if rst else ''}.__init__ import {'' if rst else 'raw, '}ctypes, typing, {'SDL_POINTER' if rst else ''}"
     result += "\n" if rst else f"\\\n{' ' * 4}SDL_POINTER, SDL_CLONE_METACLASS as SDL_CloneMeta\n\n"
     types, definitions = set(), ""
@@ -687,12 +687,12 @@ if not __initialized__ and int(os.environ.get("SDL_CTYPES_ALIAS_FIX", "0" if __f
         if i.startswith("c_") and getattr(ctypes, i).__name__ != i and hasattr(getattr(ctypes, i), "_type_"):
             setattr(ctypes, i, SDL_TYPE[i, getattr(ctypes, i)])
 
-from sdl3.SDL import *
+from sdl3.SDL import * # type: ignore
 
 if __doc_generator__:
-    import sdl3.SDL as raw
+    import sdl3.SDL as raw # type: ignore
 
-    class SDL_CLONE_METACLASS:
+    class SDL_CLONE_METACLASS(type):
         """Simple clone metaclass."""
 
         def __new__(cls, name: str, _: typing.Any, attributes: dict[str, typing.Any]) -> typing.Any:
@@ -724,11 +724,9 @@ if not __initialized__:
     
     if __doc_generator__ and (os.path.exists(__doc_file__) or SDL_TRY_WRITE_DOCS()):
         try:
-            if "sdl3.__doc__" in sys.modules:
-                del sys.modules["sdl3.__doc__"]
-
-            from .__doc__ import *
-            exec(getattr(__doc__, "__doc__"), data := {})
+            if "sdl3.__doc__" in sys.modules: del sys.modules["sdl3.__doc__"]
+            from .__doc__ import * # type: ignore
+            exec(getattr(sys.modules["sdl3.__doc__"], "__doc__"), data := {})
 
         except (SyntaxError, NameError, TypeError) as exc:
             import traceback
@@ -739,7 +737,7 @@ if not __initialized__:
         if os.path.exists(__doc_file__) and (not data or "__meta__" not in data or data["__meta__"]["target"] != f"v{__version__}" or data["__meta__"]["system"] != SDL_SYSTEM) and SDL_TRY_WRITE_DOCS():
             if "sdl3.__doc__" in sys.modules: del sys.modules["sdl3.__doc__"]
             SDL_LOGGER.Log(SDL_LOGGER.Warning, "Reloading module: 'sdl3.__doc__'...")
-            from .__doc__ import *
+            from .__doc__ import * # type: ignore
 
     else:
         try:
