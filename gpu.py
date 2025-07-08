@@ -28,9 +28,10 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO | sdl3.SDL_INIT_EVENTS | sdl3.SDL_INIT_AUDIO):
         print(f"Failed to initialize library: {sdl3.SDL_GetError().decode()}.")
         return -1
-    
-    window = sdl3.SDL_CreateWindow("Aermoss".encode(), 1600, 900, sdl3.SDL_WINDOW_RESIZABLE)
-    event, running = sdl3.SDL_Event(), True
+
+    if not (window := sdl3.SDL_CreateWindow("Aermoss".encode(), 1600, 900, sdl3.SDL_WINDOW_RESIZABLE)):
+        print(f"Failed to create window: {sdl3.SDL_GetError().decode()}.")
+        return -1
 
     gpuDrivers = [sdl3.SDL_GetGPUDriver(i).decode() for i in range(sdl3.SDL_GetNumGPUDrivers())]
     tryGetDriver, tryUseVulkan = lambda order, drivers: next((i for i in order if i in drivers), None), True
@@ -78,6 +79,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     sdl3.SDL_SubmitGPUCommandBuffer(commandBuffer)
     sdl3.SDL_ReleaseGPUTransferBuffer(device, transferBuffer)
     uniformData, lastTime, hue = UniformData(), time.time(), 0.0
+    event, running = sdl3.SDL_Event(), True
 
     while running:
         while sdl3.SDL_PollEvent(ctypes.byref(event)):
