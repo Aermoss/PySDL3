@@ -148,7 +148,7 @@ if not __initialized__:
                 SDL_LOGGER.Log(SDL_LOGGER.Warning, f"You are using an older version of PySDL3 (current: {__version__}, latest: {version}).")
 
         except requests.RequestException:
-            ...
+            SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Failed to check for the latest version of PySDL3, please check manually.")
 
     functions, binaryMap = {module: {} for module in SDL_MODULES}, {}
     binaryData, missing = {"system": SDL_SYSTEM, "arch": SDL_ARCH, "files": []}, None
