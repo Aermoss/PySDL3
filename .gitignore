@@ -1,3 +1,5 @@
+build/
+PySDL3.egg-info/
 shaders/
 sdl3/bin/
 docs/temp/
