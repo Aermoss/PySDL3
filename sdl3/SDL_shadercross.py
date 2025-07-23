@@ -20,7 +20,6 @@ class SDL_ShaderCross_IOVarMetadata(ctypes.Structure):
     _fields_ = [
         ("name", ctypes.c_char_p),
         ("location", ctypes.c_uint32),
-        ("offset", ctypes.c_uint32),
         ("vector_type", SDL_ShaderCross_IOVarType),
         ("vector_size", ctypes.c_uint32)
     ]
