@@ -280,7 +280,6 @@ def SDL_NOT_IMPLEMENTED(name: str) -> abc.Callable[..., None]:
 		SDL_LOGGER.Log(SDL_LOGGER.Error, f"Invoked an unimplemented function: '{name}'.")
 
 class SDL_FUNC:
-	@classmethod
 	def __class_getitem__(cls, key: tuple[str, type, list[type], str]) -> typing.Any:
 		"""Create a new ctypes function definition."""
 
@@ -327,7 +326,6 @@ class SDL_FUNC:
 		return func
 
 class SDL_POINTER:
-	@classmethod
 	def __class_getitem__(cls, key: type) -> type:
 		"""Create a ctypes pointer type from a ctypes type."""
 
@@ -338,7 +336,6 @@ class SDL_POINTER:
 		return ctypes.POINTER(key)
 
 class SDL_CAST:
-	@classmethod
 	def __class_getitem__(cls, key: tuple[typing.Any, type]) -> typing.Any:
 		"""Cast a ctypes pointer to an another type."""
 
@@ -351,7 +348,6 @@ class SDL_CAST:
 		return ctypes.cast(key[0], key[1])
 
 class SDL_TYPE:
-	@classmethod
 	def __class_getitem__(cls, key: tuple[str, type]) -> type:
 		"""Create a new type from a ctypes type."""
 
@@ -371,7 +367,6 @@ class SDL_TYPE:
 			return type(key[0], (ctypes._SimpleCData, ), {"_type_": key[1]._type_})
 
 class SDL_FUNC_TYPE:
-	@classmethod
 	def __class_getitem__(cls, key: tuple[str, type, list[type]]) -> type:
 		"""Create a new ctypes function type."""
 
