@@ -174,6 +174,7 @@ SDL_CreateWindowWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_Cr
 
 SDL_PROP_WINDOW_CREATE_ALWAYS_ON_TOP_BOOLEAN: bytes = "SDL.window.create.always_on_top".encode()
 SDL_PROP_WINDOW_CREATE_BORDERLESS_BOOLEAN: bytes = "SDL.window.create.borderless".encode()
+SDL_PROP_WINDOW_CREATE_CONSTRAIN_POPUP_BOOLEAN: bytes = "SDL.window.create.constrain_popup".encode()
 SDL_PROP_WINDOW_CREATE_FOCUSABLE_BOOLEAN: bytes = "SDL.window.create.focusable".encode()
 SDL_PROP_WINDOW_CREATE_EXTERNAL_GRAPHICS_CONTEXT_BOOLEAN: bytes = "SDL.window.create.external_graphics_context".encode()
 SDL_PROP_WINDOW_CREATE_FLAGS_NUMBER: bytes = "SDL.window.create.flags".encode()
