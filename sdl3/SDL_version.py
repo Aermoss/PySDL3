@@ -1,7 +1,7 @@
 from . import ctypes, typing, abc, \
     SDL_FUNC, SDL_BINARY
 
-SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_MICRO_VERSION = 3, 2, 16
+SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_MICRO_VERSION = 3, 2, 18
 
 SDL_VERSIONNUM: abc.Callable[[int, int, int], int] = \
     lambda major, minor, patch: major * 1000000 + minor * 1000 + patch
