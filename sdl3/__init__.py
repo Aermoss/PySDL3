@@ -2,8 +2,26 @@
 
 __version__ = "0.9.8b6"
 
-import sys, os, requests, ctypes, ctypes.util, platform, keyword, inspect, collections.abc as abc, \
-	asyncio, aiohttp, zipfile, typing, types, array, importlib, atexit, packaging.version, json, re
+import sys
+import os
+import requests
+import ctypes
+import ctypes.util
+import platform
+import keyword
+import inspect
+import collections.abc as abc
+import asyncio
+import aiohttp
+import zipfile
+import typing
+import types
+import array
+import importlib
+import atexit
+import packaging.version
+import json
+import re
 
 SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_TTF_BINARY, SDL_RTF_BINARY, SDL_NET_BINARY, SDL_SHADERCROSS_BINARY, \
 	*SDL_MODULES = ["SDL3", "SDL3_image", "SDL3_mixer", "SDL3_ttf", "SDL3_rtf", "SDL3_net", "SDL3_shadercross"] * 2
