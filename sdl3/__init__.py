@@ -22,6 +22,8 @@ import packaging.version
 import json
 import re
 
+from sdl3.SDL import SDL_VERSIONNUM_MAJOR, SDL_VERSIONNUM_MINOR, SDL_VERSIONNUM_MICRO, SDL_GetVersion, IMG_Version, Mix_Version, TTF_Version, RTF_Version, NET_GetVersion, SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION
+
 SDL_BINARY, SDL_IMAGE_BINARY, SDL_MIXER_BINARY, SDL_TTF_BINARY, SDL_RTF_BINARY, SDL_NET_BINARY, SDL_SHADERCROSS_BINARY, \
 	*SDL_MODULES = ["SDL3", "SDL3_image", "SDL3_mixer", "SDL3_ttf", "SDL3_rtf", "SDL3_net", "SDL3_shadercross"] * 2
 
@@ -714,8 +716,6 @@ if not __initialized__ and int(os.environ.get("SDL_CTYPES_ALIAS_FIX", "0" if __f
 	for i in dir(ctypes):
 		if i.startswith("c_") and getattr(ctypes, i).__name__ != i and hasattr(getattr(ctypes, i), "_type_"):
 			setattr(ctypes, i, SDL_TYPE[i, getattr(ctypes, i)])
-
-from sdl3.SDL import * # type: ignore
 
 if __doc_generator__:
 	import sdl3.SDL as raw # type: ignore
