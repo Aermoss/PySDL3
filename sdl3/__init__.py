@@ -384,7 +384,7 @@ async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
         headers["Authorization"] = f"Bearer {os.environ['SDL_GITHUB_TOKEN']}"
 
     for module in SDL_MODULES:
-        url = f"https://api.github.com/repos/libsdl-org/{module}/releases"
+        url = f"https://api.github.com/repos/libsdl-org/{module.replace('3', '')}/releases"
         tasks.append(asyncio.create_task(session.get(url, headers = headers, ssl = False)))
         SDL_LOGGER.Log(SDL_LOGGER.Info, f"Sending a request to '{url}'.")
 
@@ -394,7 +394,7 @@ async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
     for response, module in zip(responses, SDL_MODULES):
         if response.status != 200:
             SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Failed to get latest release of '{response.url}', skipping (status: {response.status}).")
-            releases[module] = None
+            releases[module.replace('3', '')] = None
 
         else:
             latestRelease = (None, None)
@@ -405,7 +405,7 @@ async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
                 if not latestRelease[0] or score > latestRelease[0]:
                     latestRelease = (score, release["tag_name"])
 
-            releases[module] = latestRelease[1]
+            releases[module.replace('3', '')] = latestRelease[1]
 
     await session.close()
     return releases
