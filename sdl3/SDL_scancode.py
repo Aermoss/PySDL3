@@ -1,4 +1,5 @@
-from .__init__ import typing, SDL_TYPE, SDL_ENUM
+from . import typing, \
+    SDL_TYPE, SDL_ENUM
 
 SDL_Scancode: typing.TypeAlias = SDL_TYPE["SDL_Scancode", SDL_ENUM]
 

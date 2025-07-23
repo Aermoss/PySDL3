@@ -1,5 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_PLATFORM_SPECIFIC, \
-    SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_TTF_BINARY, SDL_ENUM
+from . import ctypes, typing, abc, \
+    SDL_PLATFORM_SPECIFIC, SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_TTF_BINARY, SDL_ENUM
 
 from .SDL_pixels import SDL_Color
 from .SDL_surface import SDL_Surface

@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, \
+from . import ctypes, typing, abc, \
     SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 from .SDL_joystick import SDL_Joystick

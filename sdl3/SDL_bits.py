@@ -1,4 +1,4 @@
-from .__init__ import *
+from . import *
 
 def SDL_MostSignificantBitIndex32(x: int) -> int:
     if x == 0: return -1

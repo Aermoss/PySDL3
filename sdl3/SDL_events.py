@@ -1,5 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
-    SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
+from . import ctypes, typing, abc, \
+    SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
 
 from .SDL_video import SDL_Window, SDL_WindowID, SDL_DisplayID
 from .SDL_sensor import SDL_SensorID

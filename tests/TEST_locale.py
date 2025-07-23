@@ -1,4 +1,4 @@
-from .__init__ import sdl3, ctypes, TEST_RegisterFunction
+from . import sdl3, ctypes, TEST_RegisterFunction
 
 @TEST_RegisterFunction(["Darwin", "Windows"])
 def TEST_SDL_GetPreferredLocales() -> None:

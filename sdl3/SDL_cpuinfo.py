@@ -1,4 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_FUNC, SDL_BINARY
+from . import ctypes, typing, abc, \
+    SDL_FUNC, SDL_BINARY
 
 SDL_CACHELINE_SIZE: int = 128
 

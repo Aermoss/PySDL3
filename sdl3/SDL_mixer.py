@@ -1,5 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
-    SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_MIXER_BINARY, SDL_ENUM
+from . import ctypes, typing, abc, \
+    SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_MIXER_BINARY, SDL_ENUM
 
 from .SDL_iostream import SDL_IOStream
 from .SDL_audio import SDL_AudioDeviceID, SDL_AudioSpec, SDL_AudioFormat, SDL_AUDIO_S16

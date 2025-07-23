@@ -1,5 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_PLATFORM_SPECIFIC, \
-    SDL_POINTER, SDL_FUNC, SDL_FUNC_TYPE, SDL_TYPE, SDL_BINARY, SDL_ENUM
+from . import ctypes, typing, abc, \
+    SDL_PLATFORM_SPECIFIC, SDL_POINTER, SDL_FUNC, SDL_FUNC_TYPE, SDL_TYPE, SDL_BINARY, SDL_ENUM
 
 from .SDL_video import SDL_DisplayID
 

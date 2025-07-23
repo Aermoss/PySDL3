@@ -1,8 +1,7 @@
-from .__init__ import ctypes, typing, abc, SDL_PLATFORM_SPECIFIC, \
-    SDL_POINTER, SDL_FUNC, SDL_FUNC_TYPE, SDL_BINARY
+from . import ctypes, typing, abc, \
+    SDL_PLATFORM_SPECIFIC, SDL_POINTER, SDL_FUNC, SDL_FUNC_TYPE, SDL_BINARY
 
-from .SDL_init import SDL_AppInit_func, \
-    SDL_AppIterate_func, SDL_AppEvent_func, SDL_AppQuit_func
+from .SDL_init import SDL_AppInit_func, SDL_AppIterate_func, SDL_AppEvent_func, SDL_AppQuit_func
 
 SDL_main_func: typing.TypeAlias = SDL_FUNC_TYPE["SDL_main_func", ctypes.c_int, [ctypes.c_int, SDL_POINTER[ctypes.c_char_p]]]
 

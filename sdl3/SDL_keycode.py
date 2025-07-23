@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, SDL_TYPE
+from . import ctypes, typing, abc, SDL_TYPE
 
 from .SDL_scancode import SDL_Scancode
 

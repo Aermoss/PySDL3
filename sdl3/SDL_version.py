@@ -1,4 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_FUNC, SDL_BINARY
+from . import ctypes, typing, abc, \
+    SDL_FUNC, SDL_BINARY
 
 SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_MICRO_VERSION = 3, 2, 16
 

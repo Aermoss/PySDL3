@@ -1,4 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_FUNC, SDL_BINARY
+from . import ctypes, typing, abc, \
+    SDL_FUNC, SDL_BINARY
 
 class SDL_GUID(ctypes.Structure):
     _fields_ = [

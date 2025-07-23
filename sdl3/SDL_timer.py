@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, \
+from . import ctypes, typing, abc, \
     SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 SDL_MS_PER_SECOND: int = 1000

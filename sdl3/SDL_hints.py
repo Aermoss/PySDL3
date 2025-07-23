@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, \
+from . import ctypes, typing, abc, \
     SDL_FUNC_TYPE, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 SDL_HINT_ALLOW_ALT_TAB_WHILE_GRABBED: bytes = "SDL_ALLOW_ALT_TAB_WHILE_GRABBED".encode()

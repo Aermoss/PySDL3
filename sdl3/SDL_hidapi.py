@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, \
+from . import ctypes, typing, abc, \
     SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 class SDL_hid_device(ctypes.c_void_p):

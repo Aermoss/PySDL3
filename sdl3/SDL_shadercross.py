@@ -1,5 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
-    SDL_FUNC, SDL_TYPE, SDL_ENUM, SDL_SHADERCROSS_BINARY
+from . import ctypes, typing, abc, \
+    SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_ENUM, SDL_SHADERCROSS_BINARY
 
 from .SDL_properties import SDL_PropertiesID
 from .SDL_gpu import SDL_GPUDevice, SDL_GPUShaderFormat, SDL_GPUShader, SDL_GPUComputePipeline

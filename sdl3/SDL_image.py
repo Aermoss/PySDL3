@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, abc, \
+from . import ctypes, typing, abc, \
     SDL_POINTER, SDL_FUNC, SDL_IMAGE_BINARY
 
 from .SDL_surface import SDL_Surface

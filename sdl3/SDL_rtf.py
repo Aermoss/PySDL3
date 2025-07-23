@@ -1,5 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
-    SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_RTF_BINARY, SDL_ENUM
+from . import ctypes, typing, abc, \
+    SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_RTF_BINARY, SDL_ENUM
 
 from .SDL_pixels import SDL_Color
 from .SDL_iostream import SDL_IOStream

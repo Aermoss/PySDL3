@@ -1,4 +1,4 @@
-from .__init__ import sdl3, TEST_RegisterFunction
+from . import sdl3, TEST_RegisterFunction
 
 @TEST_RegisterFunction(["Darwin", "Windows"])
 def TEST_SDL_CreateWindow() -> None:

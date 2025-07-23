@@ -1,5 +1,5 @@
-from .__init__ import ctypes, typing, abc, SDL_POINTER, \
-    SDL_FUNC_TYPE, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
+from . import ctypes, typing, abc, \
+    SDL_POINTER, SDL_FUNC_TYPE, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 from .SDL_atomic import SDL_AtomicInt
 from .SDL_stdinc import SDL_FunctionPointer

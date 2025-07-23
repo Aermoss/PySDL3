@@ -1,4 +1,4 @@
-from .__init__ import ctypes, typing, \
+from . import ctypes, typing, \
     SDL_POINTER, SDL_TYPE, SDL_ENUM, SDL_FUNC_TYPE
 
 from .SDL_rect import SDL_Rect

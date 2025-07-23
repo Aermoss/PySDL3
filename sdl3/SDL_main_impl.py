@@ -1,4 +1,4 @@
-from .__init__ import sys, os, ctypes, atexit, types, SDL_POINTER
+from . import sys, os, ctypes, atexit, types, SDL_POINTER
 
 from .SDL_main import SDL_EnterAppMainCallbacks, SDL_RunApp, SDL_main_func, \
     SDL_AppEvent_func, SDL_AppInit_func, SDL_AppIterate_func, SDL_AppQuit_func
