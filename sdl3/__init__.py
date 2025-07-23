@@ -79,7 +79,7 @@ def SDL_FIND_BINARIES(libraries: list[str]) -> list[str]:
 
 	return binaries
 
-def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_ARCH) -> bool:
+def SDL_DOWNLOAD_BINARIES(path: str, system: str = SDL_SYSTEM, arch: str = SDL_ARCH) -> bool | None:
 	"""Download specific SDL3 binaries to the given path."""
 	assert system.capitalize() in ["Darwin", "Linux", "Windows"], "Unknown system."
 	assert arch.upper() in ["AMD64", "ARM64"], "Unknown architecture."
