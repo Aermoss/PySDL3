@@ -568,7 +568,7 @@ def SDL_GENERATE_DOCS(modules: list[str] = SDL_MODULES, raw: types.ModuleType | 
     result = "" if rst else "\"\"\"\n# This file is auto-generated, do not modify it.\n__meta__ = "
     if not rst: result += f"{{\"target\": \"v{__version__}\", \"system\": \"{SDL_SYSTEM}\"}}\n\"\"\"\n\n"
     result += f"from {'sdl3' if rst else ''}.SDL import * # type: ignore\n\n"
-    result += f"from {'sdl3' if rst else ''}.__init__ import {'' if rst else 'raw, '}ctypes, typing, {'SDL_POINTER' if rst else ''}"
+    result += f"from {'sdl3' if rst else ''}. import {'' if rst else 'raw, '}ctypes, typing, {'SDL_POINTER' if rst else ''}"
     result += "\n" if rst else f"\\\n{' ' * 4}SDL_POINTER, SDL_CLONE_METACLASS as SDL_CloneMeta\n\n"
     types, definitions = set(), ""
 
