@@ -170,13 +170,13 @@ if not __initialized__:
 
 	if int(os.environ.get("SDL_CHECK_VERSION", "0" if __frozen__ else "1")) > 0:
 		try:
-			version = requests.get(f"https://pypi.org/pypi/PySDL3/json", timeout = 0.5).json()["info"]["version"]
+			version = requests.get("https://pypi.org/pypi/PySDL3/json", timeout = 0.5).json()["info"]["version"]
 
 			if packaging.version.parse(__version__) < packaging.version.parse(version):
 				SDL_LOGGER.Log(SDL_LOGGER.Warning, f"You are using an older version of PySDL3 (current: {__version__}, latest: {version}).")
 
 		except requests.RequestException:
-			SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Failed to check for the latest version of PySDL3, please check manually.")
+			SDL_LOGGER.Log(SDL_LOGGER.Warning, "Failed to check for the latest version of PySDL3, please check manually.")
 
 	functions, binaryMap = {module: {} for module in SDL_MODULES}, {}
 	binaryData, missing = {"system": SDL_SYSTEM, "arch": SDL_ARCH, "files": []}, None
@@ -196,7 +196,7 @@ if not __initialized__:
 				binaryData["files"] += [os.path.join(root, file) for file in files if SDL_CHECK_BINARY_NAME(file)]
 
 		else:
-			SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Binary path does not exist.")
+			SDL_LOGGER.Log(SDL_LOGGER.Warning, "Binary path does not exist.")
 
 	elif "metadata.json" in (files := os.listdir(binaryPath)):
 		with open(os.path.join(binaryPath, "metadata.json"), "r") as file:
@@ -587,7 +587,7 @@ def SDL_GENERATE_DOCS(modules: list[str] = SDL_MODULES, raw: types.ModuleType | 
 			if (_ := __module__.functions[module][func]).__name__ == "__inner__": _ = _.func
 			_.__doc__ = (descriptions[__index := __index + 1], arguments[__index], returns[__index])
 
-	result = "" if rst else f"\"\"\"\n# This file is auto-generated, do not modify it.\n__meta__ = "
+	result = "" if rst else "\"\"\"\n# This file is auto-generated, do not modify it.\n__meta__ = "
 	if not rst: result += f"{{\"target\": \"v{__version__}\", \"system\": \"{SDL_SYSTEM}\"}}\n\"\"\"\n\n"
 	result += f"from {'sdl3' if rst else ''}.SDL import * # type: ignore\n\n"
 	result += f"from {'sdl3' if rst else ''}.__init__ import {'' if rst else 'raw, '}ctypes, typing, {'SDL_POINTER' if rst else ''}"
@@ -685,7 +685,7 @@ def SDL_GET_OR_GENERATE_DOCS(*args: typing.Any, **kwargs: typing.Any) -> bytes:
 		if "SDL_GITHUB_TOKEN" in os.environ:
 			headers["Authorization"] = f"Bearer {os.environ['SDL_GITHUB_TOKEN']}"
 
-		for release in (_ := requests.get(f"https://api.github.com/repos/Aermoss/PySDL3/releases", headers = headers).json()):
+		for release in (_ := requests.get("https://api.github.com/repos/Aermoss/PySDL3/releases", headers = headers).json()):
 			if isinstance(release, str):
 				SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to get docs from github: {_[release]}")
 				break
