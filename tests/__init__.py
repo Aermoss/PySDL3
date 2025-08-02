@@ -1,3 +1,15 @@
+"""
+PySDL3 Test Suite
+
+This package contains tests for PySDL3 functionality, including:
+- Core functionality tests (TEST_*.py)
+- Custom libraries test suite (TEST_custom_libraries.py)
+
+For custom compiled SDL3 libraries, use the setup utility in the project root:
+    python3 custom_libraries_setup.py /path/to/custom/libraries
+    python3 tests/TEST_custom_libraries.py /path/to/custom/libraries
+"""
+
 import os, sys, collections.abc as abc
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -13,6 +25,9 @@ from tests.TEST_init import *
 from tests.TEST_locale import *
 from tests.TEST_version import *
 from tests.TEST_video import *
+from tests.TEST_coverage_evaluation import *
+from tests.TEST_module_analyzer import *
+from tests.TEST_runner import *
 
 @atexit.register
 def TEST_RunAllTests() -> None:
