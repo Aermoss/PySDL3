@@ -32,13 +32,13 @@ if SDL_BYTEORDER == SDL_LIL_ENDIAN:
 else:
     SDL_AUDIO_S16, SDL_AUDIO_S32, SDL_AUDIO_F32 = SDL_AUDIO_S16BE, SDL_AUDIO_S32BE, SDL_AUDIO_F32BE
 
-SDL_AUDIO_BITSIZE: abc.Callable[[SDL_AudioFormat], int] = lambda x: x & SDL_AUDIO_MASK_BITSIZE
-SDL_AUDIO_BYTESIZE: abc.Callable[[SDL_AudioFormat], int] = lambda x: SDL_AUDIO_BITSIZE(x) / 8
+SDL_AUDIO_BITSIZE: abc.Callable[[SDL_AudioFormat], int] = lambda x: x.value & SDL_AUDIO_MASK_BITSIZE
+SDL_AUDIO_BYTESIZE: abc.Callable[[SDL_AudioFormat], int] = lambda x: int(SDL_AUDIO_BITSIZE(x) / 8)
 
-SDL_AUDIO_ISFLOAT: abc.Callable[[SDL_AudioFormat], int] = lambda x: x & SDL_AUDIO_MASK_FLOAT
-SDL_AUDIO_ISBIGENDIAN: abc.Callable[[SDL_AudioFormat], int] = lambda x: x & SDL_AUDIO_MASK_BIG_ENDIAN
+SDL_AUDIO_ISFLOAT: abc.Callable[[SDL_AudioFormat], int] = lambda x: x.value & SDL_AUDIO_MASK_FLOAT
+SDL_AUDIO_ISBIGENDIAN: abc.Callable[[SDL_AudioFormat], int] = lambda x: x.value & SDL_AUDIO_MASK_BIG_ENDIAN
 SDL_AUDIO_ISLITTLEENDIAN: abc.Callable[[SDL_AudioFormat], bool] = lambda x: not SDL_AUDIO_ISBIGENDIAN(x)
-SDL_AUDIO_ISSIGNED: abc.Callable[[SDL_AudioFormat], int] = lambda x: x & SDL_AUDIO_MASK_SIGNED
+SDL_AUDIO_ISSIGNED: abc.Callable[[SDL_AudioFormat], int] = lambda x: x.value & SDL_AUDIO_MASK_SIGNED
 SDL_AUDIO_ISINT: abc.Callable[[SDL_AudioFormat], bool] = lambda x: not SDL_AUDIO_ISFLOAT(x)
 SDL_AUDIO_ISUNSIGNED: abc.Callable[[SDL_AudioFormat], bool] = lambda x: not SDL_AUDIO_ISSIGNED(x)
 

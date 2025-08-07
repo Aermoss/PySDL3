@@ -5,7 +5,7 @@ from . import SDL_VA_LIST, SDL_DEREFERENCE, SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC
 SDL_arraysize: abc.Callable[[typing.Any], int] = lambda array: \
     ctypes.sizeof(array) // ctypes.sizeof(array[0])
 
-def SDL_FOURCC(a: int, b: int, c: int, d: int) -> int:
+def SDL_FOURCC(a: str, b: str, c: str, d: str) -> int:
     return (ord(a) << 0) | (ord(b) << 8) | (ord(c) << 16) | (ord(d) << 24)
 
 Sint8: typing.TypeAlias = SDL_TYPE["Sint8", ctypes.c_int8]
@@ -122,7 +122,7 @@ SDL_memset: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_memset", ctypes.c_void
 SDL_memset4: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_memset4", ctypes.c_void_p, [ctypes.c_void_p, ctypes.c_uint32, ctypes.c_size_t], SDL_BINARY]
 
 SDL_zero: abc.Callable[[ctypes.c_void_p], ctypes.c_void_p] = lambda x: SDL_memset(ctypes.byref(x), 0, ctypes.sizeof(x))
-SDL_zerop: abc.Callable[[ctypes.c_void_p], ctypes.c_void_p] = lambda x: SDL_memset(x, 0, ctypes.sizeof(x.contents))
+SDL_zerop: abc.Callable[[ctypes.c_void_p], ctypes.c_void_p] = lambda x: SDL_memset(x, 0, ctypes.sizeof(SDL_DEREFERENCE(x)))
 SDL_zeroa: abc.Callable[[ctypes.c_void_p], ctypes.c_void_p] = lambda x: SDL_memset(x, 0, ctypes.sizeof(x))
 
 SDL_memcmp: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_memcmp", ctypes.c_int, [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t], SDL_BINARY]

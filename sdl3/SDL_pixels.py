@@ -31,21 +31,22 @@ SDL_PackedLayout: typing.TypeAlias = SDL_TYPE["SDL_PackedLayout", SDL_ENUM]
 SDL_PACKEDLAYOUT_NONE, SDL_PACKEDLAYOUT_332, SDL_PACKEDLAYOUT_4444, SDL_PACKEDLAYOUT_1555, SDL_PACKEDLAYOUT_5551, SDL_PACKEDLAYOUT_565, \
     SDL_PACKEDLAYOUT_8888, SDL_PACKEDLAYOUT_2101010, SDL_PACKEDLAYOUT_1010102 = range(9)
 
+SDL_DEFINE_PIXELFOURCC: abc.Callable[[str, str, str, str], int] = SDL_FOURCC
+
 def SDL_DEFINE_PIXELFORMAT(ptype: int, order: int, layout: int, bits: int, pbytes: int) -> int:
     return (1 << 28) | (ptype << 24) | (order << 20) | (layout << 16) | (bits << 8) | (pbytes << 0)
 
-SDL_DEFINE_PIXELFOURCC: abc.Callable[[int, int, int, int], int] = SDL_FOURCC
 SDL_ISPIXELFORMAT_FOURCC: abc.Callable[..., bool] = lambda format: format and SDL_PIXELFLAG(format) != 1
 
-SDL_PIXELFLAG: abc.Callable[..., int] = lambda x: (x >> 28) & 0x0F
-SDL_PIXELTYPE: abc.Callable[..., int] = lambda x: (x >> 24) & 0x0F
-SDL_PIXELORDER: abc.Callable[..., int] = lambda x: (x >> 20) & 0x0F
-SDL_PIXELLAYOUT: abc.Callable[..., int] = lambda x: (x >> 16) & 0x0F
-SDL_BITSPERPIXEL: abc.Callable[..., int] = lambda x: (x >> 8) & 0xFF
+SDL_PIXELFLAG: abc.Callable[..., int] = lambda format: (format >> 28) & 0x0F
+SDL_PIXELTYPE: abc.Callable[..., int] = lambda format: (format >> 24) & 0x0F
+SDL_PIXELORDER: abc.Callable[..., int] = lambda format: (format >> 20) & 0x0F
+SDL_PIXELLAYOUT: abc.Callable[..., int] = lambda format: (format >> 16) & 0x0F
+SDL_BITSPERPIXEL: abc.Callable[..., int] = lambda format: 0 if SDL_ISPIXELFORMAT_FOURCC(format) else (format >> 8) & 0xFF
 
-def SDL_BYTESPERPIXEL(x: int) -> int:
-    if not SDL_ISPIXELFORMAT_FOURCC(x): return (x >> 0) & 0xFF
-    else: return 2 if x in (SDL_PIXELFORMAT_YUY2, SDL_PIXELFORMAT_UYVY, SDL_PIXELFORMAT_YVYU, SDL_PIXELFORMAT_P010) else 1
+def SDL_BYTESPERPIXEL(format: int) -> int:
+    if not SDL_ISPIXELFORMAT_FOURCC(format): return (format >> 0) & 0xFF
+    else: return 2 if format in [SDL_PIXELFORMAT_YUY2, SDL_PIXELFORMAT_UYVY, SDL_PIXELFORMAT_YVYU, SDL_PIXELFORMAT_P010] else 1
 
 def SDL_ISPIXELFORMAT_INDEXED(format: int) -> bool:
     return not SDL_ISPIXELFORMAT_FOURCC(format) and (SDL_PIXELTYPE(format) in [SDL_PIXELTYPE_INDEX1, SDL_PIXELTYPE_INDEX2, SDL_PIXELTYPE_INDEX4, SDL_PIXELTYPE_INDEX8])

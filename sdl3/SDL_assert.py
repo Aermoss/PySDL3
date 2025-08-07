@@ -10,8 +10,6 @@ SDL_AssertState: typing.TypeAlias = SDL_TYPE["SDL_AssertState", SDL_ENUM]
 SDL_ASSERTION_RETRY, SDL_ASSERTION_BREAK, SDL_ASSERTION_ABORT, \
     SDL_ASSERTION_IGNORE, SDL_ASSERTION_ALWAYS_IGNORE = range(5)
 
-SDL_AssertData: typing.TypeAlias = SDL_TYPE["SDL_AssertData", ctypes.c_void_p]
-
 class SDL_AssertData(ctypes.Structure):
     _fields_ = [
         ("always_ignore", ctypes.c_bool),
@@ -20,7 +18,7 @@ class SDL_AssertData(ctypes.Structure):
         ("filename", ctypes.c_char_p),
         ("linenum", ctypes.c_int),
         ("function", ctypes.c_char_p),
-        ("next", SDL_POINTER[SDL_AssertData])
+        ("next", SDL_POINTER[ctypes.c_void_p])
     ]
 
 SDL_ReportAssertion: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ReportAssertion", SDL_AssertState, [SDL_POINTER[SDL_AssertData], ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int], SDL_BINARY]

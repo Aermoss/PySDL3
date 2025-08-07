@@ -10,8 +10,6 @@ SDL_hid_bus_type: typing.TypeAlias = SDL_TYPE["SDL_hid_bus_type", SDL_ENUM]
 SDL_HID_API_BUS_UNKNOWN, SDL_HID_API_BUS_USB, SDL_HID_API_BUS_BLUETOOTH, \
     SDL_HID_API_BUS_I2C, SDL_HID_API_BUS_SPI = range(5)
 
-SDL_hid_device_info: typing.TypeAlias = SDL_TYPE["SDL_hid_device_info", ctypes.c_void_p]
-
 class SDL_hid_device_info(ctypes.Structure):
     _fields_ = [
         ("path", ctypes.c_char_p),
@@ -28,7 +26,7 @@ class SDL_hid_device_info(ctypes.Structure):
         ("interface_subclass", ctypes.c_int),
         ("interface_protocol", ctypes.c_int),
         ("bus_type", SDL_hid_bus_type),
-        ("next", SDL_POINTER[SDL_hid_device_info])
+        ("next", SDL_POINTER[ctypes.c_void_p])
     ]
 
 SDL_hid_init: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_hid_init", ctypes.c_int, [], SDL_BINARY]

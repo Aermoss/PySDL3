@@ -31,24 +31,19 @@ class SDL_FRect(ctypes.Structure):
         ("h", ctypes.c_float)
     ]
 
-LP_SDL_Point: typing.TypeAlias = SDL_POINTER[SDL_Point]
-LP_SDL_FPoint: typing.TypeAlias = SDL_POINTER[SDL_FPoint]
-LP_SDL_Rect: typing.TypeAlias = SDL_POINTER[SDL_Rect]
-LP_SDL_FRect: typing.TypeAlias = SDL_POINTER[SDL_FRect]
-
-def SDL_RectToFRect(rect: LP_SDL_Rect, frect: LP_SDL_FRect) -> None:
+def SDL_RectToFRect(rect: SDL_Rect, frect: SDL_FRect) -> None:
     rect, frect = SDL_DEREFERENCE(rect), SDL_DEREFERENCE(frect)
     frect.x, frect.y, frect.w, frect.h = float(rect.x), float(rect.y), float(rect.w), float(rect.h)
     
-def SDL_PointInRect(p: LP_SDL_Point, r: LP_SDL_Rect) -> bool:
+def SDL_PointInRect(p: SDL_Point, r: SDL_Rect) -> bool:
     p, r = SDL_DEREFERENCE(p), SDL_DEREFERENCE(r)
     return p.x >= r.x and p.x < r.x + r.w and p.y >= r.y and p.y < r.y + r.h
 
-def SDL_RectEmpty(r: LP_SDL_Rect) -> bool:
+def SDL_RectEmpty(r: SDL_Rect) -> bool:
     r = SDL_DEREFERENCE(r)
     return r.w <= 0 or r.h <= 0
 
-def SDL_RectEquals(a: LP_SDL_Rect, b: LP_SDL_Rect) -> bool:
+def SDL_RectEquals(a: SDL_Rect, b: SDL_Rect) -> bool:
     a, b = SDL_DEREFERENCE(a), SDL_DEREFERENCE(b)
     return a.x == b.x and a.y == b.y and a.w == b.w and a.h == b.h
 
@@ -58,20 +53,19 @@ SDL_GetRectUnion: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRectUnion", c
 SDL_GetRectEnclosingPoints: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRectEnclosingPoints", ctypes.c_bool, [SDL_POINTER[SDL_Point], ctypes.c_int, SDL_POINTER[SDL_Rect], SDL_POINTER[SDL_Rect]], SDL_BINARY]
 SDL_GetRectAndLineIntersection: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRectAndLineIntersection", ctypes.c_bool, [SDL_POINTER[SDL_Rect], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int], SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 
-def SDL_PointInRectFloat(p: LP_SDL_FPoint, r: LP_SDL_FRect) -> bool:
+def SDL_PointInRectFloat(p: SDL_FPoint, r: SDL_FRect) -> bool:
     p, r = SDL_DEREFERENCE(p), SDL_DEREFERENCE(r)
     return p.x >= r.x and p.x < r.x + r.w and p.y >= r.y and p.y < r.y + r.h
 
-def SDL_RectEmptyFloat(r: LP_SDL_FRect) -> bool:
+def SDL_RectEmptyFloat(r: SDL_FRect) -> bool:
     r = SDL_DEREFERENCE(r)
     return r.w <= 0 or r.h <= 0
 
-def SDL_RectsEqualEpsilon(a: LP_SDL_FRect, b: LP_SDL_FRect, epsilon: float) -> bool:
+def SDL_RectsEqualEpsilon(a: SDL_FRect, b: SDL_FRect, epsilon: float) -> bool:
     a, b = SDL_DEREFERENCE(a), SDL_DEREFERENCE(b)
     return abs(a.x - b.x) < epsilon and abs(a.y - b.y) < epsilon and abs(a.w - b.w) < epsilon and abs(a.h - b.h) < epsilon
 
-def SDL_RectsEqualFloat(a: LP_SDL_FRect, b: LP_SDL_FRect) -> bool:
-    a, b = SDL_DEREFERENCE(a), SDL_DEREFERENCE(b)
+def SDL_RectsEqualFloat(a: SDL_FRect, b: SDL_FRect) -> bool:
     return SDL_RectsEqualEpsilon(a, b, SDL_FLT_EPSILON)
 
 SDL_HasRectIntersectionFloat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HasRectIntersectionFloat", ctypes.c_bool, [SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FRect]], SDL_BINARY]

@@ -21,9 +21,6 @@ SDL_SetAtomicInt: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetAtomicInt", c
 SDL_GetAtomicInt: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAtomicInt", ctypes.c_int, [SDL_POINTER[SDL_AtomicInt]], SDL_BINARY]
 SDL_AddAtomicInt: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AddAtomicInt", ctypes.c_int, [SDL_POINTER[SDL_AtomicInt], ctypes.c_int], SDL_BINARY]
 
-class LP_SDL_AtomicInt(ctypes._Pointer):
-    ...
-
 SDL_AtomicIncRef: abc.Callable[[SDL_POINTER[SDL_AtomicInt]], ctypes.c_int] = lambda a: SDL_AddAtomicInt(a, 1)
 SDL_AtomicDecRef: abc.Callable[[SDL_POINTER[SDL_AtomicInt]], bool] = lambda a: SDL_AddAtomicInt(a, -1) == 1
 

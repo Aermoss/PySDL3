@@ -223,12 +223,9 @@ if not __initialized__:
                     if (name.split(".")[0] if "." in name else name).endswith(_name):
                         binaryMap[module] = ctypes.CDLL(os.path.abspath(path))
 
-BaseType = typing.TypeVar("BaseType")
-TargetType = typing.TypeVar("TargetType")
-
-def SDL_ARRAY(*args: BaseType, **kwargs: TargetType) -> tuple[ctypes.Array[BaseType | TargetType], int]:
+def SDL_ARRAY(*values, type: typing.Any | None = None) -> tuple[typing.Any, int]:
     """Create a ctypes array from the given arguments."""
-    return ((kwargs.get("type", None) or args[0].__class__) * len(args))(*args), len(args)
+    return ((type or values[0].__class__) * len(values))(*values), len(values)
 
 def SDL_DEREFERENCE(value: typing.Any) -> typing.Any:
     """Dereference a ctypes pointer or object."""
@@ -270,7 +267,7 @@ class SDL_FUNC:
             assert isinstance(key[0], str), "Expected a string as the first argument."
             assert isinstance(key[1], type) or key[1] is None, "Expected a type as the second argument."
             assert isinstance(key[2], list), "Expected a list as the third argument."
-            assert ... not in key[2] or key[2].count(...) == 1, "Expected at most 1 '...' in the argument list."
+            assert ... not in key[2] or key[2].count(...) == 1, "Expected at most 1 '...' in the argument list." # type: ignore
             assert ... not in key[2] or key[2][-1] == ..., "Expected '...' at the end of the argument list."
             assert isinstance(key[3], str), "Expected a string as the fourth argument."
             assert key[3] in SDL_MODULES, "Unknown binary."
@@ -358,16 +355,16 @@ class SDL_FUNC_TYPE:
             assert isinstance(key[1], type) or key[1] is None, "Expected a type as the second argument."
             assert isinstance(key[2], list), "Expected a list as the third argument."
 
-        _, ctypes._c_functype_cache = ctypes._c_functype_cache, {}
+        _, ctypes._c_functype_cache = ctypes._c_functype_cache, {} # type: ignore
         value = ctypes.CFUNCTYPE(key[1], *key[2])
-        value.__name__, ctypes._c_functype_cache = key[0], _
+        value.__name__, ctypes._c_functype_cache = key[0], _ # type: ignore
         return value
 
 SDL_ENUM: typing.TypeAlias = SDL_TYPE["SDL_ENUM", ctypes.c_int]
 SDL_VA_LIST: typing.TypeAlias = SDL_TYPE["SDL_VA_LIST", ctypes.c_char_p]
 
 def SDL_PARSE_ARGUMENTS(argc: ctypes.c_int, argv: SDL_POINTER[ctypes.c_char_p]) -> list[str]:
-    return [argv[i].decode("utf-8") for i in range(argc)]
+    return [argv[i].decode("utf-8") for i in range(argc.value)] # type: ignore
 
 def SDL_PROCESS_DESCRIPTION(description: str, url: str | None = None, rst: bool = False) -> str:
     """Process HTML description."""
@@ -410,7 +407,7 @@ async def SDL_GET_LATEST_RELEASES() -> dict[str, str]:
     await session.close()
     return releases
 
-async def SDL_GET_FUNC_DESCRIPTIONS(funcs: list[tuple[str, str]], rst: bool = False) -> tuple[list[str], list[list[str]]]:
+async def SDL_GET_FUNC_DESCRIPTIONS(funcs: list[tuple[str, str]], rst: bool = False) -> tuple[list[str], list[list[str]], list[str]]:
     """Get descriptions, arguments and return types of SDL3 functions from the official SDL3 wiki."""
     session, tasks = aiohttp.ClientSession(), []
 
@@ -458,7 +455,7 @@ async def SDL_GET_FUNC_DESCRIPTIONS(funcs: list[tuple[str, str]], rst: bool = Fa
     await session.close()
     return descriptions, arguments, returns
 
-async def SDL_GET_STRUCT_DESCRIPTIONS(structs: list[tuple[str, str]], rst: bool = False) -> tuple[list[str], list[list[str]]]:
+async def SDL_GET_STRUCT_DESCRIPTIONS(structs: list[tuple[str, str]], rst: bool = False) -> tuple[list[str], list[dict[str, typing.Any]]]:
     """Get descriptions and members of SDL3 structures from the official SDL3 wiki."""
     session, tasks = aiohttp.ClientSession(), []
 
@@ -518,7 +515,7 @@ async def SDL_GET_STRUCT_DESCRIPTIONS(structs: list[tuple[str, str]], rst: bool 
     await session.close()
     return descriptions, members
 
-def SDL_GET_MODULE_BY_NAME(name: str) -> str:
+def SDL_GET_MODULE_BY_NAME(name: str) -> str | None:
     """Get the module of an SDL3 function/structure by its name."""
 
     for prefix, module in sorted({"SDL": "SDL3", "IMG": "SDL3_image", "Mix": "SDL3_mixer", "TTF": "SDL3_ttf", "RTF": "SDL3_rtf", "NET": "SDL3_net", "SDL_ShaderCross": "SDL3_shadercross"}.items(), key = lambda x: -len(x[0])):
@@ -565,11 +562,13 @@ def SDL_GENERATE_DOCS(modules: list[str] = SDL_MODULES, raw: types.ModuleType | 
             if (_ := __module__.functions[module][func]).__name__ == "__inner__": _ = _.func
             _.__doc__ = (descriptions[__index := __index + 1], arguments[__index], returns[__index])
 
+    structs = False
     result = "" if rst else "\"\"\"\n# This file is auto-generated, do not modify it.\n__meta__ = "
     if not rst: result += f"{{\"target\": \"v{__version__}\", \"system\": \"{SDL_SYSTEM}\"}}\n\"\"\"\n\n"
-    result += f"from {'sdl3' if rst else ''}.SDL import * # type: ignore\n\n"
-    result += f"from {'sdl3' if rst else ''}. import {'' if rst else 'raw, '}ctypes, typing, {'SDL_POINTER' if rst else ''}"
-    result += "\n" if rst else f"\\\n{' ' * 4}SDL_POINTER, SDL_CLONE_METACLASS as SDL_CloneMeta\n\n"
+    result += f"from {'sdl3' if rst else ''}.SDL import * # type: ignore\n"
+    result += f"from {'sdl3' if rst else '.'} import {'' if rst else 'raw, '}SDL_POINTER"
+    result += "\n\n" if rst or not structs else f", \\\n{' ' * 4}SDL_CLONE_METACLASS as SDL_CloneMeta\n\n"
+    result += "import ctypes, typing\n\n"
     types, definitions = set(), ""
 
     def SDL_GET_FULL_NAME(type: type | None) -> str:
@@ -578,9 +577,9 @@ def SDL_GENERATE_DOCS(modules: list[str] = SDL_MODULES, raw: types.ModuleType | 
         if type.__name__.startswith("c_"): return f"ctypes.{type.__name__}"
         else: return type.__name__
 
-    if not rst and raw is not None:
-        structs = [(SDL_GET_MODULE_BY_NAME(name), name) for name in dir(raw) if hasattr(getattr(raw, name), "_fields_") \
-            and not name.startswith("_") and "_" in name and name not in ["SDL_GamepadBinding", "SDL_TLSID"]]
+    if not rst and raw is not None and structs:
+        structs = [(module, name) for name in dir(raw) if hasattr(getattr(raw, name), "_fields_") and not name.startswith("_") \
+            and "_" in name and name not in ["SDL_GamepadBinding", "SDL_TLSID"] and (module := SDL_GET_MODULE_BY_NAME(name))]
 
         for (module, name), description, members in zip(structs, *asyncio.run(SDL_GET_STRUCT_DESCRIPTIONS(structs))):
             if not description or not members:
@@ -748,7 +747,8 @@ if not __initialized__:
     else:
         try:
             if not (__frozen__ or __release__):
-                if os.path.exists(__doc_file__): os.remove(__doc_file__)
+                if os.path.exists(__doc_file__):
+                    os.remove(__doc_file__)
 
         except PermissionError as exc:
             SDL_LOGGER.Log(SDL_LOGGER.Error, f"Failed to remove docs: {exc}.")
