@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 SDL_MS_PER_SECOND: int = 1000
 SDL_US_PER_SECOND: int = 1000000

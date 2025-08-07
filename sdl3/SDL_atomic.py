@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 SDL_SpinLock: typing.TypeAlias = SDL_TYPE["SDL_SpinLock", ctypes.c_int]
 

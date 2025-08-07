@@ -1,4 +1,4 @@
-from . import sys, array
+import sys, array
 
 SDL_LIL_ENDIAN, SDL_BIG_ENDIAN = 1234, 4321
 SDL_BYTEORDER: int = {"little": SDL_LIL_ENDIAN, "big": SDL_BIG_ENDIAN}[sys.byteorder]

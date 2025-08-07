@@ -1,10 +1,10 @@
-from . import ctypes, typing, \
-    SDL_POINTER, SDL_TYPE, SDL_ENUM, SDL_FUNC_TYPE
+import ctypes, typing
 
-from .SDL_rect import SDL_Rect
-from .SDL_properties import SDL_PropertiesID
+from . import SDL_POINTER, SDL_TYPE, SDL_ENUM, SDL_FUNC_TYPE
 from .SDL_ttf import TTF_Font, TTF_Text, TTF_SubString
 from .SDL_pixels import SDL_FColor
+from .SDL_properties import SDL_PropertiesID
+from .SDL_rect import SDL_Rect
 
 TTF_DrawCommand: typing.TypeAlias = SDL_TYPE["TTF_DrawCommand", SDL_ENUM]
 

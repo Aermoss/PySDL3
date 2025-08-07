@@ -1,11 +1,12 @@
-from . import ctypes, typing, abc, SDL_TYPE
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_TYPE
 from .SDL_scancode import SDL_Scancode
 
 SDL_Keycode: typing.TypeAlias = SDL_TYPE["SDL_Keycode", ctypes.c_uint32]
 
 SDLK_EXTENDED_MASK, SDLK_SCANCODE_MASK = 1 << 29, 1 << 30
-SDL_SCANCODE_TO_KEYCODE: abc.Callable[[SDL_Scancode], SDL_Keycode] = lambda x: x | SDLK_SCANCODE_MASK
+SDL_SCANCODE_TO_KEYCODE: abc.Callable[[SDL_Scancode], SDL_Keycode] = lambda x: x.value | SDLK_SCANCODE_MASK
 
 SDLK_UNKNOWN: int = 0x00000000
 SDLK_RETURN: int = 0x0000000d

@@ -1,5 +1,6 @@
-from . import os, inspect, ctypes, typing, abc, re, \
-    SDL_BINARY, SDL_FUNC_TYPE, SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_ENUM
+import os, inspect, ctypes, typing, collections.abc as abc, re
+
+from . import SDL_BINARY, SDL_FUNC_TYPE, SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_ENUM
 
 SDL_ASSERT_LEVEL: int = 2
 SDL_NULL_WHILE_LOOP_CONDITION: int = 0

@@ -1,6 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC, SDL_IMAGE_BINARY
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_FUNC, SDL_IMAGE_BINARY
 from .SDL_surface import SDL_Surface
 from .SDL_render import SDL_Texture, SDL_Renderer
 from .SDL_iostream import SDL_IOStream

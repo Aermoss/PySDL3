@@ -1,6 +1,6 @@
-from . import ctypes, typing, \
-    SDL_TYPE, SDL_ENUM
+import ctypes, typing
 
+from . import SDL_TYPE, SDL_ENUM
 from .SDL_touch import SDL_TouchID
 from .SDL_mouse import SDL_MouseID
 

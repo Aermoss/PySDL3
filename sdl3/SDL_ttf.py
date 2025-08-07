@@ -1,14 +1,15 @@
-from . import ctypes, typing, abc, \
-    SDL_PLATFORM_SPECIFIC, SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_TTF_BINARY, SDL_ENUM
+import ctypes, typing, collections.abc as abc
 
-from .SDL_pixels import SDL_Color
-from .SDL_surface import SDL_Surface
-from .SDL_rect import SDL_Rect, SDL_FPoint
+from . import SDL_PLATFORM_SPECIFIC, SDL_POINTER, \
+    SDL_FUNC, SDL_TYPE, SDL_TTF_BINARY, SDL_ENUM
 from .SDL_gpu import SDL_GPUDevice, SDL_GPUTexture
 from .SDL_properties import SDL_PropertiesID
+from .SDL_rect import SDL_Rect, SDL_FPoint
+from .SDL_surface import SDL_Surface
 from .SDL_version import SDL_VERSIONNUM
 from .SDL_iostream import SDL_IOStream
 from .SDL_render import SDL_Renderer
+from .SDL_pixels import SDL_Color
 
 SDL_TTF_MAJOR_VERSION, SDL_TTF_MINOR_VERSION, SDL_TTF_MICRO_VERSION = 3, 2, 2
 SDL_TTF_VERSION: int = SDL_VERSIONNUM(SDL_TTF_MAJOR_VERSION, SDL_TTF_MINOR_VERSION, SDL_TTF_MICRO_VERSION)
@@ -189,9 +190,6 @@ TTF_CreateGPUTextEngineWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC[
 TTF_PROP_GPU_TEXT_ENGINE_DEVICE: bytes = "SDL_ttf.gpu_text_engine.create.device".encode()
 TTF_PROP_GPU_TEXT_ENGINE_ATLAS_TEXTURE_SIZE: bytes = "SDL_ttf.gpu_text_engine.create.atlas_texture_size".encode()
 
-class TTF_GPUAtlasDrawSequence(ctypes.c_void_p):
-    ...
-
 class TTF_GPUAtlasDrawSequence(ctypes.Structure):
     _fields_ = [
         ("atlas_texture", SDL_POINTER[SDL_GPUTexture]),
@@ -201,7 +199,7 @@ class TTF_GPUAtlasDrawSequence(ctypes.Structure):
         ("indices", SDL_POINTER[ctypes.c_int]),
         ("num_indices", ctypes.c_int),
         ("image_type", TTF_ImageType),
-        ("next", SDL_POINTER[TTF_GPUAtlasDrawSequence])
+        ("next", SDL_POINTER[ctypes.c_void_p])
     ]
 
 TTF_GetGPUTextDrawData: abc.Callable[..., typing.Any] = SDL_FUNC["TTF_GetGPUTextDrawData", SDL_POINTER[TTF_GPUAtlasDrawSequence], [SDL_POINTER[TTF_Text]], SDL_TTF_BINARY]

@@ -1,6 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 from .SDL_video import SDL_Window
 
 SDL_MessageBoxFlags: typing.TypeAlias = SDL_TYPE["SDL_MessageBoxFlags", ctypes.c_uint32]

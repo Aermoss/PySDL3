@@ -1,6 +1,7 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_ENUM, \
+    SDL_FUNC, SDL_TYPE, SDL_BINARY
 from .SDL_properties import SDL_PropertiesID
 from .SDL_keycode import SDL_Keycode, SDL_Keymod
 from .SDL_scancode import SDL_Scancode

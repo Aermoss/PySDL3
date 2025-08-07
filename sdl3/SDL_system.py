@@ -1,6 +1,7 @@
-from . import ctypes, typing, abc, \
-    SDL_PLATFORM_SPECIFIC, SDL_POINTER, SDL_FUNC, SDL_FUNC_TYPE, SDL_TYPE, SDL_BINARY, SDL_ENUM
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_PLATFORM_SPECIFIC, SDL_POINTER, \
+    SDL_FUNC, SDL_FUNC_TYPE, SDL_TYPE, SDL_BINARY, SDL_ENUM
 from .SDL_video import SDL_DisplayID
 
 if SDL_PLATFORM_SPECIFIC(system = ["Windows"]):

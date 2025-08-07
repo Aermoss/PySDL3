@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 SDL_BlendMode: typing.TypeAlias = SDL_TYPE["SDL_BlendMode", ctypes.c_uint32]
 

@@ -1,6 +1,7 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_RTF_BINARY, SDL_ENUM
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_FUNC_TYPE, \
+    SDL_FUNC, SDL_TYPE, SDL_RTF_BINARY, SDL_ENUM
 from .SDL_pixels import SDL_Color
 from .SDL_iostream import SDL_IOStream
 from .SDL_error import SDL_SetError, SDL_GetError

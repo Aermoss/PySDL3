@@ -1,6 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC, SDL_NET_BINARY
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_FUNC, SDL_NET_BINARY
 from .SDL_version import SDL_VERSIONNUM
 
 SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_MICRO_VERSION = 3, 0, 0

@@ -1,8 +1,8 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
 
-from .SDL_video import SDL_Window
+from . import SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_BINARY
 from .SDL_stdinc import SDL_FunctionPointer
+from .SDL_video import SDL_Window
 
 class VkInstance(ctypes.c_void_p):
     ...

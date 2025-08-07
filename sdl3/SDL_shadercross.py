@@ -1,8 +1,8 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_ENUM, SDL_SHADERCROSS_BINARY
+import ctypes, typing, collections.abc as abc
 
-from .SDL_properties import SDL_PropertiesID
+from . import SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_ENUM, SDL_SHADERCROSS_BINARY
 from .SDL_gpu import SDL_GPUDevice, SDL_GPUShaderFormat, SDL_GPUShader, SDL_GPUComputePipeline
+from .SDL_properties import SDL_PropertiesID
 
 SDL_SHADERCROSS_MAJOR_VERSION, SDL_SHADERCROSS_MINOR_VERSION, SDL_SHADERCROSS_MICRO_VERSION = 3, 0, 0
 

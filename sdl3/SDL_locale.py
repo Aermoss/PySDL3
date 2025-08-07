@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC, SDL_BINARY
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_POINTER, SDL_FUNC, SDL_BINARY
 
 class SDL_Locale(ctypes.Structure):
     _fields_ = [

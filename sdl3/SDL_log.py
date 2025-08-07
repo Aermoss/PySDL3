@@ -1,5 +1,7 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_VA_LIST, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_POINTER, SDL_VA_LIST, SDL_TYPE, \
+    SDL_FUNC, SDL_FUNC_TYPE, SDL_BINARY, SDL_ENUM
 
 SDL_LogCategory: typing.TypeAlias = SDL_TYPE["SDL_LogCategory", SDL_ENUM]
 

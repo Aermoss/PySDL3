@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_FUNC, SDL_BINARY
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_FUNC, SDL_BINARY
 
 SDL_CACHELINE_SIZE: int = 128
 

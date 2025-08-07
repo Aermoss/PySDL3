@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_BINARY, SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_BINARY, SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE
 
 class SDL_AsyncIO(ctypes.c_void_p):
     ...

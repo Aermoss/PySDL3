@@ -1,6 +1,7 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_FUNC_TYPE, \
+    SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
 from .SDL_video import SDL_Window
 from .SDL_properties import SDL_PropertiesID
 

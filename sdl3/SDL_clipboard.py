@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_BINARY
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_BINARY
 
 SDL_SetClipboardText: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetClipboardText", ctypes.c_bool, [ctypes.c_char_p], SDL_BINARY]
 SDL_GetClipboardText: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetClipboardText", ctypes.c_char_p, [], SDL_BINARY]

@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_VA_LIST, SDL_FUNC, SDL_BINARY
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_VA_LIST, SDL_FUNC, SDL_BINARY
 
 SDL_SetError: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetError", ctypes.c_bool, [ctypes.c_char_p, ...], SDL_BINARY]
 SDL_SetErrorV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetErrorV", ctypes.c_bool, [ctypes.c_char_p, SDL_VA_LIST], SDL_BINARY]

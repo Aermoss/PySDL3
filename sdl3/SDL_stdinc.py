@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_VA_LIST, SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_VA_LIST, SDL_DEREFERENCE, SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 SDL_arraysize: abc.Callable[[typing.Any], int] = lambda array: \
     ctypes.sizeof(array) // ctypes.sizeof(array[0])

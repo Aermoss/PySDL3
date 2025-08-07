@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_FUNC, SDL_BINARY
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_FUNC, SDL_BINARY
 
 SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_MICRO_VERSION = 3, 2, 18
 

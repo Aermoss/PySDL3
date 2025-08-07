@@ -1,9 +1,8 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_BINARY
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_BINARY
+from .SDL_filesystem import SDL_GlobFlags, SDL_EnumerateDirectoryCallback, SDL_PathInfo
 from .SDL_properties import SDL_PropertiesID
-from .SDL_filesystem import SDL_GlobFlags, \
-    SDL_EnumerateDirectoryCallback, SDL_PathInfo
 
 class SDL_StorageInterface(ctypes.Structure):
     _fields_ = [

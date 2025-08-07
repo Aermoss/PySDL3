@@ -1,6 +1,7 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_FUNC_TYPE, \
+    SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
 from .SDL_events import SDL_Event
 
 SDL_InitFlags: typing.TypeAlias = SDL_TYPE["SDL_InitFlags", ctypes.c_uint32]

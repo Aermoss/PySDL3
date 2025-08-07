@@ -1,6 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_BINARY
 from .SDL_joystick import SDL_Joystick
 
 class SDL_Haptic(ctypes.c_void_p):

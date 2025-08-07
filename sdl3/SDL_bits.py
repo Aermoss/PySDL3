@@ -1,5 +1,3 @@
-from . import *
-
 def SDL_MostSignificantBitIndex32(x: int) -> int:
     if x == 0: return -1
     b: list[int] = [0x2, 0xC, 0xF0, 0xFF00, 0xFFFF0000]

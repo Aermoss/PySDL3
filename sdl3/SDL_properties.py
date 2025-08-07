@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_FUNC_TYPE, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_FUNC_TYPE, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 SDL_PropertiesID: typing.TypeAlias = SDL_TYPE["SDL_PropertiesID", ctypes.c_uint32]
 SDL_PropertyType: typing.TypeAlias = SDL_TYPE["SDL_PropertyType", SDL_ENUM]

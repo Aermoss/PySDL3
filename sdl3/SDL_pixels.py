@@ -1,8 +1,8 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
 
-from .SDL_stdinc import SDL_FOURCC
+from . import SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 from .SDL_endian import SDL_BYTEORDER, SDL_BIG_ENDIAN
+from .SDL_stdinc import SDL_FOURCC
 
 SDL_ALPHA_OPAQUE, SDL_ALPHA_TRANSPARENT_FLOAT = 255, 1.0
 SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE_FLOAT = 0, 0.0

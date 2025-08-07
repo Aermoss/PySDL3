@@ -1,6 +1,7 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC_TYPE, SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_FUNC_TYPE, \
+    SDL_FUNC, SDL_TYPE, SDL_BINARY, SDL_ENUM
 from .SDL_stdinc import SDL_Time
 
 SDL_GetBasePath: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetBasePath", ctypes.c_char_p, [], SDL_BINARY]

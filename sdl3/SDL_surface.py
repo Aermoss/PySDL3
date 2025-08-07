@@ -1,9 +1,9 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
+from .SDL_pixels import SDL_PixelFormat, SDL_Colorspace, SDL_Palette
 from .SDL_blendmode import SDL_BlendMode
 from .SDL_properties import SDL_PropertiesID
-from .SDL_pixels import SDL_PixelFormat, SDL_Colorspace, SDL_Palette
 from .SDL_iostream import SDL_IOStream
 from .SDL_rect import SDL_Rect
 

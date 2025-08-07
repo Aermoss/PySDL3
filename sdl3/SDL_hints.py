@@ -1,5 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_FUNC_TYPE, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
+
+from . import SDL_FUNC_TYPE, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
 
 SDL_HINT_ALLOW_ALT_TAB_WHILE_GRABBED: bytes = "SDL_ALLOW_ALT_TAB_WHILE_GRABBED".encode()
 SDL_HINT_ANDROID_ALLOW_RECREATE_ACTIVITY: bytes = "SDL_ANDROID_ALLOW_RECREATE_ACTIVITY".encode()

@@ -1,6 +1,6 @@
-from . import ctypes, typing, abc, \
-    SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_BINARY
+import ctypes, typing, collections.abc as abc
 
+from . import SDL_POINTER, SDL_FUNC, SDL_TYPE, SDL_BINARY
 from .SDL_video import SDL_Window
 
 SDL_MetalView: typing.TypeAlias = SDL_TYPE["SDL_MetalView", ctypes.c_void_p]
