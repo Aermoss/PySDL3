@@ -31,10 +31,9 @@ Issues = "https://github.com/Aermoss/PySDL3/issues"
 
 [tool.setuptools]
 packages = ["sdl3"]
-include-package-data = true
 
 [tool.setuptools.package-data]
-"sdl3" = ["*.py"]
+"sdl3" = ["py.typed"]
 
 [tool.setuptools.dynamic]
 version = {attr = "sdl3.__version__"}
