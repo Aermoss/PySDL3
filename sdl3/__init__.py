@@ -1,5 +1,7 @@
 """A pure Python wrapper for SDL3."""
 
+from __future__ import annotations
+
 __version__ = "0.9.8b9"
 
 import os, sys, requests, ctypes, ctypes.util, platform, collections.abc as abc, \
