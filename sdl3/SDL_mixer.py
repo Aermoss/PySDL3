@@ -1,170 +1,179 @@
 import ctypes, typing, collections.abc as abc
 
-from . import  SDL_POINTER, SDL_FUNC_TYPE, \
-    SDL_FUNC, SDL_TYPE, SDL_MIXER_BINARY, SDL_ENUM
+from . import  SDL_POINTER, SDL_FUNC, \
+    SDL_FUNC_TYPE, SDL_MIXER_BINARY
 from .SDL_iostream import SDL_IOStream
-from .SDL_audio import SDL_AudioDeviceID, SDL_AudioSpec, SDL_AudioFormat, SDL_AUDIO_S16
+from .SDL_audio import SDL_AudioDeviceID, \
+    SDL_AudioSpec, SDL_AudioStream
+from .SDL_properties import SDL_PropertiesID
 from .SDL_version import SDL_VERSIONNUM
 
-SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION = 3, 0, 0
+class MIX_Mixer(ctypes.c_void_p):
+    ...
+
+class MIX_Audio(ctypes.c_void_p):
+    ...
+
+class MIX_Track(ctypes.c_void_p):
+    ...
+
+class MIX_Group(ctypes.c_void_p):
+    ...
+
+SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION = 3, 1, 0
 SDL_MIXER_VERSION: int = SDL_VERSIONNUM(SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION)
 
 SDL_MIXER_VERSION_ATLEAST: abc.Callable[[int, int, int], bool] = lambda x, y, z: \
     (SDL_MIXER_MAJOR_VERSION >= x) and (SDL_MIXER_MAJOR_VERSION > x or SDL_MIXER_MINOR_VERSION >= y) and \
         (SDL_MIXER_MAJOR_VERSION > x or SDL_MIXER_MINOR_VERSION > y or SDL_MIXER_MICRO_VERSION >= z)
 
-Mix_Version: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_Version", ctypes.c_int, [], SDL_MIXER_BINARY]
+MIX_Version: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_Version", ctypes.c_int, [], SDL_MIXER_BINARY]
+MIX_Init: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_Init", ctypes.c_bool, [], SDL_MIXER_BINARY]
+MIX_Quit: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_Quit", None, [], SDL_MIXER_BINARY]
 
-MIX_InitFlags: typing.TypeAlias = SDL_TYPE["MIX_InitFlags", ctypes.c_uint32]
+MIX_GetNumAudioDecoders: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetNumAudioDecoders", ctypes.c_int, [], SDL_MIXER_BINARY]
+MIX_GetAudioDecoder: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetAudioDecoder", ctypes.c_char_p, [ctypes.c_int], SDL_MIXER_BINARY]
+MIX_CreateMixerDevice: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_CreateMixerDevice", SDL_POINTER[MIX_Mixer], [SDL_AudioDeviceID, SDL_POINTER[SDL_AudioSpec]], SDL_MIXER_BINARY]
+MIX_CreateMixer: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_CreateMixer", SDL_POINTER[MIX_Mixer], [SDL_POINTER[SDL_AudioSpec]], SDL_MIXER_BINARY]
+MIX_DestroyMixer: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_DestroyMixer", None, [SDL_POINTER[MIX_Mixer]], SDL_MIXER_BINARY]
+MIX_GetMixerProperties: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetMixerProperties", SDL_PropertiesID, [SDL_POINTER[MIX_Mixer]], SDL_MIXER_BINARY]
+MIX_GetMixerFormat: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetMixerFormat", ctypes.c_bool, [SDL_POINTER[MIX_Mixer], SDL_POINTER[SDL_AudioSpec]], SDL_MIXER_BINARY]
+MIX_LoadAudio_IO: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_LoadAudio_IO", SDL_POINTER[MIX_Audio], [SDL_POINTER[MIX_Mixer], SDL_POINTER[SDL_IOStream], ctypes.c_bool, ctypes.c_bool], SDL_MIXER_BINARY]
+MIX_LoadAudio: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_LoadAudio", SDL_POINTER[MIX_Audio], [SDL_POINTER[MIX_Mixer], ctypes.c_char_p, ctypes.c_bool], SDL_MIXER_BINARY]
+MIX_LoadAudioWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_LoadAudioWithProperties", SDL_POINTER[MIX_Audio], [SDL_PropertiesID], SDL_MIXER_BINARY]
 
-MIX_INIT_FLAC: int = 0x00000001
-MIX_INIT_MOD: int = 0x00000002
-MIX_INIT_MP3: int = 0x00000008
-MIX_INIT_OGG: int = 0x00000010
-MIX_INIT_MID: int = 0x00000020
-MIX_INIT_OPUS: int = 0x00000040
-MIX_INIT_WAVPACK: int = 0x00000080
+MIX_PROP_AUDIO_LOAD_IOSTREAM_POINTER: bytes = "SDL_mixer.audio.load.iostream".encode()
+MIX_PROP_AUDIO_LOAD_CLOSEIO_BOOLEAN: bytes = "SDL_mixer.audio.load.closeio".encode()
+MIX_PROP_AUDIO_LOAD_PREDECODE_BOOLEAN: bytes = "SDL_mixer.audio.load.predecode".encode()
+MIX_PROP_AUDIO_LOAD_PREFERRED_MIXER_POINTER: bytes = "SDL_mixer.audio.load.preferred_mixer".encode()
+MIX_PROP_AUDIO_LOAD_SKIP_METADATA_TAGS_BOOLEAN: bytes = "SDL_mixer.audio.load.skip_metadata_tags".encode()
+MIX_PROP_AUDIO_DECODER_STRING: bytes = "SDL_mixer.audio.decoder".encode()
 
-Mix_Init: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_Init", MIX_InitFlags, [MIX_InitFlags], SDL_MIXER_BINARY]
-Mix_Quit: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_Quit", None, [], SDL_MIXER_BINARY]
+MIX_LoadRawAudio_IO: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_LoadRawAudio_IO", SDL_POINTER[MIX_Audio], [SDL_POINTER[MIX_Mixer], SDL_POINTER[SDL_IOStream], SDL_POINTER[SDL_AudioSpec], ctypes.c_bool], SDL_MIXER_BINARY]
+MIX_LoadRawAudio: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_LoadRawAudio", SDL_POINTER[MIX_Audio], [SDL_POINTER[MIX_Mixer], ctypes.c_void_p, ctypes.c_size_t, SDL_POINTER[SDL_AudioSpec]], SDL_MIXER_BINARY]
+MIX_LoadRawAudioNoCopy: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_LoadRawAudioNoCopy", SDL_POINTER[MIX_Audio], [SDL_POINTER[MIX_Mixer], ctypes.c_void_p, ctypes.c_size_t, SDL_POINTER[SDL_AudioSpec], ctypes.c_bool], SDL_MIXER_BINARY]
+MIX_CreateSineWaveAudio: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_CreateSineWaveAudio", SDL_POINTER[MIX_Audio], [SDL_POINTER[MIX_Mixer], ctypes.c_int, ctypes.c_float], SDL_MIXER_BINARY]
+MIX_GetAudioProperties: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetAudioProperties", SDL_PropertiesID, [SDL_POINTER[MIX_Audio]], SDL_MIXER_BINARY]
 
-MIX_CHANNELS: int = 8
+MIX_PROP_METADATA_TITLE_STRING: bytes = "SDL_mixer.metadata.title".encode()
+MIX_PROP_METADATA_ARTIST_STRING: bytes = "SDL_mixer.metadata.artist".encode()
+MIX_PROP_METADATA_ALBUM_STRING: bytes = "SDL_mixer.metadata.album".encode()
+MIX_PROP_METADATA_COPYRIGHT_STRING: bytes = "SDL_mixer.metadata.copyright".encode()
+MIX_PROP_METADATA_TRACK_NUMBER: bytes = "SDL_mixer.metadata.track".encode()
+MIX_PROP_METADATA_TOTAL_TRACKS_NUMBER: bytes = "SDL_mixer.metadata.total_tracks".encode()
+MIX_PROP_METADATA_YEAR_NUMBER: bytes = "SDL_mixer.metadata.year".encode()
+MIX_PROP_METADATA_DURATION_FRAMES_NUMBER: bytes = "SDL_mixer.metadata.duration_frames".encode()
+MIX_PROP_METADATA_DURATION_INFINITE_BOOLEAN: bytes = "SDL_mixer.metadata.duration_infinite".encode()
 
-MIX_DEFAULT_FREQUENCY: int = 44100
-MIX_DEFAULT_FORMAT: int = SDL_AUDIO_S16
-MIX_DEFAULT_CHANNELS: int = 2
-MIX_MAX_VOLUME: int = 128
+MIX_GetAudioDuration: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetAudioDuration", ctypes.c_int64, [SDL_POINTER[MIX_Audio]], SDL_MIXER_BINARY]
 
-class Mix_Chunk(ctypes.Structure):
+MIX_DURATION_UNKNOWN, MIX_DURATION_INFINITE = -1, -2
+
+MIX_GetAudioFormat: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetAudioFormat", ctypes.c_bool, [SDL_POINTER[MIX_Audio], SDL_POINTER[SDL_AudioSpec]], SDL_MIXER_BINARY]
+MIX_DestroyAudio: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_DestroyAudio", None, [SDL_POINTER[MIX_Audio]], SDL_MIXER_BINARY]
+MIX_CreateTrack: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_CreateTrack", SDL_POINTER[MIX_Track], [SDL_POINTER[MIX_Mixer]], SDL_MIXER_BINARY]
+MIX_DestroyTrack: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_DestroyTrack", None, [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_GetTrackProperties: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetTrackProperties", SDL_PropertiesID, [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_GetTrackMixer: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetTrackMixer", SDL_POINTER[MIX_Mixer], [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_SetTrackAudio: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackAudio", ctypes.c_bool, [SDL_POINTER[MIX_Track], SDL_POINTER[MIX_Audio]], SDL_MIXER_BINARY]
+MIX_SetTrackAudioStream: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackAudioStream", ctypes.c_bool, [SDL_POINTER[MIX_Track], SDL_POINTER[SDL_AudioStream]], SDL_MIXER_BINARY]
+MIX_SetTrackIOStream: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackIOStream", ctypes.c_bool, [SDL_POINTER[MIX_Track], SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_MIXER_BINARY]
+MIX_SetTrackRawIOStream: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackRawIOStream", ctypes.c_bool, [SDL_POINTER[MIX_Track], SDL_POINTER[SDL_IOStream], SDL_POINTER[SDL_AudioSpec], ctypes.c_bool], SDL_MIXER_BINARY]
+MIX_TagTrack: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_TagTrack", ctypes.c_bool, [SDL_POINTER[MIX_Track], ctypes.c_char_p], SDL_MIXER_BINARY]
+MIX_UntagTrack: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_UntagTrack", None, [SDL_POINTER[MIX_Track], ctypes.c_char_p], SDL_MIXER_BINARY]
+MIX_SetTrackPlaybackPosition: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackPlaybackPosition", ctypes.c_bool, [SDL_POINTER[MIX_Track], ctypes.c_int64], SDL_MIXER_BINARY]
+MIX_GetTrackPlaybackPosition: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetTrackPlaybackPosition", ctypes.c_int64, [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_TrackLooping: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_TrackLooping", ctypes.c_bool, [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_GetTrackAudio: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetTrackAudio", SDL_POINTER[MIX_Audio], [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_GetTrackAudioStream: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetTrackAudioStream", SDL_POINTER[SDL_AudioStream], [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_GetTrackRemaining: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetTrackRemaining", ctypes.c_int64, [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_TrackMSToFrames: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_TrackMSToFrames", ctypes.c_int64, [SDL_POINTER[MIX_Track], ctypes.c_int64], SDL_MIXER_BINARY]
+MIX_TrackFramesToMS: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_TrackFramesToMS", ctypes.c_int64, [SDL_POINTER[MIX_Track], ctypes.c_int64], SDL_MIXER_BINARY]
+MIX_AudioMSToFrames: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_AudioMSToFrames", ctypes.c_int64, [SDL_POINTER[MIX_Audio], ctypes.c_int64], SDL_MIXER_BINARY]
+MIX_AudioFramesToMS: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_AudioFramesToMS", ctypes.c_int64, [SDL_POINTER[MIX_Audio], ctypes.c_int64], SDL_MIXER_BINARY]
+MIX_MSToFrames: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_MSToFrames", ctypes.c_int64, [ctypes.c_int, ctypes.c_int64], SDL_MIXER_BINARY]
+MIX_FramesToMS: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_FramesToMS", ctypes.c_int64, [ctypes.c_int, ctypes.c_int64], SDL_MIXER_BINARY]
+MIX_PlayTrack: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_PlayTrack", ctypes.c_bool, [SDL_POINTER[MIX_Track], SDL_PropertiesID], SDL_MIXER_BINARY]
+
+MIX_PROP_PLAY_LOOPS_NUMBER: bytes = "SDL_mixer.play.loops".encode()
+MIX_PROP_PLAY_MAX_FRAME_NUMBER: bytes = "SDL_mixer.play.max_frame".encode()
+MIX_PROP_PLAY_MAX_MILLISECONDS_NUMBER: bytes = "SDL_mixer.play.max_milliseconds".encode()
+MIX_PROP_PLAY_START_FRAME_NUMBER: bytes = "SDL_mixer.play.start_frame".encode()
+MIX_PROP_PLAY_START_MILLISECOND_NUMBER: bytes = "SDL_mixer.play.start_millisecond".encode()
+MIX_PROP_PLAY_LOOP_START_FRAME_NUMBER: bytes = "SDL_mixer.play.loop_start_frame".encode()
+MIX_PROP_PLAY_LOOP_START_MILLISECOND_NUMBER: bytes = "SDL_mixer.play.loop_start_millisecond".encode()
+MIX_PROP_PLAY_FADE_IN_FRAMES_NUMBER: bytes = "SDL_mixer.play.fade_in_frames".encode()
+MIX_PROP_PLAY_FADE_IN_MILLISECONDS_NUMBER: bytes = "SDL_mixer.play.fade_in_milliseconds".encode()
+MIX_PROP_PLAY_APPEND_SILENCE_FRAMES_NUMBER: bytes = "SDL_mixer.play.append_silence_frames".encode()
+MIX_PROP_PLAY_APPEND_SILENCE_MILLISECONDS_NUMBER: bytes = "SDL_mixer.play.append_silence_milliseconds".encode()
+
+MIX_PlayTag: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_PlayTag", ctypes.c_bool, [SDL_POINTER[MIX_Mixer], ctypes.c_char_p, SDL_PropertiesID], SDL_MIXER_BINARY]
+MIX_PlayAudio: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_PlayAudio", ctypes.c_bool, [SDL_POINTER[MIX_Mixer], SDL_POINTER[MIX_Audio]], SDL_MIXER_BINARY]
+MIX_StopTrack: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_StopTrack", ctypes.c_bool, [SDL_POINTER[MIX_Track], ctypes.c_int64], SDL_MIXER_BINARY]
+MIX_StopAllTracks: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_StopAllTracks", ctypes.c_bool, [SDL_POINTER[MIX_Mixer], ctypes.c_int64], SDL_MIXER_BINARY]
+MIX_StopTag: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_StopTag", ctypes.c_bool, [SDL_POINTER[MIX_Mixer], ctypes.c_char_p, ctypes.c_int64], SDL_MIXER_BINARY]
+MIX_PauseTrack: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_PauseTrack", ctypes.c_bool, [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_PauseAllTracks: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_PauseAllTracks", ctypes.c_bool, [SDL_POINTER[MIX_Mixer]], SDL_MIXER_BINARY]
+MIX_PauseTag: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_PauseTag", ctypes.c_bool, [SDL_POINTER[MIX_Mixer], ctypes.c_char_p], SDL_MIXER_BINARY]
+MIX_ResumeTrack: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_ResumeTrack", ctypes.c_bool, [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_ResumeAllTracks: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_ResumeAllTracks", ctypes.c_bool, [SDL_POINTER[MIX_Mixer]], SDL_MIXER_BINARY]
+MIX_ResumeTag: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_ResumeTag", ctypes.c_bool, [SDL_POINTER[MIX_Mixer], ctypes.c_char_p], SDL_MIXER_BINARY]
+MIX_TrackPlaying: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_TrackPlaying", ctypes.c_bool, [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_TrackPaused: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_TrackPaused", ctypes.c_bool, [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_SetMasterGain: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetMasterGain", ctypes.c_bool, [SDL_POINTER[MIX_Mixer], ctypes.c_float], SDL_MIXER_BINARY]
+MIX_GetMasterGain: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetMasterGain", ctypes.c_float, [SDL_POINTER[MIX_Mixer]], SDL_MIXER_BINARY]
+MIX_SetTrackGain: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackGain", ctypes.c_bool, [SDL_POINTER[MIX_Track], ctypes.c_float], SDL_MIXER_BINARY]
+MIX_GetTrackGain: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetTrackGain", ctypes.c_float, [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_SetTagGain: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTagGain", ctypes.c_bool, [SDL_POINTER[MIX_Mixer], ctypes.c_char_p, ctypes.c_float], SDL_MIXER_BINARY]
+MIX_SetTrackFrequencyRatio: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackFrequencyRatio", ctypes.c_bool, [SDL_POINTER[MIX_Track], ctypes.c_float], SDL_MIXER_BINARY]
+MIX_GetTrackFrequencyRatio: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetTrackFrequencyRatio", ctypes.c_float, [SDL_POINTER[MIX_Track]], SDL_MIXER_BINARY]
+MIX_SetTrackOutputChannelMap: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackOutputChannelMap", ctypes.c_bool, [SDL_POINTER[MIX_Track], SDL_POINTER[ctypes.c_int], ctypes.c_int], SDL_MIXER_BINARY]
+
+class MIX_StereoGains(ctypes.Structure):
     _fields_ = [
-        ("allocated", ctypes.c_int),
-        ("abuf", SDL_POINTER[ctypes.c_uint8]),
-        ("alen", ctypes.c_uint32),
-        ("volume", ctypes.c_uint8)
+        ("left", ctypes.c_float),
+        ("right", ctypes.c_float)
     ]
 
-Mix_Fading: typing.TypeAlias = SDL_TYPE["Mix_Fading", SDL_ENUM]
+MIX_SetTrackStereo: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackStereo", ctypes.c_bool, [SDL_POINTER[MIX_Track], SDL_POINTER[MIX_StereoGains]], SDL_MIXER_BINARY]
 
-MIX_NO_FADING, MIX_FADING_OUT, MIX_FADING_IN = range(3)
+class MIX_Point3D(ctypes.Structure):
+    _fields_ = [
+        ("x", ctypes.c_float),
+        ("y", ctypes.c_float),
+        ("z", ctypes.c_float)
+    ]
 
-Mix_MusicType: typing.TypeAlias = SDL_TYPE["Mix_MusicType", SDL_ENUM]
+MIX_SetTrack3DPosition: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrack3DPosition", ctypes.c_bool, [SDL_POINTER[MIX_Track], SDL_POINTER[MIX_Point3D]], SDL_MIXER_BINARY]
+MIX_GetTrack3DPosition: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetTrack3DPosition", ctypes.c_bool, [SDL_POINTER[MIX_Track], SDL_POINTER[MIX_Point3D]], SDL_MIXER_BINARY]
 
-MUS_NONE, MUS_WAV, MUS_MOD, MUS_MID, MUS_OGG, MUS_MP3, \
-    MUS_FLAC, MUS_OPUS, MUS_WAVPACK, MUS_GME = range(10)
+MIX_CreateGroup: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_CreateGroup", SDL_POINTER[MIX_Group], [SDL_POINTER[MIX_Mixer]], SDL_MIXER_BINARY]
+MIX_DestroyGroup: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_DestroyGroup", None, [SDL_POINTER[MIX_Group]], SDL_MIXER_BINARY]
+MIX_GetGroupProperties: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetGroupProperties", SDL_PropertiesID, [SDL_POINTER[MIX_Group]], SDL_MIXER_BINARY]
+MIX_GetGroupMixer: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetGroupMixer", SDL_POINTER[MIX_Mixer], [SDL_POINTER[MIX_Group]], SDL_MIXER_BINARY]
+MIX_SetTrackGroup: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackGroup", ctypes.c_bool, [SDL_POINTER[MIX_Track], SDL_POINTER[MIX_Group]], SDL_MIXER_BINARY]
 
-class Mix_Music(ctypes.c_void_p):
+MIX_TrackStoppedCallback: typing.TypeAlias = SDL_FUNC_TYPE["MIX_TrackStoppedCallback", None, [ctypes.c_void_p, SDL_POINTER[MIX_Track]]]
+MIX_SetTrackStoppedCallback: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackStoppedCallback", ctypes.c_bool, [SDL_POINTER[MIX_Track], MIX_TrackStoppedCallback, ctypes.c_void_p], SDL_MIXER_BINARY]
+
+MIX_TrackMixCallback: typing.TypeAlias = SDL_FUNC_TYPE["MIX_TrackMixCallback", None, [ctypes.c_void_p, SDL_POINTER[MIX_Track], SDL_POINTER[SDL_AudioSpec], SDL_POINTER[ctypes.c_float], ctypes.c_int]]
+MIX_SetTrackRawCallback: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackRawCallback", ctypes.c_bool, [SDL_POINTER[MIX_Track], MIX_TrackMixCallback, ctypes.c_void_p], SDL_MIXER_BINARY]
+MIX_SetTrackCookedCallback: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetTrackCookedCallback", ctypes.c_bool, [SDL_POINTER[MIX_Track], MIX_TrackMixCallback, ctypes.c_void_p], SDL_MIXER_BINARY]
+
+MIX_GroupMixCallback: typing.TypeAlias = SDL_FUNC_TYPE["MIX_GroupMixCallback", None, [ctypes.c_void_p, SDL_POINTER[MIX_Group], SDL_POINTER[SDL_AudioSpec], SDL_POINTER[ctypes.c_float], ctypes.c_int]]
+MIX_SetGroupPostMixCallback: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetGroupPostMixCallback", ctypes.c_bool, [SDL_POINTER[MIX_Group], MIX_GroupMixCallback, ctypes.c_void_p], SDL_MIXER_BINARY]
+
+MIX_PostMixCallback: typing.TypeAlias = SDL_FUNC_TYPE["MIX_PostMixCallback", None, [ctypes.c_void_p, SDL_POINTER[MIX_Mixer], SDL_POINTER[SDL_AudioSpec], SDL_POINTER[ctypes.c_float], ctypes.c_int]]
+MIX_SetPostMixCallback: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_SetPostMixCallback", ctypes.c_bool, [SDL_POINTER[MIX_Mixer], MIX_PostMixCallback, ctypes.c_void_p], SDL_MIXER_BINARY]
+
+MIX_Generate: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_Generate", ctypes.c_bool, [SDL_POINTER[MIX_Mixer], ctypes.c_void_p, ctypes.c_int], SDL_MIXER_BINARY]
+
+class MIX_AudioDecoder(ctypes.c_void_p):
     ...
 
-Mix_OpenAudio: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_OpenAudio", ctypes.c_bool, [SDL_AudioDeviceID, SDL_POINTER[SDL_AudioSpec]], SDL_MIXER_BINARY]
-Mix_PauseAudio: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_PauseAudio", None, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_QuerySpec: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_QuerySpec", ctypes.c_bool, [SDL_POINTER[ctypes.c_int], SDL_POINTER[SDL_AudioFormat], SDL_POINTER[ctypes.c_int]], SDL_MIXER_BINARY]
-Mix_AllocateChannels: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_AllocateChannels", ctypes.c_int, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_LoadWAV_IO: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_LoadWAV_IO", SDL_POINTER[Mix_Chunk], [SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_MIXER_BINARY]
-Mix_LoadWAV: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_LoadWAV", SDL_POINTER[Mix_Chunk], [ctypes.c_char_p], SDL_MIXER_BINARY]
-Mix_LoadMUS: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_LoadMUS", SDL_POINTER[Mix_Music], [ctypes.c_char_p], SDL_MIXER_BINARY]
-Mix_LoadMUS_IO: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_LoadMUS_IO", SDL_POINTER[Mix_Music], [SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_MIXER_BINARY]
-Mix_LoadMUSType_IO: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_LoadMUSType_IO", SDL_POINTER[Mix_Music], [SDL_POINTER[SDL_IOStream], Mix_MusicType, ctypes.c_bool], SDL_MIXER_BINARY]
-Mix_QuickLoad_WAV: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_QuickLoad_WAV", SDL_POINTER[Mix_Chunk], [SDL_POINTER[ctypes.c_uint8]], SDL_MIXER_BINARY]
-Mix_QuickLoad_RAW: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_QuickLoad_RAW", SDL_POINTER[Mix_Chunk], [SDL_POINTER[ctypes.c_uint8], ctypes.c_uint32], SDL_MIXER_BINARY]
-Mix_FreeChunk: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_FreeChunk", None, [SDL_POINTER[Mix_Chunk]], SDL_MIXER_BINARY]
-Mix_FreeMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_FreeMusic", None, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_GetNumChunkDecoders: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetNumChunkDecoders", ctypes.c_int, [], SDL_MIXER_BINARY]
-Mix_GetChunkDecoder: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetChunkDecoder", ctypes.c_char_p, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_HasChunkDecoder: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_HasChunkDecoder", ctypes.c_bool, [ctypes.c_char_p], SDL_MIXER_BINARY]
-Mix_GetNumMusicDecoders: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetNumMusicDecoders", ctypes.c_int, [], SDL_MIXER_BINARY]
-Mix_GetMusicDecoder: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicDecoder", ctypes.c_char_p, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_HasMusicDecoder: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_HasMusicDecoder", ctypes.c_bool, [ctypes.c_char_p], SDL_MIXER_BINARY]
-Mix_GetMusicType: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicType", Mix_MusicType, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_GetMusicTitle: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicTitle", ctypes.c_char_p, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_GetMusicTitleTag: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicTitleTag", ctypes.c_char_p, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_GetMusicArtistTag: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicArtistTag", ctypes.c_char_p, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_GetMusicAlbumTag: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicAlbumTag", ctypes.c_char_p, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_GetMusicCopyrightTag: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicCopyrightTag", ctypes.c_char_p, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-
-Mix_MixCallback: typing.TypeAlias = SDL_FUNC_TYPE["Mix_MixCallback", None, [ctypes.c_void_p, SDL_POINTER[ctypes.c_uint8], ctypes.c_int]]
-
-Mix_SetPostMix: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_SetPostMix", None, [Mix_MixCallback, ctypes.c_void_p], SDL_MIXER_BINARY]
-Mix_HookMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_HookMusic", None, [Mix_MixCallback, ctypes.c_void_p], SDL_MIXER_BINARY]
-
-Mix_MusicFinishedCallback: typing.TypeAlias = SDL_FUNC_TYPE["Mix_MusicFinishedCallback", None, []]
-
-Mix_HookMusicFinished: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_HookMusicFinished", None, [Mix_MusicFinishedCallback], SDL_MIXER_BINARY]
-Mix_GetMusicHookData: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicHookData", ctypes.c_void_p, [], SDL_MIXER_BINARY]
-
-Mix_ChannelFinishedCallback: typing.TypeAlias = SDL_FUNC_TYPE["Mix_ChannelFinishedCallback", None, [ctypes.c_int]]
-
-Mix_ChannelFinished: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_ChannelFinished", None, [Mix_ChannelFinishedCallback], SDL_MIXER_BINARY]
-
-MIX_CHANNEL_POST: int = -2
-
-Mix_EffectFunc_t: typing.TypeAlias = SDL_FUNC_TYPE["Mix_EffectFunc_t", None, [ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p]]
-Mix_EffectDone_t: typing.TypeAlias = SDL_FUNC_TYPE["Mix_EffectDone_t", None, [ctypes.c_int, ctypes.c_void_p]]
-
-Mix_RegisterEffect: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_RegisterEffect", ctypes.c_bool, [ctypes.c_int, Mix_EffectFunc_t, Mix_EffectDone_t, ctypes.c_void_p], SDL_MIXER_BINARY]
-Mix_UnregisterEffect: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_UnregisterEffect", ctypes.c_bool, [ctypes.c_int, Mix_EffectFunc_t], SDL_MIXER_BINARY]
-Mix_UnregisterAllEffects: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_UnregisterAllEffects", ctypes.c_bool, [ctypes.c_int], SDL_MIXER_BINARY]
-
-MIX_EFFECTSMAXSPEED: bytes = "MIX_EFFECTSMAXSPEED".encode()
-
-Mix_SetPanning: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_SetPanning", ctypes.c_bool, [ctypes.c_int, ctypes.c_uint8, ctypes.c_uint8], SDL_MIXER_BINARY]
-Mix_SetPosition: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_SetPosition", ctypes.c_bool, [ctypes.c_int, ctypes.c_int16, ctypes.c_uint8], SDL_MIXER_BINARY]
-Mix_SetDistance: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_SetDistance", ctypes.c_bool, [ctypes.c_int, ctypes.c_uint8], SDL_MIXER_BINARY]
-Mix_SetReverseStereo: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_SetReverseStereo", ctypes.c_bool, [ctypes.c_int, ctypes.c_int], SDL_MIXER_BINARY]
-Mix_ReserveChannels: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_ReserveChannels", ctypes.c_int, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_GroupChannel: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GroupChannel", ctypes.c_bool, [ctypes.c_int, ctypes.c_int], SDL_MIXER_BINARY]
-Mix_GroupChannels: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GroupChannels", ctypes.c_bool, [ctypes.c_int, ctypes.c_int, ctypes.c_int], SDL_MIXER_BINARY]
-Mix_GroupAvailable: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GroupAvailable", ctypes.c_int, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_GroupCount: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GroupCount", ctypes.c_int, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_GroupOldest: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GroupOldest", ctypes.c_int, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_GroupNewer: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GroupNewer", ctypes.c_int, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_PlayChannel: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_PlayChannel", ctypes.c_int, [ctypes.c_int, SDL_POINTER[Mix_Chunk], ctypes.c_int], SDL_MIXER_BINARY]
-Mix_PlayChannelTimed: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_PlayChannelTimed", ctypes.c_int, [ctypes.c_int, SDL_POINTER[Mix_Chunk], ctypes.c_int, ctypes.c_int], SDL_MIXER_BINARY]
-Mix_PlayMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_PlayMusic", ctypes.c_bool, [SDL_POINTER[Mix_Music], ctypes.c_int], SDL_MIXER_BINARY]    
-Mix_FadeInMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_FadeInMusic", ctypes.c_bool, [SDL_POINTER[Mix_Music], ctypes.c_int, ctypes.c_int], SDL_MIXER_BINARY]
-Mix_FadeInMusicPos: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_FadeInMusicPos", ctypes.c_bool, [SDL_POINTER[Mix_Music], ctypes.c_int, ctypes.c_int, ctypes.c_double], SDL_MIXER_BINARY]
-Mix_FadeInChannel: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_FadeInChannel", ctypes.c_int, [ctypes.c_int, SDL_POINTER[Mix_Chunk], ctypes.c_int, ctypes.c_int], SDL_MIXER_BINARY]
-Mix_FadeInChannelTimed: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_FadeInChannelTimed", ctypes.c_int, [ctypes.c_int, SDL_POINTER[Mix_Chunk], ctypes.c_int, ctypes.c_int, ctypes.c_int], SDL_MIXER_BINARY]
-Mix_Volume: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_Volume", ctypes.c_int, [ctypes.c_int, ctypes.c_int], SDL_MIXER_BINARY]
-Mix_VolumeChunk: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_VolumeChunk", ctypes.c_int, [SDL_POINTER[Mix_Chunk], ctypes.c_int], SDL_MIXER_BINARY]
-Mix_VolumeMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_VolumeMusic", ctypes.c_int, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_GetMusicVolume: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicVolume", ctypes.c_int, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_MasterVolume: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_MasterVolume", ctypes.c_int, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_HaltChannel: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_HaltChannel", None, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_HaltGroup: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_HaltGroup", None, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_HaltMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_HaltMusic", None, [], SDL_MIXER_BINARY]
-Mix_ExpireChannel: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_ExpireChannel", ctypes.c_int, [ctypes.c_int, ctypes.c_int], SDL_MIXER_BINARY]
-Mix_FadeOutChannel: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_FadeOutChannel", ctypes.c_int, [ctypes.c_int, ctypes.c_int], SDL_MIXER_BINARY]
-Mix_FadeOutGroup: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_FadeOutGroup", ctypes.c_int, [ctypes.c_int, ctypes.c_int], SDL_MIXER_BINARY]
-Mix_FadeOutMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_FadeOutMusic", ctypes.c_bool, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_FadingMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_FadingMusic", Mix_Fading, [], SDL_MIXER_BINARY]
-Mix_FadingChannel: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_FadingChannel", Mix_Fading, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_Pause: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_Pause", None, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_PauseGroup: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_PauseGroup", None, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_Resume: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_Resume", None, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_ResumeGroup: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_ResumeGroup", None, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_Paused: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_Paused", ctypes.c_int, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_PauseMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_PauseMusic", None, [], SDL_MIXER_BINARY]
-Mix_ResumeMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_ResumeMusic", None, [], SDL_MIXER_BINARY]
-Mix_RewindMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_RewindMusic", None, [], SDL_MIXER_BINARY]
-Mix_PausedMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_PausedMusic", ctypes.c_bool, [], SDL_MIXER_BINARY]
-Mix_ModMusicJumpToOrder: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_ModMusicJumpToOrder", ctypes.c_bool, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_StartTrack: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_StartTrack", ctypes.c_bool, [SDL_POINTER[Mix_Music], ctypes.c_int], SDL_MIXER_BINARY]
-Mix_GetNumTracks: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetNumTracks", ctypes.c_int, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_SetMusicPosition: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_SetMusicPosition", ctypes.c_bool, [ctypes.c_double], SDL_MIXER_BINARY]
-Mix_GetMusicPosition: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicPosition", ctypes.c_double, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_MusicDuration: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_MusicDuration", ctypes.c_double, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_GetMusicLoopStartTime: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicLoopStartTime", ctypes.c_double, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_GetMusicLoopEndTime: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicLoopEndTime", ctypes.c_double, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_GetMusicLoopLengthTime: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetMusicLoopLengthTime", ctypes.c_double, [SDL_POINTER[Mix_Music]], SDL_MIXER_BINARY]
-Mix_Playing: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_Playing", ctypes.c_int, [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_PlayingMusic: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_PlayingMusic", ctypes.c_bool, [], SDL_MIXER_BINARY]
-Mix_SetSoundFonts: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_SetSoundFonts", ctypes.c_bool, [ctypes.c_char_p], SDL_MIXER_BINARY]
-Mix_GetSoundFonts: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetSoundFonts", ctypes.c_char_p, [], SDL_MIXER_BINARY]
-
-Mix_EachSoundFontCallback: typing.TypeAlias = SDL_FUNC_TYPE["Mix_EachSoundFontCallback", ctypes.c_bool, [ctypes.c_char_p, ctypes.c_void_p]]
-
-Mix_EachSoundFont: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_EachSoundFont", ctypes.c_bool, [Mix_EachSoundFontCallback, ctypes.c_void_p], SDL_MIXER_BINARY]
-Mix_SetTimidityCfg: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_SetTimidityCfg", ctypes.c_bool, [ctypes.c_char_p], SDL_MIXER_BINARY]
-Mix_GetTimidityCfg: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetTimidityCfg", ctypes.c_char_p, [], SDL_MIXER_BINARY]
-Mix_GetChunk: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_GetChunk", SDL_POINTER[Mix_Chunk], [ctypes.c_int], SDL_MIXER_BINARY]
-Mix_CloseAudio: abc.Callable[..., typing.Any] = SDL_FUNC["Mix_CloseAudio", None, [], SDL_MIXER_BINARY]
+MIX_CreateAudioDecoder: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_CreateAudioDecoder", SDL_POINTER[MIX_AudioDecoder], [ctypes.c_char_p, SDL_PropertiesID], SDL_MIXER_BINARY]
+MIX_CreateAudioDecoder_IO: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_CreateAudioDecoder_IO", SDL_POINTER[MIX_AudioDecoder], [SDL_POINTER[SDL_IOStream], ctypes.c_bool, SDL_PropertiesID], SDL_MIXER_BINARY]
+MIX_DestroyAudioDecoder: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_DestroyAudioDecoder", None, [SDL_POINTER[MIX_AudioDecoder]], SDL_MIXER_BINARY]
+MIX_GetAudioDecoderProperties: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetAudioDecoderProperties", SDL_PropertiesID, [SDL_POINTER[MIX_AudioDecoder]], SDL_MIXER_BINARY]
+MIX_GetAudioDecoderFormat: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_GetAudioDecoderFormat", ctypes.c_bool, [SDL_POINTER[MIX_AudioDecoder], SDL_POINTER[SDL_AudioSpec]], SDL_MIXER_BINARY]
+MIX_DecodeAudio: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_DecodeAudio", ctypes.c_int, [SDL_POINTER[MIX_AudioDecoder], ctypes.c_void_p, ctypes.c_int, SDL_POINTER[SDL_AudioSpec]], SDL_MIXER_BINARY]
