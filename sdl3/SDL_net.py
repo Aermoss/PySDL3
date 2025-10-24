@@ -1,6 +1,6 @@
 import ctypes, typing, collections.abc as abc
 
-from . import SDL_POINTER, SDL_FUNC, SDL_NET_BINARY
+from . import SDL_POINTER, SDL_TYPE, SDL_ENUM, SDL_FUNC, SDL_NET_BINARY
 from .SDL_version import SDL_VERSIONNUM
 
 SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_MICRO_VERSION = 3, 0, 0
@@ -10,7 +10,12 @@ SDL_NET_VERSION_ATLEAST: abc.Callable[[int, int, int], bool] = lambda x, y, z: \
     (SDL_NET_MAJOR_VERSION >= x) and (SDL_NET_MAJOR_VERSION > x or SDL_NET_MINOR_VERSION >= y) and \
         (SDL_NET_MAJOR_VERSION > x or SDL_NET_MINOR_VERSION > y or SDL_NET_MICRO_VERSION >= z)
 
-NET_GetVersion: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetVersion", ctypes.c_int, [], SDL_NET_BINARY]
+NET_Version: abc.Callable[..., typing.Any] = SDL_FUNC["NET_Version", ctypes.c_int, [], SDL_NET_BINARY]
+
+NET_Status: typing.TypeAlias = SDL_TYPE["NET_Status", SDL_ENUM]
+
+NET_FAILURE, NET_WAITING, NET_SUCCESS = range(-1, 2)
+
 NET_Init: abc.Callable[..., typing.Any] = SDL_FUNC["NET_Init", ctypes.c_bool, [], SDL_NET_BINARY]
 NET_Quit: abc.Callable[..., typing.Any] = SDL_FUNC["NET_Quit", None, [], SDL_NET_BINARY]
 
@@ -18,8 +23,8 @@ class NET_Address(ctypes.c_void_p):
     ...
 
 NET_ResolveHostname: abc.Callable[..., typing.Any] = SDL_FUNC["NET_ResolveHostname", SDL_POINTER[NET_Address], [ctypes.c_char_p], SDL_NET_BINARY]
-NET_WaitUntilResolved: abc.Callable[..., typing.Any] = SDL_FUNC["NET_WaitUntilResolved", ctypes.c_int, [SDL_POINTER[NET_Address], ctypes.c_int32], SDL_NET_BINARY]
-NET_GetAddressStatus: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetAddressStatus", ctypes.c_int, [SDL_POINTER[NET_Address]], SDL_NET_BINARY]
+NET_WaitUntilResolved: abc.Callable[..., typing.Any] = SDL_FUNC["NET_WaitUntilResolved", NET_Status, [SDL_POINTER[NET_Address], ctypes.c_int32], SDL_NET_BINARY]
+NET_GetAddressStatus: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetAddressStatus", NET_Status, [SDL_POINTER[NET_Address]], SDL_NET_BINARY]
 NET_GetAddressString: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetAddressString", ctypes.c_char_p, [SDL_POINTER[NET_Address]], SDL_NET_BINARY]
 NET_RefAddress: abc.Callable[..., typing.Any] = SDL_FUNC["NET_RefAddress", SDL_POINTER[NET_Address], [SDL_POINTER[NET_Address]], SDL_NET_BINARY]
 NET_UnrefAddress: abc.Callable[..., typing.Any] = SDL_FUNC["NET_UnrefAddress", None, [SDL_POINTER[NET_Address]], SDL_NET_BINARY]
@@ -32,7 +37,7 @@ class NET_StreamSocket(ctypes.c_void_p):
     ...
 
 NET_CreateClient: abc.Callable[..., typing.Any] = SDL_FUNC["NET_CreateClient", SDL_POINTER[NET_StreamSocket], [SDL_POINTER[NET_Address], ctypes.c_uint16], SDL_NET_BINARY]
-NET_WaitUntilConnected: abc.Callable[..., typing.Any] = SDL_FUNC["NET_WaitUntilConnected", ctypes.c_int, [SDL_POINTER[NET_StreamSocket], ctypes.c_int32], SDL_NET_BINARY]
+NET_WaitUntilConnected: abc.Callable[..., typing.Any] = SDL_FUNC["NET_WaitUntilConnected", NET_Status, [SDL_POINTER[NET_StreamSocket], ctypes.c_int32], SDL_NET_BINARY]
 
 class NET_Server(ctypes.c_void_p):
     ...
@@ -41,7 +46,7 @@ NET_CreateServer: abc.Callable[..., typing.Any] = SDL_FUNC["NET_CreateServer", S
 NET_AcceptClient: abc.Callable[..., typing.Any] = SDL_FUNC["NET_AcceptClient", ctypes.c_bool, [SDL_POINTER[NET_Server], SDL_POINTER[SDL_POINTER[NET_StreamSocket]]], SDL_NET_BINARY]
 NET_DestroyServer: abc.Callable[..., typing.Any] = SDL_FUNC["NET_DestroyServer", None, [SDL_POINTER[NET_Server]], SDL_NET_BINARY]
 NET_GetStreamSocketAddress: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetStreamSocketAddress", SDL_POINTER[NET_Address], [SDL_POINTER[NET_StreamSocket]], SDL_NET_BINARY]
-NET_GetConnectionStatus: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetConnectionStatus", ctypes.c_int, [SDL_POINTER[NET_StreamSocket]], SDL_NET_BINARY]
+NET_GetConnectionStatus: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetConnectionStatus", NET_Status, [SDL_POINTER[NET_StreamSocket]], SDL_NET_BINARY]
 NET_WriteToStreamSocket: abc.Callable[..., typing.Any] = SDL_FUNC["NET_WriteToStreamSocket", ctypes.c_bool, [SDL_POINTER[NET_StreamSocket], ctypes.c_void_p, ctypes.c_int], SDL_NET_BINARY]
 NET_GetStreamSocketPendingWrites: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetStreamSocketPendingWrites", ctypes.c_int, [SDL_POINTER[NET_StreamSocket]], SDL_NET_BINARY]
 NET_WaitUntilStreamSocketDrained: abc.Callable[..., typing.Any] = SDL_FUNC["NET_WaitUntilStreamSocketDrained", ctypes.c_int, [SDL_POINTER[NET_StreamSocket], ctypes.c_int32], SDL_NET_BINARY]
