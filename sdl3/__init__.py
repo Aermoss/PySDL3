@@ -223,11 +223,13 @@ if not __initialized__:
                     if (name.split(".")[0] if "." in name else name).endswith(_name):
                         binaryMap[module] = ctypes.CDLL(os.path.abspath(path))
 
-def SDL_ARRAY(*values, type: typing.Any | None = None) -> tuple[typing.Any, int]:
-    """Create a ctypes array from the given arguments."""
-    return ((type or values[0].__class__) * len(values))(*values), len(values)
+_CT = typing.TypeVar("_CT", bound = ctypes._SimpleCData)
 
-def SDL_DEREFERENCE(value: typing.Any) -> typing.Any:
+def SDL_ARRAY(*values: _CT, _type: type[_CT] | None = None) -> tuple[ctypes.Array[_CT], int]:
+    """Create a ctypes array from the given arguments."""
+    return ((_type or type(values[0])) * len(values))(*values), len(values)
+
+def SDL_DEREFERENCE(value: ctypes._Pointer) -> ctypes._SimpleCData:
     """Dereference a ctypes pointer or object."""
     if isinstance(value, ctypes._Pointer): return value.contents
     elif hasattr(value, "_obj"): return value._obj
@@ -237,7 +239,7 @@ def SDL_CACHE_FUNC(func: abc.Callable[..., typing.Any]) -> abc.Callable[..., typ
     """Simple function cache decorator."""
     cache = {}
 
-    def __inner__(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
+    def __inner__(*args, **kwargs) -> typing.Any:
         _hash = hash((args, tuple(frozenset(sorted(kwargs.items())))))
         if _hash not in cache: cache.update({_hash: func(*args, **kwargs)})
         return cache.get(_hash, None)
@@ -258,7 +260,7 @@ def SDL_NOT_IMPLEMENTED(name: str) -> abc.Callable[..., None]:
         SDL_LOGGER.Log(SDL_LOGGER.Error, f"Invoked an unimplemented function: '{name}'.")
 
 class SDL_FUNC:
-    def __class_getitem__(cls, key: tuple[str, type, list[type], str]) -> typing.Any:
+    def __class_getitem__(cls, key: tuple[str, type[ctypes._SimpleCData], list[type[ctypes._SimpleCData]], str]) -> ctypes._CFuncPtr | abc.Callable[..., None]:
         """Create a new ctypes function definition."""
 
         if not (__frozen__ or __release__):
@@ -278,33 +280,33 @@ class SDL_FUNC:
             if not func and not int(os.environ.get("SDL_IGNORE_MISSING_FUNCTIONS", "1" if __frozen__ or __release__ else "0")) > 0:
                 SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Function '{key[0]}' not found in binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(key[3])}'.")
 
-        if not binary or not func: func = SDL_NOT_IMPLEMENTED(key[0])
-        func.restype, func.binary = key[1], binary
+        if not binary or not func: func = SDL_NOT_IMPLEMENTED(key[0]) # type: ignore
+        func.restype, func.binary = key[1], binary # type: ignore
 
         if ... in key[2]:
-            def __inner__(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
-                for arg in args[len(__inner__.func.argtypes):]:
-                    if isinstance(arg, int): __inner__.func.argtypes += [ctypes.c_int]
-                    elif isinstance(arg, float): __inner__.func.argtypes += [ctypes.c_float]
-                    elif isinstance(arg, bytes): __inner__.func.argtypes += [ctypes.c_char_p]
-                    elif isinstance(arg, bool): __inner__.func.argtypes += [ctypes.c_bool]
-                    else: __inner__.func.argtypes += [arg.__class__]
+            def __inner__(*args, **kwargs) -> typing.Any:
+                for arg in args[len(__inner__.func.argtypes):]: # type: ignore
+                    if isinstance(arg, int): __inner__.func.argtypes += [ctypes.c_int] # type: ignore
+                    elif isinstance(arg, float): __inner__.func.argtypes += [ctypes.c_float] # type: ignore
+                    elif isinstance(arg, bytes): __inner__.func.argtypes += [ctypes.c_char_p] # type: ignore
+                    elif isinstance(arg, bool): __inner__.func.argtypes += [ctypes.c_bool] # type: ignore
+                    else: __inner__.func.argtypes += [arg.__class__] # type: ignore
 
-                value = __inner__.func(*args, **kwargs)
-                __inner__.func.argtypes = key[2][:-1]
+                value = __inner__.func(*args, **kwargs) # type: ignore
+                __inner__.func.argtypes = key[2][:-1] # type: ignore
                 return value
 
-            func.argtypes, func.vararg = key[2][:-1], True
-            func, __inner__.func = __inner__, func
+            func.argtypes, func.vararg = key[2][:-1], True # type: ignore
+            func, __inner__.func = __inner__, func # type: ignore
 
         else:
-            func.argtypes, func.vararg = key[2], False
+            func.argtypes, func.vararg = key[2], False # type: ignore
 
         __module__.functions[key[3]][key[0]] = func
         return func
 
 class SDL_POINTER:
-    def __class_getitem__(cls, key: type) -> type:
+    def __class_getitem__(cls, key: type[ctypes._SimpleCData]) -> type[ctypes._Pointer]:
         """Create a ctypes pointer type from a ctypes type."""
 
         if not (__frozen__ or __release__):
@@ -313,8 +315,10 @@ class SDL_POINTER:
 
         return ctypes.POINTER(key)
 
+_T = typing.TypeVar("_T")
+
 class SDL_CAST:
-    def __class_getitem__(cls, key: tuple[typing.Any, type]) -> typing.Any:
+    def __class_getitem__(cls, key: tuple[typing.Any, type[_T]]) -> _T:
         """Cast a ctypes pointer to an another type."""
 
         if not (__frozen__ or __release__):
@@ -323,10 +327,10 @@ class SDL_CAST:
             assert isinstance(key[0], ctypes._Pointer), "Expected a pointer as the first argument."
             assert isinstance(key[1], type), "Expected a type as the second argument."
 
-        return ctypes.cast(key[0], key[1])
+        return ctypes.cast(key[0], key[1]) # type: ignore
 
 class SDL_TYPE:
-    def __class_getitem__(cls, key: tuple[str, type]) -> type:
+    def __class_getitem__(cls, key: tuple[str, type[_T]]) -> type[_T]:
         """Create a new type from a ctypes type."""
 
         if not (__frozen__ or __release__):
@@ -336,16 +340,16 @@ class SDL_TYPE:
             assert isinstance(key[1], type), "Expected a type as the second argument."
 
         if hasattr(key[1], "contents"):
-            return type(key[0], (ctypes._Pointer, ), {"_type_": key[1]._type_, "contents": key[1].contents})
+            return type(key[0], (ctypes._Pointer, ), {"_type_": key[1]._type_, "contents": key[1].contents}) # type: ignore
 
         elif hasattr(key[1], "_fields_"):
-            return type(key[0], (ctypes.Structure, ), {"_fields_": key[1]._fields_})
+            return type(key[0], (ctypes.Structure, ), {"_fields_": key[1]._fields_}) # type: ignore
 
         else:
-            return type(key[0], (ctypes._SimpleCData, ), {"_type_": key[1]._type_})
+            return type(key[0], (ctypes._SimpleCData, ), {"_type_": key[1]._type_}) # type: ignore
 
 class SDL_FUNC_TYPE:
-    def __class_getitem__(cls, key: tuple[str, type, list[type]]) -> type:
+    def __class_getitem__(cls, key: tuple[str, type[ctypes._SimpleCData], list[type[ctypes._SimpleCData]]]) -> type[ctypes._CFuncPtr]:
         """Create a new ctypes function type."""
 
         if not (__frozen__ or __release__):
@@ -653,7 +657,7 @@ def SDL_GENERATE_DOCS(modules: list[str] = SDL_MODULES, raw: types.ModuleType | 
 
     return f"{result}\n{definitions}"
 
-def SDL_GET_OR_GENERATE_DOCS(*args: typing.Any, **kwargs: typing.Any) -> bytes:
+def SDL_GET_OR_GENERATE_DOCS(*args, **kwargs) -> bytes:
     """Get type hints and docstrings for SDL3 functions/structures from github or by generating them."""
 
     try:
