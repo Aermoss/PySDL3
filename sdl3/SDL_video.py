@@ -83,6 +83,11 @@ SDL_FlashOperation: typing.TypeAlias = SDL_TYPE["SDL_FlashOperation", SDL_ENUM]
 
 SDL_FLASH_CANCEL, SDL_FLASH_BRIEFLY, SDL_FLASH_UNTIL_FOCUSED = range(3)
 
+SDL_ProgressState: typing.TypeAlias = SDL_TYPE["SDL_ProgressState", SDL_ENUM]
+
+SDL_PROGRESS_STATE_INVALID, SDL_PROGRESS_STATE_NONE, SDL_PROGRESS_STATE_INDETERMINATE, \
+    SDL_PROGRESS_STATE_NORMAL, SDL_PROGRESS_STATE_PAUSED, SDL_PROGRESS_STATE_ERROR = range(-1, 5)
+
 class SDL_GLContextState(ctypes.c_void_p):
     ...
 
@@ -138,6 +143,7 @@ SDL_GetDisplayProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDispl
 
 SDL_PROP_DISPLAY_HDR_ENABLED_BOOLEAN: bytes = "SDL.display.HDR_enabled".encode()
 SDL_PROP_DISPLAY_KMSDRM_PANEL_ORIENTATION_NUMBER: bytes = "SDL.display.KMSDRM.panel_orientation".encode()
+SDL_PROP_DISPLAY_WAYLAND_WL_OUTPUT_POINTER: bytes = "SDL.display.wayland.wl_output".encode()
 
 SDL_GetDisplayName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayName", ctypes.c_char_p, [SDL_DisplayID], SDL_BINARY]
 SDL_GetDisplayBounds: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayBounds", ctypes.c_bool, [SDL_DisplayID, SDL_POINTER[SDL_Rect]], SDL_BINARY]
@@ -208,6 +214,9 @@ SDL_PROP_WINDOW_CREATE_WAYLAND_WL_SURFACE_POINTER: bytes = "SDL.window.create.wa
 SDL_PROP_WINDOW_CREATE_WIN32_HWND_POINTER: bytes = "SDL.window.create.win32.hwnd".encode()
 SDL_PROP_WINDOW_CREATE_WIN32_PIXEL_FORMAT_HWND_POINTER: bytes = "SDL.window.create.win32.pixel_format_hwnd".encode()
 SDL_PROP_WINDOW_CREATE_X11_WINDOW_NUMBER: bytes = "SDL.window.create.x11.window".encode()
+SDL_PROP_WINDOW_CREATE_EMSCRIPTEN_CANVAS_ID_STRING: bytes = "SDL.window.create.emscripten.canvas_id".encode()
+SDL_PROP_WINDOW_CREATE_EMSCRIPTEN_FILL_DOCUMENT_BOOLEAN: bytes = "SDL.window.create.emscripten.fill_document".encode()
+SDL_PROP_WINDOW_CREATE_EMSCRIPTEN_KEYBOARD_ELEMENT_STRING: bytes = "SDL.window.create.emscripten.keyboard_element".encode()
 
 SDL_GetWindowID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowID", SDL_WindowID, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 SDL_GetWindowFromID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowFromID", SDL_POINTER[SDL_Window], [SDL_WindowID], SDL_BINARY]
@@ -231,7 +240,7 @@ SDL_PROP_WINDOW_KMSDRM_DRM_FD_NUMBER: bytes = "SDL.window.kmsdrm.drm_fd".encode(
 SDL_PROP_WINDOW_KMSDRM_GBM_DEVICE_POINTER: bytes = "SDL.window.kmsdrm.gbm_dev".encode()
 SDL_PROP_WINDOW_COCOA_WINDOW_POINTER: bytes = "SDL.window.cocoa.window".encode()
 SDL_PROP_WINDOW_COCOA_METAL_VIEW_TAG_NUMBER: bytes = "SDL.window.cocoa.metal_view_tag".encode()
-SDL_PROP_WINDOW_OPENVR_OVERLAY_ID: bytes = "SDL.window.openvr.overlay_id".encode()
+SDL_PROP_WINDOW_OPENVR_OVERLAY_ID_NUMBER: bytes = "SDL.window.openvr.overlay_id".encode()
 SDL_PROP_WINDOW_VIVANTE_DISPLAY_POINTER: bytes = "SDL.window.vivante.display".encode()
 SDL_PROP_WINDOW_VIVANTE_WINDOW_POINTER: bytes = "SDL.window.vivante.window".encode()
 SDL_PROP_WINDOW_VIVANTE_SURFACE_POINTER: bytes = "SDL.window.vivante.surface".encode()
@@ -250,6 +259,9 @@ SDL_PROP_WINDOW_WAYLAND_XDG_POSITIONER_POINTER: bytes = "SDL.window.wayland.xdg_
 SDL_PROP_WINDOW_X11_DISPLAY_POINTER: bytes = "SDL.window.x11.display".encode()
 SDL_PROP_WINDOW_X11_SCREEN_NUMBER: bytes = "SDL.window.x11.screen".encode()
 SDL_PROP_WINDOW_X11_WINDOW_NUMBER: bytes = "SDL.window.x11.window".encode()
+SDL_PROP_WINDOW_EMSCRIPTEN_CANVAS_ID_STRING: bytes = "SDL.window.emscripten.canvas_id".encode()
+SDL_PROP_WINDOW_EMSCRIPTEN_FILL_DOCUMENT_BOOLEAN: bytes = "SDL.window.emscripten.fill_document".encode()
+SDL_PROP_WINDOW_EMSCRIPTEN_KEYBOARD_ELEMENT_STRING: bytes = "SDL.window.emscripten.keyboard_element".encode()
 
 SDL_GetWindowFlags: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowFlags", SDL_WindowFlags, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
@@ -335,6 +347,12 @@ SDL_SetWindowHitTest: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowHit
 SDL_SetWindowShape: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowShape", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_POINTER[SDL_Surface]], SDL_BINARY]
 
 SDL_FlashWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlashWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_FlashOperation], SDL_BINARY]
+
+SDL_SetWindowProgressState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowProgressState", ctypes.c_bool, [SDL_POINTER[SDL_Window], SDL_ProgressState], SDL_BINARY]
+SDL_GetWindowProgressState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowProgressState", SDL_ProgressState, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_SetWindowProgressValue: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowProgressValue", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_float], SDL_BINARY]
+SDL_GetWindowProgressValue: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowProgressValue", ctypes.c_float, [SDL_POINTER[SDL_Window]], SDL_BINARY]
+
 SDL_DestroyWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyWindow", None, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 
 SDL_ScreenSaverEnabled: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ScreenSaverEnabled", ctypes.c_bool, [], SDL_BINARY]

@@ -2,10 +2,10 @@ import ctypes, typing, collections.abc as abc
 
 from . import SDL_POINTER, SDL_ENUM, \
     SDL_FUNC, SDL_TYPE, SDL_BINARY
+from .SDL_pixels import SDL_PixelFormat, SDL_FColor
 from .SDL_properties import SDL_PropertiesID
 from .SDL_surface import SDL_FlipMode
 from .SDL_video import SDL_Window
-from .SDL_pixels import SDL_FColor
 from .SDL_rect import SDL_Rect
 
 class SDL_GPUDevice(ctypes.c_void_p):
@@ -449,7 +449,7 @@ class SDL_GPUMultisampleState(ctypes.Structure):
         ("sample_count", SDL_GPUSampleCount),
         ("sample_mask", ctypes.c_uint32),
         ("enable_mask", ctypes.c_bool),
-        ("padding1", ctypes.c_uint8),
+        ("enable_alpha_to_coverage", ctypes.c_bool),
         ("padding2", ctypes.c_uint8),
         ("padding3", ctypes.c_uint8)
     ]
@@ -544,8 +544,8 @@ class SDL_GPUDepthStencilTargetInfo(ctypes.Structure):
         ("stencil_store_op", SDL_GPUStoreOp),
         ("cycle", ctypes.c_bool),
         ("clear_stencil", ctypes.c_uint8),
-        ("padding1", ctypes.c_uint8),
-        ("padding2", ctypes.c_uint8)
+        ("mip_level", ctypes.c_uint8),
+        ("layer", ctypes.c_uint8)
     ]
 
 class SDL_GPUBlitInfo(ctypes.Structure):
@@ -602,13 +602,19 @@ SDL_CreateGPUDeviceWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL
 
 SDL_PROP_GPU_DEVICE_CREATE_DEBUGMODE_BOOLEAN: bytes = "SDL.gpu.device.create.debugmode".encode()
 SDL_PROP_GPU_DEVICE_CREATE_PREFERLOWPOWER_BOOLEAN: bytes = "SDL.gpu.device.create.preferlowpower".encode()
+SDL_PROP_GPU_DEVICE_CREATE_VERBOSE_BOOLEAN: bytes = "SDL.gpu.device.create.verbose".encode()
 SDL_PROP_GPU_DEVICE_CREATE_NAME_STRING: bytes = "SDL.gpu.device.create.name".encode()
+SDL_PROP_GPU_DEVICE_CREATE_FEATURE_CLIP_DISTANCE_BOOLEAN: bytes = "SDL.gpu.device.create.feature.clip_distance".encode()
+SDL_PROP_GPU_DEVICE_CREATE_FEATURE_DEPTH_CLAMPING_BOOLEAN: bytes = "SDL.gpu.device.create.feature.depth_clamping".encode()
+SDL_PROP_GPU_DEVICE_CREATE_FEATURE_INDIRECT_DRAW_FIRST_INSTANCE_BOOLEAN: bytes = "SDL.gpu.device.create.feature.indirect_draw_first_instance".encode()
+SDL_PROP_GPU_DEVICE_CREATE_FEATURE_ANISOTROPY_BOOLEAN: bytes = "SDL.gpu.device.create.feature.anisotropy".encode()
 SDL_PROP_GPU_DEVICE_CREATE_SHADERS_PRIVATE_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.private".encode()
 SDL_PROP_GPU_DEVICE_CREATE_SHADERS_SPIRV_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.spirv".encode()
 SDL_PROP_GPU_DEVICE_CREATE_SHADERS_DXBC_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.dxbc".encode()
 SDL_PROP_GPU_DEVICE_CREATE_SHADERS_DXIL_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.dxil".encode()
 SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.msl".encode()
 SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.metallib".encode()
+SDL_PROP_GPU_DEVICE_CREATE_D3D12_ALLOW_FEWER_RESOURCE_SLOTS_BOOLEAN: bytes = "SDL.gpu.device.create.d3d12.allowtier1resourcebinding".encode()
 SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING: bytes = "SDL.gpu.device.create.d3d12.semantic".encode()
 
 SDL_DestroyGPUDevice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyGPUDevice", None, [SDL_POINTER[SDL_GPUDevice]], SDL_BINARY]
@@ -617,6 +623,13 @@ SDL_GetNumGPUDrivers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNumGPUDri
 SDL_GetGPUDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGPUDriver", ctypes.c_char_p, [ctypes.c_int], SDL_BINARY]
 SDL_GetGPUDeviceDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGPUDeviceDriver", ctypes.c_char_p, [SDL_POINTER[SDL_GPUDevice]], SDL_BINARY]
 SDL_GetGPUShaderFormats: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGPUShaderFormats", SDL_GPUShaderFormat, [SDL_POINTER[SDL_GPUDevice]], SDL_BINARY]
+
+SDL_GetGPUDeviceProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGPUDeviceProperties", SDL_PropertiesID, [SDL_POINTER[SDL_GPUDevice]], SDL_BINARY]
+
+SDL_PROP_GPU_DEVICE_NAME_STRING: bytes = "SDL.gpu.device.name".encode()
+SDL_PROP_GPU_DEVICE_DRIVER_NAME_STRING: bytes = "SDL.gpu.device.driver_name".encode()
+SDL_PROP_GPU_DEVICE_DRIVER_VERSION_STRING: bytes = "SDL.gpu.device.driver_version".encode()
+SDL_PROP_GPU_DEVICE_DRIVER_INFO_STRING: bytes = "SDL.gpu.device.driver_info".encode()
 
 SDL_CreateGPUComputePipeline: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPUComputePipeline", SDL_POINTER[SDL_GPUComputePipeline], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_GPUComputePipelineCreateInfo]], SDL_BINARY]
 
@@ -742,3 +755,6 @@ SDL_GPUTextureFormatTexelBlockSize: abc.Callable[..., typing.Any] = SDL_FUNC["SD
 SDL_GPUTextureSupportsFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GPUTextureSupportsFormat", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], SDL_GPUTextureFormat, SDL_GPUTextureType, SDL_GPUTextureUsageFlags], SDL_BINARY]
 SDL_GPUTextureSupportsSampleCount: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GPUTextureSupportsSampleCount", ctypes.c_bool, [SDL_POINTER[SDL_GPUDevice], SDL_GPUTextureFormat, SDL_GPUSampleCount], SDL_BINARY]
 SDL_CalculateGPUTextureFormatSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CalculateGPUTextureFormatSize", ctypes.c_uint32, [SDL_GPUTextureFormat, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32], SDL_BINARY]
+
+SDL_GetPixelFormatFromGPUTextureFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPixelFormatFromGPUTextureFormat", SDL_PixelFormat, [SDL_GPUTextureFormat], SDL_BINARY]
+SDL_GetGPUTextureFormatFromPixelFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGPUTextureFormatFromPixelFormat", SDL_GPUTextureFormat, [SDL_PixelFormat], SDL_BINARY]

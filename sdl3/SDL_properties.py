@@ -8,6 +8,8 @@ SDL_PropertyType: typing.TypeAlias = SDL_TYPE["SDL_PropertyType", SDL_ENUM]
 SDL_PROPERTY_TYPE_INVALID, SDL_PROPERTY_TYPE_POINTER, SDL_PROPERTY_TYPE_STRING, \
     SDL_PROPERTY_TYPE_NUMBER, SDL_PROPERTY_TYPE_FLOAT, SDL_PROPERTY_TYPE_BOOLEAN = range(6)
 
+SDL_PROP_NAME_STRING: bytes = "SDL.name".encode()
+
 SDL_GetGlobalProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGlobalProperties", SDL_PropertiesID, [], SDL_BINARY]
 SDL_CreateProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateProperties", SDL_PropertiesID, [], SDL_BINARY]
 SDL_CopyProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CopyProperties", ctypes.c_bool, [SDL_PropertiesID, SDL_PropertiesID], SDL_BINARY]

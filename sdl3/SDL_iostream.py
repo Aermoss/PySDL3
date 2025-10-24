@@ -38,6 +38,7 @@ SDL_IOFromMem: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IOFromMem", SDL_POI
 
 SDL_PROP_IOSTREAM_MEMORY_POINTER: bytes = "SDL.iostream.memory.base".encode()
 SDL_PROP_IOSTREAM_MEMORY_SIZE_NUMBER: bytes = "SDL.iostream.memory.size".encode()
+SDL_PROP_IOSTREAM_MEMORY_FREE_FUNC_POINTER: bytes = "SDL.iostream.memory.free".encode()
 
 SDL_IOFromConstMem: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IOFromConstMem", SDL_POINTER[SDL_IOStream], [ctypes.c_void_p, ctypes.c_size_t], SDL_BINARY]
 SDL_IOFromDynamicMem: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_IOFromDynamicMem", SDL_POINTER[SDL_IOStream], [], SDL_BINARY]

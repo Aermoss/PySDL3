@@ -87,6 +87,9 @@ SDL_UnbindAudioStream: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UnbindAudio
 SDL_GetAudioStreamDevice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAudioStreamDevice", SDL_AudioDeviceID, [SDL_POINTER[SDL_AudioStream]], SDL_BINARY]
 SDL_CreateAudioStream: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateAudioStream", SDL_POINTER[SDL_AudioStream], [SDL_POINTER[SDL_AudioSpec], SDL_POINTER[SDL_AudioSpec]], SDL_BINARY]
 SDL_GetAudioStreamProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAudioStreamProperties", SDL_PropertiesID, [SDL_POINTER[SDL_AudioStream]], SDL_BINARY]
+
+SDL_PROP_AUDIOSTREAM_AUTO_CLEANUP_BOOLEAN: bytes = "SDL.audiostream.auto_cleanup".encode()
+
 SDL_GetAudioStreamFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAudioStreamFormat", ctypes.c_bool, [SDL_POINTER[SDL_AudioStream], SDL_POINTER[SDL_AudioSpec], SDL_POINTER[SDL_AudioSpec]], SDL_BINARY]
 SDL_SetAudioStreamFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetAudioStreamFormat", ctypes.c_bool, [SDL_POINTER[SDL_AudioStream], SDL_POINTER[SDL_AudioSpec], SDL_POINTER[SDL_AudioSpec]], SDL_BINARY]
 SDL_GetAudioStreamFrequencyRatio: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAudioStreamFrequencyRatio", ctypes.c_float, [SDL_POINTER[SDL_AudioStream]], SDL_BINARY]
@@ -98,6 +101,12 @@ SDL_GetAudioStreamOutputChannelMap: abc.Callable[..., typing.Any] = SDL_FUNC["SD
 SDL_SetAudioStreamInputChannelMap: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetAudioStreamInputChannelMap", ctypes.c_bool, [SDL_POINTER[SDL_AudioStream], SDL_POINTER[ctypes.c_int], ctypes.c_int], SDL_BINARY]
 SDL_SetAudioStreamOutputChannelMap: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetAudioStreamOutputChannelMap", ctypes.c_bool, [SDL_POINTER[SDL_AudioStream], SDL_POINTER[ctypes.c_int], ctypes.c_int], SDL_BINARY]
 SDL_PutAudioStreamData: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PutAudioStreamData", ctypes.c_bool, [SDL_POINTER[SDL_AudioStream], ctypes.c_void_p, ctypes.c_int], SDL_BINARY]
+
+SDL_AudioStreamDataCompleteCallback: typing.TypeAlias = SDL_FUNC_TYPE["SDL_AudioStreamDataCompleteCallback", None, [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int]]
+
+SDL_PutAudioStreamDataNoCopy: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PutAudioStreamDataNoCopy", ctypes.c_bool, [SDL_POINTER[SDL_AudioStream], ctypes.c_void_p, ctypes.c_int, SDL_AudioStreamDataCompleteCallback, ctypes.c_void_p], SDL_BINARY]
+SDL_PutAudioStreamPlanarData: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PutAudioStreamPlanarData", ctypes.c_bool, [SDL_POINTER[SDL_AudioStream], SDL_POINTER[ctypes.c_void_p], ctypes.c_int, ctypes.c_int], SDL_BINARY]
+
 SDL_GetAudioStreamData: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAudioStreamData", ctypes.c_int, [SDL_POINTER[SDL_AudioStream], ctypes.c_void_p, ctypes.c_int], SDL_BINARY]
 SDL_GetAudioStreamAvailable: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAudioStreamAvailable", ctypes.c_int, [SDL_POINTER[SDL_AudioStream]], SDL_BINARY]
 SDL_GetAudioStreamQueued: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAudioStreamQueued", ctypes.c_int, [SDL_POINTER[SDL_AudioStream]], SDL_BINARY]

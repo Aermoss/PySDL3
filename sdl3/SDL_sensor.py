@@ -13,7 +13,7 @@ SDL_STANDARD_GRAVITY: float = 9.80665
 SDL_SensorType: typing.TypeAlias = SDL_TYPE["SDL_SensorType", SDL_ENUM]
 
 SDL_SENSOR_INVALID, SDL_SENSOR_UNKNOWN, SDL_SENSOR_ACCEL, SDL_SENSOR_GYRO, \
-    SDL_SENSOR_ACCEL_L, SDL_SENSOR_GYRO_L, SDL_SENSOR_ACCEL_R, SDL_SENSOR_GYRO_R = range(-1, 7)
+    SDL_SENSOR_ACCEL_L, SDL_SENSOR_GYRO_L, SDL_SENSOR_ACCEL_R, SDL_SENSOR_GYRO_R, SDL_SENSOR_COUNT = range(-1, 8)
 
 SDL_GetSensors: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSensors", SDL_POINTER[SDL_SensorID], [SDL_POINTER[ctypes.c_int]], SDL_BINARY]
 SDL_GetSensorNameForID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSensorNameForID", ctypes.c_char_p, [SDL_SensorID], SDL_BINARY]

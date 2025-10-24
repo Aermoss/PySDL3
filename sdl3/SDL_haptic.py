@@ -6,6 +6,10 @@ from .SDL_joystick import SDL_Joystick
 class SDL_Haptic(ctypes.c_void_p):
     ...
 
+SDL_HAPTIC_INFINITY: int = 4294967295
+
+SDL_HapticEffectType: typing.TypeAlias = SDL_TYPE["SDL_HapticEffectType", ctypes.c_uint16]
+
 SDL_HAPTIC_CONSTANT: int = 1 << 0
 SDL_HAPTIC_SINE: int = 1 << 1
 SDL_HAPTIC_SQUARE: int = 1 << 2
@@ -27,20 +31,22 @@ SDL_HAPTIC_AUTOCENTER: int = 1 << 17
 SDL_HAPTIC_STATUS: int = 1 << 18
 SDL_HAPTIC_PAUSE: int = 1 << 19
 
+SDL_HapticDirectionType: typing.TypeAlias = SDL_TYPE["SDL_HapticDirectionType", ctypes.c_uint8]
+
 SDL_HAPTIC_POLAR, SDL_HAPTIC_CARTESIAN, \
     SDL_HAPTIC_SPHERICAL, SDL_HAPTIC_STEERING_AXIS = range(4)
 
-SDL_HAPTIC_INFINITY: int = 4294967295
+SDL_HapticEffectID: typing.TypeAlias = SDL_TYPE["SDL_HapticEffectID", ctypes.c_int]
 
 class SDL_HapticDirection(ctypes.Structure):
     _fields_ = [
-        ("type", ctypes.c_uint8),
+        ("type", SDL_HapticDirectionType),
         ("dir", ctypes.c_int32 * 3)
     ]
 
 class SDL_HapticConstant(ctypes.Structure):
     _fields_ = [
-        ("type", ctypes.c_uint16),
+        ("type", SDL_HapticEffectType),
         ("direction", SDL_HapticDirection),
         ("length", ctypes.c_uint32),
         ("delay", ctypes.c_uint16),
@@ -55,7 +61,7 @@ class SDL_HapticConstant(ctypes.Structure):
 
 class SDL_HapticPeriodic(ctypes.Structure):
     _fields_ = [
-        ("type", ctypes.c_uint16),
+        ("type", SDL_HapticEffectType),
         ("direction", SDL_HapticDirection),
         ("length", ctypes.c_uint32),
         ("delay", ctypes.c_uint16),
@@ -73,7 +79,7 @@ class SDL_HapticPeriodic(ctypes.Structure):
 
 class SDL_HapticCondition(ctypes.Structure):
     _fields_ = [
-        ("type", ctypes.c_uint16),
+        ("type", SDL_HapticEffectType),
         ("direction", SDL_HapticDirection),
         ("length", ctypes.c_uint32),
         ("delay", ctypes.c_uint16),
@@ -89,7 +95,7 @@ class SDL_HapticCondition(ctypes.Structure):
 
 class SDL_HapticRamp(ctypes.Structure):
     _fields_ = [
-        ("type", ctypes.c_uint16),
+        ("type", SDL_HapticEffectType),
         ("direction", SDL_HapticDirection),
         ("length", ctypes.c_uint32),
         ("delay", ctypes.c_uint16),
@@ -105,7 +111,7 @@ class SDL_HapticRamp(ctypes.Structure):
 
 class SDL_HapticLeftRight(ctypes.Structure):
     _fields_ = [
-        ("type", ctypes.c_uint16),
+        ("type", SDL_HapticEffectType),
         ("length", ctypes.c_uint32),
         ("large_magnitude", ctypes.c_uint16),
         ("small_magnitude", ctypes.c_uint16)
@@ -113,7 +119,7 @@ class SDL_HapticLeftRight(ctypes.Structure):
 
 class SDL_HapticCustom(ctypes.Structure):
     _fields_ = [
-        ("type", ctypes.c_uint16),
+        ("type", SDL_HapticEffectType),
         ("direction", SDL_HapticDirection),
         ("length", ctypes.c_uint32),
         ("delay", ctypes.c_uint16),
@@ -131,7 +137,7 @@ class SDL_HapticCustom(ctypes.Structure):
 
 class SDL_HapticEffect(ctypes.Union):
     _fields_ = [
-        ("type", ctypes.c_uint16),
+        ("type", SDL_HapticEffectType),
         ("constant", SDL_HapticConstant),
         ("periodic", SDL_HapticPeriodic),
         ("condition", SDL_HapticCondition),
@@ -158,12 +164,12 @@ SDL_GetMaxHapticEffectsPlaying: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_Ge
 SDL_GetHapticFeatures: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHapticFeatures", ctypes.c_uint32, [SDL_POINTER[SDL_Haptic]], SDL_BINARY]
 SDL_GetNumHapticAxes: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNumHapticAxes", ctypes.c_int, [SDL_POINTER[SDL_Haptic]], SDL_BINARY]
 SDL_HapticEffectSupported: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HapticEffectSupported", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], SDL_POINTER[SDL_HapticEffect]], SDL_BINARY]
-SDL_CreateHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateHapticEffect", ctypes.c_int, [SDL_POINTER[SDL_Haptic], SDL_POINTER[SDL_HapticEffect]], SDL_BINARY]
-SDL_UpdateHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateHapticEffect", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int, SDL_POINTER[SDL_HapticEffect]], SDL_BINARY]
-SDL_RunHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RunHapticEffect", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int, ctypes.c_uint32], SDL_BINARY]
-SDL_StopHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_StopHapticEffect", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int], SDL_BINARY]
-SDL_DestroyHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyHapticEffect", None, [SDL_POINTER[SDL_Haptic], ctypes.c_int], SDL_BINARY]
-SDL_GetHapticEffectStatus: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHapticEffectStatus", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int], SDL_BINARY]
+SDL_CreateHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateHapticEffect", SDL_HapticEffectID, [SDL_POINTER[SDL_Haptic], SDL_POINTER[SDL_HapticEffect]], SDL_BINARY]
+SDL_UpdateHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UpdateHapticEffect", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], SDL_HapticEffectID, SDL_POINTER[SDL_HapticEffect]], SDL_BINARY]
+SDL_RunHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RunHapticEffect", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], SDL_HapticEffectID, ctypes.c_uint32], SDL_BINARY]
+SDL_StopHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_StopHapticEffect", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], SDL_HapticEffectID], SDL_BINARY]
+SDL_DestroyHapticEffect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyHapticEffect", None, [SDL_POINTER[SDL_Haptic], SDL_HapticEffectID], SDL_BINARY]
+SDL_GetHapticEffectStatus: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetHapticEffectStatus", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], SDL_HapticEffectID], SDL_BINARY]
 SDL_SetHapticGain: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHapticGain", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int], SDL_BINARY]
 SDL_SetHapticAutocenter: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetHapticAutocenter", ctypes.c_bool, [SDL_POINTER[SDL_Haptic], ctypes.c_int], SDL_BINARY]
 SDL_PauseHaptic: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_PauseHaptic", ctypes.c_bool, [SDL_POINTER[SDL_Haptic]], SDL_BINARY]

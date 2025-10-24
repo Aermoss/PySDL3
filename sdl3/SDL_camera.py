@@ -25,6 +25,10 @@ SDL_CameraPosition: typing.TypeAlias = SDL_TYPE["SDL_CameraPosition", SDL_ENUM]
 
 SDL_CAMERA_POSITION_UNKNOWN, SDL_CAMERA_POSITION_FRONT_FACING, SDL_CAMERA_POSITION_BACK_FACING = range(3)
 
+SDL_CameraPermissionState: typing.TypeAlias = SDL_TYPE["SDL_CameraPermissionState", SDL_ENUM]
+
+SDL_CAMERA_PERMISSION_STATE_DENIED, SDL_CAMERA_PERMISSION_STATE_PENDING, SDL_CAMERA_PERMISSION_STATE_APPROVED = range(-1, 2)
+
 SDL_GetNumCameraDrivers: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetNumCameraDrivers", ctypes.c_int, [], SDL_BINARY]
 SDL_GetCameraDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraDriver", ctypes.c_char_p, [ctypes.c_int], SDL_BINARY]
 SDL_GetCurrentCameraDriver: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCurrentCameraDriver", ctypes.c_char_p, [], SDL_BINARY]
@@ -33,7 +37,7 @@ SDL_GetCameraSupportedFormats: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_Get
 SDL_GetCameraName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraName", ctypes.c_char_p, [SDL_CameraID], SDL_BINARY]
 SDL_GetCameraPosition: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraPosition", SDL_CameraPosition, [SDL_CameraID], SDL_BINARY]
 SDL_OpenCamera: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_OpenCamera", SDL_POINTER[SDL_Camera], [SDL_CameraID, SDL_POINTER[SDL_CameraSpec]], SDL_BINARY]
-SDL_GetCameraPermissionState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraPermissionState", ctypes.c_int, [SDL_POINTER[SDL_Camera]], SDL_BINARY]
+SDL_GetCameraPermissionState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraPermissionState", SDL_CameraPermissionState, [SDL_POINTER[SDL_Camera]], SDL_BINARY]
 SDL_GetCameraID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraID", SDL_CameraID, [SDL_POINTER[SDL_Camera]], SDL_BINARY]
 SDL_GetCameraProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraProperties", SDL_PropertiesID, [SDL_POINTER[SDL_Camera]], SDL_BINARY]
 SDL_GetCameraFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetCameraFormat", ctypes.c_bool, [SDL_POINTER[SDL_Camera], SDL_POINTER[SDL_CameraSpec]], SDL_BINARY]

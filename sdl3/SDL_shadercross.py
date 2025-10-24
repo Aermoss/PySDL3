@@ -24,12 +24,17 @@ class SDL_ShaderCross_IOVarMetadata(ctypes.Structure):
         ("vector_size", ctypes.c_uint32)
     ]
 
-class SDL_ShaderCross_GraphicsShaderMetadata(ctypes.Structure):
+class SDL_ShaderCross_GraphicsShaderResourceInfo(ctypes.Structure):
     _fields_ = [
         ("num_samplers", ctypes.c_uint32),
         ("num_storage_textures", ctypes.c_uint32),
         ("num_storage_buffers", ctypes.c_uint32),
-        ("num_uniform_buffers", ctypes.c_uint32),
+        ("num_uniform_buffers", ctypes.c_uint32)
+    ]
+
+class SDL_ShaderCross_GraphicsShaderMetadata(ctypes.Structure):
+    _fields_ = [
+        ("resource_info", SDL_ShaderCross_GraphicsShaderResourceInfo),
         ("num_inputs", ctypes.c_uint32),
         ("inputs", SDL_POINTER[SDL_ShaderCross_IOVarMetadata]),
         ("num_outputs", ctypes.c_uint32),
@@ -55,13 +60,15 @@ class SDL_ShaderCross_SPIRV_Info(ctypes.Structure):
         ("bytecode_size", ctypes.c_size_t),
         ("entrypoint", ctypes.c_char_p),
         ("shader_stage", SDL_ShaderCross_ShaderStage),
-        ("enable_debug", ctypes.c_bool),
-        ("name", ctypes.c_char_p),
         ("props", SDL_PropertiesID)
     ]
 
-SDL_SHADERCROSS_PROP_SPIRV_PSSL_COMPATIBILITY: bytes = "SDL.shadercross.spirv.pssl.compatibility".encode()
-SDL_SHADERCROSS_PROP_SPIRV_MSL_VERSION: bytes = "SDL.shadercross.spirv.msl.version".encode()
+SDL_SHADERCROSS_PROP_SHADER_DEBUG_ENABLE_BOOLEAN: bytes = "SDL_shadercross.spirv.debug.enable".encode()
+SDL_SHADERCROSS_PROP_SHADER_DEBUG_NAME_STRING: bytes = "SDL_shadercross.spirv.debug.name".encode()
+SDL_SHADERCROSS_PROP_SHADER_CULL_UNUSED_BINDINGS_BOOLEAN: bytes = "SDL_shadercross.spirv.cull_unused_bindings".encode()
+
+SDL_SHADERCROSS_PROP_SPIRV_PSSL_COMPATIBILITY_BOOLEAN: bytes = "SDL_shadercross.spirv.pssl.compatibility".encode()
+SDL_SHADERCROSS_PROP_SPIRV_MSL_VERSION_STRING: bytes = "SDL_shadercross.spirv.msl.version".encode()
 
 class SDL_ShaderCross_HLSL_Define(ctypes.Structure):
     _fields_ = [
@@ -76,8 +83,6 @@ class SDL_ShaderCross_HLSL_Info(ctypes.Structure):
         ("include_dir", ctypes.c_char_p),
         ("defines", SDL_POINTER[SDL_ShaderCross_HLSL_Define]),
         ("shader_stage", SDL_ShaderCross_ShaderStage),
-        ("enable_debug", ctypes.c_bool),
-        ("name", ctypes.c_char_p),
         ("props", SDL_PropertiesID)
     ]
 
@@ -91,7 +96,7 @@ SDL_ShaderCross_TranspileHLSLFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC
 SDL_ShaderCross_CompileDXBCFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileDXBCFromSPIRV", ctypes.c_void_p, [SDL_POINTER[SDL_ShaderCross_SPIRV_Info], SDL_POINTER[ctypes.c_size_t]], SDL_SHADERCROSS_BINARY]
 SDL_ShaderCross_CompileDXILFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileDXILFromSPIRV", ctypes.c_void_p, [SDL_POINTER[SDL_ShaderCross_SPIRV_Info], SDL_POINTER[ctypes.c_size_t]], SDL_SHADERCROSS_BINARY]
 
-SDL_ShaderCross_CompileGraphicsShaderFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileGraphicsShaderFromSPIRV", SDL_POINTER[SDL_GPUShader], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_ShaderCross_SPIRV_Info], SDL_POINTER[SDL_ShaderCross_GraphicsShaderMetadata], SDL_PropertiesID], SDL_SHADERCROSS_BINARY]
+SDL_ShaderCross_CompileGraphicsShaderFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileGraphicsShaderFromSPIRV", SDL_POINTER[SDL_GPUShader], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_ShaderCross_SPIRV_Info], SDL_POINTER[SDL_ShaderCross_GraphicsShaderResourceInfo], SDL_PropertiesID], SDL_SHADERCROSS_BINARY]
 SDL_ShaderCross_CompileComputePipelineFromSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_CompileComputePipelineFromSPIRV", SDL_POINTER[SDL_GPUComputePipeline], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_ShaderCross_SPIRV_Info], SDL_POINTER[SDL_ShaderCross_ComputePipelineMetadata], SDL_PropertiesID], SDL_SHADERCROSS_BINARY]
 
 SDL_ShaderCross_ReflectGraphicsSPIRV: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShaderCross_ReflectGraphicsSPIRV", SDL_POINTER[SDL_ShaderCross_GraphicsShaderMetadata], [SDL_POINTER[ctypes.c_uint8], ctypes.c_size_t, SDL_PropertiesID], SDL_SHADERCROSS_BINARY]

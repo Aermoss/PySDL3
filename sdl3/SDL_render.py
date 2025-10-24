@@ -1,15 +1,19 @@
 import ctypes, typing, collections.abc as abc
 
 from . import  SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
+from .SDL_gpu import SDL_GPUDevice, SDL_GPUShader, \
+    SDL_GPUBuffer, SDL_GPUTexture, SDL_GPUTextureSamplerBinding
 from .SDL_rect import SDL_FPoint, SDL_Rect, SDL_FRect
 from .SDL_pixels import SDL_FColor, SDL_PixelFormat
 from .SDL_surface import SDL_Surface, SDL_ScaleMode, SDL_FlipMode
 from .SDL_video import SDL_Window, SDL_WindowFlags
 from .SDL_properties import SDL_PropertiesID
 from .SDL_blendmode import SDL_BlendMode
+from .SDL_pixels import SDL_Palette
 from .SDL_events import SDL_Event
 
 SDL_SOFTWARE_RENDERER: bytes = "software".encode()
+SDL_GPU_RENDERER: bytes = "gpu".encode()
 
 class SDL_Vertex(ctypes.Structure):
     _fields_ = [
@@ -21,6 +25,10 @@ class SDL_Vertex(ctypes.Structure):
 SDL_TextureAccess: typing.TypeAlias = SDL_TYPE["SDL_TextureAccess", SDL_ENUM]
 
 SDL_TEXTUREACCESS_STATIC, SDL_TEXTUREACCESS_STREAMING, SDL_TEXTUREACCESS_TARGET = range(3)
+
+SDL_TextureAddressMode: typing.TypeAlias = SDL_TYPE["SDL_TextureAddressMode", SDL_ENUM]
+
+SDL_TEXTURE_ADDRESS_INVALID, SDL_TEXTURE_ADDRESS_AUTO, SDL_TEXTURE_ADDRESS_CLAMP, SDL_TEXTURE_ADDRESS_WRAP = range(-1, 3)
 
 SDL_RendererLogicalPresentation: typing.TypeAlias = SDL_TYPE["SDL_RendererLogicalPresentation", SDL_ENUM]
 
@@ -50,6 +58,10 @@ SDL_PROP_RENDERER_CREATE_WINDOW_POINTER: bytes = "SDL.renderer.create.window".en
 SDL_PROP_RENDERER_CREATE_SURFACE_POINTER: bytes = "SDL.renderer.create.surface".encode()
 SDL_PROP_RENDERER_CREATE_OUTPUT_COLORSPACE_NUMBER: bytes = "SDL.renderer.create.output_colorspace".encode()
 SDL_PROP_RENDERER_CREATE_PRESENT_VSYNC_NUMBER: bytes = "SDL.renderer.create.present_vsync".encode()
+SDL_PROP_RENDERER_CREATE_GPU_DEVICE_POINTER: bytes = "SDL.renderer.create.gpu.device".encode()
+SDL_PROP_RENDERER_CREATE_GPU_SHADERS_SPIRV_BOOLEAN: bytes = "SDL.renderer.create.gpu.shaders_spirv".encode()
+SDL_PROP_RENDERER_CREATE_GPU_SHADERS_DXIL_BOOLEAN: bytes = "SDL.renderer.create.gpu.shaders_dxil".encode()
+SDL_PROP_RENDERER_CREATE_GPU_SHADERS_MSL_BOOLEAN: bytes = "SDL.renderer.create.gpu.shaders_msl".encode()
 SDL_PROP_RENDERER_CREATE_VULKAN_INSTANCE_POINTER: bytes = "SDL.renderer.create.vulkan.instance".encode()
 SDL_PROP_RENDERER_CREATE_VULKAN_SURFACE_NUMBER: bytes = "SDL.renderer.create.vulkan.surface".encode()
 SDL_PROP_RENDERER_CREATE_VULKAN_PHYSICAL_DEVICE_POINTER: bytes = "SDL.renderer.create.vulkan.physical_device".encode()
@@ -57,6 +69,8 @@ SDL_PROP_RENDERER_CREATE_VULKAN_DEVICE_POINTER: bytes = "SDL.renderer.create.vul
 SDL_PROP_RENDERER_CREATE_VULKAN_GRAPHICS_QUEUE_FAMILY_INDEX_NUMBER: bytes = "SDL.renderer.create.vulkan.graphics_queue_family_index".encode()
 SDL_PROP_RENDERER_CREATE_VULKAN_PRESENT_QUEUE_FAMILY_INDEX_NUMBER: bytes = "SDL.renderer.create.vulkan.present_queue_family_index".encode()
 
+SDL_CreateGPURenderer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPURenderer", SDL_POINTER[SDL_Renderer], [SDL_POINTER[SDL_GPUDevice], SDL_POINTER[SDL_Window]], SDL_BINARY]
+SDL_GetGPURendererDevice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetGPURendererDevice", SDL_POINTER[SDL_GPUDevice], [SDL_POINTER[SDL_Renderer]], SDL_BINARY]
 SDL_CreateSoftwareRenderer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateSoftwareRenderer", SDL_POINTER[SDL_Renderer], [SDL_POINTER[SDL_Surface]], SDL_BINARY]
 SDL_GetRenderer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRenderer", SDL_POINTER[SDL_Renderer], [SDL_POINTER[SDL_Window]], SDL_BINARY]
 SDL_GetRenderWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRenderWindow", SDL_POINTER[SDL_Window], [SDL_POINTER[SDL_Renderer]], SDL_BINARY]
@@ -70,6 +84,7 @@ SDL_PROP_RENDERER_SURFACE_POINTER: bytes = "SDL.renderer.surface".encode()
 SDL_PROP_RENDERER_VSYNC_NUMBER: bytes = "SDL.renderer.vsync".encode()
 SDL_PROP_RENDERER_MAX_TEXTURE_SIZE_NUMBER: bytes = "SDL.renderer.max_texture_size".encode()
 SDL_PROP_RENDERER_TEXTURE_FORMATS_POINTER: bytes = "SDL.renderer.texture_formats".encode()
+SDL_PROP_RENDERER_TEXTURE_WRAPPING_BOOLEAN: bytes = "SDL.renderer.texture_wrapping".encode()
 SDL_PROP_RENDERER_OUTPUT_COLORSPACE_NUMBER: bytes = "SDL.renderer.output_colorspace".encode()
 SDL_PROP_RENDERER_HDR_ENABLED_BOOLEAN: bytes = "SDL.renderer.HDR_enabled".encode()
 SDL_PROP_RENDERER_SDR_WHITE_POINT_FLOAT: bytes = "SDL.renderer.SDR_white_point".encode()
@@ -101,6 +116,7 @@ SDL_PROP_TEXTURE_CREATE_FORMAT_NUMBER: bytes = "SDL.texture.create.format".encod
 SDL_PROP_TEXTURE_CREATE_ACCESS_NUMBER: bytes = "SDL.texture.create.access".encode()
 SDL_PROP_TEXTURE_CREATE_WIDTH_NUMBER: bytes = "SDL.texture.create.width".encode()
 SDL_PROP_TEXTURE_CREATE_HEIGHT_NUMBER: bytes = "SDL.texture.create.height".encode()
+SDL_PROP_TEXTURE_CREATE_PALETTE_POINTER: bytes = "SDL.texture.create.palette".encode()
 SDL_PROP_TEXTURE_CREATE_SDR_WHITE_POINT_FLOAT: bytes = "SDL.texture.create.SDR_white_point".encode()
 SDL_PROP_TEXTURE_CREATE_HDR_HEADROOM_FLOAT: bytes = "SDL.texture.create.HDR_headroom".encode()
 SDL_PROP_TEXTURE_CREATE_D3D11_TEXTURE_POINTER: bytes = "SDL.texture.create.d3d11.texture".encode()
@@ -119,6 +135,10 @@ SDL_PROP_TEXTURE_CREATE_OPENGLES2_TEXTURE_UV_NUMBER: bytes = "SDL.texture.create
 SDL_PROP_TEXTURE_CREATE_OPENGLES2_TEXTURE_U_NUMBER: bytes = "SDL.texture.create.opengles2.texture_u".encode()
 SDL_PROP_TEXTURE_CREATE_OPENGLES2_TEXTURE_V_NUMBER: bytes = "SDL.texture.create.opengles2.texture_v".encode()
 SDL_PROP_TEXTURE_CREATE_VULKAN_TEXTURE_NUMBER: bytes = "SDL.texture.create.vulkan.texture".encode()
+SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_POINTER: bytes = "SDL.texture.create.gpu.texture".encode()
+SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_UV_POINTER: bytes = "SDL.texture.create.gpu.texture_uv".encode()
+SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_U_POINTER: bytes = "SDL.texture.create.gpu.texture_u".encode()
+SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_V_POINTER: bytes = "SDL.texture.create.gpu.texture_v".encode()
 
 SDL_GetTextureProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTextureProperties", SDL_PropertiesID, [SDL_POINTER[SDL_Texture]], SDL_BINARY]
 
@@ -148,9 +168,16 @@ SDL_PROP_TEXTURE_OPENGLES2_TEXTURE_U_NUMBER: bytes = "SDL.texture.opengles2.text
 SDL_PROP_TEXTURE_OPENGLES2_TEXTURE_V_NUMBER: bytes = "SDL.texture.opengles2.texture_v".encode()
 SDL_PROP_TEXTURE_OPENGLES2_TEXTURE_TARGET_NUMBER: bytes = "SDL.texture.opengles2.target".encode()
 SDL_PROP_TEXTURE_VULKAN_TEXTURE_NUMBER: bytes = "SDL.texture.vulkan.texture".encode()
+SDL_PROP_TEXTURE_GPU_TEXTURE_POINTER: bytes = "SDL.texture.gpu.texture".encode()
+SDL_PROP_TEXTURE_GPU_TEXTURE_UV_POINTER: bytes = "SDL.texture.gpu.texture_uv".encode()
+SDL_PROP_TEXTURE_GPU_TEXTURE_U_POINTER: bytes = "SDL.texture.gpu.texture_u".encode()
+SDL_PROP_TEXTURE_GPU_TEXTURE_V_POINTER: bytes = "SDL.texture.gpu.texture_v".encode()
 
 SDL_GetRendererFromTexture: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRendererFromTexture", SDL_POINTER[SDL_Renderer], [SDL_POINTER[SDL_Texture]], SDL_BINARY]
 SDL_GetTextureSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTextureSize", ctypes.c_bool, [SDL_POINTER[SDL_Texture], SDL_POINTER[ctypes.c_float], SDL_POINTER[ctypes.c_float]], SDL_BINARY]
+
+SDL_SetTexturePalette: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetTexturePalette", ctypes.c_bool, [SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Palette]], SDL_BINARY]
+SDL_GetTexturePalette: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetTexturePalette", SDL_POINTER[SDL_Palette], [SDL_POINTER[SDL_Texture]], SDL_BINARY]
 
 SDL_SetTextureColorMod: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetTextureColorMod", ctypes.c_bool, [SDL_POINTER[SDL_Texture], ctypes.c_uint8, ctypes.c_uint8, ctypes.c_uint8], SDL_BINARY]
 SDL_SetTextureColorModFloat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetTextureColorModFloat", ctypes.c_bool, [SDL_POINTER[SDL_Texture], ctypes.c_float, ctypes.c_float, ctypes.c_float], SDL_BINARY]
@@ -235,9 +262,13 @@ SDL_RenderTextureRotated: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderTe
 SDL_RenderTextureAffine: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderTextureAffine", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_FRect], SDL_POINTER[SDL_FPoint], SDL_POINTER[SDL_FPoint], SDL_POINTER[SDL_FPoint]], SDL_BINARY]
 SDL_RenderTextureTiled: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderTextureTiled", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_FRect], ctypes.c_float, SDL_POINTER[SDL_FRect]], SDL_BINARY]
 SDL_RenderTexture9Grid: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderTexture9Grid", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_FRect], ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, SDL_POINTER[SDL_FRect]], SDL_BINARY]
+SDL_RenderTexture9GridTiled: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderTexture9GridTiled", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_FRect], ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, SDL_POINTER[SDL_FRect], ctypes.c_float], SDL_BINARY]
 
 SDL_RenderGeometry: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderGeometry", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[SDL_Vertex], ctypes.c_int, SDL_POINTER[ctypes.c_int], ctypes.c_int], SDL_BINARY]
 SDL_RenderGeometryRaw: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderGeometryRaw", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Texture], SDL_POINTER[ctypes.c_float], ctypes.c_int, SDL_POINTER[SDL_FColor], ctypes.c_int, SDL_POINTER[ctypes.c_float], ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_int], SDL_BINARY]
+
+SDL_SetRenderTextureAddressMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetRenderTextureAddressMode", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_TextureAddressMode, SDL_TextureAddressMode], SDL_BINARY]
+SDL_GetRenderTextureAddressMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetRenderTextureAddressMode", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_TextureAddressMode], SDL_POINTER[SDL_TextureAddressMode]], SDL_BINARY]
 
 SDL_RenderReadPixels: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderReadPixels", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_Rect]], SDL_BINARY]
 SDL_RenderPresent: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderPresent", ctypes.c_bool, [SDL_POINTER[SDL_Renderer]], SDL_BINARY]
@@ -261,3 +292,26 @@ SDL_DEBUG_TEXT_FONT_CHARACTER_SIZE: int = 8
 
 SDL_RenderDebugText: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderDebugText", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, ctypes.c_char_p], SDL_BINARY]
 SDL_RenderDebugTextFormat: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RenderDebugTextFormat", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], ctypes.c_float, ctypes.c_float, ctypes.c_char_p, ...], SDL_BINARY]
+
+SDL_SetDefaultTextureScaleMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetDefaultTextureScaleMode", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_ScaleMode], SDL_BINARY]
+SDL_GetDefaultTextureScaleMode: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDefaultTextureScaleMode", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_ScaleMode]], SDL_BINARY]
+
+class SDL_GPURenderStateCreateInfo(ctypes.Structure):
+    _fields_ = [
+        ("fragment_shader", SDL_POINTER[SDL_GPUShader]),
+        ("num_sampler_bindings", ctypes.c_int32),
+        ("sampler_bindings", SDL_POINTER[SDL_GPUTextureSamplerBinding]),
+        ("num_storage_textures", ctypes.c_int32),
+        ("storage_textures", SDL_POINTER[SDL_POINTER[SDL_GPUTexture]]),
+        ("num_storage_buffers", ctypes.c_int32),
+        ("storage_buffers", SDL_POINTER[SDL_POINTER[SDL_GPUBuffer]]),
+        ("props", SDL_PropertiesID)
+    ]
+
+class SDL_GPURenderState(ctypes.c_void_p):
+    ...
+
+SDL_CreateGPURenderState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CreateGPURenderState", SDL_POINTER[SDL_GPURenderState], [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_GPURenderStateCreateInfo]], SDL_BINARY]
+SDL_SetGPURenderStateFragmentUniforms: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPURenderStateFragmentUniforms", ctypes.c_bool, [SDL_POINTER[SDL_GPURenderState], ctypes.c_uint32, ctypes.c_void_p, ctypes.c_uint32], SDL_BINARY]
+SDL_SetGPURenderState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetGPURenderState", ctypes.c_bool, [SDL_POINTER[SDL_Renderer], SDL_POINTER[SDL_GPURenderState]], SDL_BINARY]
+SDL_DestroyGPURenderState: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyGPURenderState", None, [SDL_POINTER[SDL_GPURenderState]], SDL_BINARY]

@@ -1,6 +1,7 @@
 import ctypes, typing, collections.abc as abc
 
 from . import SDL_POINTER, SDL_ENUM, SDL_FUNC, SDL_TYPE, SDL_BINARY
+from .SDL_properties import SDL_PropertiesID
 
 class SDL_hid_device(ctypes.c_void_p):
     ...
@@ -36,6 +37,10 @@ SDL_hid_enumerate: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_hid_enumerate",
 SDL_hid_free_enumeration: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_hid_free_enumeration", None, [SDL_POINTER[SDL_hid_device_info]], SDL_BINARY]
 SDL_hid_open: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_hid_open", SDL_POINTER[SDL_hid_device], [ctypes.c_ushort, ctypes.c_ushort, ctypes.c_wchar_p], SDL_BINARY]
 SDL_hid_open_path: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_hid_open_path", SDL_POINTER[SDL_hid_device], [ctypes.c_char_p], SDL_BINARY]
+SDL_hid_get_properties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_hid_get_properties", SDL_PropertiesID, [SDL_POINTER[SDL_hid_device]], SDL_BINARY]
+
+SDL_PROP_HIDAPI_LIBUSB_DEVICE_HANDLE_POINTER: bytes = "SDL.hidapi.libusb.device.handle".encode()
+
 SDL_hid_write: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_hid_write", ctypes.c_int, [SDL_POINTER[SDL_hid_device], SDL_POINTER[ctypes.c_ubyte], ctypes.c_size_t], SDL_BINARY]
 SDL_hid_read_timeout: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_hid_read_timeout", ctypes.c_int, [SDL_POINTER[SDL_hid_device], SDL_POINTER[ctypes.c_ubyte], ctypes.c_size_t, ctypes.c_int], SDL_BINARY]
 SDL_hid_read: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_hid_read", ctypes.c_int, [SDL_POINTER[SDL_hid_device], SDL_POINTER[ctypes.c_ubyte], ctypes.c_size_t], SDL_BINARY]

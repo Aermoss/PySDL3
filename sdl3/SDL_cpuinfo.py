@@ -24,3 +24,4 @@ SDL_HasLASX: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HasLASX", ctypes.c_bo
 
 SDL_GetSystemRAM: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSystemRAM", ctypes.c_int, [], SDL_BINARY]
 SDL_GetSIMDAlignment: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSIMDAlignment", ctypes.c_size_t, [], SDL_BINARY]
+SDL_GetSystemPageSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSystemPageSize", ctypes.c_int, [], SDL_BINARY]

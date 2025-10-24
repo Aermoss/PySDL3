@@ -32,6 +32,7 @@ class SDL_AtomicU32(ctypes.Structure):
 SDL_CompareAndSwapAtomicU32: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CompareAndSwapAtomicU32", ctypes.c_bool, [SDL_POINTER[SDL_AtomicU32], ctypes.c_uint32, ctypes.c_uint32], SDL_BINARY]
 SDL_SetAtomicU32: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetAtomicU32", ctypes.c_uint32, [SDL_POINTER[SDL_AtomicU32], ctypes.c_uint32], SDL_BINARY]
 SDL_GetAtomicU32: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetAtomicU32", ctypes.c_uint32, [SDL_POINTER[SDL_AtomicU32]], SDL_BINARY]
+SDL_AddAtomicU32: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_AddAtomicU32", ctypes.c_uint32, [SDL_POINTER[SDL_AtomicU32], ctypes.c_int], SDL_BINARY]
 
 SDL_CompareAndSwapAtomicPointer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_CompareAndSwapAtomicPointer", ctypes.c_bool, [SDL_POINTER[ctypes.c_void_p], ctypes.c_void_p, ctypes.c_void_p], SDL_BINARY]
 SDL_SetAtomicPointer: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetAtomicPointer", ctypes.c_void_p, [SDL_POINTER[ctypes.c_void_p], ctypes.c_void_p], SDL_BINARY]

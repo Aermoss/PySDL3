@@ -1,6 +1,6 @@
-import ctypes, typing
+import ctypes, typing, collections.abc as abc
 
-from . import SDL_TYPE, SDL_ENUM
+from . import SDL_TYPE, SDL_ENUM, SDL_FUNC, SDL_BINARY
 from .SDL_touch import SDL_TouchID
 from .SDL_mouse import SDL_MouseID
 
@@ -22,3 +22,9 @@ SDL_PenAxis: typing.TypeAlias = SDL_TYPE["SDL_PenAxis", SDL_ENUM]
 
 SDL_PEN_AXIS_PRESSURE, SDL_PEN_AXIS_XTILT, SDL_PEN_AXIS_YTILT, SDL_PEN_AXIS_DISTANCE, SDL_PEN_AXIS_ROTATION, \
     SDL_PEN_AXIS_SLIDER, SDL_PEN_AXIS_TANGENTIAL_PRESSURE, SDL_PEN_AXIS_COUNT = range(8)
+
+SDL_PenDeviceType: typing.TypeAlias = SDL_TYPE["SDL_PenDeviceType", SDL_ENUM]
+
+SDL_PEN_DEVICE_TYPE_INVALID, SDL_PEN_DEVICE_TYPE_UNKNOWN, SDL_PEN_DEVICE_TYPE_DIRECT, SDL_PEN_DEVICE_TYPE_INDIRECT = range(-1, 3)
+
+SDL_GetPenDeviceType: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetPenDeviceType", SDL_PenDeviceType, [SDL_PenID], SDL_BINARY]

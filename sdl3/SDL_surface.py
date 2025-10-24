@@ -17,11 +17,11 @@ SDL_MUSTLOCK: abc.Callable[..., bool] = lambda s: \
 
 SDL_ScaleMode: typing.TypeAlias = SDL_TYPE["SDL_ScaleMode", SDL_ENUM]
 
-SDL_SCALEMODE_INVALID, SDL_SCALEMODE_NEAREST, SDL_SCALEMODE_LINEAR = range(-1, 2)
+SDL_SCALEMODE_INVALID, SDL_SCALEMODE_NEAREST, SDL_SCALEMODE_LINEAR, SDL_SCALEMODE_PIXELART = range(-1, 3)
 
 SDL_FlipMode: typing.TypeAlias = SDL_TYPE["SDL_FlipMode", SDL_ENUM]
 
-SDL_FLIP_NONE, SDL_FLIP_HORIZONTAL, SDL_FLIP_VERTICAL = range(3)
+SDL_FLIP_NONE, SDL_FLIP_HORIZONTAL, SDL_FLIP_VERTICAL, SDL_FLIP_HORIZONTAL_AND_VERTICAL = range(4)
 
 class SDL_Surface(ctypes.Structure):
     _fields_ = [
@@ -62,9 +62,13 @@ SDL_UnlockSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UnlockSurface",
 
 SDL_LoadBMP_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadBMP_IO", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_BINARY]
 SDL_LoadBMP: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadBMP", SDL_POINTER[SDL_Surface], [ctypes.c_char_p], SDL_BINARY]
-
 SDL_SaveBMP_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SaveBMP_IO", ctypes.c_bool, [SDL_POINTER[SDL_Surface], SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_BINARY]
 SDL_SaveBMP: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SaveBMP", ctypes.c_bool, [SDL_POINTER[SDL_Surface], ctypes.c_char_p], SDL_BINARY]
+
+SDL_LoadPNG_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadPNG_IO", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_BINARY]
+SDL_LoadPNG: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadPNG", SDL_POINTER[SDL_Surface], [ctypes.c_char_p], SDL_BINARY]
+SDL_SavePNG_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SavePNG_IO", ctypes.c_bool, [SDL_POINTER[SDL_Surface], SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_BINARY]
+SDL_SavePNG: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SavePNG", ctypes.c_bool, [SDL_POINTER[SDL_Surface], ctypes.c_char_p], SDL_BINARY]
 
 SDL_SetSurfaceRLE: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetSurfaceRLE", ctypes.c_bool, [SDL_POINTER[SDL_Surface], ctypes.c_bool], SDL_BINARY]
 SDL_SurfaceHasRLE: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SurfaceHasRLE", ctypes.c_bool, [SDL_POINTER[SDL_Surface]], SDL_BINARY]
@@ -86,6 +90,7 @@ SDL_SetSurfaceClipRect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetSurface
 SDL_GetSurfaceClipRect: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSurfaceClipRect", ctypes.c_bool, [SDL_POINTER[SDL_Surface], SDL_POINTER[SDL_Rect]], SDL_BINARY]
 
 SDL_FlipSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_FlipSurface", ctypes.c_bool, [SDL_POINTER[SDL_Surface], SDL_FlipMode], SDL_BINARY]
+SDL_RotateSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_RotateSurface", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_Surface], ctypes.c_float], SDL_BINARY]
 SDL_DuplicateSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DuplicateSurface", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_Surface]], SDL_BINARY]
 SDL_ScaleSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ScaleSurface", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_Surface], ctypes.c_int, ctypes.c_int, SDL_ScaleMode], SDL_BINARY]
 

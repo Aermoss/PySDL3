@@ -1,6 +1,6 @@
 """A pure Python wrapper for SDL3."""
 
-__version__ = "0.9.8b9"
+__version__ = "0.9.9b0"
 
 import os, sys, requests, ctypes, ctypes.util, platform, collections.abc as abc, \
     keyword, packaging.version, asyncio, aiohttp, zipfile, typing, types, json, re
@@ -522,7 +522,7 @@ async def SDL_GET_STRUCT_DESCRIPTIONS(structs: list[tuple[str, str]], rst: bool 
 def SDL_GET_MODULE_BY_NAME(name: str) -> str | None:
     """Get the module of an SDL3 function/structure by its name."""
 
-    for prefix, module in sorted({"SDL": "SDL3", "IMG": "SDL3_image", "Mix": "SDL3_mixer", "TTF": "SDL3_ttf", "RTF": "SDL3_rtf", "NET": "SDL3_net", "SDL_ShaderCross": "SDL3_shadercross"}.items(), key = lambda x: -len(x[0])):
+    for prefix, module in sorted({"SDL": "SDL3", "IMG": "SDL3_image", "MIX": "SDL3_mixer", "TTF": "SDL3_ttf", "RTF": "SDL3_rtf", "NET": "SDL3_net", "SDL_ShaderCross": "SDL3_shadercross"}.items(), key = lambda x: -len(x[0])):
         if name.startswith(prefix): return module
 
 def SDL_PYTHONIZE_TYPE(type: str, name: str | None = None, globals: dict[str, typing.Any] = {}) -> str:
@@ -718,8 +718,8 @@ SDL_VERSIONNUM_STRING: abc.Callable[[int], str] = lambda num: str(None).lower() 
 
 if not __initialized__:
     if int(os.environ.get("SDL_CHECK_BINARY_VERSION", "1")) > 0:
-        for module, left, right in zip(SDL_MODULES, [SDL_GetVersion, IMG_Version, Mix_Version, TTF_Version, RTF_Version, NET_GetVersion], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
-            if module in binaryMap and (_ := left()) != right: SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(module)}' (expected: {SDL_VERSIONNUM_STRING(right)}, got: {SDL_VERSIONNUM_STRING(_)}).")
+        for module, left, right in zip(SDL_MODULES, [SDL_GetVersion, IMG_Version, MIX_Version, TTF_Version, RTF_Version, NET_Version], [SDL_VERSION, SDL_IMAGE_VERSION, SDL_MIXER_VERSION, SDL_TTF_VERSION, SDL_RTF_VERSION, SDL_NET_VERSION]):
+            if module in __module__.binaryMap and (_ := left()) != right: SDL_LOGGER.Log(SDL_LOGGER.Warning, f"Version mismatch with binary: '{SDL_BINARY_PATTERNS[SDL_SYSTEM][0].format(module)}' (expected: {SDL_VERSIONNUM_STRING(right)}, got: {SDL_VERSIONNUM_STRING(_)}).")
 
     def SDL_TRY_WRITE_DOCS() -> bool | None:
         try:

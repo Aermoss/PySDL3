@@ -19,6 +19,7 @@ SDL_CreateProcessWithProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_C
 
 SDL_PROP_PROCESS_CREATE_ARGS_POINTER: bytes = "SDL.process.create.args".encode()
 SDL_PROP_PROCESS_CREATE_ENVIRONMENT_POINTER: bytes = "SDL.process.create.environment".encode()
+SDL_PROP_PROCESS_CREATE_WORKING_DIRECTORY_STRING: bytes = "SDL.process.create.working_directory".encode()
 SDL_PROP_PROCESS_CREATE_STDIN_NUMBER: bytes = "SDL.process.create.stdin_option".encode()
 SDL_PROP_PROCESS_CREATE_STDIN_POINTER: bytes = "SDL.process.create.stdin_source".encode()
 SDL_PROP_PROCESS_CREATE_STDOUT_NUMBER: bytes = "SDL.process.create.stdout_option".encode()
@@ -27,6 +28,7 @@ SDL_PROP_PROCESS_CREATE_STDERR_NUMBER: bytes = "SDL.process.create.stderr_option
 SDL_PROP_PROCESS_CREATE_STDERR_POINTER: bytes = "SDL.process.create.stderr_source".encode()
 SDL_PROP_PROCESS_CREATE_STDERR_TO_STDOUT_BOOLEAN: bytes = "SDL.process.create.stderr_to_stdout".encode()
 SDL_PROP_PROCESS_CREATE_BACKGROUND_BOOLEAN: bytes = "SDL.process.create.background".encode()
+SDL_PROP_PROCESS_CREATE_CMDLINE_STRING: bytes = "SDL.process.create.cmdline".encode()
 
 SDL_GetProcessProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetProcessProperties", SDL_PropertiesID, [SDL_POINTER[SDL_Process]], SDL_BINARY]
 
