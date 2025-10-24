@@ -66,9 +66,9 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
     transferBuffer = sdl3.SDL_CreateGPUTransferBuffer(device, sdl3.SDL_GPUTransferBufferCreateInfo(sdl3.SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD, ctypes.sizeof(Vertex) * 3))
 
     transferData = ctypes.cast(sdl3.SDL_MapGPUTransferBuffer(device, transferBuffer, False), sdl3.SDL_POINTER[Vertex])
-    transferData[0] = Vertex(sdl3.SDL_ARRAY(-0.5, -0.5, 0.0, type = ctypes.c_float)[0])
-    transferData[1] = Vertex(sdl3.SDL_ARRAY( 0.5, -0.5, 0.0, type = ctypes.c_float)[0])
-    transferData[2] = Vertex(sdl3.SDL_ARRAY( 0.0,  0.5, 0.0, type = ctypes.c_float)[0])
+    transferData[0] = Vertex(sdl3.SDL_ARRAY(-0.5, -0.5, 0.0, _type = ctypes.c_float)[0])
+    transferData[1] = Vertex(sdl3.SDL_ARRAY( 0.5, -0.5, 0.0, _type = ctypes.c_float)[0])
+    transferData[2] = Vertex(sdl3.SDL_ARRAY( 0.0,  0.5, 0.0, _type = ctypes.c_float)[0])
     sdl3.SDL_UnmapGPUTransferBuffer(device, transferBuffer)
 
     commandBuffer = sdl3.SDL_AcquireGPUCommandBuffer(device)
@@ -110,9 +110,9 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
         colorTargetInfo = sdl3.SDL_GPUColorTargetInfo(swapChainTexture, load_op = sdl3.SDL_GPU_LOADOP_CLEAR,
             clear_color = sdl3.SDL_FColor(*colorsys.hsv_to_rgb(hue := (hue + 0.25 * deltaTime) % 1, 1.0, 0.0), 1.0))
         
-        uniformData.color0 = sdl3.SDL_ARRAY(*colorsys.hsv_to_rgb(hue + 0.48, 1.0, 1.0), 1.0, type = ctypes.c_float)[0]
-        uniformData.color1 = sdl3.SDL_ARRAY(*colorsys.hsv_to_rgb(hue + 0.32, 1.0, 1.0), 1.0, type = ctypes.c_float)[0]
-        uniformData.color2 = sdl3.SDL_ARRAY(*colorsys.hsv_to_rgb(hue + 0.64, 1.0, 1.0), 1.0, type = ctypes.c_float)[0]
+        uniformData.color0 = sdl3.SDL_ARRAY(*colorsys.hsv_to_rgb(hue + 0.48, 1.0, 1.0), 1.0, _type = ctypes.c_float)[0]
+        uniformData.color1 = sdl3.SDL_ARRAY(*colorsys.hsv_to_rgb(hue + 0.32, 1.0, 1.0), 1.0, _type = ctypes.c_float)[0]
+        uniformData.color2 = sdl3.SDL_ARRAY(*colorsys.hsv_to_rgb(hue + 0.64, 1.0, 1.0), 1.0, _type = ctypes.c_float)[0]
 
         renderPass = sdl3.SDL_BeginGPURenderPass(commandBuffer, ctypes.byref(colorTargetInfo), 1, None)
         sdl3.SDL_BindGPUGraphicsPipeline(renderPass, pipeline)
