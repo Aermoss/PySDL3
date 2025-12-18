@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "PySDL3"
 description = "A pure Python wrapper for SDL3."
+license = "MIT"
 readme = {file = "README.md", content-type = "text/markdown"}
 authors = [
     {name = "Yusuf Rençber", email = "aermoss.0@gmail.com"}
@@ -17,7 +18,6 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
