@@ -135,6 +135,7 @@ SDL_PROP_TEXTURE_CREATE_OPENGLES2_TEXTURE_UV_NUMBER: bytes = "SDL.texture.create
 SDL_PROP_TEXTURE_CREATE_OPENGLES2_TEXTURE_U_NUMBER: bytes = "SDL.texture.create.opengles2.texture_u".encode()
 SDL_PROP_TEXTURE_CREATE_OPENGLES2_TEXTURE_V_NUMBER: bytes = "SDL.texture.create.opengles2.texture_v".encode()
 SDL_PROP_TEXTURE_CREATE_VULKAN_TEXTURE_NUMBER: bytes = "SDL.texture.create.vulkan.texture".encode()
+SDL_PROP_TEXTURE_CREATE_VULKAN_LAYOUT_NUMBER: bytes = "SDL.texture.create.vulkan.layout".encode()
 SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_POINTER: bytes = "SDL.texture.create.gpu.texture".encode()
 SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_UV_POINTER: bytes = "SDL.texture.create.gpu.texture_uv".encode()
 SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_U_POINTER: bytes = "SDL.texture.create.gpu.texture_u".encode()

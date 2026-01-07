@@ -17,6 +17,7 @@ SDL_PEN_INPUT_BUTTON_3: int = 1 << 3
 SDL_PEN_INPUT_BUTTON_4: int = 1 << 4
 SDL_PEN_INPUT_BUTTON_5: int = 1 << 5
 SDL_PEN_INPUT_ERASER_TIP: int = 1 << 30
+SDL_PEN_INPUT_IN_PROXIMITY: int = 1 << 31
 
 SDL_PenAxis: typing.TypeAlias = SDL_TYPE["SDL_PenAxis", SDL_ENUM]
 

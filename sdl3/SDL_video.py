@@ -64,6 +64,7 @@ SDL_WINDOW_UTILITY: int = 0x0000000000020000
 SDL_WINDOW_TOOLTIP: int = 0x0000000000040000
 SDL_WINDOW_POPUP_MENU: int = 0x0000000000080000
 SDL_WINDOW_KEYBOARD_GRABBED: int = 0x0000000000100000
+SDL_WINDOW_FILL_DOCUMENT: int = 0x0000000000200000
 SDL_WINDOW_VULKAN: int = 0x0000000010000000
 SDL_WINDOW_METAL: int = 0x0000000020000000
 SDL_WINDOW_TRANSPARENT: int = 0x0000000040000000
@@ -144,6 +145,7 @@ SDL_GetDisplayProperties: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDispl
 SDL_PROP_DISPLAY_HDR_ENABLED_BOOLEAN: bytes = "SDL.display.HDR_enabled".encode()
 SDL_PROP_DISPLAY_KMSDRM_PANEL_ORIENTATION_NUMBER: bytes = "SDL.display.KMSDRM.panel_orientation".encode()
 SDL_PROP_DISPLAY_WAYLAND_WL_OUTPUT_POINTER: bytes = "SDL.display.wayland.wl_output".encode()
+SDL_PROP_DISPLAY_WINDOWS_HMONITOR_POINTER: bytes = "SDL.display.windows.hmonitor".encode()
 
 SDL_GetDisplayName: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayName", ctypes.c_char_p, [SDL_DisplayID], SDL_BINARY]
 SDL_GetDisplayBounds: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetDisplayBounds", ctypes.c_bool, [SDL_DisplayID, SDL_POINTER[SDL_Rect]], SDL_BINARY]
@@ -208,6 +210,7 @@ SDL_PROP_WINDOW_CREATE_X_NUMBER: bytes = "SDL.window.create.x".encode()
 SDL_PROP_WINDOW_CREATE_Y_NUMBER: bytes = "SDL.window.create.y".encode()
 SDL_PROP_WINDOW_CREATE_COCOA_WINDOW_POINTER: bytes = "SDL.window.create.cocoa.window".encode()
 SDL_PROP_WINDOW_CREATE_COCOA_VIEW_POINTER: bytes = "SDL.window.create.cocoa.view".encode()
+SDL_PROP_WINDOW_CREATE_WINDOWSCENE_POINTER: bytes = "SDL.window.create.uikit.windowscene".encode()
 SDL_PROP_WINDOW_CREATE_WAYLAND_SURFACE_ROLE_CUSTOM_BOOLEAN: bytes = "SDL.window.create.wayland.surface_role_custom".encode()
 SDL_PROP_WINDOW_CREATE_WAYLAND_CREATE_EGL_WINDOW_BOOLEAN: bytes = "SDL.window.create.wayland.create_egl_window".encode()
 SDL_PROP_WINDOW_CREATE_WAYLAND_WL_SURFACE_POINTER: bytes = "SDL.window.create.wayland.wl_surface".encode()
@@ -215,7 +218,6 @@ SDL_PROP_WINDOW_CREATE_WIN32_HWND_POINTER: bytes = "SDL.window.create.win32.hwnd
 SDL_PROP_WINDOW_CREATE_WIN32_PIXEL_FORMAT_HWND_POINTER: bytes = "SDL.window.create.win32.pixel_format_hwnd".encode()
 SDL_PROP_WINDOW_CREATE_X11_WINDOW_NUMBER: bytes = "SDL.window.create.x11.window".encode()
 SDL_PROP_WINDOW_CREATE_EMSCRIPTEN_CANVAS_ID_STRING: bytes = "SDL.window.create.emscripten.canvas_id".encode()
-SDL_PROP_WINDOW_CREATE_EMSCRIPTEN_FILL_DOCUMENT_BOOLEAN: bytes = "SDL.window.create.emscripten.fill_document".encode()
 SDL_PROP_WINDOW_CREATE_EMSCRIPTEN_KEYBOARD_ELEMENT_STRING: bytes = "SDL.window.create.emscripten.keyboard_element".encode()
 
 SDL_GetWindowID: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowID", SDL_WindowID, [SDL_POINTER[SDL_Window]], SDL_BINARY]
@@ -260,7 +262,6 @@ SDL_PROP_WINDOW_X11_DISPLAY_POINTER: bytes = "SDL.window.x11.display".encode()
 SDL_PROP_WINDOW_X11_SCREEN_NUMBER: bytes = "SDL.window.x11.screen".encode()
 SDL_PROP_WINDOW_X11_WINDOW_NUMBER: bytes = "SDL.window.x11.window".encode()
 SDL_PROP_WINDOW_EMSCRIPTEN_CANVAS_ID_STRING: bytes = "SDL.window.emscripten.canvas_id".encode()
-SDL_PROP_WINDOW_EMSCRIPTEN_FILL_DOCUMENT_BOOLEAN: bytes = "SDL.window.emscripten.fill_document".encode()
 SDL_PROP_WINDOW_EMSCRIPTEN_KEYBOARD_ELEMENT_STRING: bytes = "SDL.window.emscripten.keyboard_element".encode()
 
 SDL_GetWindowFlags: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindowFlags", SDL_WindowFlags, [SDL_POINTER[SDL_Window]], SDL_BINARY]
@@ -293,6 +294,7 @@ SDL_GetWindowMaximumSize: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetWindo
 SDL_SetWindowBordered: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowBordered", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
 SDL_SetWindowResizable: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowResizable", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
 SDL_SetWindowAlwaysOnTop: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowAlwaysOnTop", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
+SDL_SetWindowFillDocument: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetWindowFillDocument", ctypes.c_bool, [SDL_POINTER[SDL_Window], ctypes.c_bool], SDL_BINARY]
 
 SDL_ShowWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_ShowWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]
 SDL_HideWindow: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_HideWindow", ctypes.c_bool, [SDL_POINTER[SDL_Window]], SDL_BINARY]

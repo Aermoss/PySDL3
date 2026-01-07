@@ -46,6 +46,7 @@ SDL_PROP_SURFACE_HDR_HEADROOM_FLOAT: bytes = "SDL.surface.HDR_headroom".encode()
 SDL_PROP_SURFACE_TONEMAP_OPERATOR_STRING: bytes = "SDL.surface.tonemap".encode()
 SDL_PROP_SURFACE_HOTSPOT_X_NUMBER: bytes = "SDL.surface.hotspot.x".encode()
 SDL_PROP_SURFACE_HOTSPOT_Y_NUMBER: bytes = "SDL.surface.hotspot.y".encode()
+SDL_PROP_SURFACE_ROTATION_FLOAT: bytes = "SDL.surface.rotation".encode()
 
 SDL_SetSurfaceColorspace: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SetSurfaceColorspace", ctypes.c_bool, [SDL_POINTER[SDL_Surface], SDL_Colorspace], SDL_BINARY]
 SDL_GetSurfaceColorspace: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_GetSurfaceColorspace", SDL_Colorspace, [SDL_POINTER[SDL_Surface]], SDL_BINARY]
@@ -60,13 +61,18 @@ SDL_RemoveSurfaceAlternateImages: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_
 SDL_LockSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LockSurface", ctypes.c_bool, [SDL_POINTER[SDL_Surface]], SDL_BINARY]
 SDL_UnlockSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_UnlockSurface", None, [SDL_POINTER[SDL_Surface]], SDL_BINARY]
 
+SDL_LoadSurface_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadSurface_IO", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_BINARY]
+SDL_LoadSurface: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadSurface", SDL_POINTER[SDL_Surface], [ctypes.c_char_p], SDL_BINARY]
+
 SDL_LoadBMP_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadBMP_IO", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_BINARY]
 SDL_LoadBMP: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadBMP", SDL_POINTER[SDL_Surface], [ctypes.c_char_p], SDL_BINARY]
+
 SDL_SaveBMP_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SaveBMP_IO", ctypes.c_bool, [SDL_POINTER[SDL_Surface], SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_BINARY]
 SDL_SaveBMP: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SaveBMP", ctypes.c_bool, [SDL_POINTER[SDL_Surface], ctypes.c_char_p], SDL_BINARY]
 
 SDL_LoadPNG_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadPNG_IO", SDL_POINTER[SDL_Surface], [SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_BINARY]
 SDL_LoadPNG: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_LoadPNG", SDL_POINTER[SDL_Surface], [ctypes.c_char_p], SDL_BINARY]
+
 SDL_SavePNG_IO: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SavePNG_IO", ctypes.c_bool, [SDL_POINTER[SDL_Surface], SDL_POINTER[SDL_IOStream], ctypes.c_bool], SDL_BINARY]
 SDL_SavePNG: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_SavePNG", ctypes.c_bool, [SDL_POINTER[SDL_Surface], ctypes.c_char_p], SDL_BINARY]
 

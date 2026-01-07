@@ -616,6 +616,19 @@ SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN: bytes = "SDL.gpu.device.create.s
 SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.metallib".encode()
 SDL_PROP_GPU_DEVICE_CREATE_D3D12_ALLOW_FEWER_RESOURCE_SLOTS_BOOLEAN: bytes = "SDL.gpu.device.create.d3d12.allowtier1resourcebinding".encode()
 SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING: bytes = "SDL.gpu.device.create.d3d12.semantic".encode()
+SDL_PROP_GPU_DEVICE_CREATE_VULKAN_REQUIRE_HARDWARE_ACCELERATION_BOOLEAN: bytes = "SDL.gpu.device.create.vulkan.requirehardwareacceleration".encode()
+SDL_PROP_GPU_DEVICE_CREATE_VULKAN_OPTIONS_POINTER: bytes = "SDL.gpu.device.create.vulkan.options".encode()
+
+class SDL_GPUVulkanOptions(ctypes.Structure):
+    _fields_ = [
+        ("vulkan_api_version", ctypes.c_uint32),
+        ("feature_list", ctypes.c_void_p),
+        ("vulkan_10_physical_device_features", ctypes.c_void_p),
+        ("device_extension_count", ctypes.c_uint32),
+        ("device_extension_names", SDL_POINTER[ctypes.c_char_p]),
+        ("instance_extension_count", ctypes.c_uint32),
+        ("instance_extension_names", SDL_POINTER[ctypes.c_char_p])
+    ]
 
 SDL_DestroyGPUDevice: abc.Callable[..., typing.Any] = SDL_FUNC["SDL_DestroyGPUDevice", None, [SDL_POINTER[SDL_GPUDevice]], SDL_BINARY]
 
