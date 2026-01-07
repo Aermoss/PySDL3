@@ -20,7 +20,7 @@ for module in sdl3.SDL_MODULES:
         file.write(sdl3.SDL_GENERATE_DOCS([module], rst = True))
 
 project = "PySDL3"
-copyright = "2025, Yusuf Rençber"
+copyright = "2024-2026, Yusuf Rençber"
 author = "Yusuf Rençber"
 release = sdl3.__version__
 
