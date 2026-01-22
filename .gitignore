@@ -10,3 +10,6 @@ tests/__pycache__/
 __pycache__/
 embed.py
 *.pyc
+docs/Darwin-Docs.py
+docs/Linux-Docs.py
+docs/Windows-Docs.py

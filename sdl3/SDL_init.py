@@ -6,6 +6,7 @@ from .SDL_events import SDL_Event
 
 SDL_InitFlags: typing.TypeAlias = SDL_TYPE["SDL_InitFlags", ctypes.c_uint32]
 
+SDL_INIT_TIMER: int = 0x00000001
 SDL_INIT_AUDIO: int = 0x00000010
 SDL_INIT_VIDEO: int = 0x00000020
 SDL_INIT_JOYSTICK: int = 0x00000200
