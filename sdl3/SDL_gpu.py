@@ -616,8 +616,11 @@ SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN: bytes = "SDL.gpu.device.create.s
 SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN: bytes = "SDL.gpu.device.create.shaders.metallib".encode()
 SDL_PROP_GPU_DEVICE_CREATE_D3D12_ALLOW_FEWER_RESOURCE_SLOTS_BOOLEAN: bytes = "SDL.gpu.device.create.d3d12.allowtier1resourcebinding".encode()
 SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING: bytes = "SDL.gpu.device.create.d3d12.semantic".encode()
+SDL_PROP_GPU_DEVICE_CREATE_D3D12_AGILITY_SDK_VERSION_NUMBER: bytes = "SDL.gpu.device.create.d3d12.agility_sdk_version".encode()
+SDL_PROP_GPU_DEVICE_CREATE_D3D12_AGILITY_SDK_PATH_STRING: bytes = "SDL.gpu.device.create.d3d12.agility_sdk_path".encode()
 SDL_PROP_GPU_DEVICE_CREATE_VULKAN_REQUIRE_HARDWARE_ACCELERATION_BOOLEAN: bytes = "SDL.gpu.device.create.vulkan.requirehardwareacceleration".encode()
 SDL_PROP_GPU_DEVICE_CREATE_VULKAN_OPTIONS_POINTER: bytes = "SDL.gpu.device.create.vulkan.options".encode()
+SDL_PROP_GPU_DEVICE_CREATE_METAL_ALLOW_MACFAMILY1_BOOLEAN: bytes = "SDL.gpu.device.create.metal.allowmacfamily1".encode()
 
 class SDL_GPUVulkanOptions(ctypes.Structure):
     _fields_ = [
