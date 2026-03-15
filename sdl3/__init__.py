@@ -14,9 +14,9 @@ def SDL_FORMAT_ARCH(arch: str) -> str:
     if arch.lower() in ["aarch64", "arm64"]: return "ARM64"
     assert False, "Unknown architecture."
 
-SDL_SYSTEM, SDL_ARCH = platform.system(), SDL_FORMAT_ARCH(platform.machine())
-SDL_BINARY_EXTENSIONS, SDL_BINARY_PATTERNS = {"Windows": ["dll"], "Darwin": ["dylib"], "Linux": ["so"], "Android": ["so"]}, \
-    {"Windows": ["{}.dll"], "Darwin": ["lib{}.dylib", "{0}.framework/{0}", "{0}.framework/Versions/Current/{0}"], "Linux": ["lib{}.so"], "Android": ["lib{}.so"]}
+SDL_SYSTEM, SDL_ARCH = os.uname().sysname if hasattr(os, "uname") else platform.system(), SDL_FORMAT_ARCH(platform.machine())
+SDL_BINARY_EXTENSIONS, SDL_BINARY_PATTERNS = {"Windows": ["dll"], "Darwin": ["dylib"], "Linux": ["so"]}, \
+    {"Windows": ["{}.dll"], "Darwin": ["lib{}.dylib", "{0}.framework/{0}", "{0}.framework/Versions/Current/{0}"], "Linux": ["lib{}.so"]}
 
 def SDL_PLATFORM_SPECIFIC(system: list[str] | None = None, arch: list[str] | None = None) -> bool:
     """Check if the current platform is inside the given platforms."""
