@@ -69,6 +69,7 @@ SDL_SHADERCROSS_PROP_SHADER_CULL_UNUSED_BINDINGS_BOOLEAN: bytes = "SDL_shadercro
 
 SDL_SHADERCROSS_PROP_SPIRV_PSSL_COMPATIBILITY_BOOLEAN: bytes = "SDL_shadercross.spirv.pssl.compatibility".encode()
 SDL_SHADERCROSS_PROP_SPIRV_MSL_VERSION_STRING: bytes = "SDL_shadercross.spirv.msl.version".encode()
+SDL_SHADERCROSS_PROP_HLSL_SKIP_SPIRV_ROUNDTRIP_BOOLEAN: bytes = "SDL_shadercross.hlsl.skip_spirv_roundtrip".encode()
 
 class SDL_ShaderCross_HLSL_Define(ctypes.Structure):
     _fields_ = [
