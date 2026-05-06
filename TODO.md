@@ -1,1 +1,1 @@
-- [x] Add 'SDL_shadercross' implementation.
+- [] Download precompiled binaries from official sources.
