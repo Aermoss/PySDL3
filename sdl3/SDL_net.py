@@ -2,6 +2,7 @@ import ctypes, typing, collections.abc as abc
 
 from . import SDL_POINTER, SDL_TYPE, SDL_ENUM, SDL_FUNC, SDL_NET_BINARY
 from .SDL_version import SDL_VERSIONNUM
+from .SDL_properties import SDL_PropertiesID
 
 SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_MICRO_VERSION = 3, 0, 0
 SDL_NET_VERSION: int = SDL_VERSIONNUM(SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_MICRO_VERSION)
@@ -36,13 +37,13 @@ NET_FreeLocalAddresses: abc.Callable[..., typing.Any] = SDL_FUNC["NET_FreeLocalA
 class NET_StreamSocket(ctypes.c_void_p):
     ...
 
-NET_CreateClient: abc.Callable[..., typing.Any] = SDL_FUNC["NET_CreateClient", SDL_POINTER[NET_StreamSocket], [SDL_POINTER[NET_Address], ctypes.c_uint16], SDL_NET_BINARY]
+NET_CreateClient: abc.Callable[..., typing.Any] = SDL_FUNC["NET_CreateClient", SDL_POINTER[NET_StreamSocket], [SDL_POINTER[NET_Address], ctypes.c_uint16, SDL_PropertiesID], SDL_NET_BINARY]
 NET_WaitUntilConnected: abc.Callable[..., typing.Any] = SDL_FUNC["NET_WaitUntilConnected", NET_Status, [SDL_POINTER[NET_StreamSocket], ctypes.c_int32], SDL_NET_BINARY]
 
 class NET_Server(ctypes.c_void_p):
     ...
 
-NET_CreateServer: abc.Callable[..., typing.Any] = SDL_FUNC["NET_CreateServer", SDL_POINTER[NET_Server], [SDL_POINTER[NET_Address], ctypes.c_uint16], SDL_NET_BINARY]
+NET_CreateServer: abc.Callable[..., typing.Any] = SDL_FUNC["NET_CreateServer", SDL_POINTER[NET_Server], [SDL_POINTER[NET_Address], ctypes.c_uint16, SDL_PropertiesID], SDL_NET_BINARY]
 NET_AcceptClient: abc.Callable[..., typing.Any] = SDL_FUNC["NET_AcceptClient", ctypes.c_bool, [SDL_POINTER[NET_Server], SDL_POINTER[SDL_POINTER[NET_StreamSocket]]], SDL_NET_BINARY]
 NET_DestroyServer: abc.Callable[..., typing.Any] = SDL_FUNC["NET_DestroyServer", None, [SDL_POINTER[NET_Server]], SDL_NET_BINARY]
 NET_GetStreamSocketAddress: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetStreamSocketAddress", SDL_POINTER[NET_Address], [SDL_POINTER[NET_StreamSocket]], SDL_NET_BINARY]
@@ -65,7 +66,7 @@ class NET_Datagram(ctypes.Structure):
         ("buflen", ctypes.c_int)
     ]
 
-NET_CreateDatagramSocket: abc.Callable[..., typing.Any] = SDL_FUNC["NET_CreateDatagramSocket", SDL_POINTER[NET_DatagramSocket], [SDL_POINTER[NET_Address], ctypes.c_uint16], SDL_NET_BINARY]
+NET_CreateDatagramSocket: abc.Callable[..., typing.Any] = SDL_FUNC["NET_CreateDatagramSocket", SDL_POINTER[NET_DatagramSocket], [SDL_POINTER[NET_Address], ctypes.c_uint16, SDL_PropertiesID], SDL_NET_BINARY]
 NET_SendDatagram: abc.Callable[..., typing.Any] = SDL_FUNC["NET_SendDatagram", ctypes.c_bool, [SDL_POINTER[NET_DatagramSocket], SDL_POINTER[NET_Address], ctypes.c_uint16, ctypes.c_void_p, ctypes.c_int], SDL_NET_BINARY]
 NET_ReceiveDatagram: abc.Callable[..., typing.Any] = SDL_FUNC["NET_ReceiveDatagram", ctypes.c_bool, [SDL_POINTER[NET_DatagramSocket], SDL_POINTER[SDL_POINTER[NET_Datagram]]], SDL_NET_BINARY]
 NET_DestroyDatagram: abc.Callable[..., typing.Any] = SDL_FUNC["NET_DestroyDatagram", None, [SDL_POINTER[NET_Datagram]], SDL_NET_BINARY]

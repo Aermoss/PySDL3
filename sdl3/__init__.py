@@ -622,6 +622,7 @@ def SDL_GENERATE_DOCS(modules: list[str] = SDL_MODULES, raw: types.ModuleType | 
 
             if arguments is not None and len(arguments) != len(argtypes):
                 SDL_LOGGER.Log(SDL_LOGGER.Error, f"Argument count mismatch for 'https://wiki.libsdl.org/{module}/{func}' (expected: {len(arguments)}, got: {len(argtypes)}).")
+                continue
 
             if arguments is None:
                 arguments = [f"_{i}" for i in range(len(argtypes))]
