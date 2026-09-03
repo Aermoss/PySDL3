@@ -20,7 +20,7 @@ class MIX_Track(ctypes.c_void_p):
 class MIX_Group(ctypes.c_void_p):
     ...
 
-SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION = 3, 2, 0
+SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION = 3, 2, 4
 SDL_MIXER_VERSION: int = SDL_VERSIONNUM(SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION)
 
 SDL_MIXER_VERSION_ATLEAST: abc.Callable[[int, int, int], bool] = lambda x, y, z: \
@@ -55,6 +55,7 @@ MIX_PROP_AUDIO_LOAD_CLOSEIO_BOOLEAN: bytes = "SDL_mixer.audio.load.closeio".enco
 MIX_PROP_AUDIO_LOAD_PREDECODE_BOOLEAN: bytes = "SDL_mixer.audio.load.predecode".encode()
 MIX_PROP_AUDIO_LOAD_PREFERRED_MIXER_POINTER: bytes = "SDL_mixer.audio.load.preferred_mixer".encode()
 MIX_PROP_AUDIO_LOAD_SKIP_METADATA_TAGS_BOOLEAN: bytes = "SDL_mixer.audio.load.skip_metadata_tags".encode()
+MIX_PROP_AUDIO_LOAD_IGNORE_LOOPS_BOOLEAN: bytes = "SDL_mixer.audio.load.ignore_loops".encode()
 MIX_PROP_AUDIO_DECODER_STRING: bytes = "SDL_mixer.audio.decoder".encode()
 
 MIX_LoadRawAudio_IO: abc.Callable[..., typing.Any] = SDL_FUNC["MIX_LoadRawAudio_IO", SDL_POINTER[MIX_Audio], [SDL_POINTER[MIX_Mixer], SDL_POINTER[SDL_IOStream], SDL_POINTER[SDL_AudioSpec], ctypes.c_bool], SDL_MIXER_BINARY]
@@ -112,6 +113,7 @@ MIX_PROP_PLAY_MAX_FRAME_NUMBER: bytes = "SDL_mixer.play.max_frame".encode()
 MIX_PROP_PLAY_MAX_MILLISECONDS_NUMBER: bytes = "SDL_mixer.play.max_milliseconds".encode()
 MIX_PROP_PLAY_START_FRAME_NUMBER: bytes = "SDL_mixer.play.start_frame".encode()
 MIX_PROP_PLAY_START_MILLISECOND_NUMBER: bytes = "SDL_mixer.play.start_millisecond".encode()
+MIX_PROP_PLAY_START_ORDER_NUMBER: bytes = "SDL_mixer.play.start_order".encode()
 MIX_PROP_PLAY_LOOP_START_FRAME_NUMBER: bytes = "SDL_mixer.play.loop_start_frame".encode()
 MIX_PROP_PLAY_LOOP_START_MILLISECOND_NUMBER: bytes = "SDL_mixer.play.loop_start_millisecond".encode()
 MIX_PROP_PLAY_FADE_IN_FRAMES_NUMBER: bytes = "SDL_mixer.play.fade_in_frames".encode()

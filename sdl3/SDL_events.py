@@ -404,7 +404,8 @@ class SDL_PenProximityEvent(ctypes.Structure):
         ("reserved", ctypes.c_uint32),
         ("timestamp", ctypes.c_uint64),
         ("windowID", SDL_WindowID),
-        ("which", SDL_PenID)
+        ("which", SDL_PenID),
+        ("pen_state", SDL_PenInputFlags)
     ]
 
 class SDL_PenMotionEvent(ctypes.Structure):
