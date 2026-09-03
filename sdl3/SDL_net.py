@@ -4,7 +4,7 @@ from . import SDL_POINTER, SDL_TYPE, SDL_ENUM, SDL_FUNC, SDL_NET_BINARY
 from .SDL_version import SDL_VERSIONNUM
 from .SDL_properties import SDL_PropertiesID
 
-SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_MICRO_VERSION = 3, 0, 0
+SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_MICRO_VERSION = 3, 2, 0
 SDL_NET_VERSION: int = SDL_VERSIONNUM(SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_MICRO_VERSION)
 
 SDL_NET_VERSION_ATLEAST: abc.Callable[[int, int, int], bool] = lambda x, y, z: \
@@ -27,6 +27,7 @@ NET_ResolveHostname: abc.Callable[..., typing.Any] = SDL_FUNC["NET_ResolveHostna
 NET_WaitUntilResolved: abc.Callable[..., typing.Any] = SDL_FUNC["NET_WaitUntilResolved", NET_Status, [SDL_POINTER[NET_Address], ctypes.c_int32], SDL_NET_BINARY]
 NET_GetAddressStatus: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetAddressStatus", NET_Status, [SDL_POINTER[NET_Address]], SDL_NET_BINARY]
 NET_GetAddressString: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetAddressString", ctypes.c_char_p, [SDL_POINTER[NET_Address]], SDL_NET_BINARY]
+NET_GetAddressBytes: abc.Callable[..., typing.Any] = SDL_FUNC["NET_GetAddressBytes", ctypes.c_void_p, [SDL_POINTER[NET_Address], SDL_POINTER[ctypes.c_int]], SDL_NET_BINARY]
 NET_RefAddress: abc.Callable[..., typing.Any] = SDL_FUNC["NET_RefAddress", SDL_POINTER[NET_Address], [SDL_POINTER[NET_Address]], SDL_NET_BINARY]
 NET_UnrefAddress: abc.Callable[..., typing.Any] = SDL_FUNC["NET_UnrefAddress", None, [SDL_POINTER[NET_Address]], SDL_NET_BINARY]
 NET_SimulateAddressResolutionLoss: abc.Callable[..., typing.Any] = SDL_FUNC["NET_SimulateAddressResolutionLoss", None, [ctypes.c_int], SDL_NET_BINARY]
